@@ -1,0 +1,474 @@
+
+/* service card section */
+ .fx-booking .fx-servicecontainer {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.fx-leftcontentbox{
+  position: relative;
+}
+ .fx-booking .fx-servicecontainer .fx-servicebox {
+    max-width: 224px;
+    height: auto;
+    box-shadow: 0px 0px 3px 0px var(--box-shadow);
+}
+
+.fx-booking .fx-servicebox .fx-servicepicbox {
+  width: 100%;
+  height: 178px;
+  position: relative;
+}
+.fx-booking .fx-servicebox .fx-servicepicbox img {
+  width: 100%;
+  height: 178px;
+}
+.fx-booking .fx-servicepiccontentbox {
+  width: 77px;
+  position: absolute;
+  background: var(--white);
+  padding: 7px;
+  font-size: var(--small-descriptionsize);
+  border-top-right-radius:4px;
+  border-bottom-right-radius:4px;
+  font-weight: 400;
+  text-align: center;
+  left: 0px;
+  top: 15px;
+  color: var(--darkgrey);
+  font-family: "Roboto", sans-serif;
+}
+
+.fx-booking .fx-pricebox{
+  background: var(--white);
+  position: absolute;
+  padding: 8px 12px;
+  bottom: 0px;
+  right: 0px;
+  font-family: "Roboto", sans-serif;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  margin: 0px;
+}
+
+
+.fx-booking .fx-servicebox .fx-servicecontentbox {
+  width: 100%;
+  height: auto;
+  padding: 16px;
+  background: var(--white);
+}
+
+.fx-booking .fx-servicebox .fx-servicecontentbox h4 {
+  font-family: "Roboto", sans-serif;
+  font-size: var(--card-headingsize);
+  font-weight: 300;
+  margin: 0px;
+}
+
+.fx-booking .fx-servicebox .fx-servicecontentbox p {
+  height: 42px;
+  font-family: "Roboto", sans-serif;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 300;
+  color: var(--grey);
+  margin-top: 4px;
+  margin-bottom: 4px;
+  overflow: hidden;
+}
+
+.fx-booking .fx-servicebox .fx-servicecontentbox .price {
+  height: 29px;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  font-family: "Roboto", sans-serif;
+  color: var(--darkblue-color);
+  margin:0px;
+}
+
+.fx-booking .fx-servicebox .fx-servicecontentbox .price span {
+  font-size: var(--small-headingsize);
+}
+
+.fx-booking .fx-servicebox .fx-servicecontentbox .booknowbtn {
+  width: 100%;
+  padding: 10px;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  border: 1px solid var(--primary-color);
+  text-align: center;
+  border-radius: 33px;
+  color: var(--primary-color);
+  margin-top:16px;
+}
+
+/* service section list view */
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist {
+  width: 99.8%;
+  height: auto;
+  display: flex;
+  background: var(--white);
+  box-shadow: 0px 0px 3px 0px var(--box-shadow);
+  margin-bottom: 16px;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist {
+  width: 180px;
+  height: 121px;
+  position: relative;
+}
+
+.fx-booking .fx-tabcontent .fx-extraboxlist {
+  width: 99.8%;
+  height: auto;
+  display: flex;
+  background: var(--white);
+  box-shadow: 0px 0px 3px 0px var(--box-shadow);
+  margin-bottom: 16px;
+}
+
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist {
+  width: 180px;
+  height: 121px;
+  position: relative;
+}
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist img {
+    width: 100%;
+    height: auto;
+    max-height: 121px;
+}
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist {
+    width: calc(100% - 180px);
+    height: 121px;
+    padding: 15px 16px;
+    background: var(--white);
+    position: relative;
+}
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist h4 {
+        font-family: "Roboto", sans-serif;
+    font-size: 26px;
+    font-weight: 300;
+    margin: 0px;
+}
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist p {
+    height: 22px;
+    font-family: "Roboto", sans-serif;
+    font-size: var(--normal-descriptionsize);
+    font-weight: 300;
+    color: var(--grey);
+    margin-top: 10px;
+    margin-bottom: 12px;
+}
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price {
+        height: 29px;
+    font-size: var(--normal-descriptionsize);
+    font-family: "Roboto", sans-serif;
+    color: var(--darkblue-color);
+    position: absolute;
+    top: 15px;
+    right: 16px;
+}
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price span {
+     font-size: 22px;
+    font-weight: 400;
+}
+
+
+/* 
+.servicepictextboxlist {
+  width: 77px;
+  height: 23px;
+  background: #fff;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  color: #083FB4;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+} */
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img {
+  width: 100%;
+  height: auto;
+  max-height: 121px;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist {
+  width: calc(100% - 180px);
+  height: 121px;
+  padding: 15px 16px;
+  background: var(--white);
+  position: relative;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist h4 {
+  font-family: "Roboto", sans-serif;
+  font-size: 26px;
+  font-weight: 300;
+  margin: 0px;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist p {
+  height: 22px;
+  font-family: "Roboto", sans-serif;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 300;
+  color: var(--grey);
+  margin-top: 10px;
+  margin-bottom: 12px;
+
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .price {
+  height: 29px;
+  font-size: var(--normal-descriptionsize);
+  font-family: "Roboto", sans-serif;
+  color: var(--darkblue-color);
+  position: absolute;
+  top:15px;
+  right:16px;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .price span {
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .booknowbtn {
+  height: 43px;
+  width: 163px;
+  padding: 10px;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  border: 1px solid var(--primary-color);
+  text-align: center;
+  border-radius: 33px;
+  color: var(--primary-color);
+  float: right;
+  position: absolute;
+  right: 16px;
+  bottom: 15px;
+}
+
+/* extra card section */
+.fx-booking .fx-extracontainer {
+  display: flex;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.fx-booking .fx-extracontainer .fx-extrabox{
+  max-width: 224px;
+  height: auto;
+  box-shadow: 0px 0px 3px 0px var(--box-shadow);
+}
+
+.fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox{
+   width: 100%;
+  height: 190px;
+  position: relative;
+}
+
+.fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox img{
+   width: 100%;
+  height: 190px;
+}
+.fx-booking .fx-extracontainer .fx-extrabox .fx-extracontentbox {
+   width: 100%;
+  height: auto;
+  padding: 16px;
+  background: var(--white);
+}
+
+.fx-booking .fx-extracontainer .fx-extrabox .fx-extracontentbox h4 {
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  margin: 0px;
+}
+.fx-booking .fx-extracontainer .fx-extrabox .fx-extracontentbox p {
+  height: 42px;
+  font-family: "Roboto", sans-serif;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 300;
+  color: var(--grey);
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.fx-booking .fx-extracontainer .fx-extrabox .fx-extracontentbox .price {
+  height: 29px;
+  font-size: var(--normal-descriptionsize);
+  font-family: "Roboto", sans-serif;
+  color: var(--darkblue-color);
+}
+/* .fx-extracontentbox .price .rightside{
+  
+} */
+.fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox .fx-extrapicpricebox {
+  width: 70px;
+  height: 29px;
+  position: absolute;
+  background: var(--white);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  text-align: center;
+  left: 10px;
+  bottom: 30px;
+  color: var(--darkblue-color);
+  font-family: "Roboto", sans-serif;
+  margin-bottom: 0px;
+}
+
+.fx-booking .fx-extrabox .fx-extrapicbox .fx-extrapicpriceboxright{
+  width: 74px;
+  height: 37px;
+  position: absolute;
+  background: var(--white);
+  padding: 8px 12px;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  text-align: center;
+  right: 10px;
+  bottom: 0px;
+  color: var(--darkblue-color);
+  font-family: "Roboto", sans-serif;
+  margin-bottom: 0px;
+  border-radius: 4px 4px 0px 0px;
+}
+.fx-booking .fx-extracontentbox .fx-common{
+  display: flex;
+  justify-content: space-between;
+}
+.fx-booking .fx-extracontentbox .fx-common .fx-quantitybox {
+  width: auto;
+  float: left;
+}
+
+.fx-booking .fx-extracontentbox .fx-common .fx-quantitybox button{
+  width: 27px;
+  height: 27px;
+  color: var(darkgrey);
+  font-size: var(--normal-descriptionsize);
+  border: 0.76px solid var(--border-color);
+  background: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0px;
+}
+
+.fx-booking .fx-extracontentbox .fx-common .fx-quantitybox input[type="number"] {
+  width: 30px;
+  height: 26px;
+  text-align: center;
+  border: none;
+  font-size: var(--normal-descriptionsize);
+  box-sizing: border-box;
+}
+
+.fx-booking .fx-extracontentbox .fx-common .fx-quantitybox input[type="number"]::-webkit-inner-spin-button,
+.fx-booking .fx-extracontentbox .fx-common .fx-quantitybox input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.fx-booking .fx-extracontentbox .fx-common .fx-quantitybox .decrement {
+  border-radius: 50%;
+  margin-bottom: 0px;
+}
+
+.fx-booking .fx-extracontentbox .fx-common .fx-quantitybox .increment {
+  border-radius: 50%;
+  margin-bottom: 0px;
+}
+
+@media screen and (max-width: 580px) {
+.fx-booking .fx-servicecontainer{
+  display: inline-block;
+}
+.fx-booking .fx-extracontainer{
+  display: inline-block;
+}
+.fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox img{
+  height:auto;
+}
+.fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox{
+  height:auto;
+}
+.fx-booking .fx-servicecontainer .fx-servicebox{
+  max-width: 100%;
+  margin-bottom: 24px;
+}
+.fx-booking .fx-servicecontainer .fx-servicebox:last-child{
+  margin-bottom: 0px;
+}
+.fx-booking .fx-tabcontent .fx-serviceboxlist{
+  height: 200px;
+}
+.fx-booking .fx-tabcontent .fx-serviceboxlist{
+  height: 200px;
+}
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist{
+  height: 200px;
+}
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img{
+  height: 200px;
+  max-height: 200px;
+}
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist{
+  height: 200px;
+}
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist h4{
+  font-size: 22px;
+}
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist p{
+  font-size:14px;
+  height:35px;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .price{
+  position: inherit !important;
+  top:inherit !important;
+  right: inherit !important;
+}
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .booknowbtn{
+  right:inherit !important;
+  left:16px;
+  padding:9px;
+  height: 40px;
+}
+.fx-booking .fx-servicebox .fx-servicepicbox img{
+  height:auto;
+}
+.fx-booking .fx-servicebox .fx-servicepicbox{
+  height:auto;
+}
+.fx-booking .fx-extracontainer .fx-extrabox{
+  max-width: 100%;
+  margin-bottom: 24px;
+}
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist h4{
+  font-size: 22px;
+}
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price{
+  position: inherit;
+    margin-left: 16px;
+    margin-top: -8px;
+}
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist p{
+    margin-top: 3px;
+    margin-bottom: 0px;
+}
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist p{
+  height: 39px;
+  overflow: hidden;
+}
+}
+

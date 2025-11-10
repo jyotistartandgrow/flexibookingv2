@@ -1,0 +1,171 @@
+/* right sidebar panel */
+.fx-booking .fx-sidebar {
+    background: var(--white);
+    max-height: 100%;
+    z-index: 99;
+    right: 0px;
+    min-width: 370px;
+    max-width: 370px;
+    overflow: hidden;
+    overflow-y: auto;
+    box-shadow: -2px 0px 2px 0px rgba(0, 0, 0, 0.04);
+    position: fixed;
+    height: 100%;
+}
+
+.fx-booking .fx-sidebar .logo .fx-right-logo{
+  width:140px;
+}
+
+.fx-booking .fx-sidebar .logo {
+    text-align: center;
+    margin-top: 40px;
+}
+.fx-booking .fx-bookingdatebar {
+    padding: 16px 20px;
+}
+
+.fx-booking .fx-bookingdate {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--darkgrey);
+}
+.fx-booking .fx-sidebar .giftmessagebox{
+    font-size:28px;
+    padding: 35px;
+    line-height: 1.7;
+    font-weight: 300;
+    text-align: center;
+    margin-top:150px;
+}
+
+.fx-booking .fx-servicelistbox{
+  padding:16px 20px;
+  border-top: 1px solid var(--border-color);;
+}
+.fx-booking .fx-servicelistbox .fx-serviceitem{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.fx-booking .fx-servicelistbox .fx-serviceitem.time{
+  font-size:18px;
+  font-weight: 400;
+  color: var(--grey);
+}
+.fx-booking .fx-servicelistbox .fx-serviceitem .itemname{
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--darkgrey);
+  max-width: 28%;
+}
+.fx-booking .fx-servicelistbox .fx-serviceitem .itemname span{
+  font-size:14px;
+  color: var(--darkgrey);
+  text-decoration: underline;
+}
+.fx-booking .fx-servicelistbox .fx-serviceitem .price{
+  font-size:18px;
+  font-weight: 400;
+  color: var(--dark-blue-color);
+}
+.fx-booking .fx-totalbar{
+  position: absolute;
+  bottom: 0px;
+  left:0px;
+  right:0px;
+  border-top:1px solid #D5D5D5;
+  padding: 12px 20px;
+  
+}
+.fx-booking .fx-totalbar p{
+  margin:0px;
+  color: var(--grey);
+  font-size:18px;
+  font-weight: 400;
+}
+.fx-booking .fx-totalbar p span{
+  color: var(--darkgrey);
+  font-size: var(--big-descriptionsize);
+  font-weight: 600;
+  float: right;
+}
+
+.fx-booking .fx-tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.fx-sidebar .fx-bookingdatebar .fx-coupon-box{
+  width: 100%;
+}
+
+ .fx-booking .fx-mobilesidebar{
+  display: none;
+ }
+
+@media screen and (max-width: 580px) {
+  .fx-booking .fx-mobilesidebar{
+    width:100%;
+    height:auto;
+    position: fixed;
+    bottom:0px;
+    padding:15px;
+    font-size: var(--card-headingsize);
+    background: var(--white);
+    display:block;
+    box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.3);
+  }
+
+  .fx-booking .fx-mobilesidebar p{
+    margin-top:5px;
+    color: var(--grey);
+  }
+  .fx-booking .fx-mobilesidebar p span{
+    color: var(--darkgrey);
+    font-size: var(--card-headingsize);
+    font-weight: 800;
+  }
+}
+
+
+// Mobile Bottom footer
+ .fx-booking .fx-mobilesidebar .fx-bottombar-top-details{
+            display: inline-block;
+            width:100%;
+        }
+        .fx-booking .fx-mobilesidebar .fx-bottombar-bottom-details{
+            display: inline-block;
+            width:100%;
+        }
+        .fx-booking .fx-mobilesidebar .fx-order-details{
+            font-size:18px;
+            float: left;
+        }
+
+        .fx-booking .fx-mobilesidebar .fx-bottombar-top-details i{
+            font-size:18px;
+            float: right;
+        }
+        .fx-booking .fx-mobilesidebar .fx-bottombar-bottom-details .fx-left-content-date{
+            font-size: 18px;
+            display: inline-block;
+            color: var(--grey);
+        }
+         .fx-booking .fx-mobilesidebar .fx-bottombar-bottom-details .fx-left-content-service{
+            display: inline-block;
+            font-size: 18px;
+            margin-left: 8px;
+            vertical-align: middle;
+            color: var(--grey);
+        }
+        .fx-booking .fx-mobilesidebar .fx-bottombar-bottom-details .fx-price{
+            font-size:18px;
+            float: right;
+            margin-top: 8px;
+        }
+        .fx-booking .fx-mobilesidebar .fx-bottom-date{
+            margin-left: 4px;
+        }
+

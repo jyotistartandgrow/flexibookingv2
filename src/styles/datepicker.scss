@@ -1,0 +1,152 @@
+/* Date Picker */
+.fx-booking .fx-calendar {
+  width:500px;
+  position: relative;
+}
+.fx-rightpopup .fx-element-box .fx-calendar{
+  width: 330px;
+}
+
+ .fx-calendaricon {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  width: 20px;
+}
+
+.fx-rightpopup .fx-element-box .fx-calendaricon{
+  top:34px;
+}
+
+.ui-datepicker {
+  background: var(--white);
+  font-family: "Roboto", sans-serif;
+  box-shadow: 0px 0px 2px 0px var(--box-shadow);
+}
+
+.ui-datepicker-header {
+  height: 50px;
+  line-height: 50px;
+  color: var(--dark-grey);
+  background: var(--white);
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.ui-datepicker-prev,
+.ui-datepicker-next {
+  width: 20px;
+  height: 20px;
+  text-indent: 9999px;
+  border-radius: 100%;
+  cursor: pointer;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.ui-datepicker-prev {
+  float: left;
+  margin-left: 12px;
+}
+
+.ui-datepicker-prev:after {
+  transform: rotate(45deg);
+  margin: -43px 0px 0px 8px;
+}
+
+.ui-datepicker-next {
+  float: right;
+  margin-right: 12px;
+}
+
+.ui-datepicker-next:after {
+  transform: rotate(-135deg);
+  margin: -43px 0px 0px 6px;
+}
+
+.ui-datepicker-prev:after,
+.ui-datepicker-next:after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-left: 2px solid #000;
+  border-bottom: 2px solid #000;
+}
+
+.ui-datepicker-prev:hover,
+.ui-datepicker-next:hover,
+.ui-datepicker-prev:hover:after,
+.ui-datepicker-next:hover:after {
+  border-color: #333333;
+}
+
+.ui-datepicker-title {
+  text-align: center;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.ui-datepicker-calendar {
+  width: 100%;
+  text-align: center;
+}
+
+.ui-datepicker-calendar thead tr th span {
+  display: block;
+  width: 68px;
+  color: #858C97;
+  margin-bottom: 5px;
+  font-size: 18px;
+  font-weight: normal;
+}
+thead tr th.ui-datepicker-week-end span {
+  background: #F6FFC5;
+border-radius: 6px;
+padding: 3px;
+}
+
+.ui-state-default {
+  display: block;
+  text-decoration: none;
+  color: #000;
+  line-height: 40px;
+  font-size: 16px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ui-state-default:hover {
+  color: #000;
+  background: #B4BAC5;
+  transition: all 0.25s cubic-bezier(0.7, -0.12, 0.2, 1.12);
+}
+
+.ui-state-highlight {
+  background: #E1EBFF;
+  border-radius: 4px;
+}
+
+.ui-state-active {
+  color: #ffffff;
+  background-color: #31639c;
+}
+
+.ui-datepicker-unselectable .ui-state-default {
+  color: #eee;
+  border: 2px solid transparent;
+}
+
+.icon {
+  margin-left: -30px;
+  margin-top: -26px;
+  position: relative;
+  color: #31639c;
+  font-size: 20px;
+}
+@media screen and (max-width: 480px) {
+.fx-booking .fx-calendar{
+  width:100%;
+}
+}

@@ -1,0 +1,401 @@
+/* Popup modal css */
+.fx-booking .fx-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  transition: opacity 200ms;
+  visibility: hidden;
+  z-index: 999;
+  opacity: 0;
+
+  &.light {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .cancel {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: default;
+  }
+
+  &:target {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.fx-booking .fx-popup {
+  margin: 70px auto;
+  background: var(--white);
+  width: 1200px;
+  height: 600px;
+  box-shadow: 0 0 50px var(--box-shadow);
+  position: relative;
+}
+
+h2 {
+  margin-top: 0;
+  color: var(--darkgrey);
+  font-family: "Roboto", sans-serif;
+}
+
+.fx-booking .close {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 10px;
+  right: 10px;
+  opacity: 0.8;
+  transition: all 200ms;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--darkgrey);
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.fx-booking .fx-popup .fx-leftpopup {
+  width: 50%;
+  height: 600px;
+  float: left;
+  position: relative;
+}
+
+.fx-booking .fx-popup .fx-leftpopup img {
+  width: 100%;
+  height: 600px;
+}
+
+.fx-booking .fx-popup .fx-servicepiccontentbox {
+  top: 0px;
+}
+
+.fx-booking .fx-popup .fx-pricebox {
+  left: 0px;
+  bottom: 10px;
+  right: inherit;
+  border-top-right-radius: 4px;
+
+}
+
+.fx-booking .fx-popup .fx-rightpopup {
+  width: 50%;
+  padding: 20px;
+  height: auto;
+  float: left;
+}
+
+.fx-booking .fx-popup .fx-rightpopup h4 {
+  font-family: "Roboto", sans-serif;
+  font-size: var(--main-headingsize);
+  font-weight: 400;
+  margin: 0px;
+  line-height: 1;
+}
+
+.fx-booking .fx-popup .fx-rightpopup p {
+
+  font-family: "Roboto", sans-serif;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  color: var(--grey);
+  margin-top: 10px;
+  margin-bottom: 5px;
+  line-height: 1.3;
+}
+
+.fx-booking .fx-popup .fx-rightpopup p span.readmore {
+  font-weight: 500;
+  color: var(--darkgrey);
+  line-height: 35px;
+  text-decoration: underline;
+}
+
+.fx-booking .fx-popup .fx-rightpopup .datetext {
+  font-size: var(--normal-descriptionsize);
+  font-family: "Roboto", sans-serif;
+  color: var(--grey);
+  font-weight: 400;
+  margin: 0px;
+  line-height: 1.5;
+}
+
+.fx-booking .fx-popup .fx-rightpopup .calendarboxbar {
+  width: 100%;
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.fx-booking .fx-popup .fx-rightpopup .calendarbox {
+  width: 20%;
+  height: 95px;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--grey);
+  font-size: var(--extrasmall-headingsize);
+  font-weight: 400;
+  line-height: 1.3;
+  position: relative;
+}
+
+.fx-booking .fx-popup .fx-rightpopup .calendarbox.active {
+  border-color: var(--primary-light);
+  color: var(--primary-light);
+}
+
+.fx-booking .fx-popup .fx-rightpopup .calendarbox.active span {
+  color: var(--primary-light);
+}
+
+.fx-booking .fx-popup .fx-rightpopup .calendarbox.active hr {
+  border-color: var(--primary-light);
+}
+
+.fx-booking .fx-popup .fx-rightpopup .calendarbox span {
+  font-size: var(--small-headingsize);
+  color: var(--darkgrey);
+  font-weight: 600;
+}
+
+.fx-booking .fx-popup .fx-rightpopup .calendarbox hr {
+  border: 2px solid var(--border-color);
+  width: 40px;
+}
+
+.fx-booking .fx-popup .fx-rightpopup .price span {
+  font-weight: 500;
+  color: var(--darkgrey);
+}
+
+.fx-booking .fx-popup .fx-rightpopup input[type="text"] {
+  width: 318px;
+  height: 50px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  /* box-sizing: border-box; */
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.fx-booking .fx-popup .fx-rightpopup .calendaricon {
+  right: 20px;
+  top: 30px;
+}
+
+.fx-booking .fx-popup .fx-rightpopup h5 {
+  font-family: "Roboto", sans-serif;
+  color: var(--darkgrey);
+  font-size: var(--extrasmall-headingsize);
+  font-weight: 400;
+  margin-bottom: 10px;
+  margin-top: 13px;
+}
+
+.fx-booking .fx-popup .calendar {
+  width: 320px;
+}
+
+.fx-booking .fx-popup #fx-calendarContainer {
+  right: 0px;
+  position: absolute;
+
+  top: 90px;
+}
+
+.fx-booking .fx-popup #fx-modaltab_nav button[type="button"],
+.fx-booking .fx-popup #fx-modaltab_nav button {
+  width: 28px;
+  height: 27px;
+  margin-bottom: 0px;
+  padding: 0px;
+  margin-top: 0px;
+}
+
+.fx-booking .fx-popup #fx-modaltab_nav div.fx-tabcontent {
+  margin-top: 0px;
+}
+
+.fx-booking .fx-popup #fx-modaltab_nav li a {
+  margin-right: 0px;
+  width: 185px;
+  padding: 10px;
+  border-radius: 0px !important;
+  font-size: var(--normal-descriptionsize);
+}
+
+.fx-booking .fx-popup #fx-modaltab_nav li:first-child a {
+  border-right: 0px;
+  border-top-left-radius: 4px !important;
+  border-bottom-left-radius: 4px !important;
+}
+
+.fx-booking .fx-popup #fx-modaltab_nav li:last-child a {
+  border-left: 0px;
+  border-top-right-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
+}
+.fx-booking .fx-timelistboxbar{
+  overflow: auto;
+  height:200px;
+}
+.fx-booking .fx-timelistbox {
+  padding: 7px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  /* box-shadow: 0px 0px 5px 0px var(--box-shadow); */
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fx-booking .time {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: var(--normal-descriptionsize);
+  color: var(--grey);
+  display: flex;
+  gap: 20px;
+}
+
+.fx-booking .fx-timeslotsection {
+  display: flex;
+  gap: 15px;
+}
+
+.fx-booking .fx-timeslotsection .fx-offericon {
+  width: 25px;
+}
+
+.fx-booking .fx-slotquantity {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #dedede;
+  border-radius: 50%;
+  background-image: url(../images/icons8-clock\ 9.svg);
+  background-size: 100% 100%;
+  display: flex;
+  align-items: center;
+  /* vertical center */
+  justify-content: center;
+  color: var(--darkgrey);
+  font-weight: 500;
+  font-size: var(--extrasmall-timeslotsize);
+}
+
+.fx-booking .soldbadge {
+  font-family: "Roboto", sans-serif;
+  margin-left: 20px;
+  background: var(--grey);
+  border-radius: 4px;
+  padding: 2px 6px;
+  padding-bottom: 4px;
+  color: var(--white);
+  font-size: 16px;
+}
+
+.fx-booking .fx-popup .fx-quantitybox {
+  width: auto;
+  float: right;
+  justify-content: center;
+  align-items: center;
+}
+
+.fx-booking .fx-popup .fx-quantitybox button {
+  width: 28px;
+  height: 27px;
+  font-size: var(--normal-descriptionsize);
+  border: 0.76px solid var(--border-color);
+  background: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.fx-booking .fx-popup .fx-quantitybox input[type="number"] {
+  width: 30px;
+  height: 26px;
+  text-align: center;
+  border: none;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.fx-booking .fx-popup .fx-quantitybox input[type="number"]::-webkit-inner-spin-button,
+.fx-booking .fx-popup .fx-quantitybox input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.fx-booking .fx-popup .fx-quantitybox .decrement {
+  border-radius: 50%;
+  margin-bottom: 0px;
+}
+
+.fx-booking .fx-quantitybox .increment {
+  border-radius: 50%;
+  margin-bottom: 0px;
+}
+
+.fx-booking .fx-popup .fx-rightpopup .continuebtn {
+  height: 39px;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 400;
+  background: var(--primary-color);
+  text-align: center;
+  border-radius: 33px;
+  font-family: "Roboto", sans-serif;
+  color: var(--white);
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 480px) {
+
+  .fx-booking .fx-popup {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    margin: 0px;
+  }
+
+  .fx-booking .fx-popup .fx-leftpopup {
+    width: 100%;
+    height: 300px;
+  }
+
+  .fx-booking .fx-popup .fx-leftpopup img {
+    height: 300px;
+  }
+
+  .fx-booking .fx-popup .fx-rightpopup {
+    width: 100%;
+  }
+  .fx-booking #fx-modaltab_nav ul{
+    width:100%;
+  }
+  .fx-booking .fx-popup #fx-modaltab_nav li{
+    width:33%;
+  }
+  .fx-booking .fx-popup #fx-modaltab_nav li a{
+    width:100%;
+  }
+
+
+}

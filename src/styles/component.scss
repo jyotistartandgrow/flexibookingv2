@@ -1,0 +1,371 @@
+
+/* booking input section */
+.fx-booking #fx-tab_nav div.selected  input[type="button"],
+.fx-booking #fx-tab_nav div.selected  button[type="button"],
+.fx-booking #fx-tab_nav div.selected  button {
+  width: 146px;
+  height: 71px;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+ .fx-booking .fx-giftbox{
+  width:668px;
+}
+ .fx-booking #fx-tab_nav div.selected .fx-element-box{
+  display: inline-block;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 12px;
+}
+ .fx-booking .fx-commoninput label{
+  font-family: "Roboto", sans-serif;
+  font-size:16px;
+  font-weight: 400;
+  color: var(darkgrey);
+  line-height: 30px;
+  display: block;
+  text-transform: capitalize;
+}
+ .fx-booking .fx-commoninput .fx-inputgroup {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+}
+ .fx-booking .fx-commoninput .bigtextbox{
+  height: 112px !important;
+}
+ .fx-booking .fx-commoninput input[type="text"],
+ .fx-booking .fx-commoninput input[type="email"] {
+  width: 100%;
+  padding: 16px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);;
+  /* box-sizing: border-box; */
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+ /* .fx-booking .fx-commoninput input[type="text"]:focus-visible,
+ .fx-booking .fx-commoninput input[type="email"]:focus-visible
+{
+  border:1px solid #ccc !important;
+} */
+ .fx-booking .fx-inputgroup {
+  width: 100%;
+  display: flex;
+  gap: 30px;
+}
+ .fx-booking input[type="text"],
+ .fx-booking input[type="email"] {
+  width: 100%;
+  padding: 16px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  /* box-sizing: border-box; */
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+ .fx-booking .fx-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+ .fx-booking .fx-input-wrapper i {
+  position: absolute;
+  right: 15px;
+  top: 21%;
+  font-size: 25px;
+  color: var(--input-icon-color); /* Adjust color for the icon */
+  pointer-events: none; /* Prevent the icon from blocking clicks on the input */
+}
+
+/* Example email and phone icons */
+ .fx-booking .fx-input-wrapper .email-icon::before {
+  content: "\2709"; /* Envelope Unicode character for email */
+}
+
+ .fx-booking .fx-input-wrapper .phone-icon::before {
+  content: "\260E"; /* Telephone Unicode character for phone */
+}
+ .fx-booking .fx-element-box .btn-primary.active {
+  border: 1px solid var(--primary-color) !important;
+  color: var(--primary-color);
+}
+
+.fx-booking .btn-primary {
+  border: 1px solid transparent;
+  width: 240px;
+  font-weight: 400;
+  font-size: var(--normal-descriptionsize);
+  font-family: "Roboto", sans-serif;
+  border-radius: 44px;
+  background: var(--primary-color);
+  color: var(--white);
+}
+
+
+.fx-booking input[type="submit"],
+.fx-booking input[type="button"],
+.fx-booking button[type="button"] {
+  width: auto;
+  padding: 12px 24px;
+  font-weight: 400;
+  font-size: var(--normal-descriptionsize);
+  font-family: "Roboto", sans-serif;
+  border-radius: 44px;
+  cursor: pointer;
+}
+
+
+.fx-booking .btn-secondary{
+    width: 196px;
+    font-size: var(--normal-descriptionsize);
+    font-weight: 400;
+    border: 1px solid var(--primary-color);
+    text-align: center;
+    border-radius: 33px;
+    color: var(--primary-color);
+    margin-top:0px;
+    padding: 14px 0px;
+    cursor: pointer;
+    color: var(--primary-color);
+    background:#fff;
+}
+
+
+ .fx-booking .fx-element-box .btn-primary:hover,
+ .fx-booking .fx-element-box input[type="submit"]:hover,
+ .fx-booking .fx-element-box input[type="button"]:hover,
+ .fx-booking .fx-element-box button[type="button"]:hover {
+  background: var(--darkblue-color);
+  color: var(--white);
+  border: 1px solid var(--border-color);
+}
+
+ .fx-booking .fx-element-box input[type="text"]:focus {
+  border: 1px solid var(--border-color);
+}
+
+
+/* Coupon Section */
+ .fx-booking .fx-couponcontainer {
+  width:500px;
+  position: relative;
+  margin-top:30px;
+}
+ .fx-booking .fx-couponcontainerinputbox{
+  display: flex;
+}
+ .fx-booking .fx-coupon-box {
+  display: flex;
+  align-items: center;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  margin-bottom: 10px;
+  width: 95%;
+}
+ .fx-booking .fx-coupon-box input[type="text"] {
+  flex: 1;
+  border: none !important;
+  outline: none;
+  font-size: var(--small-descriptionsize);
+  margin-bottom: 0px;
+}
+ .fx-booking .fx-coupon-box input:focus{
+  border:none;
+}
+
+ .fx-booking .fx-apply-btn {
+  background: none;
+  border: none;
+  color: var(--grey);
+  font-size: var(--small-descriptionsize);
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 0px !important;
+  height:inherit !important;
+  width:auto !important;
+}
+
+ .fx-booking .fx-apply-btn:hover {
+  color: var(--grey);
+}
+
+ .fx-booking .fx-delete-icon {
+  color: var(--grey);
+  font-size: var(--normal-descriptionsize);
+  cursor: pointer;
+  margin-left: 10px;
+  margin-top:15px;
+}
+
+ .fx-booking .fx-delete-icon:hover {
+  color: var(--darkblue-color);
+}
+
+
+ .fx-booking .fx-tooltip {
+  visibility: hidden;
+  width: 200px;
+  background-color: var(--white);
+  font-size: var(--small-descriptionsize);
+  font-weight: 400;
+  line-height: 23px;
+  color: var(--grey);
+  padding: 16px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 24px 0px var(--box-shadow);
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+ .fx-booking .fx-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: white transparent transparent transparent;
+}
+
+ .fx-booking .fx-tooltip-container:hover .fx-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+ .fx-booking .fx-info-icon {
+  font-size: var(--normal-descriptionsize);
+  color: var(--grey);
+  cursor: pointer;
+}
+
+
+ /* Checkbox styles */
+.fx-booking .fx-element-box input[type="checkbox"] {
+  display: none;
+}
+
+ .fx-booking .fx-element-box .checkbox-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+ .fx-booking .fx-element-box .checkbox-label::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid var(--border-color);;
+  background-color: var(--white);;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+ .fx-booking .fx-element-box input[type="checkbox"]:checked + .checkbox-label::before {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+ .fx-booking .fx-element-box input[type="checkbox"]:checked + .checkbox-label::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top:3px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+ .fx-booking .fx-element-box input[type="checkbox"]:disabled + .checkbox-label {
+  color: var(--disabled-backgrouncolor);
+  cursor: not-allowed;
+}
+
+ .fx-booking .fx-element-box input[type="checkbox"]:disabled + .checkbox-label::before {
+  background-color: var(--disabled-backgrouncolor);
+  border-color: var(--disabled-bordercolor);
+}
+
+.fx-extracontentboxlist .fx-quantitybox {
+    width: auto;
+    float: left;
+}
+
+.fx-extracontentboxlist .fx-quantitybox .decrement {
+    border-radius: 50%;
+    margin-bottom: 0px;
+}
+.fx-extracontentboxlist .fx-quantitybox input[type="number"] {
+    width: 30px;
+    height: 26px;
+    text-align: center;
+    border: none;
+    font-size: var(--normal-descriptionsize);
+    box-sizing: border-box;
+}
+ .fx-extracontentboxlist .fx-quantitybox .increment {
+    border-radius: 50%;
+    margin-bottom: 0px;
+}
+
+.fx-extracontentboxlist .fx-quantitybox button {
+    width: 27px;
+    height: 27px;
+    color: var(darkgrey);
+    font-size: var(--normal-descriptionsize);
+    border: 0.76px solid var(--border-color);
+    background: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0px;
+}
+ .fx-extracontentboxlist .fx-common {
+        display: flex;
+    justify-content: space-between;
+    float: right;
+    margin-top: -16px;
+}
+
+@media screen and (max-width: 480px) {
+.fx-booking .fx-couponcontainer{
+  width:100%;
+}
+.fx-booking .fx-coupon-box{
+  width:90% !important;
+}
+.fx-booking .fx-giftbox{
+  width:100% !important;
+}
+.fx-booking .fx-inputgroup{
+  gap:10px;
+}
+.fx-booking .fx-commoninput .fx-inputgroup{
+  flex-direction: column;
+}
+.fx-booking .fx-inputgroup{
+  flex-direction: column;
+}
+.fx-booking .fx-element-box .btn-primary, .fx-booking .fx-element-box input[type="submit"], .fx-booking .fx-element-box input[type="button"], .fx-booking .fx-element-box button[type="button"]{
+      width: 100%;
+}
+}

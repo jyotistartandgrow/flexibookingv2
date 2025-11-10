@@ -1,0 +1,208 @@
+/* Tab Section */
+/*---------- tab nav */
+.fx-booking .leftcontentbox{
+  position: relative;
+}
+.fx-booking #fx-tab_nav {
+  display: block;
+  width: 100%;
+}
+
+.fx-booking #fx-tab_nav ul {
+  display: table;
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+
+
+}
+
+.fx-booking #fx-tab_nav li {
+  display: table-cell;
+  text-align: center;
+  padding: 0 2px 0 0;
+  margin-bottom: 10px;
+}
+
+.fx-booking #fx-tab_nav li a {
+  display: block;
+  font-size: var(--small-headingsize);
+  font-weight: 400;
+  color: var(--grey);
+  text-decoration: none;
+  padding: 16px 0px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 2px 0px var(--box-shadow);
+  background: var(--white);
+  width: 146px;
+  margin-right: 11px;
+
+}
+
+.fx-booking #fx-tab_nav li a.selected {
+  border: 1px solid var(--darkblue-color) !important;
+  color: var(--darkblue-color);
+}
+
+.fx-booking #fx-tab_nav div.fx-tabcontent {
+  display: none;
+  margin-top: 20px;
+  color: var(--grey);
+
+}
+
+.fx-booking #fx-tab_nav div.selected {
+  display: block;
+}
+
+.fx-booking #fx-tab_nav div p {
+  margin: 0px 0px 20px 0px;
+}
+
+
+.fx-booking #fx-modaltab_nav li a.selected {
+  border: 1px solid var(--darkblue-color) !important;
+  color: var(--darkblue-color);
+}
+
+.fx-booking #fx-modaltab_nav div.fx-tabcontent {
+  display: none;
+  margin-top: 20px;
+  color: var(--grey);
+
+}
+
+.fx-booking #fx-modaltab_nav div.selected {
+  display: block;
+}
+
+.fx-booking #fx-modaltab_nav div p {
+  margin: 0px 0px 20px 0px;
+}
+
+
+
+.fx-booking #fx-modaltab_nav {
+  display: block;
+  width: 100%;
+}
+
+.fx-booking #fx-modaltab_nav ul {
+  display: table;
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+
+
+}
+
+.fx-booking #fx-modaltab_nav li {
+  display: table-cell;
+  text-align: center;
+  padding: 0 2px 0 0;
+  margin-bottom: 10px;
+}
+
+.fx-booking #fx-modaltab_nav li a {
+  display: block;
+  font-size: var(--small-headingsize);
+  font-weight: 400;
+  color: var(--grey);
+  text-decoration: none;
+  padding: 25px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 2px 0px var(--box-shadow);
+  background: var(--white);
+  width: 146px;
+  margin-right: 11px;
+
+}
+
+.fx-booking #fx-modaltab_nav li a.selected {
+  border: 1px solid var(--darkblue-color) !important;
+  color: var(--darkblue-color);
+}
+
+.fx-booking #fx-modaltab_nav div.fx-tabcontent {
+  display: none;
+  margin-top: 20px;
+  color: var(--grey);
+
+}
+
+.fx-booking #fx-modaltab_nav div.selected {
+  display: block;
+}
+
+.fx-booking #fx-modaltab_nav div p {
+  margin: 0px 0px 20px 0px;
+}
+
+
+
+/* Tab Icon Section */
+/*---------- tab nav */
+.fx-booking #fx-Icontab_nav {
+  display: block;
+  width: 100%;
+}
+
+.fx-booking #fx-Icontab_nav ul {
+  display: table;
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  position: absolute;
+  top: 6px;
+  right: 0px;
+}
+
+.fx-booking #fx-Icontab_nav li {
+  display: table-cell;
+  text-align: center;
+  padding: 0 2px 0 0;
+  margin-bottom: 10px;
+}
+
+.fx-booking #fx-Icontab_nav li a {
+  display: block;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  color: var(--grey);
+  text-decoration: none;
+  padding: 5px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 2px 0px var(--box-shadow);
+  background: var(--white);
+  width: 33px;
+  margin-left: 7px;
+
+}
+
+.fx-booking #fx-Icontab_nav li a.selected {
+  border: 1px solid var(--darkblue-color);
+  color: var(--darkblue-color);
+}
+
+.fx-booking #fx-Icontab_nav div.fx-tabcontent {
+  display: none;
+  margin-top: 0px;
+}
+
+.fx-booking #fx-Icontab_nav div.selected {
+  display: block;
+}
+
+@media screen and (max-width: 480px) {
+  .fx-booking #fx-tab_nav ul{
+    display: flex;
+    gap:11px;
+    justify-content: space-between;
+  }
+  .fx-booking #fx-tab_nav li{
+    width: 100%;
+  }
+  .fx-booking #fx-tab_nav li a{
+    width:inherit !important;
+  }
+}

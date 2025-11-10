@@ -1,0 +1,264 @@
+/* fx-stepper design css */
+.fx-booking .fx-stepper {
+  display: flex;
+  align-items: center;
+}
+
+.fx-booking .fx-step {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  color: var(--muted-color);
+  border: 2px solid var(--muted-color);
+  position: relative;
+}
+
+.fx-booking .fx-step.active {
+  background: var(--darkblue-color);
+  border-color: var(--darkblue-color);
+  color: var(--white);
+}
+
+.fx-booking .fx-step.completed {
+  background: var(--lightblue);
+  border-color: var(--lightblue);
+  color: var(--white);
+}
+
+.fx-booking .fx-step-label {
+  margin-left: 11px;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  color: var(--darkgrey);
+  margin-right: 13px;
+}
+
+.fx-booking .fx-line {
+  width:60px;
+  height: 3px;
+  background: var(--border-color);
+  margin-right: 13px;
+}
+
+.fx-booking .fx-line.active {
+  background: var(--primary-color);
+}
+
+.fx-booking .fx-step-container {
+  display: flex;
+  align-items: center;
+}
+
+.fx-booking .fx-step-container.active .fx-step-label{
+ display: block;
+}
+
+.fx-stepper-tabstyle {
+  position: relative;
+  width: 100%;
+  padding: 20px 0;
+  height: 60px;
+  /* enough height for steps to show */
+}
+
+.fx-stepper-tabstyle .step {
+  position: absolute;
+  top: 0;
+  padding: 10px 0;
+  width: 20%;
+  /* adjust width as needed */
+  border-radius: 40px;
+  border: 1px solid var(--border-color);
+  background: #f5f8ff;
+  color: #003087;
+  text-align: right;
+  padding-right: 50px;
+  transition: 0.3s;
+}
+
+.fx-stepper-tabstyle .datestep {
+  width: 20%;
+  z-index: 5;
+}
+
+.fx-stepper-tabstyle .servicesstep {
+  width: 50%;
+  z-index: 4;
+}
+
+.fx-stepper-tabstyle .extrastep {
+  width: 65%;
+  z-index: 3;
+}
+
+.fx-stepper-tabstyle .checkoutstep {
+  width: 83%;
+  z-index: 2;
+}
+
+.fx-stepper-tabstyle .paymentstep {
+  width: 100%;
+  z-index: 1;
+}
+
+/* ✅ Active step on top */
+.fx-stepper-tabstyle .datestep.active {
+  border: 1px solid #003087;
+  background: #fff;
+  text-align: center;
+  width: 32%;
+  left: 0%;
+  padding-right: 0px;
+}
+
+.fx-stepper-tabstyle .servicesstep.active {
+  width: 35%;
+  border: 1px solid #003087;
+  background: #fff;
+  text-align: center;
+  left: 15%;
+  padding-right: 0px;
+}
+
+.fx-stepper-tabstyle .extrastep.active {
+  width: 35%;
+  border: 1px solid #003087;
+  background: #fff;
+  text-align: center;
+  left: 31%;
+  padding-right: 0px;
+}
+
+.fx-stepper-tabstyle .checkoutstep.active {
+  width: 35%;
+  border: 1px solid #003087;
+  background: #fff;
+  text-align: center;
+  left: 49%;
+  padding-right: 0px;
+}
+
+.fx-stepper-tabstyle .paymentstep.active {
+  width: 35%;
+  border: 1px solid #003087;
+  background: #fff;
+  text-align: center;
+  left: 65%;
+  padding-right: 0px;
+
+}
+
+.fx-stepper-tabstyle .datestep.complete {
+  background: #fff;
+  width: 20%;
+  text-align: center;
+  padding-right: 0px;
+}
+
+.fx-stepper-tabstyle .servicesstep.complete {
+  background: #fff;
+  width: 30%;
+  left: 7%;
+}
+
+.fx-stepper-tabstyle .extrastep.complete {
+  background: #fff;
+  width: 48%;
+  left: 5%;
+}
+
+.fx-stepper-tabstyle .checkoutstep.complete {
+  background: #fff;
+  width: 52%;
+  left: 20%;
+}
+
+
+
+
+@media screen and (max-width: 500px) {
+  .fx-booking .fx-step{
+    width: 30px;
+    height: 30px;
+  }
+  .fx-booking .fx-step-label{
+    margin-left: 8px;
+    margin-right:6px;
+  }
+  .fx-booking .fx-line{
+        margin-right: 3px;
+        margin-left: 3px;
+  }
+}
+
+
+@media screen and (max-width: 500px) {
+  .fx-booking .fx-step-label {
+    display: none;
+  }
+
+  .fx-stepper-modern .fx-step {
+    font-size: 13px;
+    padding: 10px 0;
+  }
+
+  .fx-stepper-modern .fx-step-number {
+    font-size: 13px;
+  }
+
+  .fx-stepper-tabstyle .step span {
+    display: none;
+  }
+
+  .fx-stepper-tabstyle .step.active span {
+    display: block !important;
+  }
+
+  .fx-stepper-tabstyle .datestep.active {
+    width:42%;
+  }
+  .fx-stepper-tabstyle .servicesstep{
+    width:24%;
+    left:32%;
+    padding-right:20px;
+  }
+  .fx-stepper-tabstyle .extrastep{
+    width:38%;
+    left:32%;
+    padding-right:20px;
+  }
+
+  .fx-stepper-tabstyle .step{
+        padding-right: 20px;
+  }
+  .fx-stepper-tabstyle .servicesstep.active{
+    width: 44%;
+    left: 12%;
+    padding-right: 0px;
+    padding-left: 10px;
+  }
+  .fx-stepper-tabstyle .extrastep.active{
+    left: 29%;
+        width: 40%;
+  }
+  .fx-stepper-tabstyle .checkoutstep.active{
+        width: 41%;
+        left: 46%;
+        padding-left: 20px;
+  }
+  .fx-stepper-tabstyle .paymentstep.active{
+        width: 40%;
+        left: 60%;
+         padding-left: 20px;
+  }
+  .fx-stepper-tabstyle .checkoutstep.complete{
+        width: 48%;
+           
+  }
+
+}

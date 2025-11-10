@@ -1,0 +1,161 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import "./variables";
+@import "./card";
+@import "./component";
+@import "./modal";
+@import "./rightsidebar";
+@import "./stepper";
+@import "./tab";
+@import "./datepicker";
+
+*,
+:after,
+:before {
+    box-sizing: border-box;
+}
+
+html {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100vh;
+    font-family: "Roboto", sans-serif;
+    background: var(--greylight-bg);
+}
+
+.bgbody {
+    font-family: "Roboto", sans-serif;
+}
+
+.fx-booking.fx-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+
+.fx-booking .fx-leftbar {
+    width: 100%;
+    position: relative;
+}
+
+h1 {
+    text-align: left;
+    font-size: var(--main-headingsize);
+    font-weight: 400;
+}
+
+h2 {
+    color: var(--darkgrey);
+    font-size: var(--card-headingsize);
+    font-weight: 400;
+}
+
+h3 {
+    color: var(--darkgrey);
+    font-size: var(--small-headingsize);
+    font-weight: 400;
+}
+
+.fx-booking .fx-container .fx-leftbar .fx-leftcontentbox {
+    margin-top: 50px;
+    position: relative;
+}
+
+.fx-leftcontentbox 
+
+.fx-booking .fx-element-box {
+    text-align: left;
+    width: 100%;
+}
+
+ .fx-bottom-bar{
+                display: inline-block;
+                margin-bottom: 16px;
+                width:100%;
+            }
+            
+            .fx-bottom-bar .fx-skip{
+                 float: left;
+            }
+
+            .fx-bottom-bar .fx-continue{
+                 float: right;
+            }
+
+
+
+.fx-booking .fx-bookingdate span {
+    font-weight: 200;
+}
+
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--white);
+    scrollbar-arrow-color:var(--white);
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+   
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    border: 1px solid var(--white)
+  
+  }
+
+.fx-booking .fx-addmorelink{
+  font-size: var(--normal-descriptionsize);
+  text-decoration: underline;
+  font-weight: 400;
+  cursor: pointer;
+}
+@media screen and (max-width: 480px) {
+/* body{
+    overflow: auto !important;
+}
+.fx-booking.fx-container{
+    height: auto !important;
+    max-height: inherit !important;
+    overflow: auto !important;
+} */
+.fx-booking .fx-leftbar{
+    padding:15px;
+}
+.fx-booking .fx-sidebar{
+    display: none;
+}
+h1{
+    font-size:22px;
+    width:50%;
+}
+}
+@media screen and (min-width: 1024px) {
+  .fx-booking .fx-leftbar {
+    max-width:950px;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 40px;
+    right: 180px;
+  }
+}
