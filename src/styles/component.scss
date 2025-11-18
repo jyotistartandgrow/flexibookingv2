@@ -15,7 +15,7 @@
  .fx-booking .fx-giftbox{
   width:668px;
 }
- .fx-booking #fx-tab_nav div.selected .fx-element-box{
+ .fx-booking #fx-tab_nav div.selected .fx-element-box, .fx-booking .fx-commoninput .fx-element-box{
   display: inline-block;
   text-align: left;
   width: 100%;
@@ -26,14 +26,14 @@
   font-size:16px;
   font-weight: 400;
   color: var(darkgrey);
-  line-height: 30px;
   display: block;
   text-transform: capitalize;
+  margin-bottom: 7px;
 }
  .fx-booking .fx-commoninput .fx-inputgroup {
   width: 100%;
   display: flex;
-  gap: 10px;
+  gap: 14px;
 }
  .fx-booking .fx-commoninput .bigtextbox{
   height: 112px !important;
@@ -345,6 +345,100 @@
     float: right;
     margin-top: -16px;
 }
+
+ /* Radio button styles */
+ .fx-booking .fx-element-box input[type="radio"] {
+  display: none;
+}
+.fx-booking .fx-element-box .radio-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+
+.fx-booking .fx-element-box .radio-label::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  background-color: var(--white);
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+
+.fx-booking .fx-element-box input[type="radio"]:checked + .radio-label::after {
+  content: "";
+    position: absolute;
+    left: 4px;
+    width: 10px;
+    height: 10px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+}
+
+.fx-booking .fx-element-box input[type="radio"]:checked + .radio-label::before {
+  border-color: var(--primary-color);
+}
+
+.fx-booking .fx-element-box input[type="radio"]:disabled + .radio-label {
+  color: var(--disabled-backgrouncolor);
+  cursor: not-allowed;
+}
+
+.fx-booking .fx-element-box input[type="radio"]:disabled + .radio-label::before {
+  background-color: var(--disabled-backgrouncolor);
+  border-color: var(--disabled-bordercolor);
+}
+.fx-booking .fx-commoninput .fx-element-box.fx-checkoutbuttonbar{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.fx-booking .fx-phone-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 4px;
+  overflow: hidden;
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+.fx-booking .fx-phone-input .country-code {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #e9e9e9;
+  padding: 16px 12px;
+  font-size: 14px;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.fx-booking .fx-phone-input .country-code img {
+  width: 20px;
+  height: 14px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.fx-booking .fx-phone-input input {
+  border: none;
+  outline: none;
+  padding: 16px 12px;
+  font-size: 14px;
+  flex: 1;
+}
+
+.fx-booking .fx-phone-input input::placeholder {
+  color: #999;
+}
+
 
 @media screen and (max-width: 480px) {
 .fx-booking .fx-couponcontainer{

@@ -79,3 +79,9 @@ export const slugify = (text) => {
     .replace(/&/g, "-and-")
     .replace(/[\s\W-]+/g, "-");
 };
+
+export const decodeHtml = (html) => {
+  const txt = document.createElement("textarea");
+  txt.innerHTML = html;
+  return txt.value;
+};

@@ -9,6 +9,7 @@ const initialState = {
     phoneNumber: "",
     country: "",
     zip: "",
+    address: "",
   },
 };
 

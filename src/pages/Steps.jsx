@@ -4,13 +4,38 @@ import { useSelector } from "react-redux";
 export default function Steps({ step, setStep }) {
   const date = useSelector((state) => state.step1.date);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
+  const serviceid = useSelector((state) => state.step2.service);
+  let datestepclass = "step datestep";
+  let servicesstepclass = "step servicesstep";
+  let extrastepclass = "step extrastep";
+  let checkoutstepclass = "step checkoutstep";
+  let paymentstepclass = "step paymentstep";
+  if (step == "datestep") {
+    datestepclass = datestepclass + " active";
+  } else if (step == "servicesstep") {
+    servicesstepclass = servicesstepclass + " active";
+    datestepclass = datestepclass + " complete";
+  } else if (step == "extrastep") {
+    extrastepclass = extrastepclass + " active";
+    datestepclass = datestepclass + " complete";
+    servicesstepclass = servicesstepclass + " complete";
+  } else if (step == "checkoutstep") {
+    checkoutstepclass = checkoutstepclass + " active";
+    datestepclass = datestepclass + " complete";
+    servicesstepclass = servicesstepclass + " complete";
+    extrastepclass = extrastepclass + " complete";
+  } else if (step == "paymentstep") {
+    paymentstepclass = paymentstepclass + " active";
+    datestepclass = datestepclass + " complete";
+    servicesstepclass = servicesstepclass + " complete";
+    extrastepclass = extrastepclass + " complete";
+    checkoutstepclass = checkoutstepclass + " complete";
+  }
 
   return (
     <div className="fx-stepper-tabstyle">
       <div
-        className={
-          step == "datestep" ? "step datestep active" : "step datestep"
-        }
+        className={datestepclass}
         onClick={() => {
           if (date || receiverInfo.firstName) setStep("datestep");
         }}
@@ -18,35 +43,20 @@ export default function Steps({ step, setStep }) {
         <span>1 DATE</span>
       </div>
       <div
-        className={
-          step == "servicesstep"
-            ? "step servicesstep active"
-            : "step servicesstep"
-        }
+        className={servicesstepclass}
+        onClick={() => {
+          if (serviceid) setStep("servicesstep");
+        }}
       >
         2 <span>SERVICES</span>
       </div>
-      <div
-        className={
-          step == "extrastep" ? "step extrastep active" : "step extrastep"
-        }
-      >
+      <div className={extrastepclass}>
         3 <span>EXTRA</span>
       </div>
-      <div
-        className={
-          step == "checkoutstep"
-            ? "step checkoutstep active"
-            : "step checkoutstep"
-        }
-      >
-        4 <span>CHECKOT</span>
+      <div className={checkoutstepclass}>
+        4 <span>CHECKOUT</span>
       </div>
-      <div
-        className={
-          step == "paymentstep" ? "step paymentstep active" : "step paymentstep"
-        }
-      >
+      <div className={paymentstepclass}>
         5 <span>PAYMENT</span>
       </div>
     </div>

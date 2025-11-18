@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import calendar from "../assets/calendar.png";
 import { Calendar } from "primereact/calendar";
@@ -7,10 +7,10 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import moment from "moment";
-import useFetch from "../Utils/CustomHook";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
 import { setDate, setReceiverInfo } from "../store/step1Slice";
+import { decodeHtml } from "../Utils/Functions";
 
 export default function ChooseDate({ step, setStep }) {
   const dispatch = useDispatch();
@@ -20,9 +20,15 @@ export default function ChooseDate({ step, setStep }) {
   const [isVisibleGift, setIsVisibleGift] = useState(false);
   const [couponCount, setCouponCount] = useState(0);
   const [disabledDates, setDisabledDates] = useState([]);
+  const [responsearr, setResponsear] = useState([]);
+  const [month, setMonth] = useState(moment().format("YYYY-MM"));
   const toggleDiv = (type) => {
     setIsVisible(type);
   };
+
+  useEffect(() => {
+    getserviceavailabilitycalendar(month);
+  }, [month]);
 
   const addmoreCoupon = () => {
     setCouponCount(couponCount + 1);
@@ -32,30 +38,6 @@ export default function ChooseDate({ step, setStep }) {
     setCouponCount(couponCount - 1);
   };
 
-  const monthYear = moment().format("YYYY-MM");
-  const { data: datearr } = useFetch(
-    "/service-availability-calendar?month=" + monthYear,
-    {
-      method: "get",
-    }
-  );
-
-  if (datearr?.data && disabledDates.length === 0) {
-    const datedarr = [];
-    datearr?.data.forEach((dateItem) => {
-      if (dateItem.is_bookable === false) {
-        const dateObj = new Date(dateItem.date);
-        datedarr.push(dateObj);
-      }
-    });
-    setDisabledDates(datedarr);
-  }
-
-  const decodeHtml = (html) => {
-    const txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value;
-  };
   const dateTemplate = (dateMeta) => {
     // dateMeta = { day, month, year, today, selectable, otherMonth }
     let tooltipText = "";
@@ -75,7 +57,7 @@ export default function ChooseDate({ step, setStep }) {
     ) {
       tooltipText = "Date not available";
     } else {
-      const matchedObj = datearr?.data?.find((item) => {
+      const matchedObj = responsearr?.find((item) => {
         const itemDate = item?.date
           ? moment(item.date).format("YYYY-MM-DD")
           : null;
@@ -156,6 +138,34 @@ export default function ChooseDate({ step, setStep }) {
     }
     setStep("servicesstep");
   };
+
+  const getserviceavailabilitycalendar = async (monthYear) => {
+    /* Service availability calendar */
+    const { data: dataa } = await axiosInstance(
+      `/service-availability-calendar?month=${monthYear}`,
+      {
+        method: "get",
+      }
+    );
+
+    if (dataa?.data) {
+      setResponsear(dataa?.data);
+      if (dataa?.data && disabledDates.length === 0) {
+        const datedarr = [];
+        dataa?.data.forEach((dateItem) => {
+          if (dateItem.is_bookable === false) {
+            const dateObj = new Date(dateItem.date);
+            datedarr.push(dateObj);
+          }
+        });
+        setDisabledDates(datedarr);
+      }
+    }
+  };
+
+  const handleMonthChange = (e) => {
+    setMonth(moment(e.year + "-" + e.month).format("YYYY-MM"));
+  };
   return (
     <div
       className="fx-leftcontentbox"
@@ -198,6 +208,7 @@ export default function ChooseDate({ step, setStep }) {
                 className="fx-datepicker"
                 minDate={new Date()}
                 disabledDates={disabledDates}
+                onMonthChange={handleMonthChange}
               />
               <img src={calendar} className="fx-calendaricon" />
             </div>
@@ -302,6 +313,24 @@ export default function ChooseDate({ step, setStep }) {
                       setReceiverInfo({
                         ...receiverInfo,
                         zip: e.target.value,
+                      })
+                    )
+                  }
+                />
+              </div>
+            </div>
+            <div className="fx-inputgroup">
+              <div className="fx-input-wrapper">
+                <input
+                  type="text"
+                  placeholder="Address"
+                  className="bigtextbox"
+                  value={receiverInfo.address}
+                  onBlur={(e) =>
+                    dispatch(
+                      setReceiverInfo({
+                        ...receiverInfo,
+                        address: e.target.value,
                       })
                     )
                   }
