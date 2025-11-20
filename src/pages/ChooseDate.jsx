@@ -77,6 +77,14 @@ export default function ChooseDate({ step, setStep }) {
 
     return (
       <div id={tooltipId} className="relative w-full h-full">
+        
+        <div className="custom-day" data-pr-tooltip={tooltipText}>
+          {day}
+          {/* {<div className="fx-tooltip">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+          </div>} */}
+        </div>
+        
         <div
           className="pecent-bar"
           style={{
@@ -85,9 +93,6 @@ export default function ChooseDate({ step, setStep }) {
             backgroundColor: "blue ",
           }}
         ></div>
-        <div className="custom-day" data-pr-tooltip={tooltipText}>
-          {day}
-        </div>
         <Tooltip target=".custom-day" />
       </div>
     );
@@ -376,7 +381,7 @@ export default function ChooseDate({ step, setStep }) {
                       <input type="text" placeholder="Enter your coupon code" />
                       <button className="fx-apply-btn">APPLY</button>
                     </div>
-                    <div>
+                    <div className="fx-delete-coupon">
                       <i
                         className="pi pi-trash"
                         onClick={() => removeCoupon()}
