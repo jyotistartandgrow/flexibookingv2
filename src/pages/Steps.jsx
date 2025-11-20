@@ -1,10 +1,15 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setStep } from "../store/step1Slice";
 
-export default function Steps({ step, setStep }) {
+export default function Steps() {
+  const dispatch = useDispatch();
   const date = useSelector((state) => state.step1.date);
+  const step = useSelector((state) => state.step1.step);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
   const serviceid = useSelector((state) => state.step2.service);
+  const extra = useSelector((state) => state.step3.extra);
+  const checkoutkey = useSelector((state) => state.step4.checkoutkey);
   let datestepclass = "step datestep";
   let servicesstepclass = "step servicesstep";
   let extrastepclass = "step extrastep";
@@ -37,7 +42,7 @@ export default function Steps({ step, setStep }) {
       <div
         className={datestepclass}
         onClick={() => {
-          if (date || receiverInfo.firstName) setStep("datestep");
+          if (date || receiverInfo.firstName) dispatch(setStep("datestep"));
         }}
       >
         <span>1 DATE</span>
@@ -45,15 +50,25 @@ export default function Steps({ step, setStep }) {
       <div
         className={servicesstepclass}
         onClick={() => {
-          if (serviceid) setStep("servicesstep");
+          if (serviceid) dispatch(setStep("servicesstep"));
         }}
       >
         2 <span>SERVICES</span>
       </div>
-      <div className={extrastepclass}>
+      <div
+        className={extrastepclass}
+        onClick={() => {
+          if (extra) dispatch(setStep("extrastep"));
+        }}
+      >
         3 <span>EXTRA</span>
       </div>
-      <div className={checkoutstepclass}>
+      <div
+        className={checkoutstepclass}
+        onClick={() => {
+          if (checkoutkey) dispatch(setStep("checkoutstep"));
+        }}
+      >
         4 <span>CHECKOUT</span>
       </div>
       <div className={paymentstepclass}>

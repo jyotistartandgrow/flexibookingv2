@@ -9,12 +9,14 @@ import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 import extra from "../assets/extra1.jpg";
 import { setExtracapacity, setExtra, setBookingkey } from "../store/step3Slice";
+import { setStep } from "../store/step1Slice";
 import Swal from "sweetalert2";
 
-export default function Service({ step, setStep }) {
+export default function Service() {
   const dispatch = useDispatch();
 
   const date = useSelector((state) => state.step1.date);
+  const step = useSelector((state) => state.step1.step);
   const service = useSelector((state) => state.step2.service);
   const capacity = useSelector((state) => state.step2.capacity);
   const slot = useSelector((state) => state.step2.slot);
@@ -60,7 +62,7 @@ export default function Service({ step, setStep }) {
         </div>
         <div className="fx-extracontentbox">
           <h4>{product.extra_name}</h4>
-          <p>{product.extra_desc}</p>
+          <p>{decodeHtml(product.extra_desc)}</p>
           <div className="fx-common">
             <div className="fx-quantitybox">
               <button
@@ -132,7 +134,7 @@ export default function Service({ step, setStep }) {
       dispatch(setExtracapacity(book));
       dispatch(setExtra(extraid));
       dispatch(setBookingkey(data.data.booking_string));
-      setStep("checkoutstep");
+      dispatch(setStep("checkoutstep"));
     } else {
       Swal.fire({
         toast: true,
@@ -146,7 +148,7 @@ export default function Service({ step, setStep }) {
   };
 
   const skipextra = () => {
-    setStep("checkoutstep");
+    dispatch(setStep("checkoutstep"));
   };
 
   return (
@@ -207,7 +209,7 @@ export default function Service({ step, setStep }) {
                       </div>
                       <div className="fx-extracontentbox">
                         <h4>{product.extra_name}</h4>
-                        <p>{product.extra_desc}</p>
+                        <p>{decodeHtml(product.extra_desc)}</p>
                         <div className="fx-common">
                           <div className="fx-quantitybox">
                             <button
@@ -256,7 +258,7 @@ export default function Service({ step, setStep }) {
                     </div>
                     <div className="fx-extracontentboxlist">
                       <h4>{product.extra_name}</h4>
-                      <p>{product.extra_desc}</p>
+                      <p>{decodeHtml(product.extra_desc)}</p>
                       <p className="price">
                         {" "}
                         <span>{decodeHtml(product.price)}</span>

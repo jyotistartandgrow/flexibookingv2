@@ -9,12 +9,13 @@ import "primeicons/primeicons.css";
 import moment from "moment";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
-import { setDate, setReceiverInfo } from "../store/step1Slice";
+import { setDate, setReceiverInfo, setStep } from "../store/step1Slice";
 import { decodeHtml } from "../Utils/Functions";
 
-export default function ChooseDate({ step, setStep }) {
+export default function ChooseDate() {
   const dispatch = useDispatch();
   const date = useSelector((state) => state.step1.date);
+  const step = useSelector((state) => state.step1.step);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
   const [isVisible, setIsVisible] = useState("booking");
   const [isVisibleGift, setIsVisibleGift] = useState(false);
@@ -117,7 +118,7 @@ export default function ChooseDate({ step, setStep }) {
       }
     );
     if (data?.data?.is_bookable) {
-      setStep("servicesstep");
+      dispatch(setStep("servicesstep"));
     }
   };
 
@@ -141,7 +142,7 @@ export default function ChooseDate({ step, setStep }) {
       });
       return;
     }
-    setStep("servicesstep");
+    dispatch(setStep("servicesstep"));
   };
 
   const getserviceavailabilitycalendar = async (monthYear) => {

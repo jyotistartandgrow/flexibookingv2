@@ -9,11 +9,12 @@ import useFetch from "../Utils/CustomHook";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { InputSwitch } from "primereact/inputswitch";
-import { setReceiverInfo } from "../store/step1Slice";
+import { setReceiverInfo, setStep } from "../store/step1Slice";
 import { setCheckoutkey, setPaymentstring } from "../store/step4Slice";
 
-export default function Checkout({ step, setStep }) {
+export default function Checkout() {
   const dispatch = useDispatch();
+  const step = useSelector((state) => state.step1.step);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
 
@@ -118,7 +119,7 @@ export default function Checkout({ step, setStep }) {
     if (data && data.status == 200 && data.data.status == "success") {
       dispatch(setCheckoutkey(data.data.checkout));
       dispatch(setPaymentstring(data.data.data));
-      setStep("paymentstep");
+      dispatch(setStep("paymentstep"));
     } else {
       Swal.fire({
         toast: true,
@@ -222,7 +223,7 @@ export default function Checkout({ step, setStep }) {
                 setBilldata({ ...billdata, sgbm_field_7: e.target.value });
               }}
             >
-              {states.length &&
+              {states.length > 0 &&
                 Object.keys(states).map((key) => (
                   <option value={states[key].code}>{states[key].name}</option>
                 ))}
@@ -280,7 +281,7 @@ export default function Checkout({ step, setStep }) {
             inputId="option2"
           />
         </div>
-        {gift && (
+        {gift == true && (
           <>
             <h3>Gift Receiver Information</h3>
             <div className="fx-giftbox fx-commoninput" id="gift-section">

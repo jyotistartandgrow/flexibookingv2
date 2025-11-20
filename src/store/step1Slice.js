@@ -11,6 +11,7 @@ const initialState = {
     zip: "",
     address: "",
   },
+  step: "datestep",
 };
 
 const step1Slice = createSlice({
@@ -23,8 +24,11 @@ const step1Slice = createSlice({
     setReceiverInfo: (state, action) => {
       state.receiverInfo = { ...state.receiverInfo, ...action.payload };
     },
+    setStep: (state, action) => {
+      state.step = action.payload;
+    },
   },
 });
 
-export const { setDate, setReceiverInfo } = step1Slice.actions;
+export const { setDate, setReceiverInfo, setStep } = step1Slice.actions;
 export default step1Slice.reducer;

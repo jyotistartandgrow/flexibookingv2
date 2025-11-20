@@ -26,5 +26,6 @@ const step2Slice = createSlice({
   },
 });
 
-export const { setTimeslot, setCapacity, setService } = step2Slice.actions;
+export const { setTimeslot, setCapacity, setService, setCart } =
+  step2Slice.actions;
 export default step2Slice.reducer;
