@@ -5,9 +5,11 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import Swal from "sweetalert2";
 import axiosInstance from "../Utils/Interceptor";
+import { setStep } from "../store/step1Slice";
 
-export default function Payment({ step, setStep }) {
+export default function Payment() {
   const dispatch = useDispatch();
+  const step = useSelector((state) => state.step1.step);
 
   return (
     <div
