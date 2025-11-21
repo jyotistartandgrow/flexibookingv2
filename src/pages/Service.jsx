@@ -375,9 +375,9 @@ export default function Service() {
             setVisible(false);
           }}
           maximizable
-          style={{ width: "50vw" }}
-          breakpoints={{ "960px": "75vw", "641px": "100vw" }}
-          className="fx-booking"
+          // style={{ width: "50vw" }}
+          // breakpoints={{ "960px": "75vw", "641px": "100vw" }}
+          className="fx-booking fx-main-modal-box"
         >
           <div
             className="fx-overlay"
@@ -408,7 +408,7 @@ export default function Service() {
                 </a>
 
                 <p>
-                  {decodeHtml(productDetails.svc_long_desc)}
+                  <span className="fx-des">{decodeHtml(productDetails.svc_long_desc)}</span>
                   <span className="readmore">Read More</span>
                 </p>
                 <p className="datetext">{moment(date).format("MMM YYYY")}</p>
