@@ -39,6 +39,7 @@ export default function Service() {
   const [serviceid, setServiceId] = useState(null);
   const [book, setBook] = useState(0);
   const [slot, setSlot] = useState("");
+  const [readmorecl, setReadmorecl] = useState(false);
 
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -247,6 +248,9 @@ export default function Service() {
     dispatch(setStep("extrastep"));
   };
 
+  const slotObj = dateslot.find((s) =>
+    moment(moment(date).format("YYYY-MM-DD")).isSame(s.date)
+  );
   return (
     <div
       className="fx-leftcontentbox"
@@ -407,9 +411,14 @@ export default function Service() {
                   &times;
                 </a>
 
-                <p>
+                <p className={readmorecl ? "fx-expand-readmore" : ""}>
                   {decodeHtml(productDetails.svc_long_desc)}
-                  <span className="readmore">Read More</span>
+                  <span
+                    className="readmore"
+                    onClick={() => setReadmorecl(!readmorecl)}
+                  >
+                    Read More
+                  </span>
                 </p>
                 <p className="datetext">{moment(date).format("MMM YYYY")}</p>
                 <div className="calendarboxbar">
@@ -460,9 +469,7 @@ export default function Service() {
                 </div>
 
                 <div id="fx-modaltab_nav">
-                  {!dateslot.find((s) =>
-                    moment(moment(date).format("YYYY-MM-DD")).isSame(s.date)
-                  )?.slots.single_time_slot.slot_type && (
+                  {!slotObj?.slots.single_time_slot.slot_type && (
                     <>
                       <ul>
                         <li
@@ -514,11 +521,6 @@ export default function Service() {
                         <h5>Choose the time</h5>
                         <div className="fx-timelistboxbar">
                           {(() => {
-                            const slotObj = dateslot.find((s) =>
-                              moment(moment(date).format("YYYY-MM-DD")).isSame(
-                                s.date
-                              )
-                            );
                             const slotItems = slotObj?.slots?.morning || [];
 
                             if (!slotObj || slotItems.length === 0) {
@@ -529,63 +531,76 @@ export default function Service() {
                               );
                             }
 
-                            return slotItems.map((item, idx) => {
-                              return (
-                                <div className="fx-timelistbox" key={idx}>
-                                  <div className="fx-timeslotsection">
-                                    <div className="time">{item.time_slot}</div>
-                                    <img
-                                      className="fx-offericon"
-                                      src={percentage}
-                                    />
-                                    <div className="fx-slotquantity">
-                                      {item.capacity_left}
-                                    </div>
-                                  </div>
-
-                                  <div className="fx-common">
-                                    <div className="fx-quantitybox">
-                                      {item.slot_type == "active" && (
-                                        <>
-                                          <button
-                                            type="button"
-                                            className="decrement"
-                                            onClick={() =>
-                                              slotbook(item.time_slot, "minus")
-                                            }
-                                          >
-                                            -
-                                          </button>
-                                          <input
-                                            type="number"
-                                            value={
-                                              slot == item.time_slot ? book : 0
-                                            }
-                                            defaultValue={0}
-                                            min={0}
-                                            max={item.capacity_left}
-                                          />
-                                          <button
-                                            type="button"
-                                            className="increment"
-                                            onClick={() =>
-                                              slotbook(item.time_slot, "add")
-                                            }
-                                          >
-                                            +
-                                          </button>
-                                        </>
-                                      )}
-                                    </div>
+                            return slotItems.map((item, idx) => (
+                              <div
+                                className={
+                                  slot == item.time_slot
+                                    ? "fx-timelistbox fx-slotbox-active"
+                                    : "fx-timelistbox"
+                                }
+                                key={idx}
+                              >
+                                <div className="fx-timeslotsection">
+                                  <div className="time">{item.time_slot}</div>
+                                  <img
+                                    className="fx-offericon"
+                                    src={percentage}
+                                  />
+                                  <div className="fx-slotquantity">
+                                    {item.capacity_left}
                                   </div>
                                 </div>
-                              );
-                            });
+
+                                <div className="fx-common">
+                                  <div className="fx-quantitybox">
+                                    {item.slot_type == "active" && (
+                                      <>
+                                        <button
+                                          type="button"
+                                          className="decrement"
+                                          onClick={() =>
+                                            slotbook(item.time_slot, "minus")
+                                          }
+                                        >
+                                          -
+                                        </button>
+                                        <input
+                                          type="number"
+                                          value={
+                                            slot == item.time_slot ? book : 0
+                                          }
+                                          defaultValue={0}
+                                          min={0}
+                                          max={item.capacity_left}
+                                        />
+                                        <button
+                                          type="button"
+                                          className="increment"
+                                          onClick={() =>
+                                            slotbook(item.time_slot, "add")
+                                          }
+                                        >
+                                          +
+                                        </button>
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            ));
                           })()}
                         </div>
                         <div
-                          className="continuebtn"
-                          onClick={() => bookservice()}
+                          className={
+                            slotVisible == "morning" && book > 0
+                              ? "continuebtn"
+                              : "continuebtn fx-disable-button"
+                          }
+                          onClick={() =>
+                            slotVisible == "morning" && book > 0
+                              ? bookservice()
+                              : ""
+                          }
                         >
                           Continue
                         </div>
@@ -600,14 +615,9 @@ export default function Service() {
                         <h5>Choose the time</h5>
                         <div className="fx-timelistboxbar">
                           {(() => {
-                            const slotObj = dateslot.find((s) =>
-                              moment(moment(date).format("YYYY-MM-DD")).isSame(
-                                s.date
-                              )
-                            );
-                            const slotItems = slotObj?.slots?.afternoon || [];
+                            const slotAfItems = slotObj?.slots?.afternoon || [];
 
-                            if (!slotObj || slotItems.length === 0) {
+                            if (!slotObj || slotAfItems.length === 0) {
                               return (
                                 <div className="fx-timelistbox">
                                   No slots available
@@ -615,63 +625,77 @@ export default function Service() {
                               );
                             }
 
-                            slotItems.map((item, idx) => {
-                              return (
-                                <div className="fx-timelistbox" key={idx}>
-                                  <div className="fx-timeslotsection">
-                                    <div className="time">{item.time_slot}</div>
-                                    <img
-                                      className="fx-offericon"
-                                      src={percentage}
-                                    />
-                                    <div className="fx-slotquantity">
-                                      {item.capacity_left}
-                                    </div>
-                                  </div>
-
-                                  <div className="fx-common">
-                                    <div className="fx-quantitybox">
-                                      {item.slot_type == "active" && (
-                                        <>
-                                          <button
-                                            type="button"
-                                            className="decrement"
-                                            onClick={() =>
-                                              slotbook(item.time_slot, "minus")
-                                            }
-                                          >
-                                            -
-                                          </button>
-                                          <input
-                                            type="number"
-                                            value={
-                                              slot == item.time_slot ? book : 0
-                                            }
-                                            defaultValue={0}
-                                            min={0}
-                                            max={item.capacity_left}
-                                          />
-                                          <button
-                                            type="button"
-                                            className="increment"
-                                            onClick={() =>
-                                              slotbook(item.time_slot, "add")
-                                            }
-                                          >
-                                            +
-                                          </button>
-                                        </>
-                                      )}
-                                    </div>
+                            return slotAfItems.map((item, idx) => (
+                              <div
+                                className={
+                                  slot == item.time_slot
+                                    ? "fx-timelistbox fx-slotbox-active"
+                                    : "fx-timelistbox"
+                                }
+                                key={"af=" + idx}
+                              >
+                                <div className="fx-timeslotsection">
+                                  <div className="time">{item.time_slot}</div>
+                                  <img
+                                    className="fx-offericon"
+                                    src={percentage}
+                                  />
+                                  <div className="fx-slotquantity">
+                                    {item.capacity_left}
                                   </div>
                                 </div>
-                              );
-                            });
+
+                                <div className="fx-common">
+                                  <div className="fx-quantitybox">
+                                    {item.slot_type == "active" && (
+                                      <>
+                                        <button
+                                          type="button"
+                                          className="decrement"
+                                          onClick={() =>
+                                            slotbook(item.time_slot, "minus")
+                                          }
+                                        >
+                                          -
+                                        </button>
+
+                                        <input
+                                          type="number"
+                                          min={0}
+                                          max={item.capacity_left}
+                                          value={
+                                            slot === item.time_slot ? book : 0
+                                          }
+                                        />
+
+                                        <button
+                                          type="button"
+                                          className="increment"
+                                          onClick={() =>
+                                            slotbook(item.time_slot, "add")
+                                          }
+                                        >
+                                          +
+                                        </button>
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            ));
                           })()}
                         </div>
                         <div
-                          className="continuebtn"
-                          onClick={() => bookservice()}
+                          className={
+                            slotVisible == "afternoon" && book > 0
+                              ? "continuebtn"
+                              : "continuebtn fx-disable-button"
+                          }
+                          onClick={() =>
+                            slotVisible == "afternoon" && book > 0
+                              ? bookservice()
+                              : ""
+                          }
                         >
                           Continue
                         </div>
@@ -691,11 +715,6 @@ export default function Service() {
                     <h5>Choose the time</h5>
                     <div className="fx-timelistboxbar">
                       {(() => {
-                        const slotObj = dateslot.find((s) =>
-                          moment(moment(date).format("YYYY-MM-DD")).isSame(
-                            s.date
-                          )
-                        );
                         const slotItems = slotObj?.slots?.time_slots || [];
                         const singleslotItem =
                           slotObj?.slots?.single_time_slot || {};
@@ -713,9 +732,15 @@ export default function Service() {
                           );
                         }
 
-                        if (singleslotItem) {
+                        if (singleslotItem && singleslotItem.time_slot) {
                           return (
-                            <div className="fx-timelistbox">
+                            <div
+                              className={
+                                slot == singleslotItem.time_slot
+                                  ? "fx-timelistbox fx-slotbox-active"
+                                  : "fx-timelistbox"
+                              }
+                            >
                               <div className="fx-timeslotsection">
                                 <div className="time">
                                   {singleslotItem.time_slot}
@@ -776,61 +801,70 @@ export default function Service() {
                           );
                         }
 
-                        return slotItems.map((item, idx) => {
-                          return (
-                            <div className="fx-timelistbox" key={idx}>
-                              <div className="fx-timeslotsection">
-                                <div className="time">{item.time_slot}</div>
-                                <img
-                                  className="fx-offericon"
-                                  src={percentage}
-                                />
-                                <div className="fx-slotquantity">
-                                  {item.capacity_left}
-                                </div>
-                              </div>
-
-                              <div className="fx-common">
-                                <div className="fx-quantitybox">
-                                  {item.slot_type == "active" && (
-                                    <>
-                                      <button
-                                        type="button"
-                                        className="decrement"
-                                        onClick={() =>
-                                          slotbook(item.time_slot, "minus")
-                                        }
-                                      >
-                                        -
-                                      </button>
-                                      <input
-                                        type="number"
-                                        value={
-                                          slot == item.time_slot ? book : 0
-                                        }
-                                        defaultValue={0}
-                                        min={0}
-                                        max={item.capacity_left}
-                                      />
-                                      <button
-                                        type="button"
-                                        className="increment"
-                                        onClick={() =>
-                                          slotbook(item.time_slot, "add")
-                                        }
-                                      >
-                                        +
-                                      </button>
-                                    </>
-                                  )}
-                                </div>
+                        return slotItems.map((item, idx) => (
+                          <div
+                            className={
+                              slot == item.time_slot
+                                ? "fx-timelistbox fx-slotbox-active"
+                                : "fx-timelistbox"
+                            }
+                            key={idx}
+                          >
+                            <div className="fx-timeslotsection">
+                              <div className="time">{item.time_slot}</div>
+                              <img className="fx-offericon" src={percentage} />
+                              <div className="fx-slotquantity">
+                                {item.capacity_left}
                               </div>
                             </div>
-                          );
-                        });
+
+                            <div className="fx-common">
+                              <div className="fx-quantitybox">
+                                {item.slot_type == "active" && (
+                                  <>
+                                    <button
+                                      type="button"
+                                      className="decrement"
+                                      onClick={() =>
+                                        slotbook(item.time_slot, "minus")
+                                      }
+                                    >
+                                      -
+                                    </button>
+                                    <input
+                                      type="number"
+                                      value={slot == item.time_slot ? book : 0}
+                                      defaultValue={0}
+                                      min={0}
+                                      max={item.capacity_left}
+                                    />
+                                    <button
+                                      type="button"
+                                      className="increment"
+                                      onClick={() =>
+                                        slotbook(item.time_slot, "add")
+                                      }
+                                    >
+                                      +
+                                    </button>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ));
                       })()}
                     </div>
-                    <div className="continuebtn" onClick={() => bookservice()}>
+                    <div
+                      className={
+                        slotVisible == "all" && book > 0
+                          ? "continuebtn"
+                          : "continuebtn fx-disable-button"
+                      }
+                      onClick={() =>
+                        slotVisible == "all" && book > 0 ? bookservice() : ""
+                      }
+                    >
                       Continue
                     </div>
                   </div>

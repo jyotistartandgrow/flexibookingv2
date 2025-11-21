@@ -6,10 +6,14 @@ import "primeicons/primeicons.css";
 import Swal from "sweetalert2";
 import axiosInstance from "../Utils/Interceptor";
 import { setStep } from "../store/step1Slice";
+import moment from "moment";
+import { decodeHtml } from "../Utils/Functions";
 
 export default function Payment() {
   const dispatch = useDispatch();
   const step = useSelector((state) => state.step1.step);
+  const date = useSelector((state) => state.step1.date);
+  const cart = useSelector((state) => state.step2.cart);
 
   return (
     <div
@@ -20,7 +24,7 @@ export default function Payment() {
       <div className="fx-order-summary">
         <div className="fx-service-date">
           <strong>Service Date:</strong>
-          <p>December 28th, 2024</p>
+          <p>{moment(date).format("MMMM Do, YYYY")}</p>
         </div>
 
         <table className="fx-summary-table">
@@ -33,29 +37,28 @@ export default function Payment() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Test new</td>
-              <td>€23,00</td>
-              <td>0</td>
-              <td>€0,00</td>
-            </tr>
-            <tr>
-              <td>Test1</td>
-              <td>€23,00</td>
-              <td>0</td>
-              <td>€0,00</td>
-            </tr>
+            {cart.length > 0 &&
+              cart.map((ct, ckey) => {
+                return (
+                  <tr key={ckey}>
+                    <td>{ct.name}</td>
+                    <td>{decodeHtml(ct.price)}</td>
+                    <td>{ct.capacity}</td>
+                    <td>{decodeHtml(ct.total_formatted)}</td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
 
         <div className="fx-summary-footer">
           <div className="fx-summary-line">
             <span>Subtotal</span>
-            <span className="value">€60,00</span>
+            <span className="value">{decodeHtml(cart[0]?.total_formatted)}</span>
           </div>
           <div className="fx-summary-line">
             <span>Discount</span>
-            <span className="value">€60,00</span>
+            <span className="value">€0,00</span>
           </div>
         </div>
       </div>
