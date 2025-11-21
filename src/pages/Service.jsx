@@ -379,9 +379,9 @@ export default function Service() {
             setVisible(false);
           }}
           maximizable
-          style={{ width: "50vw" }}
-          breakpoints={{ "960px": "75vw", "641px": "100vw" }}
-          className="fx-booking"
+          // style={{ width: "50vw" }}
+          // breakpoints={{ "960px": "75vw", "641px": "100vw" }}
+          className="fx-booking fx-main-modal-box"
         >
           <div
             className="fx-overlay"
@@ -411,13 +411,17 @@ export default function Service() {
                   &times;
                 </a>
 
-                <p className={readmorecl ? "fx-expand-readmore" : ""}>
-                  {decodeHtml(productDetails.svc_long_desc)}
+                <p>
+                  <span
+                    className={readmorecl ? "fx-expand-readmore" : "fx-des"}
+                  >
+                    {decodeHtml(productDetails.svc_long_desc)}
+                  </span>
                   <span
                     className="readmore"
                     onClick={() => setReadmorecl(!readmorecl)}
                   >
-                    Read More
+                    {readmorecl ? "Read Less" : "Read More"}
                   </span>
                 </p>
                 <p className="datetext">{moment(date).format("MMM YYYY")}</p>

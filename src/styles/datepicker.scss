@@ -3,6 +3,9 @@
   width:500px;
   position: relative;
 }
+.fx-booking .fx-datepicker{
+  display: inherit;
+}
 .fx-rightpopup .fx-element-box .fx-calendar{
   width: 330px;
 }
@@ -18,6 +21,29 @@
   top:34px;
 }
 
+.p-datepicker table td > span{
+  border-radius: 0px;
+}
+
+.p-datepicker table td{
+      padding:0px;
+}
+
+.pecent-bar{
+background-color: #000 !important;
+height:2px !important;
+}
+
+.p-datepicker table td.p-datepicker-today > span{
+  background: #E1EBFF;
+  border-radius: 4px;
+}
+.p-datepicker table td > span{
+  width: inherit;
+  font-size: 16px;
+  color: #000;
+  margin: 0px 2px
+}
 .ui-datepicker {
   background: var(--white);
   font-family: "Roboto", sans-serif;

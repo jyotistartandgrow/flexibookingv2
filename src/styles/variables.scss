@@ -1,6 +1,6 @@
 :root {
   --greylight-bg: #F9FAFB;
-  --primary-color: #215AD4;
+  --primary-color: #215AD4 !important;
   --darkblue-color: #041F5A;
   --primary-light: #5D8EF8;
   --muted-color: #C5C4C4;
@@ -21,7 +21,7 @@
 :root {
   --main-headingsize: 28px;
   --small-headingsize: 20px;
-  --card-headingsize: 24px;
+  --card-headingsize: 22px;
   --extrasmall-headingsize: 18px;
   --normal-descriptionsize: 16px;
   --big-descriptionsize: 18px;

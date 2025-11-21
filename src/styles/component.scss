@@ -212,6 +212,25 @@
   color: var(--darkblue-color);
 }
 
+.fx-tooltip {
+  visibility: hidden;
+  width: 200px;
+  background-color: var(--white);
+  font-size: var(--small-descriptionsize);
+  font-weight: 400;
+  line-height: 23px;
+  color: var(--grey);
+  padding: 16px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 24px 0px var(--box-shadow);
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
 
  .fx-booking .fx-tooltip {
   visibility: hidden;
@@ -246,6 +265,12 @@
  .fx-booking .fx-tooltip-container:hover .fx-tooltip {
   visibility: visible;
   opacity: 1;
+}
+
+.p-tooltip{
+  background-color: var(--white);
+  box-shadow: none;
+  border: none;
 }
 
  .fx-booking .fx-info-icon {
