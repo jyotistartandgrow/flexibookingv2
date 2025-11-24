@@ -15,6 +15,8 @@ export default function Sidebar() {
   const date = useSelector((state) => state.step1.date);
   //const step = useSelector((state) => state.step1.step);
   const cart = useSelector((state) => state.step2.cart);
+  const paymentstring = useSelector((state) => state.step4.paymentstring);
+  console.log(paymentstring);
   const [visibleBottom, setVisibleBottom] = useState(false);
 
   const editaccept = (id) => {
@@ -67,7 +69,7 @@ export default function Sidebar() {
           </p>
         )}
 
-        {date && (
+        {date && !paymentstring && (
           <div className="fx-bookingdatebar">
             <div className="fx-coupon-box">
               <input type="text" placeholder="Enter your coupon code" />
@@ -80,7 +82,7 @@ export default function Sidebar() {
             </div>
           </div>
         )}
-        {cart.length > 0 && (
+        {cart.length > 0 && !paymentstring && (
           <>
             <div className="fx-servicelistbox">
               {cart.map((ct, ckey) => {
@@ -106,6 +108,41 @@ export default function Sidebar() {
               </p>
             </div>
           </>
+        )}
+        {paymentstring && (
+          <div class="fx-paymentbox">
+            <h1 class="fx-main-heading">Payment</h1>
+            <div class="fx-card-input">
+              <div class="fx-card-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="16"
+                  width="16"
+                  fill="#9ca3af"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16
+               c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V10h16v8zm0-10H4V6h16v2z"
+                  />
+                </svg>
+              </div>
+              <input
+                type="text"
+                placeholder="Card Number"
+                class="fx-card-number"
+              />
+              <input type="text" placeholder="MM / YY" class="fx-card-expiry" />
+              <input type="text" placeholder="CVC" class="fx-card-cvc" />
+            </div>
+            <div class="fx-element-box fx-paymentbutton">
+              <input
+                type="submit"
+                class="btn-primary"
+                value={"Pay " + decodeHtml(cart[0].total_formatted)}
+              />
+            </div>
+          </div>
         )}
       </div>
       {cart.length > 0 && (

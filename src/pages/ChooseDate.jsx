@@ -77,25 +77,36 @@ export default function ChooseDate() {
     }
 
     return (
-      <div id={tooltipId} className="relative w-full h-full">
-        
-        <div className="custom-day" data-pr-tooltip={tooltipText}>
-          {day}
-          {/* {<div className="fx-tooltip">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-          </div>} */}
-        </div>
-        
+      <>
         <div
-          className="pecent-bar"
-          style={{
-            width: `${availabilityPercent}%`,
-            height: "5px",
-            backgroundColor: "blue ",
+          id={tooltipId}
+          className="relative w-full h-full"
+          onMouseEnter={() => {
+            const el = document.getElementById(tooltipId);
+            if (el && el.nextElementSibling) {
+              el.nextElementSibling.classList.add("fx-tooltip-visible");
+            }
           }}
-        ></div>
-        <Tooltip target=".custom-day" />
-      </div>
+          onMouseLeave={() => {
+            const el = document.getElementById(tooltipId);
+            if (el && el.nextElementSibling) {
+              el.nextElementSibling.classList.remove("fx-tooltip-visible");
+            }
+          }}
+        >
+          <div className="custom-day">{day}</div>
+
+          <div
+            className="pecent-bar"
+            style={{
+              width: `${availabilityPercent}%`,
+              height: "5px",
+              backgroundColor: "blue",
+            }}
+          ></div>
+        </div>
+        <div className="fx-tooltip">{tooltipText}</div>
+      </>
     );
   };
 

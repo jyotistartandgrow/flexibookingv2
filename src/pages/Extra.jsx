@@ -122,6 +122,10 @@ export default function Service() {
       return;
     }
 
+    addtocart();
+  };
+
+  const addtocart = async () => {
     const { data } = await axiosInstance.post(`/addtocart`, {
       service_id: service,
       date: moment(date).format("YYYY-MM-DD"),
@@ -148,6 +152,7 @@ export default function Service() {
   };
 
   const skipextra = () => {
+    addtocart();
     dispatch(setStep("checkoutstep"));
   };
 
