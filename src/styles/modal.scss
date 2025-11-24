@@ -21,12 +21,18 @@
 
 .fx-booking .fx-popup {
   background: var(--white);
-  width: 1200px;
-  height: 600px;
+  // width: 1200px;
+  height: 604px;
   // box-shadow: 0 0 50px var(--box-shadow);
   position: relative;
 }
-
+.p-dialog .p-dialog-content{
+  padding: 0px;
+  height:604px;
+}
+.p-dialog-content{
+overflow-y: inherit !important;
+}
 .p-dialog .p-dialog-header{
       border-bottom: 0 none;
     background: #ffffff;
@@ -66,14 +72,14 @@ h2 {
 
 .fx-booking .fx-popup .fx-leftpopup {
   width: 50%;
-  height: 600px;
+  height: 604px;
   float: left;
   position: relative;
 }
 
 .fx-booking .fx-popup .fx-leftpopup img {
   width: 100%;
-  height: 600px;
+  height: 604px;
 }
 
 .fx-booking .fx-popup .fx-servicepiccontentbox {
@@ -93,7 +99,7 @@ h2 {
   padding: 20px;
   height: 100%;
   float: left;
-  overflow-y: auto;
+
 }
 
 .fx-booking .fx-popup .fx-rightpopup h4 {
@@ -414,5 +420,14 @@ h2 {
     width:100%;
   }
 
-
+  .fx-main-modal-box{
+    width: 100%;
+    top:0px;
+  }
+  .p-dialog .p-dialog-header{
+    padding: 0px;
+  }
+  .fx-booking .fx-timelistboxbar{
+    height:150px;
+  }
 }
