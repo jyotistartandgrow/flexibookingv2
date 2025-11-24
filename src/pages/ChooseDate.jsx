@@ -78,14 +78,10 @@ export default function ChooseDate() {
 
     return (
       <div id={tooltipId} className="relative w-full h-full">
-        
-        <div className="custom-day" data-pr-tooltip={tooltipText}>
+        <div className="custom-day">
           {day}
-          {/* {<div className="fx-tooltip">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-          </div>} */}
         </div>
-        
+
         <div
           className="pecent-bar"
           style={{
@@ -94,7 +90,8 @@ export default function ChooseDate() {
             backgroundColor: "blue ",
           }}
         ></div>
-        <Tooltip target=".custom-day" />
+        <div className="fx-tooltip">{tooltipText}</div>
+        {/* <Tooltip target=".custom-day" /> */}
       </div>
     );
   };
