@@ -137,6 +137,10 @@ h3 {
     margin-left: 8px;
 }
 
+.fx-timelistboxbar .fx-slotbox-active{
+    background: var(--lightblue-secondary-active);
+}
+
 @media screen and (max-width: 480px) {
 /* body{
     overflow: auto !important;
@@ -165,4 +169,116 @@ h1{
     padding-top: 40px;
     right: 180px;
   }
+}
+
+.fx-skeleton-row {
+    display: flex;
+    gap: 20px;
+    position: absolute;
+    width: 100%;
+    z-index: 999;
+}
+
+.fx-card-skeleton {
+    width: 260px;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.fx-sk-img {
+    width: 100%;
+    height: 160px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.fx-sk-tag {
+    width: 60px;
+    height: 18px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.fx-sk-title {
+    width: 70%;
+    height: 20px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.fx-sk-text {
+    width: 100%;
+    height: 14px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.fx-sk-text.short {
+    width: 80%;
+}
+
+.fx-sk-price {
+    width: 120px;
+    height: 18px;
+    border-radius: 6px;
+    margin: 12px 0;
+}
+
+.fx-sk-button {
+    width: 120px;
+    height: 36px;
+    border-radius: 30px;
+}
+
+@media screen and (max-width: 480px) {
+    .fx-skeleton-row{
+            flex-direction: column;
+    }
+}
+
+/* SHIMMER EFFECT */
+.fx-card-skeleton div {
+    background: linear-gradient(
+        90deg,
+        #e0e0e0 25%,
+        #f4f4f4 37%,
+        #e0e0e0 63%
+    );
+    background-size: 400% 100%;
+    animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+
+/* Fullscreen transparent overlay */
+.fx-fullscreen-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;  /* fully transparent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Segmented spinner */
+.fx-seg-loader {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 6px solid #d9d9d9;      /* light grey */
+    border-top-color: #333;         /* dark segment */
+    border-right-color: #b5b5b5;     /* medium segment */
+    animation: spin 0.8s linear infinite;
+}
+
+/* Rotate */
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }

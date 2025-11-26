@@ -289,6 +289,48 @@ export default function Service() {
           </li>
         </ul>
 
+          <div class="fx-skeleton-row">
+            <div class="fx-card-skeleton">
+                <div class="fx-sk-img"></div>
+                <div class="fx-sk-tag"></div>
+                <div class="fx-sk-title"></div>
+                <div class="fx-sk-text"></div>
+                <div class="fx-sk-text short"></div>
+                <div class="fx-sk-price"></div>
+                <div class="fx-sk-button"></div>
+            </div>
+
+           <div class="fx-card-skeleton">
+                <div class="fx-sk-img"></div>
+                <div class="fx-sk-tag"></div>
+                <div class="fx-sk-title"></div>
+                <div class="fx-sk-text"></div>
+                <div class="fx-sk-text short"></div>
+                <div class="fx-sk-price"></div>
+                <div class="fx-sk-button"></div>
+            </div>
+
+           <div class="fx-card-skeleton">
+                <div class="fx-sk-img"></div>
+                <div class="fx-sk-tag"></div>
+                <div class="fx-sk-title"></div>
+                <div class="fx-sk-text"></div>
+                <div class="fx-sk-text short"></div>
+                <div class="fx-sk-price"></div>
+                <div class="fx-sk-button"></div>
+            </div>
+
+           <div class="fx-card-skeleton">
+                <div class="fx-sk-img"></div>
+                <div class="fx-sk-tag"></div>
+                <div class="fx-sk-title"></div>
+                <div class="fx-sk-text"></div>
+                <div class="fx-sk-text short"></div>
+                <div class="fx-sk-price"></div>
+                <div class="fx-sk-button"></div>
+            </div>
+        </div>
+
         <div
           className={
             isVisible == "grid" ? "fx-tabcontent selected" : "fx-tabcontent"
@@ -372,6 +414,8 @@ export default function Service() {
             />
           </div>
         </div>
+
+        
 
         <Dialog
           visible={visible}
