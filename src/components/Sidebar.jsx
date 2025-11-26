@@ -8,6 +8,12 @@ import { setCart } from "../store/step2Slice";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Toast } from "primereact/toast";
 import { Sidebar as Sidebarpanel } from "primereact/sidebar";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import CheckoutForm from "../pages/CheckoutForm";
+
+const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
+const stripePromise = loadStripe(PUBLIC_KEY);
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -16,7 +22,6 @@ export default function Sidebar() {
   //const step = useSelector((state) => state.step1.step);
   const cart = useSelector((state) => state.step2.cart);
   const paymentstring = useSelector((state) => state.step4.paymentstring);
-  console.log(paymentstring);
   const [visibleBottom, setVisibleBottom] = useState(false);
 
   const editaccept = (id) => {
@@ -112,7 +117,10 @@ export default function Sidebar() {
         {paymentstring && (
           <div class="fx-paymentbox">
             <h1 class="fx-main-heading">Payment</h1>
-            <div class="fx-card-input">
+            <Elements stripe={stripePromise}>
+              <CheckoutForm />
+            </Elements>
+            {/* <div class="fx-card-input">
               <div class="fx-card-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +149,7 @@ export default function Sidebar() {
                 class="btn-primary"
                 value={"Pay " + decodeHtml(cart[0].total_formatted)}
               />
-            </div>
+            </div> */}
           </div>
         )}
       </div>

@@ -81,6 +81,8 @@ export default function Checkout() {
       recipient_postcode: gift ? receiverInfo.zip ?? "" : "",
     };
 
+    billdata.country_code = billdata.sgbm_field_8;
+
     const { data } = await axiosInstance.post(`/checkout`, {
       booking_data: bookingkey,
       billing_details: billdata,
@@ -206,7 +208,7 @@ export default function Checkout() {
             <label>Country</label>
             <select
               onChange={(e) => {
-                setBilldata({ ...billdata, sgbm_field_6: e.target.value });
+                setBilldata({ ...billdata, sgbm_field_8: e.target.value });
                 getState(e.target.value);
               }}
             >
@@ -237,7 +239,7 @@ export default function Checkout() {
               type="text"
               placeholder="City"
               onChange={(e) =>
-                setBilldata({ ...billdata, sgbm_field_8: e.target.value })
+                setBilldata({ ...billdata, sgbm_field_6: e.target.value })
               }
             />
           </div>

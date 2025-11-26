@@ -10,7 +10,7 @@ const step4Slice = createSlice({
   initialState,
   reducers: {
     setCheckoutkey: (state, action) => {
-      state.bookingkey = action.payload;
+      state.checkoutkey = action.payload;
     },
     setPaymentstring: (state, action) => {
       state.paymentstring = action.payload;

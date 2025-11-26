@@ -47,6 +47,7 @@ export default function Service() {
 
   useEffect(() => {
     console.log("Selected date in Service component:", date);
+    setVisible(false);
     if (date) {
       fetchProductsByDate(date);
       if (serviceid) {
