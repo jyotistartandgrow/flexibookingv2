@@ -420,15 +420,24 @@ h2 {
   .fx-booking .fx-popup #fx-modaltab_nav li a{
     width:100%;
   }
-
+  .p-dialog{
+    max-height: 100%;
+  }
   .fx-main-modal-box{
     width: 100%;
     top:0px;
+    height:100%;
   }
   .p-dialog .p-dialog-header{
     padding: 0px;
   }
   .fx-booking .fx-timelistboxbar{
     height:150px;
+  }
+  .fx-booking .fx-popup .fx-rightpopup .continuebtn{
+    position: fixed;
+    width:94%;
+    left: 3%;
+    bottom: 5px;
   }
 }
