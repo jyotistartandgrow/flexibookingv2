@@ -93,13 +93,18 @@ h2 {
   border-top-right-radius: 4px;
 
 }
-
+.p-dialog .p-dialog-header{
+  padding: 5px;
+}
+.p-dialog-header-icons button[type=button]{
+  padding:5px;
+}
 .fx-booking .fx-popup .fx-rightpopup {
   width: 50%;
   padding: 20px;
   height: 100%;
   float: left;
-
+  overflow: auto;
 }
 
 .fx-booking .fx-popup .fx-rightpopup h4 {
@@ -410,6 +415,7 @@ h2 {
 
   .fx-booking .fx-popup .fx-rightpopup {
     width: 100%;
+    height: calc(100vh - 300px);
   }
   .fx-booking #fx-modaltab_nav ul{
     width:100%;
