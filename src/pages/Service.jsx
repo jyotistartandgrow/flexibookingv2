@@ -42,6 +42,7 @@ export default function Service() {
   const [readmorecl, setReadmorecl] = useState(false);
   const [loading, setLoading] = useState(true);
   const [spinnervisible, setSpinnervisible] = useState(false);
+  const prevDate = useRef(date);
 
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -58,19 +59,20 @@ export default function Service() {
     setVisible(false);
 
     if (date) {
-      console.log("Selected date in Service component:", date);
-      setLoading(true);
-      fetchProductsByDate(date);
-
+      if (date !== prevDate.current) {
+        console.log("Selected date in Service component:", date);
+        fetchProductsByDate(date);
+      }
       if (serviceid) {
-        console.log(serviceid);
         setSpinnervisible(true);
         servicedetail(serviceid);
       }
+      prevDate.current = date;
     }
   }, [date, step, serviceid]);
 
   const fetchProductsByDate = async (selectedDate) => {
+    setLoading(true);
     const { data } = await axiosInstance(
       `/services?date=${moment(selectedDate).format("YYYY-MM-DD")}`,
       {
