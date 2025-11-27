@@ -47,18 +47,28 @@ export default function Service() {
     setIsVisible(type);
   };
 
+  // Reset service id on step change
   useEffect(() => {
-    console.log("Selected date in Service component:", date);
+    setServiceId(null);
+  }, [step]);
+
+  useEffect(() => {
+    if (step !== "servicesstep") return;
+
     setVisible(false);
+
     if (date) {
+      console.log("Selected date in Service component:", date);
       setLoading(true);
       fetchProductsByDate(date);
+
       if (serviceid) {
+        console.log(serviceid);
         setSpinnervisible(true);
         servicedetail(serviceid);
       }
     }
-  }, [date]);
+  }, [date, step, serviceid]);
 
   const fetchProductsByDate = async (selectedDate) => {
     const { data } = await axiosInstance(
