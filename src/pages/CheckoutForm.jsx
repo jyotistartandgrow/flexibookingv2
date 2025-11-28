@@ -87,7 +87,7 @@ export default function CheckoutForm() {
         <button disabled={!stripe || loading} class="btn-primary">
           {loading
             ? "Processing..."
-            : "Pay " + decodeHtml(cart[0].total_formatted)}
+            : "Pay " + decodeHtml(cart.total_formatted)}
         </button>
       </div>
       {message && <p>{message}</p>}

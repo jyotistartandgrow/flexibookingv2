@@ -37,8 +37,19 @@ export default function Payment() {
             </tr>
           </thead>
           <tbody>
-            {cart.length > 0 &&
-              cart.map((ct, ckey) => {
+            {cart?.service?.length > 0 &&
+              cart.service.map((ct, ckey) => {
+                return (
+                  <tr key={ckey}>
+                    <td>{ct.name}</td>
+                    <td>{decodeHtml(ct.price)}</td>
+                    <td>{ct.capacity}</td>
+                    <td>{decodeHtml(ct.total_formatted)}</td>
+                  </tr>
+                );
+              })}
+            {cart?.extra?.length > 0 &&
+              cart.extra.map((ct, ckey) => {
                 return (
                   <tr key={ckey}>
                     <td>{ct.name}</td>
@@ -54,7 +65,7 @@ export default function Payment() {
         <div className="fx-summary-footer">
           <div className="fx-summary-line">
             <span>Subtotal</span>
-            <span className="value">{decodeHtml(cart[0]?.total_formatted)}</span>
+            <span className="value">{decodeHtml(cart?.total_formatted)}</span>
           </div>
           <div className="fx-summary-line">
             <span>Discount</span>

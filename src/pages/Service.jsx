@@ -40,7 +40,7 @@ export default function Service() {
   const [book, setBook] = useState(0);
   const [slot, setSlot] = useState("");
   const [readmorecl, setReadmorecl] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [spinnervisible, setSpinnervisible] = useState(false);
   const prevDate = useRef(date);
 
@@ -56,7 +56,7 @@ export default function Service() {
   useEffect(() => {
     if (step !== "servicesstep") return;
 
-    setVisible(false);
+    //setVisible(false);
 
     if (date) {
       if (date !== prevDate.current) {
@@ -97,6 +97,19 @@ export default function Service() {
     );
 
     if (data && data.status == 200) {
+      if (data.data.length == 0) {
+        Swal.fire({
+          toast: true,
+          position: "top-end", // or 'bottom-end', 'top-start', etc.
+          showConfirmButton: false,
+          timer: 3000, // auto-close after 3 seconds
+          icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
+          title: data?.message,
+        });
+        setSpinnervisible(false);
+        //setVisible(false);
+        return;
+      }
       setProductDetails(data?.data);
       setVisible(true);
 
@@ -172,12 +185,25 @@ export default function Service() {
     }
 
     return (
-      <div id={tooltipId} className="relative w-full h-full">
-        <div className="custom-day" data-pr-tooltip={tooltipText}>
-          {day}
+      <>
+        <div
+          id={tooltipId}
+          className="relative w-full h-full"
+          onMouseEnter={(e) => {
+            const tooltip =
+              e.currentTarget.parentNode.querySelector(".fx-tooltip");
+            tooltip?.classList.add("fx-tooltip-visible");
+          }}
+          onMouseLeave={(e) => {
+            const tooltip =
+              e.currentTarget.parentNode.querySelector(".fx-tooltip");
+            tooltip?.classList.remove("fx-tooltip-visible");
+          }}
+        >
+          <div className="custom-day">{day}</div>
         </div>
-        <Tooltip target=".custom-day" />
-      </div>
+        <div className="fx-tooltip">{tooltipText}</div>
+      </>
     );
   };
 
@@ -265,12 +291,18 @@ export default function Service() {
       id: productDetails.id,
       name: productDetails.service_name,
       price: productDetails.svc_price,
-      total: data?.data?.total,
-      total_formatted: data?.data?.total_formated,
+      total: data?.data?.service_total,
+      total_formatted: data?.data?.service_total,
       slot: slot,
       capacity: book,
     };
-    dispatch(setCart([cartobj]));
+    dispatch(
+      setCart({
+        service: [cartobj],
+        total: data?.data?.total,
+        total_formatted: data?.data?.total_formated,
+      })
+    );
     dispatch(setTimeslot(slot));
     dispatch(setCapacity(book));
     dispatch(setService(serviceid));
@@ -646,7 +678,7 @@ export default function Service() {
                                   return slotItems.map((item, idx) => (
                                     <div
                                       className={
-                                        slot == item.time_slot
+                                        slot == item.time_slot && book > 0
                                           ? "fx-timelistbox fx-slotbox-active"
                                           : "fx-timelistbox"
                                       }
@@ -753,7 +785,7 @@ export default function Service() {
                                   return slotAfItems.map((item, idx) => (
                                     <div
                                       className={
-                                        slot == item.time_slot
+                                        slot == item.time_slot && book > 0
                                           ? "fx-timelistbox fx-slotbox-active"
                                           : "fx-timelistbox"
                                       }
@@ -876,7 +908,8 @@ export default function Service() {
                                 return (
                                   <div
                                     className={
-                                      slot == singleslotItem.time_slot
+                                      slot == singleslotItem.time_slot &&
+                                      book > 0
                                         ? "fx-timelistbox fx-slotbox-active"
                                         : "fx-timelistbox"
                                     }
@@ -947,7 +980,7 @@ export default function Service() {
                               return slotItems.map((item, idx) => (
                                 <div
                                   className={
-                                    slot == item.time_slot
+                                    slot == item.time_slot && book > 0
                                       ? "fx-timelistbox fx-slotbox-active"
                                       : "fx-timelistbox"
                                   }

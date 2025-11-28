@@ -81,27 +81,25 @@ export default function ChooseDate() {
         <div
           id={tooltipId}
           className="relative w-full h-full"
-          onMouseEnter={() => {
-            const el = document.getElementById(tooltipId);
-            if (el && el.nextElementSibling) {
-              el.nextElementSibling.classList.add("fx-tooltip-visible");
-            }
+          onMouseEnter={(e) => {
+            const tooltip =
+              e.currentTarget.parentNode.querySelector(".fx-tooltip");
+            tooltip?.classList.add("fx-tooltip-visible");
           }}
-          onMouseLeave={() => {
-            const el = document.getElementById(tooltipId);
-            if (el && el.nextElementSibling) {
-              el.nextElementSibling.classList.remove("fx-tooltip-visible");
-            }
+          onMouseLeave={(e) => {
+            const tooltip =
+              e.currentTarget.parentNode.querySelector(".fx-tooltip");
+            tooltip?.classList.remove("fx-tooltip-visible");
           }}
         >
           <div className="custom-day">{day}</div>
         </div>
+
         <div
-            className="percent-bar"
-            style={{
-              width: `${availabilityPercent}%`,
-            }}
-          ></div>
+          className="percent-bar"
+          style={{ width: `${availabilityPercent}%` }}
+        ></div>
+
         <div className="fx-tooltip">{tooltipText}</div>
       </>
     );

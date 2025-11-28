@@ -10,6 +10,7 @@ import { decodeHtml } from "../Utils/Functions";
 import extra from "../assets/extra1.jpg";
 import { setExtracapacity, setExtra, setBookingkey } from "../store/step3Slice";
 import { setStep } from "../store/step1Slice";
+import { setCart } from "../store/step2Slice";
 import Swal from "sweetalert2";
 
 export default function Service() {
@@ -20,12 +21,14 @@ export default function Service() {
   const service = useSelector((state) => state.step2.service);
   const capacity = useSelector((state) => state.step2.capacity);
   const slot = useSelector((state) => state.step2.slot);
+  const cart = useSelector((state) => state.step2.cart);
 
   const [products, setProductsArr] = useState([]);
   const [isVisible, setIsVisible] = useState("grid");
   const [book, setBook] = useState(0);
   const [extraid, setExtraid] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [extradetails, setExtradetails] = useState({});
 
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -135,6 +138,34 @@ export default function Service() {
       });
       return;
     }
+
+    const { data } = await axiosInstance(
+      `/price-format?service_id=${cart.service[0].id}&capacity=${
+        cart.service[0].capacity
+      }&date=${moment(date).format(
+        "YYYY-MM-DD"
+      )}&extra_id=${extraid}&extra_capacity=${book}`,
+      {
+        method: "get",
+      }
+    );
+    let cartobj = {
+      id: extraid,
+      name: extradetails.extra_name,
+      price: extradetails.extra_price,
+      total: data?.data?.extra_total,
+      total_formatted: data?.data?.extra_total,
+      slot: "",
+      capacity: book,
+    };
+    dispatch(
+      setCart({
+        service: cart.service,
+        extra: [cartobj],
+        total: data?.data?.total,
+        total_formatted: data?.data?.total_formated,
+      })
+    );
 
     addtocart();
   };
@@ -282,38 +313,57 @@ export default function Service() {
                             <p>{decodeHtml(product.extra_desc)}</p>
                             <div className="fx-common">
                               <div className="fx-quantitybox">
-                                <button
-                                  type="button"
-                                  className="decrement"
-                                  onClick={() =>
-                                    slotbook(
-                                      product.id,
-                                      "minus",
-                                      product.cap_left
-                                    )
-                                  }
-                                >
-                                  -
-                                </button>
-                                <input
-                                  type="number"
-                                  value={extraid == product.id ? book : 0}
-                                  defaultValue={0}
-                                  min={0}
-                                />
-                                <button
-                                  type="button"
-                                  className="increment"
-                                  onClick={() =>
-                                    slotbook(
-                                      product.id,
-                                      "add",
-                                      product.cap_left
-                                    )
-                                  }
-                                >
-                                  +
-                                </button>
+                                {book == 0 && (
+                                  <input
+                                    type="submit"
+                                    className="btn-secondary"
+                                    value="Select"
+                                    onClick={() => {
+                                      setExtradetails(product);
+                                      slotbook(
+                                        product.id,
+                                        "add",
+                                        product.cap_left
+                                      );
+                                    }}
+                                  />
+                                )}
+                                {extraid == product.id && book > 0 && (
+                                  <>
+                                    <button
+                                      type="button"
+                                      className="decrement"
+                                      onClick={() =>
+                                        slotbook(
+                                          product.id,
+                                          "minus",
+                                          product.cap_left
+                                        )
+                                      }
+                                    >
+                                      -
+                                    </button>
+                                    <input
+                                      type="number"
+                                      value={extraid == product.id ? book : 0}
+                                      defaultValue={0}
+                                      min={0}
+                                    />
+                                    <button
+                                      type="button"
+                                      className="increment"
+                                      onClick={() =>
+                                        slotbook(
+                                          product.id,
+                                          "add",
+                                          product.cap_left
+                                        )
+                                      }
+                                    >
+                                      +
+                                    </button>
+                                  </>
+                                )}
                               </div>
                             </div>
                           </div>

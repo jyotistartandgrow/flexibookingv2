@@ -23,6 +23,7 @@ export default function Sidebar() {
   const cart = useSelector((state) => state.step2.cart);
   const paymentstring = useSelector((state) => state.step4.paymentstring);
   const [visibleBottom, setVisibleBottom] = useState(false);
+  console.log(cart);
 
   const editaccept = (id) => {
     dispatch(setStep("servicesstep"));
@@ -37,12 +38,6 @@ export default function Sidebar() {
     });
   };
 
-  const removeaccept = (id) => {
-    const updatedCart = cart.filter((item) => item.id !== id);
-    dispatch(setCart(updatedCart));
-    dispatch(setStep("servicesstep"));
-  };
-
   const edititem = (id) => {
     confirmDialog({
       message: "Are you sure you want to proceed?",
@@ -53,22 +48,13 @@ export default function Sidebar() {
     });
   };
 
-  const removeitem = (id) => {
-    confirmDialog({
-      message: "Are you sure you want to proceed?",
-      header: "Confirmation",
-      icon: "pi pi-exclamation-triangle",
-      accept: () => removeaccept(id),
-      reject,
-    });
-  };
   return (
     <>
       <div className="fx-sidebar ">
         <div className="logo">
           <img src={logo} className="fx-right-logo" />
         </div>
-        {cart.length == 0 && !date && (
+        {cart?.service?.length == 0 && !date && (
           <p className="giftmessagebox">
             book your service on a specific date" and "do a gift to a friend
           </p>
@@ -87,17 +73,16 @@ export default function Sidebar() {
             </div>
           </div>
         )}
-        {cart.length > 0 && !paymentstring && (
+        {cart?.service?.length > 0 && !paymentstring && (
           <>
             <div className="fx-servicelistbox">
-              {cart.map((ct, ckey) => {
+              {cart.service.map((ct, ckey) => {
                 return (
                   <div className="fx-serviceitem" key={"ct-" + ckey}>
                     <div className="itemname">
                       {ct.name}
                       <br />
-                      <span onClick={() => edititem(ct.id)}>Edit</span> |{" "}
-                      <span onClick={() => removeitem(ct.id)}>Remove</span>
+                      <span onClick={() => edititem(ct.id)}>Edit</span>{" "}
                     </div>
                     <div className="time">{ct.slot}</div>
                     <div className="price">
@@ -106,10 +91,26 @@ export default function Sidebar() {
                   </div>
                 );
               })}
+              {cart?.extra?.length > 0 &&
+                cart.extra.map((ct, ckey) => {
+                  return (
+                    <div className="fx-serviceitem" key={"ct-" + ckey}>
+                      <div className="itemname">
+                        {ct.name}
+                        <br />
+                        <span onClick={() => edititem(ct.id)}>Edit</span>{" "}
+                      </div>
+                      <div className="time">{ct.slot}</div>
+                      <div className="price">
+                        {decodeHtml(ct.total_formatted)}
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
             <div className="fx-totalbar">
               <p>
-                Total <span> {decodeHtml(cart[0].total_formatted)}</span>
+                Total <span> {decodeHtml(cart.total_formatted)}</span>
               </p>
             </div>
           </>
@@ -153,7 +154,7 @@ export default function Sidebar() {
           </div>
         )}
       </div>
-      {cart.length > 0 && (
+      {date && (
         <div
           className="fx-mobilesidebar"
           onClick={() => setVisibleBottom(true)}
@@ -166,19 +167,26 @@ export default function Sidebar() {
             <div className="fx-left-content-date">
               <i className="fa fa-calendar"></i>{" "}
               <span className="fx-bottom-date">
-                {moment(date).format("MMM DD")},
+                {moment(date).format("MMM DD")}
               </span>
             </div>
-            {cart.map((ct, ckey) => {
-              return (
-                <div className="fx-left-content-service" key={"ctm-" + ckey}>
-                  <span className="fx-bottom-service">{ct.name}</span>
+            {cart?.service?.length > 0 && (
+              <>
+                {cart.service.map((ct, ckey) => {
+                  return (
+                    <div
+                      className="fx-left-content-service"
+                      key={"ctm-" + ckey}
+                    >
+                      <span className="fx-bottom-service">, {ct.name}</span>
+                    </div>
+                  );
+                })}
+                <div className="fx-price">
+                  {decodeHtml(cart.total_formatted)}
                 </div>
-              );
-            })}
-            <div className="fx-price">
-              {decodeHtml(cart[0].total_formatted)}
-            </div>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -189,12 +197,12 @@ export default function Sidebar() {
         visible={visibleBottom}
         position="bottom"
         onHide={() => setVisibleBottom(false)}
-      > 
+      >
         <div className="fx-sidebar fx-mob-footer-order-details">
           <div className="logo">
             <img src={logo} className="fx-right-logo" />
           </div>
-          {cart.length == 0 && !date && (
+          {cart?.service?.length == 0 && !date && (
             <p className="giftmessagebox">
               book your service on a specific date" and "do a gift to a friend
             </p>
@@ -213,17 +221,31 @@ export default function Sidebar() {
               </div>
             </div>
           )}
-          {cart.length > 0 && (
+          {cart?.service?.length > 0 && (
             <>
               <div className="fx-servicelistbox">
-                {cart.map((ct, ckey) => {
+                {cart.service.map((ct, ckey) => {
                   return (
                     <div className="fx-serviceitem" key={"ct-" + ckey}>
                       <div className="itemname">
                         {ct.name}
                         <br />
-                        <span onClick={() => edititem(ct.id)}>Edit</span> |{" "}
-                        <span onClick={() => removeitem(ct.id)}>Remove</span>
+                        <span onClick={() => edititem(ct.id)}>Edit</span>{" "}
+                      </div>
+                      <div className="time">{ct.slot}</div>
+                      <div className="price">
+                        {decodeHtml(ct.total_formatted)}
+                      </div>
+                    </div>
+                  );
+                })}
+                {cart?.extra?.map((ct, ckey) => {
+                  return (
+                    <div className="fx-serviceitem" key={"ct-" + ckey}>
+                      <div className="itemname">
+                        {ct.name}
+                        <br />
+                        <span onClick={() => edititem(ct.id)}>Edit</span>{" "}
                       </div>
                       <div className="time">{ct.slot}</div>
                       <div className="price">
@@ -235,7 +257,7 @@ export default function Sidebar() {
               </div>
               <div className="fx-totalbar">
                 <p>
-                  Total <span> {decodeHtml(cart[0].total_formatted)}</span>
+                  Total <span> {decodeHtml(cart.total_formatted)}</span>
                 </p>
               </div>
             </>
