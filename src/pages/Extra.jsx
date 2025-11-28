@@ -25,6 +25,7 @@ export default function Service() {
   const [isVisible, setIsVisible] = useState("grid");
   const [book, setBook] = useState(0);
   const [extraid, setExtraid] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -32,6 +33,7 @@ export default function Service() {
 
   useEffect(() => {
     if (date && service) {
+      setLoading(true);
       fetchProductsByDate(date);
     }
   }, [date, service]);
@@ -48,6 +50,7 @@ export default function Service() {
     if (data && data.status == 200) {
       setProductsArr(data.data);
     }
+    setLoading(false);
   };
 
   // Template for each carousel item
@@ -68,7 +71,7 @@ export default function Service() {
               <button
                 type="button"
                 className="decrement"
-                onClick={() => slotbook(product.id, "minus")}
+                onClick={() => slotbook(product.id, "minus", product.cap_left)}
               >
                 -
               </button>
@@ -81,7 +84,7 @@ export default function Service() {
               <button
                 type="button"
                 className="increment"
-                onClick={() => slotbook(product.id, "add")}
+                onClick={() => slotbook(product.id, "add", product.cap_left)}
               >
                 +
               </button>
@@ -92,7 +95,7 @@ export default function Service() {
     );
   };
 
-  const slotbook = (id, type) => {
+  const slotbook = (id, type, capacity_left) => {
     setExtraid(id);
     let currentbook = book;
     if (extraid != id) {
@@ -100,6 +103,17 @@ export default function Service() {
       setBook(0);
     }
     if (type == "add") {
+      if (currentbook >= capacity_left) {
+        Swal.fire({
+          toast: true,
+          position: "top-end", // or 'bottom-end', 'top-start', etc.
+          showConfirmButton: false,
+          timer: 3000, // auto-close after 3 seconds
+          icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
+          title: "Maximum capacity reached",
+        });
+        return;
+      }
       setBook(parseInt(currentbook) + parseInt(1));
     } else if (type == "minus") {
       let count = parseInt(currentbook) - parseInt(1);
@@ -196,119 +210,196 @@ export default function Service() {
             </li>
           </ul>
 
-          <div
-            className={
-              isVisible == "grid" ? "fx-tabcontent selected" : "fx-tabcontent"
-            }
-          >
-            <div className="fx-extracontainer">
-              {products.length > 0 &&
-                products.map((product, p1) => {
-                  return (
-                    <div className="fx-extrabox" key={p1}>
-                      <div className="fx-extrapicbox">
-                        <img src={extra} alt={product.extra_name} />
-                        <p className="fx-extrapicpriceboxright">
-                          {decodeHtml(product.price)}
-                        </p>
-                      </div>
-                      <div className="fx-extracontentbox">
-                        <h4>{product.extra_name}</h4>
-                        <p>{decodeHtml(product.extra_desc)}</p>
-                        <div className="fx-common">
-                          <div className="fx-quantitybox">
-                            <button
-                              type="button"
-                              className="decrement"
-                              onClick={() => slotbook(product.id, "minus")}
-                            >
-                              -
-                            </button>
-                            <input
-                              type="number"
-                              value={extraid == product.id ? book : 0}
-                              defaultValue={0}
-                              min={0}
-                            />
-                            <button
-                              type="button"
-                              className="increment"
-                              onClick={() => slotbook(product.id, "add")}
-                            >
-                              +
-                            </button>
+          {loading && (
+            <div class="fx-skeleton-row">
+              <div class="fx-card-skeleton">
+                <div class="fx-sk-img"></div>
+                <div class="fx-sk-tag"></div>
+                <div class="fx-sk-title"></div>
+                <div class="fx-sk-text"></div>
+                <div class="fx-sk-text short"></div>
+                <div class="fx-sk-price"></div>
+                <div class="fx-sk-button"></div>
+              </div>
+
+              <div class="fx-card-skeleton">
+                <div class="fx-sk-img"></div>
+                <div class="fx-sk-tag"></div>
+                <div class="fx-sk-title"></div>
+                <div class="fx-sk-text"></div>
+                <div class="fx-sk-text short"></div>
+                <div class="fx-sk-price"></div>
+                <div class="fx-sk-button"></div>
+              </div>
+
+              <div class="fx-card-skeleton">
+                <div class="fx-sk-img"></div>
+                <div class="fx-sk-tag"></div>
+                <div class="fx-sk-title"></div>
+                <div class="fx-sk-text"></div>
+                <div class="fx-sk-text short"></div>
+                <div class="fx-sk-price"></div>
+                <div class="fx-sk-button"></div>
+              </div>
+
+              <div class="fx-card-skeleton">
+                <div class="fx-sk-img"></div>
+                <div class="fx-sk-tag"></div>
+                <div class="fx-sk-title"></div>
+                <div class="fx-sk-text"></div>
+                <div class="fx-sk-text short"></div>
+                <div class="fx-sk-price"></div>
+                <div class="fx-sk-button"></div>
+              </div>
+            </div>
+          )}
+
+          {!loading && products.length == 0 && (
+            <div className="fx-no-data">No services found</div>
+          )}
+          {!loading && products.length > 0 && (
+            <>
+              <div
+                className={
+                  isVisible == "grid"
+                    ? "fx-tabcontent selected"
+                    : "fx-tabcontent"
+                }
+              >
+                <div className="fx-extracontainer">
+                  {products.length > 0 &&
+                    products.map((product, p1) => {
+                      return (
+                        <div className="fx-extrabox" key={p1}>
+                          <div className="fx-extrapicbox">
+                            <img src={extra} alt={product.extra_name} />
+                            <p className="fx-extrapicpriceboxright">
+                              {decodeHtml(product.price)}
+                            </p>
+                          </div>
+                          <div className="fx-extracontentbox">
+                            <h4>{product.extra_name}</h4>
+                            <p>{decodeHtml(product.extra_desc)}</p>
+                            <div className="fx-common">
+                              <div className="fx-quantitybox">
+                                <button
+                                  type="button"
+                                  className="decrement"
+                                  onClick={() =>
+                                    slotbook(
+                                      product.id,
+                                      "minus",
+                                      product.cap_left
+                                    )
+                                  }
+                                >
+                                  -
+                                </button>
+                                <input
+                                  type="number"
+                                  value={extraid == product.id ? book : 0}
+                                  defaultValue={0}
+                                  min={0}
+                                />
+                                <button
+                                  type="button"
+                                  className="increment"
+                                  onClick={() =>
+                                    slotbook(
+                                      product.id,
+                                      "add",
+                                      product.cap_left
+                                    )
+                                  }
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+
+              <div
+                className={
+                  isVisible == "list"
+                    ? "fx-tabcontent selected"
+                    : "fx-tabcontent"
+                }
+              >
+                {products.length > 0 &&
+                  products.map((product, p2) => {
+                    return (
+                      <div className="fx-extraboxlist" key={p2}>
+                        <div className="fx-extrapicboxlist">
+                          <img src={extra} alt={product.extra_name} />
+                          <span className="fx-servicepiccontentbox">
+                            {product.extra_name}
+                          </span>
+                        </div>
+                        <div className="fx-extracontentboxlist">
+                          <h4>{product.extra_name}</h4>
+                          <p>{decodeHtml(product.extra_desc)}</p>
+                          <p className="price">
+                            {" "}
+                            <span>{decodeHtml(product.price)}</span>
+                          </p>
+                          <div className="fx-common">
+                            <div className="fx-quantitybox">
+                              <button
+                                type="button"
+                                className="decrement"
+                                onClick={() =>
+                                  slotbook(
+                                    product.id,
+                                    "minus",
+                                    product.cap_left
+                                  )
+                                }
+                              >
+                                -
+                              </button>
+                              <input type="number" value="0" min="0" />
+                              <button
+                                type="button"
+                                className="increment"
+                                onClick={() =>
+                                  slotbook(product.id, "add", product.cap_left)
+                                }
+                              >
+                                +
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-            </div>
-          </div>
+                    );
+                  })}
+              </div>
 
-          <div
-            className={
-              isVisible == "list" ? "fx-tabcontent selected" : "fx-tabcontent"
-            }
-          >
-            {products.length > 0 &&
-              products.map((product, p2) => {
-                return (
-                  <div className="fx-extraboxlist" key={p2}>
-                    <div className="fx-extrapicboxlist">
-                      <img src={extra} alt={product.extra_name} />
-                      <span className="fx-servicepiccontentbox">
-                        {product.extra_name}
-                      </span>
-                    </div>
-                    <div className="fx-extracontentboxlist">
-                      <h4>{product.extra_name}</h4>
-                      <p>{decodeHtml(product.extra_desc)}</p>
-                      <p className="price">
-                        {" "}
-                        <span>{decodeHtml(product.price)}</span>
-                      </p>
-                      <div className="fx-common">
-                        <div className="fx-quantitybox">
-                          <button
-                            type="button"
-                            className="decrement"
-                            onClick={() => slotbook(product.id, "minus")}
-                          >
-                            -
-                          </button>
-                          <input type="number" value="0" min="0" />
-                          <button
-                            type="button"
-                            className="increment"
-                            onClick={() => slotbook(product.id, "add")}
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-
-          <div
-            className={
-              isVisible == "slider" ? "fx-tabcontent selected" : "fx-tabcontent"
-            }
-          >
-            <div className="slider responsive">
-              <Carousel
-                value={products}
-                itemTemplate={productTemplate}
-                numVisible={4}
-                numScroll={3}
-                circular
-                autoplayInterval={3000}
-              />
-            </div>
-          </div>
+              <div
+                className={
+                  isVisible == "slider"
+                    ? "fx-tabcontent selected"
+                    : "fx-tabcontent"
+                }
+              >
+                <div className="slider responsive">
+                  <Carousel
+                    value={products}
+                    itemTemplate={productTemplate}
+                    numVisible={4}
+                    numScroll={3}
+                    circular
+                    autoplayInterval={3000}
+                  />
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
       <div

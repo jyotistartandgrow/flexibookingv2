@@ -211,7 +211,7 @@ export default function Service() {
     );
   };
 
-  const slotbook = (timeslot, type) => {
+  const slotbook = (timeslot, type, capacity_left) => {
     const currentslot = slot;
     let currentbook = book;
     setSlot(timeslot);
@@ -220,6 +220,17 @@ export default function Service() {
       setBook(0);
     }
     if (type == "add") {
+      if (currentbook >= capacity_left) {
+        Swal.fire({
+          toast: true,
+          position: "top-end", // or 'bottom-end', 'top-start', etc.
+          showConfirmButton: false,
+          timer: 3000, // auto-close after 3 seconds
+          icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
+          title: "Maximum capacity reached",
+        });
+        return;
+      }
       setBook(parseInt(currentbook) + parseInt(1));
     } else if (type == "minus") {
       let count = parseInt(currentbook) - parseInt(1);
@@ -664,7 +675,8 @@ export default function Service() {
                                                 onClick={() =>
                                                   slotbook(
                                                     item.time_slot,
-                                                    "minus"
+                                                    "minus",
+                                                    item.capacity_left
                                                   )
                                                 }
                                               >
@@ -687,7 +699,8 @@ export default function Service() {
                                                 onClick={() =>
                                                   slotbook(
                                                     item.time_slot,
-                                                    "add"
+                                                    "add",
+                                                    item.capacity_left
                                                   )
                                                 }
                                               >
@@ -769,7 +782,8 @@ export default function Service() {
                                                 onClick={() =>
                                                   slotbook(
                                                     item.time_slot,
-                                                    "minus"
+                                                    "minus",
+                                                    item.capacity_left
                                                   )
                                                 }
                                               >
@@ -793,7 +807,8 @@ export default function Service() {
                                                 onClick={() =>
                                                   slotbook(
                                                     item.time_slot,
-                                                    "add"
+                                                    "add",
+                                                    item.capacity_left
                                                   )
                                                 }
                                               >
@@ -890,7 +905,8 @@ export default function Service() {
                                               onClick={() =>
                                                 slotbook(
                                                   singleslotItem.time_slot,
-                                                  "minus"
+                                                  "minus",
+                                                  singleslotItem.capacity_left
                                                 )
                                               }
                                             >
@@ -913,7 +929,8 @@ export default function Service() {
                                               onClick={() =>
                                                 slotbook(
                                                   singleslotItem.time_slot,
-                                                  "add"
+                                                  "add",
+                                                  singleslotItem.capacity_left
                                                 )
                                               }
                                             >
@@ -955,7 +972,11 @@ export default function Service() {
                                             type="button"
                                             className="decrement"
                                             onClick={() =>
-                                              slotbook(item.time_slot, "minus")
+                                              slotbook(
+                                                item.time_slot,
+                                                "minus",
+                                                item.capacity_left
+                                              )
                                             }
                                           >
                                             -
@@ -973,7 +994,11 @@ export default function Service() {
                                             type="button"
                                             className="increment"
                                             onClick={() =>
-                                              slotbook(item.time_slot, "add")
+                                              slotbook(
+                                                item.time_slot,
+                                                "add",
+                                                item.capacity_left
+                                              )
                                             }
                                           >
                                             +
