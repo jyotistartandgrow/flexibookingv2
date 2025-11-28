@@ -141,6 +141,21 @@ h3 {
     background: var(--lightblue-secondary-active);
 }
 
+.percent-bar{
+    height: 4px;
+    background-color: #95B8FF;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top:3px;
+}
+
+.p-datepicker table td > span{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 4px;
+}
+
 @media screen and (max-width: 480px) {
 /* body{
     overflow: auto !important;

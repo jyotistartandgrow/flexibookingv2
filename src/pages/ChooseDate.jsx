@@ -95,16 +95,13 @@ export default function ChooseDate() {
           }}
         >
           <div className="custom-day">{day}</div>
-
-          <div
-            className="pecent-bar"
+        </div>
+        <div
+            className="percent-bar"
             style={{
               width: `${availabilityPercent}%`,
-              height: "5px",
-              backgroundColor: "blue",
             }}
           ></div>
-        </div>
         <div className="fx-tooltip">{tooltipText}</div>
       </>
     );
