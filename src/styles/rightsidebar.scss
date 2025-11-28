@@ -106,6 +106,74 @@
  }
 
 @media screen and (max-width: 580px) {
+  .p-sidebar-bottom .p-sidebar{
+    height:100%;
+  }
+  .fx-mob-footer-order-details .logo{
+    display: none;
+  }
+  .fx-mob-footer-order-details .fx-bookingdatebar {
+      padding: 0px;
+  }
+  .fx-mob-footer-order-details .fx-coupon-box {
+  display: flex;
+  align-items: center;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  margin-bottom: 10px;
+  width: 95%;
+}
+ .fx-mob-footer-order-details .fx-coupon-box input[type="text"] {
+  flex: 1;
+  border: none !important;
+  outline: none;
+  font-size: var(--small-descriptionsize);
+  margin-bottom: 0px;
+}
+ .fx-mob-footer-order-details .fx-coupon-box input:focus{
+  border:none;
+}
+.fx-mob-footer-order-details input[type="text"],
+ .fx-mob-footer-order-details input[type="email"] {
+  width: 100%;
+  padding: 16px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  /* box-sizing: border-box; */
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+// .fx-mob-footer-order-details .fx-apply-btn {
+//   background: none;
+//   border: none;
+//   color: var(--grey);
+//   font-size: var(--small-descriptionsize);
+//   font-weight: bold;
+//   cursor: pointer;
+//   margin-bottom: 0px !important;
+//   height:inherit !important;
+//   width:auto !important;
+// }
+// .fx-mob-footer-order-details .fx-apply-btn:hover {
+//   color: var(--grey);
+// }
+// .fx-mob-footer-order-details .fx-bookingdate {
+//     font-size: 17px;
+//     font-weight: 500;
+//     color: var(--darkgrey);
+//     padding-bottom: 16px;
+// }
+// .fx-mob-footer-order-details .fx-bookingdate span {
+//     font-weight: 200;
+// }
+// .fx-mob-footer-order-details .fx-servicelistbox {
+//     padding: 16px 0px;
+//     border-top: 1px solid var(--border-color);
+// }
   .fx-booking .fx-mobilesidebar{
     width:100%;
     height:auto;

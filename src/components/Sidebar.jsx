@@ -64,7 +64,7 @@ export default function Sidebar() {
   };
   return (
     <>
-      <div className="fx-sidebar">
+      <div className="fx-sidebar ">
         <div className="logo">
           <img src={logo} className="fx-right-logo" />
         </div>
@@ -189,8 +189,8 @@ export default function Sidebar() {
         visible={visibleBottom}
         position="bottom"
         onHide={() => setVisibleBottom(false)}
-      >
-        <div className="fx-sidebar">
+      > 
+        <div className="fx-sidebar fx-mob-footer-order-details">
           <div className="logo">
             <img src={logo} className="fx-right-logo" />
           </div>
