@@ -1,0 +1,207 @@
+.fx-booking .fx-confirmation-wrapper {
+    display: flex;
+    
+    font-family: "Roboto", sans-serif;
+}
+.fx-booking .fx-thanku-logo{
+    position: absolute;
+    left:40px;
+    top:40px;
+    height:40px;
+}
+
+.fx-booking .fx-confirm-left {
+    width: 50%;
+    padding: 100px;
+    text-align: center;
+   background: var(--white);
+}
+
+.fx-booking .fx-voucher-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: #777;
+}
+
+.fx-booking .fx-voucher-icon i {
+    font-size: 32px;
+}
+
+.fx-booking .fx-confirm-left h1 {
+    margin-top: 40px;
+    margin-bottom: 0px;
+    font-size: 32px;
+    color: #222;
+    text-align: center;
+}
+
+.fx-booking .fx-confirm-left h2 {
+    font-size: 25px;
+    font-weight: 300;
+    margin-top: 10px;
+    color: var(--grey);
+}
+
+.fx-booking .fx-info-text {
+    margin-top: 20px;
+    font-size: 15px;
+    font-weight: 300;
+    color:var(--grey);
+    line-height: 1.6;
+    text-align: left;
+}
+
+.fx-booking .fx-email-box {
+    display: flex;
+    margin-top: 30px;
+}
+
+.fx-booking .fx-email-box input[type="text"] {
+    flex: 1;
+    padding:12px;
+    margin-bottom: 0px;
+    border-right: none;
+    border-top-right-radius:0px;
+    border-bottom-right-radius:0px;
+}
+
+.fx-booking .fx-btn-send {
+    padding: 10px 40px;
+    background: var(--lightgrey);
+    color: var(--white);
+    border: none;
+    border-radius: 0 4px 4px 0;
+}
+
+.fx-booking .fx-button-row {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.fx-booking .fx-btn-light,
+.fx-booking.btn-dark {
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+}
+
+.fx-booking .fx-btn-light {
+    background: var(--white);
+    border:1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 4px;
+}
+.fx-booking .fx-btn-light i{
+    margin-left:5px;
+}
+.fx-booking .fx-btn-dark {
+    background: #333;
+    color: white;
+}
+
+
+.fx-booking .fx-confirm-right {
+    width: 50%;
+    background: #333;
+
+}
+.fx-booking .fx-confirm-innerrightbox{
+     background: white;
+    margin: 90px 70px;
+    padding:20px 50px;
+}
+.fx-booking .fx-order-title {
+    font-size: 15px;
+    color: var(--darkgrey);
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.fx-booking .fx-order-row {
+    display: flex;
+    justify-content: space-between;
+    color: var(--darkgrey);
+    font-size:var(--small-descriptionsize);
+    font-weight: 500;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+.fx-booking .fx-order-row span{
+    color: var(--grey);
+    font-weight: 300;
+}
+.fx-booking .fx-order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size:var(--small-descriptionsize);
+}
+.fx-booking .fx-order-table th{
+    font-weight: 500;
+}
+.fx-booking .fx-order-table th,
+.fx-booking .fx-order-table td {
+    padding: 12px 4px;
+    text-align: left;
+}
+.fx-booking .fx-order-table td{
+    color: var(--grey);
+    font-weight: 300;
+}
+.fx-booking .fx-order-table th:last-child{
+    text-align: right;
+}
+.fx-booking .fx-order-table td:last-child{
+    text-align: right;
+}
+.fx-booking .fx-summary {
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+    font-weight: 500;
+}
+
+.fx-booking .fx-summary div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.fx-booking .fx-address-block {
+    border-top:1px solid var(--border-color);
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.fx-booking .fx-address-block h4 {
+    margin-bottom: 8px;
+    margin-top:15px;
+    font-size: var(--small-descriptionsize);
+    font-weight: 500;
+}
+.fx-booking .fx-address-block p{
+    font-size: var(--small-descriptionsize);
+    color: var(--grey);
+    margin-top:0px;
+    line-height: 1.3;
+    font-weight: 300;
+}
+
+@media (max-width: 900px) {
+    .fx-booking .fx-confirmation-wrapper {
+        flex-direction: column;
+    }
+    .fx-booking .fx-confirmation-wrapper h1{
+        width: 100%;
+    }
+    .fx-booking .fx-confirm-left,
+    .fx-booking .fx-confirm-right {
+        width: 100%;
+    }
+}

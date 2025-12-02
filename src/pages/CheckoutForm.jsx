@@ -60,6 +60,7 @@ export default function CheckoutForm() {
           });
           if (data && data.status == 200) {
             console.log(data);
+            window.location.href = "/thankyou";
           }
         }
       }

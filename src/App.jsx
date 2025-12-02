@@ -6,6 +6,7 @@ export default function App() {
   const Layout = lazy(() => import("./components/Layout"));
   const Component = lazy(() => import("./pages/Component"));
   const SgbmDateGift = lazy(() => import("./pages/SgbmDateGift"));
+  const Thankyou = lazy(() => import("./pages/Thankyou"));
 
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ export default function App() {
             {/* 404 Fallback */}
             <Route path="*" element={<h1>Page Not Found</h1>} />
           </Route>
+          <Route path="thankyou" element={<Thankyou />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
