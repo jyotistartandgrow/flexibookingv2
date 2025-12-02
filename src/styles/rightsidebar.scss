@@ -104,13 +104,30 @@
  .fx-booking .fx-mobilesidebar{
   display: none;
  }
+ .fx-mob-footer-order-details h3{
+    display: none;
+  }
+  .fx-mob-footer-order-details .fx-mob-down-arrow{
+
+  }
 
 @media screen and (max-width: 580px) {
   .p-sidebar-bottom .p-sidebar{
-    height:100%;
+    height:90%;
   }
   .fx-mob-footer-order-details .logo{
     display: none;
+  }
+  .fx-mob-footer-order-details .fx-mob-down-arrow{
+    position: absolute;
+    top:10px;
+    left:50%;
+  }
+  .fx-mob-footer-order-details h3{
+    display: block;
+    margin: 0px;
+    position: absolute;
+    top:20px;
   }
   .fx-mob-footer-order-details .fx-bookingdatebar {
       padding: 0px;
@@ -147,33 +164,88 @@
   margin-bottom: 15px;
 }
 
-// .fx-mob-footer-order-details .fx-apply-btn {
-//   background: none;
-//   border: none;
-//   color: var(--grey);
-//   font-size: var(--small-descriptionsize);
-//   font-weight: bold;
-//   cursor: pointer;
-//   margin-bottom: 0px !important;
-//   height:inherit !important;
-//   width:auto !important;
-// }
-// .fx-mob-footer-order-details .fx-apply-btn:hover {
-//   color: var(--grey);
-// }
-// .fx-mob-footer-order-details .fx-bookingdate {
-//     font-size: 17px;
-//     font-weight: 500;
-//     color: var(--darkgrey);
-//     padding-bottom: 16px;
-// }
-// .fx-mob-footer-order-details .fx-bookingdate span {
-//     font-weight: 200;
-// }
-// .fx-mob-footer-order-details .fx-servicelistbox {
-//     padding: 16px 0px;
-//     border-top: 1px solid var(--border-color);
-// }
+.fx-mob-footer-order-details .fx-apply-btn {
+  background: none;
+  border: none;
+  color: var(--grey);
+  font-size: var(--small-descriptionsize);
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 0px !important;
+  height:inherit !important;
+  width:auto !important;
+}
+.fx-mob-footer-order-details .fx-apply-btn:hover {
+  color: var(--grey);
+}
+.fx-mob-footer-order-details .fx-bookingdate {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--darkgrey);
+    padding-bottom: 16px;
+}
+.fx-mob-footer-order-details .fx-bookingdate span {
+    font-weight: 200;
+}
+.fx-mob-footer-order-details .fx-servicelistbox {
+    padding: 16px 0px;
+    border-top: 1px solid var(--border-color);
+}
+.fx-mob-footer-order-details .fx-servicelistbox .fx-serviceitem{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.fx-mob-footer-order-details .fx-servicelistbox .fx-serviceitem .itemname{
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--darkgrey);
+    max-width: 28%;
+}
+.fx-mob-footer-order-details .fx-servicelistbox .fx-serviceitem .itemname span {
+    font-size: 14px;
+    color: var(--darkgrey);
+    text-decoration: underline;
+}
+.fx-mob-footer-order-details .time {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: var(--normal-descriptionsize);
+    color: var(--grey);
+    display: flex;
+    gap: 20px;
+}
+.fx-mob-footer-order-details .fx-servicelistbox .fx-serviceitem .price {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--dark-blue-color);
+}
+
+.fx-mob-footer-order-details .fx-totalbar {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    border-top: 1px solid #D5D5D5;
+    padding: 12px 20px;
+}
+
+
+.fx-mob-footer-order-details .fx-totalbar p {
+    margin: 0px;
+    color: var(--grey);
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.fx-mob-footer-order-details .fx-totalbar p span {
+    color: var(--darkgrey);
+    font-size: var(--big-descriptionsize);
+    font-weight: 600;
+    float: right;
+}
+
   .fx-booking .fx-mobilesidebar{
     width:100%;
     height:auto;

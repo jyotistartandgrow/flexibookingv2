@@ -160,7 +160,7 @@ export default function Sidebar() {
         >
           <div className="fx-bottombar-top-details">
             <span className="fx-order-details">Order Details </span>
-            <i className="fa fa-chevron-up"></i>
+            <i className="pi pi-chevron-up"></i>
           </div>
           <div className="fx-bottombar-bottom-details">
             <div className="fx-left-content-date">
@@ -194,6 +194,8 @@ export default function Sidebar() {
           <div className="logo">
             <img src={logo} className="fx-right-logo" />
           </div>
+          <div className="fx-mob-down-arrow"><i className="pi pi-chevron-down"></i></div>
+          <h3>Order Details</h3>
           {cart.length == 0 && !date && (
             <p className="giftmessagebox">
               book your service on a specific date" and "do a gift to a friend

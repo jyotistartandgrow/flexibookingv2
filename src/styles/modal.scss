@@ -101,10 +101,9 @@ h2 {
 }
 .fx-booking .fx-popup .fx-rightpopup {
   width: 50%;
-  padding: 20px;
   height: 100%;
   float: left;
-  overflow: auto;
+  padding:20px;
 }
 
 .fx-booking .fx-popup .fx-rightpopup h4 {
@@ -402,6 +401,7 @@ h2 {
     height: 100%;
     overflow: auto;
     margin: 0px;
+    padding: 15px;
   }
 
   .fx-booking .fx-popup .fx-leftpopup {
@@ -438,12 +438,25 @@ h2 {
     padding: 0px;
   }
   .fx-booking .fx-timelistboxbar{
-    height:150px;
+    height:auto;
   }
   .fx-booking .fx-popup .fx-rightpopup .continuebtn{
     position: fixed;
     width:94%;
     left: 3%;
     bottom: 5px;
+  }
+  .fx-booking .fx-popup .fx-rightpopup{
+    padding:0px;
+  }
+  .fx-booking .fx-popup .fx-rightpopup h4{
+        margin-top: 15px;
+  }
+  .fx-booking .fx-popup .fx-rightpopup .calendarboxbar{
+    gap:8px;
+  }
+  .fx-booking .fx-popup .fx-rightpopup .calendarbox{
+    height: auto;
+    padding:8px 0px;
   }
 }
