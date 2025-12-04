@@ -226,19 +226,19 @@ export default function Component() {
 
       <div className="fx-stepper-tabstyle" style={{ marginTop: "30px" }}>
         <div className="step datestep complete">
-          1<span>DATE</span>
+          <span>1 DATE</span>
         </div>
         <div className="step servicesstep active">
           <span>2 SERVICES</span>
         </div>
         <div className="step extrastep ">
-          3<span>EXTRA</span>
+          <span>3 EXTRA</span>
         </div>
         <div className="step checkoutstep ">
-          4<span>CHECKOUT</span>
+          <span>4 CHECKOUT</span>
         </div>
         <div className="step paymentstep ">
-          5<span>PAYMENT</span>
+          <span>5 PAYMENT</span>
         </div>
       </div>
 

@@ -104,6 +104,7 @@ h2 {
   height: 100%;
   float: left;
   padding:20px;
+  overflow:auto;
 }
 
 .fx-booking .fx-popup .fx-rightpopup h4 {
@@ -458,5 +459,8 @@ h2 {
   .fx-booking .fx-popup .fx-rightpopup .calendarbox{
     height: auto;
     padding:8px 0px;
+  }
+  .fx-booking .fx-popup .fx-rightpopup {
+    overflow:initial;
   }
 }

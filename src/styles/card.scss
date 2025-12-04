@@ -253,7 +253,7 @@
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .booknowbtn {
   height: 43px;
-  width: 163px;
+  width: 134px;
   padding: 10px;
   font-size: var(--normal-descriptionsize);
   font-weight: 400;
@@ -439,10 +439,13 @@
 }
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist h4{
   font-size: 22px;
+  height: 24px;
+  overflow: hidden;
 }
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist p{
   font-size:14px;
-  height:35px;
+  height: 36px;
+  overflow: hidden;
 }
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .price{

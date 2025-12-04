@@ -250,12 +250,13 @@
     width:100%;
     height:auto;
     position: fixed;
-    bottom:0px;
+    bottom:-2px;
     padding:15px;
     font-size: var(--card-headingsize);
     background: var(--white);
     display:block;
     box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.3);
+    z-index:999;
   }
 
   .fx-booking .fx-mobilesidebar p{

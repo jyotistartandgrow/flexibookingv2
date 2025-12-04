@@ -45,7 +45,7 @@ export default function Steps() {
           if (date || receiverInfo.firstName) dispatch(setStep("datestep"));
         }}
       >
-        <span>1 DATE</span>
+        <div>1 <span>DATE</span></div>
       </div>
       <div
         className={servicesstepclass}
@@ -53,7 +53,7 @@ export default function Steps() {
           if (serviceid) dispatch(setStep("servicesstep"));
         }}
       >
-        2 <span>SERVICES</span>
+        <div>2 <span>SERVICES</span></div>
       </div>
       <div
         className={extrastepclass}
@@ -61,7 +61,7 @@ export default function Steps() {
           if (extra) dispatch(setStep("extrastep"));
         }}
       >
-        3 <span>EXTRA</span>
+        <div>3 <span>EXTRA</span></div>
       </div>
       <div
         className={checkoutstepclass}
@@ -69,10 +69,10 @@ export default function Steps() {
           if (checkoutkey) dispatch(setStep("checkoutstep"));
         }}
       >
-        4 <span>CHECKOUT</span>
+        <div>4 <span>CHECKOUT</span></div>
       </div>
       <div className={paymentstepclass}>
-        5 <span>PAYMENT</span>
+        <div>5 <span>PAYMENT</span></div>
       </div>
     </div>
   );
