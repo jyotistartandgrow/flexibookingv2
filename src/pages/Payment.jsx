@@ -5,7 +5,7 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import Swal from "sweetalert2";
 import axiosInstance from "../Utils/Interceptor";
-import { setStep } from "../store/step1Slice";
+import { setCart } from "../store/step2Slice";
 import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 
@@ -14,6 +14,31 @@ export default function Payment() {
   const step = useSelector((state) => state.step1.step);
   const date = useSelector((state) => state.step1.date);
   const cart = useSelector((state) => state.step2.cart);
+  const bookingkey = useSelector((state) => state.step3.bookingkey);
+
+  useEffect(() => {
+    if (step == "paymentstep") {
+      auto_apply_coupon();
+    }
+  }, [step]);
+
+  const auto_apply_coupon = async () => {
+    const { data } = await axiosInstance(
+      `/auto-apply-coupon?booking_key=${bookingkey}`,
+      {
+        method: "get",
+      }
+    );
+    if (data && data.status == 200 && data?.data.status) {
+      const updatedCart = {
+        ...cart,
+        total_formatted: data?.data?.total,
+        discount: data?.data?.discount,
+        subtotal: data?.data?.subtotal,
+      };
+      dispatch(setCart(updatedCart));
+    }
+  };
 
   return (
     <div
@@ -65,11 +90,15 @@ export default function Payment() {
         <div className="fx-summary-footer">
           <div className="fx-summary-line">
             <span>Subtotal</span>
-            <span className="value">{decodeHtml(cart?.total_formatted)}</span>
+            <span className="value">{decodeHtml(cart?.subtotal)}</span>
           </div>
           <div className="fx-summary-line">
             <span>Discount</span>
-            <span className="value">€0,00</span>
+            <span className="value">{decodeHtml(cart?.discount)}</span>
+          </div>
+          <div className="fx-summary-line">
+            <span>Total</span>
+            <span className="value">{decodeHtml(cart?.total_formatted)}</span>
           </div>
         </div>
       </div>

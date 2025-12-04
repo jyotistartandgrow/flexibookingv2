@@ -12,6 +12,7 @@ const initialState = {
     address: "",
   },
   step: "datestep",
+  couponcode: [],
 };
 
 const step1Slice = createSlice({
@@ -27,8 +28,12 @@ const step1Slice = createSlice({
     setStep: (state, action) => {
       state.step = action.payload;
     },
+    setCouponlist: (state, action) => {
+      state.couponcode = action.payload;
+    },
   },
 });
 
-export const { setDate, setReceiverInfo, setStep } = step1Slice.actions;
+export const { setDate, setReceiverInfo, setStep, setCouponlist } =
+  step1Slice.actions;
 export default step1Slice.reducer;

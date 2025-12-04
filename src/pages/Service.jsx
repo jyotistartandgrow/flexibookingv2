@@ -301,6 +301,8 @@ export default function Service() {
         service: [cartobj],
         total: data?.data?.total,
         total_formatted: data?.data?.total_formated,
+        discount: 0,
+        subtotal: data?.data?.total_formated
       })
     );
     dispatch(setTimeslot(slot));
@@ -351,45 +353,45 @@ export default function Service() {
         </ul>
 
         {loading && (
-          <div class="fx-skeleton-row">
-            <div class="fx-card-skeleton">
-              <div class="fx-sk-img"></div>
-              <div class="fx-sk-tag"></div>
-              <div class="fx-sk-title"></div>
-              <div class="fx-sk-text"></div>
-              <div class="fx-sk-text short"></div>
-              <div class="fx-sk-price"></div>
-              <div class="fx-sk-button"></div>
+          <div className="fx-skeleton-row">
+            <div className="fx-card-skeleton">
+              <div className="fx-sk-img"></div>
+              <div className="fx-sk-tag"></div>
+              <div className="fx-sk-title"></div>
+              <div className="fx-sk-text"></div>
+              <div className="fx-sk-text short"></div>
+              <div className="fx-sk-price"></div>
+              <div className="fx-sk-button"></div>
             </div>
 
-            <div class="fx-card-skeleton">
-              <div class="fx-sk-img"></div>
-              <div class="fx-sk-tag"></div>
-              <div class="fx-sk-title"></div>
-              <div class="fx-sk-text"></div>
-              <div class="fx-sk-text short"></div>
-              <div class="fx-sk-price"></div>
-              <div class="fx-sk-button"></div>
+            <div className="fx-card-skeleton">
+              <div className="fx-sk-img"></div>
+              <div className="fx-sk-tag"></div>
+              <div className="fx-sk-title"></div>
+              <div className="fx-sk-text"></div>
+              <div className="fx-sk-text short"></div>
+              <div className="fx-sk-price"></div>
+              <div className="fx-sk-button"></div>
             </div>
 
-            <div class="fx-card-skeleton">
-              <div class="fx-sk-img"></div>
-              <div class="fx-sk-tag"></div>
-              <div class="fx-sk-title"></div>
-              <div class="fx-sk-text"></div>
-              <div class="fx-sk-text short"></div>
-              <div class="fx-sk-price"></div>
-              <div class="fx-sk-button"></div>
+            <div className="fx-card-skeleton">
+              <div className="fx-sk-img"></div>
+              <div className="fx-sk-tag"></div>
+              <div className="fx-sk-title"></div>
+              <div className="fx-sk-text"></div>
+              <div className="fx-sk-text short"></div>
+              <div className="fx-sk-price"></div>
+              <div className="fx-sk-button"></div>
             </div>
 
-            <div class="fx-card-skeleton">
-              <div class="fx-sk-img"></div>
-              <div class="fx-sk-tag"></div>
-              <div class="fx-sk-title"></div>
-              <div class="fx-sk-text"></div>
-              <div class="fx-sk-text short"></div>
-              <div class="fx-sk-price"></div>
-              <div class="fx-sk-button"></div>
+            <div className="fx-card-skeleton">
+              <div className="fx-sk-img"></div>
+              <div className="fx-sk-tag"></div>
+              <div className="fx-sk-title"></div>
+              <div className="fx-sk-text"></div>
+              <div className="fx-sk-text short"></div>
+              <div className="fx-sk-price"></div>
+              <div className="fx-sk-button"></div>
             </div>
           </div>
         )}
@@ -490,8 +492,8 @@ export default function Service() {
               </div>
             </div>
             {spinnervisible && (
-              <div class="fx-fullscreen-loader">
-                <div class="fx-seg-loader"></div>
+              <div className="fx-fullscreen-loader">
+                <div className="fx-seg-loader"></div>
               </div>
             )}
             {!spinnervisible && (

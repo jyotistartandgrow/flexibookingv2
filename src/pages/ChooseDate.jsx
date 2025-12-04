@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import calendar from "../assets/calendar.png";
 import { Calendar } from "primereact/calendar";
+import iconapplied from "../assets/icons8-confirm.svg";
 import { Tooltip } from "primereact/tooltip";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
@@ -9,7 +10,12 @@ import "primeicons/primeicons.css";
 import moment from "moment";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
-import { setDate, setReceiverInfo, setStep } from "../store/step1Slice";
+import {
+  setDate,
+  setReceiverInfo,
+  setStep,
+  setCouponlist,
+} from "../store/step1Slice";
 import { decodeHtml } from "../Utils/Functions";
 
 export default function ChooseDate() {
@@ -19,9 +25,10 @@ export default function ChooseDate() {
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
   const [isVisible, setIsVisible] = useState("booking");
   const [isVisibleGift, setIsVisibleGift] = useState(false);
-  const [couponCount, setCouponCount] = useState(0);
   const [disabledDates, setDisabledDates] = useState([]);
   const [responsearr, setResponsear] = useState([]);
+  const [coupon, setCoupon] = useState("");
+  const [fields, setFields] = useState([{ code: "" }]);
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -32,11 +39,47 @@ export default function ChooseDate() {
   }, [month]);
 
   const addmoreCoupon = () => {
-    setCouponCount(couponCount + 1);
+    setFields([...fields, { code: "" }]);
+    setCoupon("");
   };
 
-  const removeCoupon = () => {
-    setCouponCount(couponCount - 1);
+  const removeCoupon = (key) => {
+    const updated = fields.filter((_, i) => i !== key);
+    setFields(updated);
+    console.log("Updated Coupons:", updated);
+    const validCoupons = updated
+      .map((f) => f.code.trim())
+      .filter((c) => c !== "");
+    dispatch(setCouponlist(validCoupons));
+  };
+
+  const applycoupon = async (key) => {
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      icon: "success",
+      title:
+        "Coupon Applied! Once you proceed to payment, the discount will be applied.",
+    });
+
+    setFields((prev) => {
+      // update only one field
+      const updated = prev.map((item, i) =>
+        i === key ? { ...item, code: coupon } : item
+      );
+
+      // compute valid coupons using UPDATED list
+      const validCoupons = updated
+        .map((f) => f.code.trim())
+        .filter((c) => c !== "");
+
+      // dispatch inside the setter
+      dispatch(setCouponlist(validCoupons));
+
+      return updated;
+    });
   };
 
   const dateTemplate = (dateMeta) => {
@@ -178,6 +221,7 @@ export default function ChooseDate() {
   const handleMonthChange = (e) => {
     setMonth(moment(e.year + "-" + e.month).format("YYYY-MM"));
   };
+
   return (
     <div
       className="fx-leftcontentbox"
@@ -375,23 +419,42 @@ export default function ChooseDate() {
             </div>
             {isVisibleGift && (
               <div className="fx-commoninput">
-                <div className="fx-couponcontainerinputbox">
-                  <div className="fx-coupon-box">
-                    <input type="text" placeholder="Enter your coupon code" />
-                    <button className="fx-apply-btn">APPLY</button>
-                  </div>
-                </div>
-
-                {Array.from({ length: couponCount }).map((_, index) => (
+                {fields.map((field, index) => (
                   <div className="fx-couponcontainerinputbox" key={index}>
                     <div className="fx-coupon-box">
-                      <input type="text" placeholder="Enter your coupon code" />
-                      <button className="fx-apply-btn">APPLY</button>
+                      <input
+                        type="text"
+                        placeholder="Enter your coupon code"
+                        value={
+                          fields[index].code === ""
+                            ? coupon
+                            : fields[index].code
+                        }
+                        onChange={(e) => {
+                          if (fields[index].code === "") {
+                            setCoupon(e.target.value); // editable BEFORE apply
+                          }
+                        }}
+                        disabled={fields[index].code !== ""} // disable AFTER apply
+                      />
+                      {fields[index].code === "" && (
+                        <button
+                          className="fx-apply-btn"
+                          onClick={() => applycoupon(index)}
+                        >
+                          APPLY
+                        </button>
+                      )}
+                      {fields[index].code !== "" && (
+                        <button className="fx-apply-btn fx-applied-btn">
+                          APPLIED <img src={iconapplied} />
+                        </button>
+                      )}
                     </div>
                     <div className="fx-delete-coupon">
                       <i
                         className="pi pi-trash"
-                        onClick={() => removeCoupon()}
+                        onClick={() => removeCoupon(index)}
                       ></i>
                     </div>
                   </div>

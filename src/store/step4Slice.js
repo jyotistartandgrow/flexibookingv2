@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   checkoutkey: null,
   paymentstring: null,
+  session_expired: false,
 };
 
 const step4Slice = createSlice({
@@ -15,8 +16,12 @@ const step4Slice = createSlice({
     setPaymentstring: (state, action) => {
       state.paymentstring = action.payload;
     },
+    setSessionExpired: (state, action) => {
+      state.session_expired = action.payload;
+    },
   },
 });
 
-export const { setCheckoutkey, setPaymentstring } = step4Slice.actions;
+export const { setCheckoutkey, setPaymentstring, setSessionExpired } =
+  step4Slice.actions;
 export default step4Slice.reducer;
