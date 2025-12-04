@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import calendar from "../assets/calendar.png";
 import { Calendar } from "primereact/calendar";
@@ -19,6 +19,7 @@ import {
 import { decodeHtml } from "../Utils/Functions";
 
 export default function ChooseDate() {
+  const calendarRef = useRef(null);
   const dispatch = useDispatch();
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
@@ -265,6 +266,11 @@ export default function ChooseDate() {
                 minDate={new Date()}
                 disabledDates={disabledDates}
                 onMonthChange={handleMonthChange}
+                ref={calendarRef}
+                onClick={() => {
+                  // force open
+                  calendarRef.current?.show();
+                }}
               />
               <img src={calendar} className="fx-calendaricon" />
             </div>
