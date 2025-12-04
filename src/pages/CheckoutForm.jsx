@@ -113,8 +113,8 @@ export default function CheckoutForm() {
               },
             }}
           />
-          <div class="fx-element-box fx-paymentbutton">
-            <button disabled={!stripe || loading} class="btn-primary">
+          <div className="fx-element-box fx-paymentbutton">
+            <button disabled={!stripe || loading} className="btn-primary">
               {loading
                 ? "Processing..."
                 : "Pay " + decodeHtml(cart.total_formatted)}

@@ -18,6 +18,7 @@ import {
 import { setCouponlist } from "../store/step1Slice";
 import { setCart } from "../store/step2Slice";
 import axiosInstance from "../Utils/Interceptor";
+import useDeviceType from "../Utils/useDeviceType";
 
 const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
 const stripePromise = loadStripe(PUBLIC_KEY);
@@ -33,6 +34,7 @@ export default function Commonbox() {
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const [coupon, setCoupon] = useState("");
   const [fields, setFields] = useState([{ code: "" }]);
+  const isDesktop = useDeviceType();
   useEffect(() => {
     let field = [];
     if (couponcode && couponcode.length > 0) {
@@ -90,7 +92,6 @@ export default function Commonbox() {
       .map((f) => f.code.trim())
       .filter((c) => c !== "");
     dispatch(setCouponlist(validCoupons));
-    console.log(cart.discount);
     if (cart.discount && cart.discount != 0) {
       const { data: coupondata } = await axiosInstance.post(`/coupon-removal`, {
         booking_key: bookingkey,
@@ -150,76 +151,66 @@ export default function Commonbox() {
           book your service on a specific date" and "do a gift to a friend
         </p>
       )}
-      {date && !paymentstring && (
-        <div className="fx-bookingdatebar">
-          {fields.map((field, index) => (
-            <div className="fx-couponcontainerinputbox" key={index}>
-              <div className="fx-coupon-box">
-                <input
-                  type="text"
-                  placeholder="Enter your coupon code"
-                  value={
-                    fields[index].code === "" ? coupon : fields[index].code
-                  }
-                  onChange={(e) => {
-                    if (fields[index].code === "") {
-                      setCoupon(e.target.value); // editable BEFORE apply
+      {date &&
+        ((step !== "paymentstep" && !paymentstring) ||
+          (step === "paymentstep" && !isDesktop)) && (
+          <div className="fx-bookingdatebar">
+            {fields.map((field, index) => (
+              <div className="fx-couponcontainerinputbox" key={index}>
+                <div className="fx-coupon-box">
+                  <input
+                    type="text"
+                    placeholder="Enter your coupon code"
+                    value={
+                      fields[index].code === "" ? coupon : fields[index].code
                     }
-                  }}
-                  disabled={fields[index].code !== ""} // disable AFTER apply
-                />
-                {fields[index].code === "" && (
-                  <button
-                    className="fx-apply-btn"
-                    onClick={() => applycoupon(index)}
-                  >
-                    APPLY
-                  </button>
-                )}
-                {fields[index].code !== "" && (
-                  <button className="fx-apply-btn fx-applied-btn">
-                    APPLIED <img src={iconapplied} />
-                  </button>
+                    onChange={(e) => {
+                      if (fields[index].code === "") {
+                        setCoupon(e.target.value); // editable BEFORE apply
+                      }
+                    }}
+                    disabled={fields[index].code !== ""} // disable AFTER apply
+                  />
+                  {fields[index].code === "" && (
+                    <button
+                      className="fx-apply-btn"
+                      onClick={() => applycoupon(index)}
+                    >
+                      APPLY
+                    </button>
+                  )}
+                  {fields[index].code !== "" && (
+                    <button className="fx-apply-btn fx-applied-btn">
+                      APPLIED <img src={iconapplied} />
+                    </button>
+                  )}
+                </div>
+                {step != "paymentstep" && (
+                  <div className="fx-delete-coupon">
+                    <i
+                      className="pi pi-trash"
+                      onClick={() => removeCoupon(index)}
+                    ></i>
+                  </div>
                 )}
               </div>
-              {step != "paymentstep" && (
-                <div className="fx-delete-coupon">
-                  <i
-                    className="pi pi-trash"
-                    onClick={() => removeCoupon(index)}
-                  ></i>
-                </div>
-              )}
+            ))}
+            <div className="fx-element-box" onClick={() => addmoreCoupon()}>
+              <p className="fx-addmorelink">Add More</p>
             </div>
-          ))}
-          <div className="fx-element-box" onClick={() => addmoreCoupon()}>
-            <p className="fx-addmorelink">Add More</p>
+            <div className="fx-bookingdate">
+              Date
+              <br />
+              <span>{moment(date).format("MMMM DD YYYY")}</span>
+            </div>
           </div>
-          <div className="fx-bookingdate">
-            Date
-            <br />
-            <span>{moment(date).format("MMMM DD YYYY")}</span>
-          </div>
-        </div>
-      )}
-      {cart?.service?.length > 0 && !paymentstring && (
-        <>
-          <div className="fx-servicelistbox">
-            {cart.service.map((ct, ckey) => {
-              return (
-                <div className="fx-serviceitem" key={"ct-" + ckey}>
-                  <div className="itemname">
-                    {ct.name} X {ct.capacity}
-                    <br />
-                    <span onClick={() => edititem(ct.id)}>Edit</span>{" "}
-                  </div>
-                  <div className="time">{ct.slot}</div>
-                  <div className="price">{decodeHtml(ct.total_formatted)}</div>
-                </div>
-              );
-            })}
-            {cart?.extra?.length > 0 &&
-              cart.extra.map((ct, ckey) => {
+        )}
+      {cart?.service?.length > 0 &&
+        ((step !== "paymentstep" && !paymentstring) ||
+          (step === "paymentstep" && !isDesktop)) && (
+          <>
+            <div className="fx-servicelistbox">
+              {cart.service.map((ct, ckey) => {
                 return (
                   <div className="fx-serviceitem" key={"ct-" + ckey}>
                     <div className="itemname">
@@ -234,27 +225,43 @@ export default function Commonbox() {
                   </div>
                 );
               })}
-          </div>
-          <div className="fx-subtotalbar">
-            <p>
-              Sub Total <span> {decodeHtml(cart.subtotal)}</span>
-            </p>
-          </div>
-          <div className="fx-discountbar">
-            <p>
-              Discount <span> {decodeHtml(cart.discount)}</span>
-            </p>
-          </div>
-          <div className="fx-totalbar">
-            <p>
-              Total <span> {decodeHtml(cart.total_formatted)}</span>
-            </p>
-          </div>
-        </>
-      )}
-      {paymentstring && (
-        <div class="fx-paymentbox">
-          <h1 class="fx-main-heading">Payment</h1>
+              {cart?.extra?.length > 0 &&
+                cart.extra.map((ct, ckey) => {
+                  return (
+                    <div className="fx-serviceitem" key={"ct-" + ckey}>
+                      <div className="itemname">
+                        {ct.name} X {ct.capacity}
+                        <br />
+                        <span onClick={() => edititem(ct.id)}>Edit</span>{" "}
+                      </div>
+                      <div className="time">{ct.slot}</div>
+                      <div className="price">
+                        {decodeHtml(ct.total_formatted)}
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+            <div className="fx-subtotalbar">
+              <p>
+                Sub Total <span> {decodeHtml(cart.subtotal)}</span>
+              </p>
+            </div>
+            <div className="fx-discountbar">
+              <p>
+                Discount <span> {decodeHtml(cart.discount)}</span>
+              </p>
+            </div>
+            <div className="fx-totalbar">
+              <p>
+                Total <span> {decodeHtml(cart.total_formatted)}</span>
+              </p>
+            </div>
+          </>
+        )}
+      {paymentstring && isDesktop && (
+        <div className="fx-paymentbox">
+          <h1 className="fx-main-heading">Payment</h1>
           <Elements stripe={stripePromise}>
             <CheckoutForm />
           </Elements>

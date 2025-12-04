@@ -8,7 +8,13 @@ import axiosInstance from "../Utils/Interceptor";
 import { setCart } from "../store/step2Slice";
 import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
+import CheckoutForm from "../pages/CheckoutForm";
+import useDeviceType from "../Utils/useDeviceType";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
+const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
+const stripePromise = loadStripe(PUBLIC_KEY);
 export default function Payment() {
   const dispatch = useDispatch();
   const step = useSelector((state) => state.step1.step);
@@ -16,6 +22,7 @@ export default function Payment() {
   const cart = useSelector((state) => state.step2.cart);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const couponcode = useSelector((state) => state.step1.couponcode);
+  const isDesktop = useDeviceType();
 
   useEffect(() => {
     if (step == "paymentstep") {
@@ -75,63 +82,78 @@ export default function Payment() {
       className="fx-leftcontentbox"
       style={{ display: step === "paymentstep" ? "block" : "none" }}
     >
-      <h1 className="fx-main-heading">Checkout</h1>
-      <div className="fx-order-summary">
-        <div className="fx-service-date">
-          <strong>Service Date:</strong>
-          <p>{moment(date).format("MMMM Do, YYYY")}</p>
-        </div>
+      {isDesktop && (
+        <>
+          <h1 className="fx-main-heading">Checkout</h1>
+          <div className="fx-order-summary">
+            <div className="fx-service-date">
+              <strong>Service Date:</strong>
+              <p>{moment(date).format("MMMM Do, YYYY")}</p>
+            </div>
 
-        <table className="fx-summary-table">
-          <thead>
-            <tr>
-              <th>Products Name</th>
-              <th>Price</th>
-              <th>Qty</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cart?.service?.length > 0 &&
-              cart.service.map((ct, ckey) => {
-                return (
-                  <tr key={ckey}>
-                    <td>{ct.name}</td>
-                    <td>{decodeHtml(ct.price)}</td>
-                    <td>{ct.capacity}</td>
-                    <td>{decodeHtml(ct.total_formatted)}</td>
-                  </tr>
-                );
-              })}
-            {cart?.extra?.length > 0 &&
-              cart.extra.map((ct, ckey) => {
-                return (
-                  <tr key={ckey}>
-                    <td>{ct.name}</td>
-                    <td>{decodeHtml(ct.price)}</td>
-                    <td>{ct.capacity}</td>
-                    <td>{decodeHtml(ct.total_formatted)}</td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
+            <table className="fx-summary-table">
+              <thead>
+                <tr>
+                  <th>Products Name</th>
+                  <th>Price</th>
+                  <th>Qty</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cart?.service?.length > 0 &&
+                  cart.service.map((ct, ckey) => {
+                    return (
+                      <tr key={ckey}>
+                        <td>{ct.name}</td>
+                        <td>{decodeHtml(ct.price)}</td>
+                        <td>{ct.capacity}</td>
+                        <td>{decodeHtml(ct.total_formatted)}</td>
+                      </tr>
+                    );
+                  })}
+                {cart?.extra?.length > 0 &&
+                  cart.extra.map((ct, ckey) => {
+                    return (
+                      <tr key={ckey}>
+                        <td>{ct.name}</td>
+                        <td>{decodeHtml(ct.price)}</td>
+                        <td>{ct.capacity}</td>
+                        <td>{decodeHtml(ct.total_formatted)}</td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
 
-        <div className="fx-summary-footer">
-          <div className="fx-summary-line">
-            <span>Subtotal</span>
-            <span className="value">{decodeHtml(cart?.subtotal)}</span>
+            <div className="fx-summary-footer">
+              <div className="fx-summary-line">
+                <span>Subtotal</span>
+                <span className="value">{decodeHtml(cart?.subtotal)}</span>
+              </div>
+              <div className="fx-summary-line">
+                <span>Discount</span>
+                <span className="value">{decodeHtml(cart?.discount)}</span>
+              </div>
+              <div className="fx-summary-line">
+                <span>Total</span>
+                <span className="value">
+                  {decodeHtml(cart?.total_formatted)}
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="fx-summary-line">
-            <span>Discount</span>
-            <span className="value">{decodeHtml(cart?.discount)}</span>
-          </div>
-          <div className="fx-summary-line">
-            <span>Total</span>
-            <span className="value">{decodeHtml(cart?.total_formatted)}</span>
-          </div>
+        </>
+      )}
+
+      {!isDesktop && (
+        <div className="fx-paymentbox">
+          <h1 className="fx-main-heading">Payment</h1>
+          <Elements stripe={stripePromise}>
+            <CheckoutForm />
+          </Elements>
         </div>
-      </div>
+      )}
     </div>
   );
 }

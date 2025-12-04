@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import Commonbox from "./Commonbox";
 
 export default function Sidebar() {
+  const step = useSelector((state) => state.step1.step);
   const date = useSelector((state) => state.step1.date);
   const cart = useSelector((state) => state.step2.cart);
   const [visibleBottom, setVisibleBottom] = useState(false);
@@ -25,7 +26,11 @@ export default function Sidebar() {
       </div>
       {date && (
         <div
-          className="fx-mobilesidebar"
+          className={
+            step != "paymentstep"
+              ? "fx-mobilesidebar"
+              : "fx-mobilesidebar fx-mobilesidebar-top"
+          }
           onClick={() => setVisibleBottom(true)}
         >
           <div className="fx-bottombar-top-details">
