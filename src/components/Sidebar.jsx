@@ -27,7 +27,7 @@ export default function Sidebar() {
       {date && (
         <div
           className={
-            step != "paymentstep"
+            step != "paymentstep" && step != "checkoutstep"
               ? "fx-mobilesidebar"
               : "fx-mobilesidebar fx-mobilesidebar-top"
           }
