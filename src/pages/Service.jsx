@@ -152,6 +152,7 @@ export default function Service() {
   const dateTemplate = (dateMeta) => {
     // dateMeta = { day, month, year, today, selectable, otherMonth }
     let tooltipText = "";
+    let availabilityPercent = 0;
     const { day, month, year } = dateMeta;
     let tooltipId = `tooltip-${year}-${month}-${day}`;
     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(
@@ -176,11 +177,15 @@ export default function Service() {
 
       if (matchedObj) {
         // example: set tooltip based on matched object's properties
-        tooltipText =
-          matchedObj.time_slots.length ||
-          matchedObj.single_time_slot.length ||
-          0;
-        tooltipText = `${tooltipText} Slots Available`;
+        if (matchedObj.single_time_slot) {
+          tooltipText = `1 Slot, (${matchedObj.total_capacity_left}) Capacity`;
+        } else if (matchedObj.time_slots) {
+          tooltipText = `${matchedObj.time_slots.length} Slots, (${matchedObj.total_capacity_left}) Capacity`;
+        } else {
+          tooltipText = `0 Slot`;
+        }
+        tooltipText = `${tooltipText}`;
+        availabilityPercent = matchedObj.capacity_left_percentage;
       }
     }
 
@@ -202,6 +207,10 @@ export default function Service() {
         >
           <div className="custom-day">{day}</div>
         </div>
+        <div
+          className="percent-bar"
+          style={{ width: `${availabilityPercent}%` }}
+        ></div>
         <div className="fx-tooltip">{tooltipText}</div>
       </>
     );
@@ -302,7 +311,7 @@ export default function Service() {
         total: data?.data?.total,
         total_formatted: data?.data?.total_formated,
         discount: 0,
-        subtotal: data?.data?.total_formated
+        subtotal: data?.data?.total_formated,
       })
     );
     dispatch(setTimeslot(slot));

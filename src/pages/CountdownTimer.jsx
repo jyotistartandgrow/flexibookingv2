@@ -40,9 +40,11 @@ export default function CountdownTimer({ startSeconds = 180 }) {
   return (
     <div>
       <h4>
-        {running ? `Session ends in ${formatTime(time)}` : "Session expired!"}
+        {running && !sessionExpired
+          ? `Session ends in ${formatTime(time)}`
+          : "Session expired!"}
       </h4>
-      {!running && (
+      {sessionExpired && (
         <input
           type="button"
           className="btn-primary"
