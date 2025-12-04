@@ -15,6 +15,7 @@ export default function Payment() {
   const date = useSelector((state) => state.step1.date);
   const cart = useSelector((state) => state.step2.cart);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
+  const couponcode = useSelector((state) => state.step1.couponcode);
 
   useEffect(() => {
     if (step == "paymentstep") {
@@ -37,6 +38,35 @@ export default function Payment() {
         subtotal: data?.data?.subtotal,
       };
       dispatch(setCart(updatedCart));
+
+      if (couponcode && couponcode.length > 0) {
+        // apply coupons one by one
+        for (let i = 0; i < couponcode.length; i++) {
+          const { data: coupondata } = await axiosInstance.post(
+            `/apply-coupon`,
+            {
+              booking_key: bookingkey,
+              coupon_code: couponcode[i],
+            }
+          );
+
+          if (
+            coupondata &&
+            coupondata.status == 200 &&
+            coupondata.data.status == true
+          ) {
+            dispatch(
+              setCart({
+                ...cart,
+                total: coupondata?.data?.original_data?.amount,
+                total_formatted: coupondata?.data?.total,
+                discount: coupondata?.data?.coupon_discount,
+                subtotal: coupondata?.data?.original_data?.subtotal,
+              })
+            );
+          }
+        }
+      }
     }
   };
 

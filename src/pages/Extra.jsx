@@ -22,7 +22,6 @@ export default function Service() {
   const capacity = useSelector((state) => state.step2.capacity);
   const slot = useSelector((state) => state.step2.slot);
   const cart = useSelector((state) => state.step2.cart);
-  const couponcode = useSelector((state) => state.step1.couponcode);
 
   const [products, setProductsArr] = useState([]);
   const [isVisible, setIsVisible] = useState("grid");
@@ -186,35 +185,6 @@ export default function Service() {
       dispatch(setExtracapacity(book));
       dispatch(setExtra(extraid));
       dispatch(setBookingkey(data.data.booking_string));
-
-      if (couponcode && couponcode.length > 0) {
-        // apply coupons one by one
-        for (let i = 0; i < couponcode.length; i++) {
-          const { data: coupondata } = await axiosInstance.post(
-            `/apply-coupon`,
-            {
-              booking_key: data.data.booking_string,
-              coupon_code: couponcode[i],
-            }
-          );
-
-          if (
-            coupondata &&
-            coupondata.status == 200 &&
-            coupondata.data.status == true
-          ) {
-            dispatch(
-              setCart({
-                ...cart,
-                total: coupondata?.data?.original_data?.amount,
-                total_formatted: coupondata?.data?.total,
-                discount: coupondata?.data?.coupon_discount,
-                subtotal: coupondata?.data?.original_data?.subtotal,
-              })
-            );
-          }
-        }
-      }
       dispatch(setStep("checkoutstep"));
     } else {
       Swal.fire({
