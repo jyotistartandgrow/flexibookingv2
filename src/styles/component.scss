@@ -12,6 +12,9 @@
   cursor: pointer;
   margin-bottom: 15px;
 }
+
+
+
  .fx-booking .fx-giftbox{
   width:668px;
 }
@@ -50,6 +53,19 @@
   cursor: pointer;
   margin-bottom: 10px;
 }
+
+ .fx-booking .fx-commoninput select{
+   width: 100%;
+  padding: 16px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);;
+  /* box-sizing: border-box; */
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  cursor: pointer;
+  margin-bottom: 10px;
+ }
+
  /* .fx-booking .fx-commoninput input[type="text"]:focus-visible,
  .fx-booking .fx-commoninput input[type="email"]:focus-visible
 {
@@ -469,7 +485,6 @@
 .fx-booking .fx-phone-input input {
   border: none;
   outline: none;
-  padding: 16px 12px;
   font-size: 14px;
   flex: 1;
 }
