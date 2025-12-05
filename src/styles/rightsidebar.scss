@@ -71,20 +71,46 @@
   color: var(--dark-blue-color);
 }
 .fx-booking .fx-totalbar{
+  border-top:1px solid #D5D5D5;
+  padding: 12px 20px;
+}
+
+.fx-booking .fx-right-bottom-bar, .p-sidebar-content .fx-right-bottom-bar{
   position: absolute;
   bottom: 0px;
   left:0px;
   right:0px;
-  border-top:1px solid #D5D5D5;
-  padding: 12px 20px;
-  
 }
+
+.fx-booking .fx-subtotalbar, .fx-booking .fx-discountbar, .p-sidebar-content .fx-subtotalbar, .p-sidebar-content .fx-discountbar{
+  padding: 8px 20px;
+}
+
+.fx-booking .fx-subtotalbar p, .fx-booking .fx-discountbar p, .p-sidebar-content .fx-subtotalbar p, .p-sidebar-content .fx-discountbar p{
+  margin:0px;
+  color: var(--grey);
+  font-size:16px;
+  font-weight: 400;
+}
+
+.fx-booking .fx-subtotalbar p span, .fx-booking .fx-discountbar p span, .p-sidebar-content .fx-subtotalbar p span, .p-sidebar-content .fx-discountbar p span{
+  color: var(--darkgrey);
+  font-size: var(--big-descriptionsize);
+  font-weight: 600;
+  float: right;
+}
+
 .fx-booking .fx-totalbar p{
   margin:0px;
   color: var(--grey);
   font-size:18px;
   font-weight: 400;
 }
+
+.fx-subtotal-discount-bar{
+  margin-bottom: 10px;
+}
+
 .fx-booking .fx-totalbar p span{
   color: var(--darkgrey);
   font-size: var(--big-descriptionsize);
@@ -223,10 +249,6 @@
 }
 
 .fx-mob-footer-order-details .fx-totalbar {
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
     border-top: 1px solid #D5D5D5;
     padding: 12px 20px;
 }
@@ -257,6 +279,12 @@
     display:block;
     box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.3);
     z-index:999;
+  }
+
+  .fx-booking .fx-mobilesidebar-top{
+     top:76px;
+     box-shadow:0 1px 7px -4px rgba(0, 0, 0, 0.3);
+     height: 82px;
   }
 
   .fx-booking .fx-mobilesidebar p{
