@@ -1,26 +1,59 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import logo from "../assets/logo.png";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import axiosInstance from "../Utils/Interceptor";
 import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
+import { useReactToPrint } from "react-to-print";
+import { setLoading } from "../store/step1Slice";
+import { toJpeg } from "html-to-image";
 
 export default function Thankyou() {
+  const dispatch = useDispatch();
+  const componentRef = useRef();
   const bookingKey = useSelector((state) => state.step3.bookingkey);
   const [bookingData, setBookingData] = useState(null);
 
   const bookingdetail = async () => {
+    dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/thankyou`, {
       booking_key: "FLEXIB43CD5C6144E3056",
     });
     if (data && data.status == 200) {
       console.log(data);
       setBookingData(data?.data);
+      dispatch(setLoading(false));
     }
   };
+
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef,
+    documentTitle: "Print",
+    onBeforePrint: () => {
+      return new Promise((resolve) => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "../src/styles/thankyou.css";
+        link.onload = resolve; // wait for CSS to load
+        document.head.appendChild(link);
+      });
+    },
+  });
+
+  const downloadAsImage = () => {
+    toJpeg(componentRef.current)
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = "download.jpeg";
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     bookingdetail();
   }, []);
@@ -54,18 +87,17 @@ export default function Thankyou() {
           </div>
 
           <div className="fx-button-row">
-            <button className="fx-btn-light">
+            <button className="fx-btn-light" onClick={handlePrint}>
               {" "}
               Print <i className="pi pi-print"></i>
             </button>
-            <button className="fx-btn-light">
+            <button className="fx-btn-light" onClick={downloadAsImage}>
               {" "}
               Download <i className="pi pi-download"></i>
             </button>
           </div>
         </div>
-
-        <div className="fx-confirm-right">
+        <div className="fx-confirm-right" ref={componentRef}>
           <div className="fx-confirm-innerrightbox">
             <h3 className="fx-order-title">
               Your order is Confirmed. You will receive a confirmation mail in

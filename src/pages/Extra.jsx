@@ -9,7 +9,7 @@ import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 import extra from "../assets/extra1.jpg";
 import { setExtracapacity, setExtra, setBookingkey } from "../store/step3Slice";
-import { setStep } from "../store/step1Slice";
+import { setStep, setLoading } from "../store/step1Slice";
 import { setCart } from "../store/step2Slice";
 import Swal from "sweetalert2";
 
@@ -27,7 +27,7 @@ export default function Service() {
   const [isVisible, setIsVisible] = useState("grid");
   const [book, setBook] = useState(0);
   const [extraid, setExtraid] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [skeloading, setLoadingske] = useState(true);
   const [extradetails, setExtradetails] = useState({});
 
   const toggleDiv = (type) => {
@@ -36,7 +36,7 @@ export default function Service() {
 
   useEffect(() => {
     if (date && service) {
-      setLoading(true);
+      setLoadingske(true);
       fetchProductsByDate(date);
     }
   }, [date, service]);
@@ -53,7 +53,7 @@ export default function Service() {
     if (data && data.status == 200) {
       setProductsArr(data.data);
     }
-    setLoading(false);
+    setLoadingske(false);
   };
 
   // Template for each carousel item
@@ -139,6 +139,7 @@ export default function Service() {
       return;
     }
 
+    dispatch(setLoading(true));
     const { data } = await axiosInstance(
       `/price-format?service_id=${cart.service[0].id}&capacity=${
         cart.service[0].capacity
@@ -173,6 +174,7 @@ export default function Service() {
   };
 
   const addtocart = async () => {
+    dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/addtocart`, {
       service_id: service,
       date: moment(date).format("YYYY-MM-DD"),
@@ -186,6 +188,7 @@ export default function Service() {
       dispatch(setExtra(extraid));
       dispatch(setBookingkey(data.data.booking_string));
       dispatch(setStep("checkoutstep"));
+      dispatch(setLoading(false));
     } else {
       Swal.fire({
         toast: true,
@@ -195,12 +198,14 @@ export default function Service() {
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
         title: data?.message ?? "There is some error , please try again",
       });
+      dispatch(setLoading(false));
     }
   };
 
   const skipextra = () => {
     addtocart();
     dispatch(setStep("checkoutstep"));
+    dispatch(setLoading(false));
   };
 
   return (
@@ -243,7 +248,7 @@ export default function Service() {
             </li>
           </ul>
 
-          {loading && (
+          {skeloading && (
             <div className="fx-skeleton-row">
               <div className="fx-card-skeleton">
                 <div className="fx-sk-img"></div>
@@ -287,10 +292,10 @@ export default function Service() {
             </div>
           )}
 
-          {!loading && products.length == 0 && (
+          {!skeloading && products.length == 0 && (
             <div className="fx-no-data">No services found</div>
           )}
-          {!loading && products.length > 0 && (
+          {!skeloading && products.length > 0 && (
             <>
               <div
                 className={

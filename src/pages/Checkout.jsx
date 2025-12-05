@@ -9,7 +9,7 @@ import useFetch from "../Utils/CustomHook";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { InputSwitch } from "primereact/inputswitch";
-import { setReceiverInfo, setStep } from "../store/step1Slice";
+import { setReceiverInfo, setStep, setLoading } from "../store/step1Slice";
 import { setCheckoutkey, setPaymentstring } from "../store/step4Slice";
 
 export default function Checkout() {
@@ -27,14 +27,17 @@ export default function Checkout() {
   const [term, setTerm] = useState(false);
   const [gift, setGift] = useState(receiverInfo.firstName ? 1 : 0);
   const [invoice, setInvoice] = useState(false);
+  const [numberOnly, setNumberOnly] = useState("");
 
   const getState = async (country) => {
+    dispatch(setLoading(true));
     const { data } = await axiosInstance(`/states?country_code=${country}`, {
       method: "get",
     });
 
     if (data?.data) {
       setState(data?.data);
+      dispatch(setLoading(false));
     }
   };
 
@@ -53,7 +56,7 @@ export default function Checkout() {
     if (
       billdata.sgbm_field_1 == "" ||
       billdata.sgbm_field_3 == "" ||
-      billdata.sgbm_field_4 == "" ||
+      numberOnly.trim() == "" ||
       billdata.sgbm_field_5 == "" ||
       billdata.sgbm_field_6 == "" ||
       billdata.sgbm_field_8 == "" ||
@@ -68,7 +71,9 @@ export default function Checkout() {
         icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
         title: "Please fill billing details",
       });
+      return;
     }
+    dispatch(setLoading(true));
     const gift_info = {
       recipient_first_name: gift ? receiverInfo.firstName ?? "" : "",
       recipient_last_name: gift ? receiverInfo.lastName ?? "" : "",
@@ -122,6 +127,7 @@ export default function Checkout() {
       dispatch(setCheckoutkey(data.data.checkout));
       dispatch(setPaymentstring(data.data.data));
       dispatch(setStep("paymentstep"));
+      dispatch(setLoading(false));
     } else {
       Swal.fire({
         toast: true,
@@ -131,6 +137,7 @@ export default function Checkout() {
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
         title: data?.message ?? "There is some error , please try again",
       });
+      dispatch(setLoading(false));
     }
   };
   return (
@@ -180,9 +187,12 @@ export default function Checkout() {
               <PhoneInput
                 country={"in"}
                 value={billdata.sgbm_field_4}
-                onChange={(phone) =>
-                  setBilldata({ ...billdata, sgbm_field_4: phone })
-                }
+                onChange={(phone, country) => {
+                  setBilldata({ ...billdata, sgbm_field_4: phone });
+                  // Remove dial code to check number only
+                  const number = phone.replace("+" + country.dialCode, "");
+                  setNumberOnly(number);
+                }}
                 enableSearch={true} // search country
                 disableDropdown={false} // keep dropdown
                 inputStyle={{ width: "100%" }}

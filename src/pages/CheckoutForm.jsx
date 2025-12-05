@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { decodeHtml } from "../Utils/Functions";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
-import { setStep } from "../store/step1Slice";
+import { setStep, setLoading } from "../store/step1Slice";
 import { setCheckoutkey, setPaymentstring } from "../store/step4Slice";
 import CountdownTimer from "./CountdownTimer";
 
@@ -16,13 +16,14 @@ export default function CheckoutForm() {
   const bookingKey = useSelector((state) => state.step3.bookingkey);
   const checkoutKey = useSelector((state) => state.step4.checkoutkey);
   const sessionExpired = useSelector((state) => state.step4.session_expired);
+  const loading = useSelector((state) => state.step1.loading);
 
-  const [loading, setLoading] = useState(false);
+  //const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    dispatch(setLoading(true));
 
     if (!stripe || !elements) return;
 
@@ -39,10 +40,10 @@ export default function CheckoutForm() {
           icon: "error", // 'success', 'error', 'warning', 'info', 'question'
           title: "Session Expired! Please re-initiate payment.",
         });
-        setLoading(false);
         dispatch(setPaymentstring(null));
         dispatch(setCheckoutkey(null));
         dispatch(setStep("checkoutstep"));
+        dispatch(setLoading(true));
         return;
       }
     }
@@ -86,11 +87,12 @@ export default function CheckoutForm() {
           });
           if (data && data.status == 200) {
             console.log(data);
+            dispatch(setLoading(false));
             window.location.href = "/thankyou";
           }
         }
       }
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
