@@ -15,7 +15,7 @@ import {
   setPaymentstring,
   setSessionExpired,
 } from "../store/step4Slice";
-import { setCouponlist } from "../store/step1Slice";
+import { setCouponlist, setLoading } from "../store/step1Slice";
 import { setCart } from "../store/step2Slice";
 import axiosInstance from "../Utils/Interceptor";
 import useDeviceType from "../Utils/useDeviceType";
@@ -84,6 +84,7 @@ export default function Commonbox() {
   };
 
   const removeCoupon = async (key) => {
+    dispatch(setLoading(true));
     let couponcode = fields[key].code;
     const updated = fields.filter((_, i) => i !== key);
     setFields(updated);
@@ -113,6 +114,7 @@ export default function Commonbox() {
         );
       }
     }
+    dispatch(setLoading(false));
   };
 
   const applycoupon = async (key) => {
@@ -146,7 +148,7 @@ export default function Commonbox() {
 
   return (
     <>
-      {cart?.service?.length == 0 && !date && (
+      {!cart.service && !date && (
         <p className="giftmessagebox">
           book your service on a specific date" and "do a gift to a friend
         </p>

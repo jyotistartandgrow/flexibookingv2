@@ -19,9 +19,19 @@ const step4Slice = createSlice({
     setSessionExpired: (state, action) => {
       state.session_expired = action.payload;
     },
+    sessionClear: (state) => {
+      state.checkoutkey = null;
+      state.paymentstring = null;
+      state.session_expired = false;
+      state.bookingkey = null;
+    },
   },
 });
 
-export const { setCheckoutkey, setPaymentstring, setSessionExpired } =
-  step4Slice.actions;
+export const {
+  setCheckoutkey,
+  setPaymentstring,
+  setSessionExpired,
+  sessionClear,
+} = step4Slice.actions;
 export default step4Slice.reducer;

@@ -15,6 +15,7 @@ import {
   setReceiverInfo,
   setStep,
   setCouponlist,
+  setLoading,
 } from "../store/step1Slice";
 import { decodeHtml } from "../Utils/Functions";
 
@@ -173,6 +174,7 @@ export default function ChooseDate() {
   };
 
   const viewService = () => {
+    dispatch(setLoading(true));
     console.log("Receiver Info:", receiverInfo);
     if (
       receiverInfo.firstName === "" ||
@@ -193,9 +195,11 @@ export default function ChooseDate() {
       return;
     }
     dispatch(setStep("servicesstep"));
+    dispatch(setLoading(false));
   };
 
   const getserviceavailabilitycalendar = async (monthYear) => {
+    dispatch(setLoading(true));
     /* Service availability calendar */
     const { data: dataa } = await axiosInstance(
       `/service-availability-calendar?month=${monthYear}`,
@@ -215,6 +219,7 @@ export default function ChooseDate() {
           }
         });
         setDisabledDates(datedarr);
+        dispatch(setLoading(false));
       }
     }
   };

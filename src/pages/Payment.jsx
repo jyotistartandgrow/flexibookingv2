@@ -6,6 +6,7 @@ import "primeicons/primeicons.css";
 import Swal from "sweetalert2";
 import axiosInstance from "../Utils/Interceptor";
 import { setCart } from "../store/step2Slice";
+import { setLoading } from "../store/step1Slice";
 import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 import CheckoutForm from "../pages/CheckoutForm";
@@ -31,6 +32,7 @@ export default function Payment() {
   }, [step]);
 
   const auto_apply_coupon = async () => {
+    dispatch(setLoading(true));
     const { data } = await axiosInstance(
       `/auto-apply-coupon?booking_key=${bookingkey}`,
       {
@@ -74,6 +76,7 @@ export default function Payment() {
           }
         }
       }
+      dispatch(setLoading(false));
     }
   };
 
