@@ -9,18 +9,21 @@ import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 import { useReactToPrint } from "react-to-print";
 import { setLoading } from "../store/step1Slice";
-import { toJpeg } from "html-to-image";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import Swal from "sweetalert2";
 
 export default function Thankyou() {
   const dispatch = useDispatch();
   const componentRef = useRef();
-  const bookingKey = useSelector((state) => state.step3.bookingkey);
+  const bookingkey = new URLSearchParams(window.location.search).get("pid");
   const [bookingData, setBookingData] = useState(null);
+  const [email, setEmail] = useState("");
 
   const bookingdetail = async () => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/thankyou`, {
-      booking_key: "FLEXIB43CD5C6144E3056",
+      booking_key: bookingkey,
     });
     if (data && data.status == 200) {
       console.log(data);
@@ -43,15 +46,38 @@ export default function Thankyou() {
     },
   });
 
-  const downloadAsImage = () => {
-    toJpeg(componentRef.current)
-      .then((dataUrl) => {
-        const link = document.createElement("a");
-        link.download = "download.jpeg";
-        link.href = dataUrl;
-        link.click();
-      })
-      .catch((err) => console.log(err));
+  const downloadAsPDF = async () => {
+    const element = componentRef.current;
+    const canvas = await html2canvas(element);
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("download.pdf");
+  };
+
+  const sendEmail = async () => {
+    if (!email) {
+      Swal.fire({
+        toast: true,
+        position: "top-end", // or 'bottom-end', 'top-start', etc.
+        showConfirmButton: false,
+        timer: 3000, // auto-close after 3 seconds
+        icon: "error", // 'success', 'error', 'warning', 'info', 'question'
+        title: "Please provide email",
+      });
+    }
+    const { data } = await axiosInstance.post(`/send-email`, {
+      booking_key: bookingkey,
+      email,
+    });
+    if (data && data.status == 200) {
+      console.log(data);
+    }
   };
 
   useEffect(() => {
@@ -82,8 +108,14 @@ export default function Thankyou() {
           </p>
 
           <div className="fx-email-box">
-            <input type="text" placeholder="Send via mail" />
-            <button className="fx-btn-send">Send</button>
+            <input
+              type="text"
+              placeholder="Send via mail"
+              onBlur={(e) => setEmail(e.target.value)}
+            />
+            <button className="fx-btn-send" onClick={sendEmail}>
+              Send
+            </button>
           </div>
 
           <div className="fx-button-row">
@@ -91,7 +123,7 @@ export default function Thankyou() {
               {" "}
               Print <i className="pi pi-print"></i>
             </button>
-            <button className="fx-btn-light" onClick={downloadAsImage}>
+            <button className="fx-btn-light" onClick={downloadAsPDF}>
               {" "}
               Download <i className="pi pi-download"></i>
             </button>

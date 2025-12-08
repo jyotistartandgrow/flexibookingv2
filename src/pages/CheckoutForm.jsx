@@ -23,10 +23,9 @@ export default function CheckoutForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(setLoading(true));
 
     if (!stripe || !elements) return;
-
+    dispatch(setLoading(true));
     const { data: sessiondata } = await axiosInstance.post(`/check-session`, {
       booking_key: bookingKey,
     });
@@ -88,7 +87,7 @@ export default function CheckoutForm() {
           if (data && data.status == 200) {
             console.log(data);
             dispatch(setLoading(false));
-            window.location.href = "/thankyou";
+            window.location.href = `/thankyou?pid=${bookingKey}`;
           }
         }
       }
