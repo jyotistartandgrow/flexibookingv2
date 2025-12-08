@@ -49,7 +49,7 @@
     font-size: 15px;
     font-weight: 300;
     color:var(--grey);
-    line-height: 1.6;
+    line-height: 1.8;
     text-align: left;
 }
 
@@ -192,7 +192,34 @@
     line-height: 1.3;
     font-weight: 300;
 }
+@media screen and (max-width: 480px) {
+.fx-booking .fx-confirm-left{
+    padding: 30px;
+}
+.fx-booking .fx-confirm-left h1{
+    margin-top:0px !important;
+}
+.fx-booking .fx-confirm-left h2{
+    font-size:var(--small-headingsize);
+}
+.fx-booking .fx-info-text{
+    margin-top:0px;
+}
+.fx-booking .fx-voucher-icon{
+    margin-top:80px;
+}
+.fx-booking .fx-thankubuttontext{
+    display: none;
+}
+.fx-booking .fx-confirm-right{
+    background: inherit !important;
+}
+.fx-booking .fx-confirm-innerrightbox{
+    margin: inherit !important;
+    padding: 20px 30px !important;
+}
 
+}
 @media (max-width: 900px) {
     .fx-booking .fx-confirmation-wrapper {
         flex-direction: column;

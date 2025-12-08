@@ -70,6 +70,13 @@
   padding:16px 20px;
   margin-top:80px;
 }
+.fx-paymentbox .StripeElement{
+  background: #fff !important;
+  border:1px solid var(--border-color) !important;
+  padding: 16px 12px !important;
+  margin-bottom: 15px !important;
+  border-radius: 4px;
+}
 .fx-booking  .fx-card-input {
   display: flex;
   align-items: center;

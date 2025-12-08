@@ -58,11 +58,22 @@
  display: block;
 }
 
+.fx-step-top-fixed-box{
+    display: block;
+    position: fixed;
+    width: 100%;
+    z-index: 99;
+    background: #fff;
+    left: 0px;
+    top: 0px;
+    padding: 16px;
+}
+
 .fx-stepper-tabstyle {
   position: relative;
   width: 100%;
   padding: 20px 0;
-  height: 60px;
+  height:46px;
   /* enough height for steps to show */
 }
 

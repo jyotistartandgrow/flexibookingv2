@@ -38,7 +38,7 @@ export default function Steps() {
   }
 
   return (
-    <div>
+    <div className="fx-step-top-fixed-box1">
     <div className="fx-stepper-tabstyle">
       <div
         className={datestepclass}

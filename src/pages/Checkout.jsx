@@ -142,7 +142,7 @@ export default function Checkout() {
   };
   return (
     <div
-      className="fx-leftcontentbox"
+      className="fx-leftcontentbox fx-checkoutpage"
       style={{ display: step === "checkoutstep" ? "block" : "none" }}
     >
       <h1 className="fx-main-heading">Checkout</h1>
@@ -154,10 +154,12 @@ export default function Checkout() {
             <input
               type="text"
               placeholder="First Name"
+              className="fx-invalid"
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_1: e.target.value })
               }
             />
+            <span class="fx-errortext">Enter First Name</span>
           </div>
           <div className="fx-element-box">
             <label>Last Name</label>

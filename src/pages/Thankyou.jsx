@@ -20,7 +20,7 @@ export default function Thankyou() {
   const bookingdetail = async () => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/thankyou`, {
-      booking_key: "FLEXIB43CD5C6144E3056",
+      booking_key: "FLEXIB070EDF89233232D",
     });
     if (data && data.status == 200) {
       console.log(data);
@@ -89,11 +89,11 @@ export default function Thankyou() {
           <div className="fx-button-row">
             <button className="fx-btn-light" onClick={handlePrint}>
               {" "}
-              Print <i className="pi pi-print"></i>
+              <span className="fx-thankubuttontext">Print</span> <i className="pi pi-print"></i>
             </button>
             <button className="fx-btn-light" onClick={downloadAsImage}>
               {" "}
-              Download <i className="pi pi-download"></i>
+              <span className="fx-thankubuttontext">Download</span> <i className="pi pi-download"></i>
             </button>
           </div>
         </div>
