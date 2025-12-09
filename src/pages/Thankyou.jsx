@@ -123,7 +123,7 @@ export default function Thankyou() {
               type="text"
               placeholder="Send via mail"
               value={email}
-              onBlur={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <button className="fx-btn-send" onClick={sendEmail}>
               Send
