@@ -18,7 +18,9 @@ export default function App({ initialRoute = "/" }) {
   function InitialRedirect() {
     const navigate = useNavigate();
     useEffect(() => {
-      navigate(initialRoute);
+      if (window.location.pathname === "/") {
+        navigate(initialRoute);
+      }
     }, []);
     return null;
   }

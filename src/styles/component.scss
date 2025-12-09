@@ -54,6 +54,10 @@
   margin-bottom: 0px;
 }
 
+ .fx-booking .fx-commoninput input[type="text"].fx-invalid,.fx-booking .fx-commoninput input[type="email"].fx-invalid{
+  border: 1px solid var(--error-color)  !important;
+ }
+
  .fx-booking .fx-commoninput select{
    width: 100%;
   padding: 16px 12px;
@@ -118,6 +122,7 @@
 
 .fx-booking .btn-primary {
   border: 1px solid transparent;
+  padding: 12px 24px;
   width: 240px;
   font-weight: 400;
   font-size: var(--normal-descriptionsize);
@@ -211,6 +216,10 @@
   height:inherit !important;
   width:auto !important;
 }
+
+ .fx-booking .fx-applied-btn{
+
+ }
 
  .fx-booking .fx-apply-btn:hover {
   color: var(--grey);
@@ -459,11 +468,23 @@
   align-items: center;
   border: 1px solid var(--border-color, #ccc);
   border-radius: 4px;
-  overflow: hidden;
+  // overflow: hidden;
   width: 100%;
   font-family: 'Roboto', sans-serif;
 }
 
+.fx-booking .fx-phone-input .country-list{
+  margin-top:0px !important;
+}
+
+.fx-booking .fx-phone-input .country-list .search-box{
+  width:87%;
+}
+.fx-booking .fx-errortext{
+  color:var(--error-color);
+  float: left;
+  margin-top:8px;
+}
 .fx-booking .fx-phone-input .country-code {
   display: flex;
   align-items: center;

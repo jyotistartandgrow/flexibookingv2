@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import logo from "../assets/logo.png";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -77,6 +77,17 @@ export default function Thankyou() {
     });
     if (data && data.status == 200) {
       console.log(data);
+      if (data.data.status) {
+        setEmail("");
+        Swal.fire({
+          toast: true,
+          position: "top-end", // or 'bottom-end', 'top-start', etc.
+          showConfirmButton: false,
+          timer: 3000, // auto-close after 3 seconds
+          icon: "success", // 'success', 'error', 'warning', 'info', 'question'
+          title: "Mail Sent successfully",
+        });
+      }
     }
   };
 
@@ -111,6 +122,7 @@ export default function Thankyou() {
             <input
               type="text"
               placeholder="Send via mail"
+              value={email}
               onBlur={(e) => setEmail(e.target.value)}
             />
             <button className="fx-btn-send" onClick={sendEmail}>
@@ -121,11 +133,13 @@ export default function Thankyou() {
           <div className="fx-button-row">
             <button className="fx-btn-light" onClick={handlePrint}>
               {" "}
-              Print <i className="pi pi-print"></i>
+              <span className="fx-thankubuttontext">Print</span>{" "}
+              <i className="pi pi-print"></i>
             </button>
             <button className="fx-btn-light" onClick={downloadAsPDF}>
               {" "}
-              Download <i className="pi pi-download"></i>
+              <span className="fx-thankubuttontext">Download</span>{" "}
+              <i className="pi pi-download"></i>
             </button>
           </div>
         </div>
@@ -221,6 +235,55 @@ export default function Thankyou() {
                 </p>
               </div>
             </div>
+            <table className="billing-shipping-notification noborder">
+              <tbody>
+                <tr>
+                  <th>
+                    <i
+                      className="fa fa-exclamation-triangle"
+                      aria-hidden="true"
+                    ></i>
+                    This order has
+                  </th>
+                </tr>
+                <tr>
+                  <td className="addresstext addresstext-notic">
+                    <i className="fa fa-hand-o-right" aria-hidden="true"></i>
+                    coupon/s <strong>{bookingData?.coupon}</strong> with total
+                    discount of{" "}
+                    <span className="postive_price_module_discount">
+                      {decodeHtml(bookingData?.coupon_discount)}
+                    </span>{" "}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table className="discountbox">
+              <tbody>
+                <tr>
+                  <td>
+                    <div className="discount">
+                      <div className="shopnowbtn" id="booking_home">
+                        {" "}
+                        Home
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table className="footer">
+              <tbody>
+                <tr>
+                  <td colspan="2" className="copyright">
+                    <img decoding="async" src={logo} />
+                    <br />
+                    Copyrights Reserved © {moment().format("YYYY")}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

@@ -244,20 +244,24 @@ export default function Commonbox() {
                   );
                 })}
             </div>
-            <div className="fx-subtotalbar">
-              <p>
-                Sub Total <span> {decodeHtml(cart.subtotal)}</span>
-              </p>
-            </div>
-            <div className="fx-discountbar">
-              <p>
-                Discount <span> {decodeHtml(cart.discount)}</span>
-              </p>
-            </div>
-            <div className="fx-totalbar">
-              <p>
-                Total <span> {decodeHtml(cart.total_formatted)}</span>
-              </p>
+            <div className="fx-right-bottom-bar">
+              <div className="fx-subtotal-discount-bar">
+                <div className="fx-subtotalbar">
+                  <p>
+                    Sub Total <span> {decodeHtml(cart.subtotal)}</span>
+                  </p>
+                </div>
+                <div className="fx-discountbar">
+                  <p>
+                    Discount <span> {decodeHtml(cart.discount)}</span>
+                  </p>
+                </div>
+              </div>
+              <div className="fx-totalbar">
+                <p>
+                  Total <span> {decodeHtml(cart.total_formatted)}</span>
+                </p>
+              </div>
             </div>
           </>
         )}
