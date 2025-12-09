@@ -1,15 +1,31 @@
 // src/App.jsx
-import { Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Suspense, lazy, useEffect } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 
-export default function App() {
+export default function App({ initialRoute = "/" }) {
   const Layout = lazy(() => import("./components/Layout"));
   const Component = lazy(() => import("./pages/Component"));
   const SgbmDateGift = lazy(() => import("./pages/SgbmDateGift"));
   const Thankyou = lazy(() => import("./pages/Thankyou"));
 
+  // Force route redirect when the app loads
+  function InitialRedirect() {
+    const navigate = useNavigate();
+    useEffect(() => {
+      navigate(initialRoute);
+    }, []);
+    return null;
+  }
+
   return (
     <BrowserRouter>
+      <InitialRedirect />
       <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
         <Routes>
           {/* Layout wraps all public routes */}
