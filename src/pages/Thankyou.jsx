@@ -263,7 +263,11 @@ export default function Thankyou() {
                 <tr>
                   <td>
                     <div className="discount">
-                      <div className="shopnowbtn" id="booking_home">
+                      <div
+                        className="shopnowbtn"
+                        id="booking_home"
+                        onClick={() => (window.location.href = "/")}
+                      >
                         {" "}
                         Home
                       </div>
