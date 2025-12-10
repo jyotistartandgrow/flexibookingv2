@@ -38,7 +38,11 @@ export default function Steps() {
   }
 
   return (
-    <div className="fx-step-top-fixed-box1">
+    <div className={
+            step != "paymentstep" && step != "checkoutstep"
+              ? ""
+              : "fx-step-top-fixed-box"
+          }>
     <div className="fx-stepper-tabstyle">
       <div
         className={datestepclass}
