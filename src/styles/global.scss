@@ -1,15 +1,15 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@use "./variables";
+@use "./card";
+@use "./component";
+@use "./modal";
+@use "./rightsidebar";
+@use "./stepper";
+@use "./tab";
+@use "./datepicker";
+@use "./payment";
+@use "./thankyou";
 
-@import "./variables";
-@import "./card";
-@import "./component";
-@import "./modal";
-@import "./rightsidebar";
-@import "./stepper";
-@import "./tab";
-@import "./datepicker";
-@import "./payment";
-@import "./thankyou.scss";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 *,
 :after,

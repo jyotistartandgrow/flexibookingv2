@@ -41,6 +41,7 @@ export default function Service() {
   const [slot, setSlot] = useState("");
   const [readmorecl, setReadmorecl] = useState(false);
   const [skeloading, setLoadingske] = useState(false);
+  const [currentitem, setCurrentItem] = useState({});
   const prevDate = useRef(date);
 
   const toggleDiv = (type) => {
@@ -247,16 +248,18 @@ export default function Service() {
     );
   };
 
-  const slotbook = (timeslot, type, capacity_left) => {
+  const slotbook = (type, itemm) => {
+    setCurrentItem(itemm);
     const currentslot = slot;
     let currentbook = book;
-    setSlot(timeslot);
-    if (currentslot != timeslot) {
+    setSlot(itemm.time_slot);
+    if (currentslot != itemm.time_slot) {
       currentbook = 0;
       setBook(0);
     }
+
     if (type == "add") {
-      if (currentbook >= capacity_left) {
+      if (currentbook >= itemm.capacity_left) {
         Swal.fire({
           toast: true,
           position: "top-end", // or 'bottom-end', 'top-start', etc.
@@ -288,6 +291,19 @@ export default function Service() {
       });
       return;
     }
+
+    if (book < currentitem.min_capacity) {
+      Swal.fire({
+        toast: true,
+        position: "top-end", // or 'bottom-end', 'top-start', etc.
+        showConfirmButton: false,
+        timer: 3000, // auto-close after 3 seconds
+        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
+        title: "Minimum capacity to book is " + currentitem.min_capacity,
+      });
+      return;
+    }
+
     dispatch(setLoading(true));
     const { data } = await axiosInstance(
       `/price-format?service_id=${
@@ -707,11 +723,7 @@ export default function Service() {
                                               type="button"
                                               className="decrement"
                                               onClick={() =>
-                                                slotbook(
-                                                  item.time_slot,
-                                                  "minus",
-                                                  item.capacity_left
-                                                )
+                                                slotbook("minus", item)
                                               }
                                             >
                                               -
@@ -731,11 +743,7 @@ export default function Service() {
                                               type="button"
                                               className="increment"
                                               onClick={() =>
-                                                slotbook(
-                                                  item.time_slot,
-                                                  "add",
-                                                  item.capacity_left
-                                                )
+                                                slotbook("add", item)
                                               }
                                             >
                                               +
@@ -814,11 +822,7 @@ export default function Service() {
                                               type="button"
                                               className="decrement"
                                               onClick={() =>
-                                                slotbook(
-                                                  item.time_slot,
-                                                  "minus",
-                                                  item.capacity_left
-                                                )
+                                                slotbook("minus", item)
                                               }
                                             >
                                               -
@@ -839,11 +843,7 @@ export default function Service() {
                                               type="button"
                                               className="increment"
                                               onClick={() =>
-                                                slotbook(
-                                                  item.time_slot,
-                                                  "add",
-                                                  item.capacity_left
-                                                )
+                                                slotbook("add", item)
                                               }
                                             >
                                               +
@@ -935,11 +935,7 @@ export default function Service() {
                                             type="button"
                                             className="decrement"
                                             onClick={() =>
-                                              slotbook(
-                                                singleslotItem.time_slot,
-                                                "minus",
-                                                singleslotItem.capacity_left
-                                              )
+                                              slotbook("minus", singleslotItem)
                                             }
                                           >
                                             -
@@ -959,11 +955,7 @@ export default function Service() {
                                             type="button"
                                             className="increment"
                                             onClick={() =>
-                                              slotbook(
-                                                singleslotItem.time_slot,
-                                                "add",
-                                                singleslotItem.capacity_left
-                                              )
+                                              slotbook("add", singleslotItem)
                                             }
                                           >
                                             +
@@ -1004,11 +996,7 @@ export default function Service() {
                                           type="button"
                                           className="decrement"
                                           onClick={() =>
-                                            slotbook(
-                                              item.time_slot,
-                                              "minus",
-                                              item.capacity_left
-                                            )
+                                            slotbook("minus", item)
                                           }
                                         >
                                           -
@@ -1025,13 +1013,7 @@ export default function Service() {
                                         <button
                                           type="button"
                                           className="increment"
-                                          onClick={() =>
-                                            slotbook(
-                                              item.time_slot,
-                                              "add",
-                                              item.capacity_left
-                                            )
-                                          }
+                                          onClick={() => slotbook("add", item)}
                                         >
                                           +
                                         </button>

@@ -5,10 +5,19 @@ import App from "./App.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </StrictMode>
-);
+// function to mount to any ID
+function mountReactApp(id, initialRoute) {
+  const el = document.getElementById(id);
+  if (el) {
+    createRoot(el).render(
+      <StrictMode>
+        <Provider store={store}>
+          <App initialRoute={initialRoute} />
+        </Provider>
+      </StrictMode>
+    );
+  }
+}
+
+// mount for shortcode 1
+mountReactApp("react_sgbm_starting_date", "/");

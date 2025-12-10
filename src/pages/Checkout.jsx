@@ -28,6 +28,7 @@ export default function Checkout() {
   const [gift, setGift] = useState(receiverInfo.firstName ? 1 : 0);
   const [invoice, setInvoice] = useState(false);
   const [numberOnly, setNumberOnly] = useState("");
+  const [errorlist, setErrorlist] = useState({});
 
   const getState = async (country) => {
     dispatch(setLoading(true));
@@ -53,26 +54,40 @@ export default function Checkout() {
       });
       return;
     }
-    if (
-      billdata.sgbm_field_1 == "" ||
-      billdata.sgbm_field_3 == "" ||
-      numberOnly.trim() == "" ||
-      billdata.sgbm_field_5 == "" ||
-      billdata.sgbm_field_6 == "" ||
-      billdata.sgbm_field_8 == "" ||
-      billdata.sgbm_field_9 == "" ||
-      billdata.sgbm_field_10 == ""
-    ) {
-      Swal.fire({
-        toast: true,
-        position: "top-end", // or 'bottom-end', 'top-start', etc.
-        showConfirmButton: false,
-        timer: 3000, // auto-close after 3 seconds
-        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Please fill billing details",
-      });
+
+    if (!billdata.sgbm_field_1) {
+      setErrorlist({ sgbm_field_1: true });
       return;
     }
+    if (!billdata.sgbm_field_3) {
+      setErrorlist({ sgbm_field_3: true });
+      return;
+    }
+    if (numberOnly.trim() == "") {
+      setErrorlist({ sgbm_field_4: true });
+      return;
+    }
+    if (!billdata.sgbm_field_5) {
+      setErrorlist({ sgbm_field_5: true });
+      return;
+    }
+    if (!billdata.sgbm_field_6) {
+      setErrorlist({ sgbm_field_6: true });
+      return;
+    }
+    if (!billdata.sgbm_field_8) {
+      setErrorlist({ sgbm_field_8: true });
+      return;
+    }
+    if (!billdata.sgbm_field_9) {
+      setErrorlist({ sgbm_field_9: true });
+      return;
+    }
+    if (!billdata.sgbm_field_10) {
+      setErrorlist({ sgbm_field_10: true });
+      return;
+    }
+
     dispatch(setLoading(true));
     const gift_info = {
       recipient_first_name: gift ? receiverInfo.firstName ?? "" : "",
@@ -154,12 +169,14 @@ export default function Checkout() {
             <input
               type="text"
               placeholder="First Name"
-              className="fx-invalid"
+              className={errorlist.sgbm_field_1 ? "fx-invalid" : ""}
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_1: e.target.value })
               }
             />
-            <span class="fx-errortext">Enter First Name</span>
+            {errorlist.sgbm_field_1 && (
+              <span class="fx-errortext">Enter First Name</span>
+            )}
           </div>
           <div className="fx-element-box">
             <label>Last Name</label>
@@ -178,10 +195,14 @@ export default function Checkout() {
             <input
               type="email"
               placeholder="Email"
+              className={errorlist.sgbm_field_3 ? "fx-invalid" : ""}
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_3: e.target.value })
               }
             />
+            {errorlist.sgbm_field_3 && (
+              <span class="fx-errortext">Enter Email</span>
+            )}
           </div>
           <div className="fx-element-box">
             <label>Mobile</label>
@@ -189,6 +210,7 @@ export default function Checkout() {
               <PhoneInput
                 country={"in"}
                 value={billdata.sgbm_field_4}
+                className={errorlist.sgbm_field_4 ? "fx-invalid" : ""}
                 onChange={(phone, country) => {
                   setBilldata({ ...billdata, sgbm_field_4: phone });
                   // Remove dial code to check number only
@@ -199,6 +221,9 @@ export default function Checkout() {
                 disableDropdown={false} // keep dropdown
                 inputStyle={{ width: "100%" }}
               />
+              {errorlist.sgbm_field_4 && (
+                <span class="fx-errortext">Enter Phone number</span>
+              )}
             </div>
           </div>
         </div>
@@ -208,11 +233,16 @@ export default function Checkout() {
             <input
               type="text"
               placeholder="Address"
-              className="bigtextbox"
+              className={
+                errorlist.sgbm_field_5 ? "fx-invalid bigtextbox" : "bigtextbox"
+              }
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_5: e.target.value })
               }
             />
+            {errorlist.sgbm_field_5 && (
+              <span class="fx-errortext">Enter Address</span>
+            )}
           </div>
         </div>
         <div className="fx-inputgroup">
@@ -223,12 +253,16 @@ export default function Checkout() {
                 setBilldata({ ...billdata, sgbm_field_8: e.target.value });
                 getState(e.target.value);
               }}
+              className={errorlist.sgbm_field_8 ? "fx-invalid" : ""}
             >
               {countries &&
                 Object.keys(countries.data).map((code) => (
                   <option value={code}>{countries.data[code]}</option>
                 ))}
             </select>
+            {errorlist.sgbm_field_8 && (
+              <span class="fx-errortext">Enter Country</span>
+            )}
           </div>
           <div className="fx-element-box">
             <label>State</label>
@@ -236,12 +270,16 @@ export default function Checkout() {
               onChange={(e) => {
                 setBilldata({ ...billdata, sgbm_field_7: e.target.value });
               }}
+              className={errorlist.sgbm_field_7 ? "fx-invalid" : ""}
             >
               {states.length > 0 &&
                 Object.keys(states).map((key) => (
                   <option value={states[key].code}>{states[key].name}</option>
                 ))}
             </select>
+            {errorlist.sgbm_field_7 && (
+              <span class="fx-errortext">Enter State</span>
+            )}
           </div>
         </div>
         <div className="fx-inputgroup">
@@ -250,20 +288,28 @@ export default function Checkout() {
             <input
               type="text"
               placeholder="City"
+              className={errorlist.sgbm_field_6 ? "fx-invalid" : ""}
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_6: e.target.value })
               }
             />
+            {errorlist.sgbm_field_6 && (
+              <span class="fx-errortext">Enter City</span>
+            )}
           </div>
           <div className="fx-element-box">
             <label>Zip</label>
             <input
               type="text"
               placeholder="State"
+              className={errorlist.sgbm_field_9 ? "fx-invalid" : ""}
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_9: e.target.value })
               }
             />
+            {errorlist.sgbm_field_9 && (
+              <span class="fx-errortext">Enter Zip</span>
+            )}
           </div>
         </div>
         <div className="fx-inputgroup">
@@ -272,11 +318,16 @@ export default function Checkout() {
             <input
               type="text"
               placeholder="Note"
-              className="bigtextbox"
+              className={
+                errorlist.sgbm_field_10 ? "bigtextbox fx-invalid" : "bigtextbox"
+              }
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_10: e.target.value })
               }
             />
+            {errorlist.sgbm_field_10 && (
+              <span class="fx-errortext">Enter Order Notes</span>
+            )}
           </div>
         </div>
 

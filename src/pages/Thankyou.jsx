@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import logo from "../assets/logo.png";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -9,18 +9,21 @@ import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 import { useReactToPrint } from "react-to-print";
 import { setLoading } from "../store/step1Slice";
-import { toJpeg } from "html-to-image";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import Swal from "sweetalert2";
 
 export default function Thankyou() {
   const dispatch = useDispatch();
   const componentRef = useRef();
-  const bookingKey = useSelector((state) => state.step3.bookingkey);
+  const bookingkey = new URLSearchParams(window.location.search).get("pid");
   const [bookingData, setBookingData] = useState(null);
+  const [email, setEmail] = useState("");
 
   const bookingdetail = async () => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/thankyou`, {
-      booking_key: "FLEXIB070EDF89233232D",
+      booking_key: bookingkey,
     });
     if (data && data.status == 200) {
       console.log(data);
@@ -43,15 +46,49 @@ export default function Thankyou() {
     },
   });
 
-  const downloadAsImage = () => {
-    toJpeg(componentRef.current)
-      .then((dataUrl) => {
-        const link = document.createElement("a");
-        link.download = "download.jpeg";
-        link.href = dataUrl;
-        link.click();
-      })
-      .catch((err) => console.log(err));
+  const downloadAsPDF = async () => {
+    const element = componentRef.current;
+    const canvas = await html2canvas(element);
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("download.pdf");
+  };
+
+  const sendEmail = async () => {
+    if (!email) {
+      Swal.fire({
+        toast: true,
+        position: "top-end", // or 'bottom-end', 'top-start', etc.
+        showConfirmButton: false,
+        timer: 3000, // auto-close after 3 seconds
+        icon: "error", // 'success', 'error', 'warning', 'info', 'question'
+        title: "Please provide email",
+      });
+    }
+    const { data } = await axiosInstance.post(`/send-email`, {
+      booking_key: bookingkey,
+      email,
+    });
+    if (data && data.status == 200) {
+      console.log(data);
+      if (data.data.status) {
+        setEmail("");
+        Swal.fire({
+          toast: true,
+          position: "top-end", // or 'bottom-end', 'top-start', etc.
+          showConfirmButton: false,
+          timer: 3000, // auto-close after 3 seconds
+          icon: "success", // 'success', 'error', 'warning', 'info', 'question'
+          title: "Mail Sent successfully",
+        });
+      }
+    }
   };
 
   useEffect(() => {
@@ -82,18 +119,27 @@ export default function Thankyou() {
           </p>
 
           <div className="fx-email-box">
-            <input type="text" placeholder="Send via mail" />
-            <button className="fx-btn-send">Send</button>
+            <input
+              type="text"
+              placeholder="Send via mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button className="fx-btn-send" onClick={sendEmail}>
+              Send
+            </button>
           </div>
 
           <div className="fx-button-row">
             <button className="fx-btn-light" onClick={handlePrint}>
               {" "}
-              <span className="fx-thankubuttontext">Print</span> <i className="pi pi-print"></i>
+              <span className="fx-thankubuttontext">Print</span>{" "}
+              <i className="pi pi-print"></i>
             </button>
-            <button className="fx-btn-light" onClick={downloadAsImage}>
+            <button className="fx-btn-light" onClick={downloadAsPDF}>
               {" "}
-              <span className="fx-thankubuttontext">Download</span> <i className="pi pi-download"></i>
+              <span className="fx-thankubuttontext">Download</span>{" "}
+              <i className="pi pi-download"></i>
             </button>
           </div>
         </div>
@@ -189,6 +235,59 @@ export default function Thankyou() {
                 </p>
               </div>
             </div>
+            <table className="billing-shipping-notification noborder">
+              <tbody>
+                <tr>
+                  <th>
+                    <i
+                      className="fa fa-exclamation-triangle"
+                      aria-hidden="true"
+                    ></i>
+                    This order has
+                  </th>
+                </tr>
+                <tr>
+                  <td className="addresstext addresstext-notic">
+                    <i className="fa fa-hand-o-right" aria-hidden="true"></i>
+                    coupon/s <strong>{bookingData?.coupon}</strong> with total
+                    discount of{" "}
+                    <span className="postive_price_module_discount">
+                      {decodeHtml(bookingData?.coupon_discount)}
+                    </span>{" "}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table className="discountbox">
+              <tbody>
+                <tr>
+                  <td>
+                    <div className="discount">
+                      <div
+                        className="shopnowbtn"
+                        id="booking_home"
+                        onClick={() => (window.location.href = "/")}
+                      >
+                        {" "}
+                        Home
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table className="footer">
+              <tbody>
+                <tr>
+                  <td colspan="2" className="copyright">
+                    <img decoding="async" src={logo} />
+                    <br />
+                    Copyrights Reserved © {moment().format("YYYY")}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
