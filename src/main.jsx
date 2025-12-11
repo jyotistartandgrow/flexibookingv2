@@ -21,3 +21,6 @@ function mountReactApp(id, initialRoute) {
 
 // mount for shortcode 1
 mountReactApp("react_sgbm_starting_date", "/");
+
+// mount for shortcode 2
+mountReactApp("react_sgbm_starting_gift", "/?type=gift");
