@@ -248,8 +248,8 @@ export default function Thankyou() {
                   </th>
                 </tr>
                 <tr>
-                  <td className="addresstext addresstext-notic">
-                    <i className="fa fa-hand-o-right" aria-hidden="true"></i>
+                  <td className="fx-coupon-des">
+                    <i className="pi pi-angle-double-right"></i>
                     coupon/s <strong>{bookingData?.coupon}</strong> with total
                     discount of{" "}
                     <span className="postive_price_module_discount">

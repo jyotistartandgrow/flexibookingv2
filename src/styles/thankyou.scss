@@ -200,11 +200,25 @@
     width: 150px;
 }
 .fx-billing-shipping-notification{
-    background: #ffe0e0;
+    background:#fff7f7;
     width: 100%;
-    padding: 19px;
+    padding: 12px;
     text-align: left;
-    border-radius: 0px 8px 8px 0px;
+    border-radius:8px;
+    border: 1px solid #ffb7b7;
+}
+
+.fx-billing-shipping-notification th{
+    padding-bottom:6px;
+}
+.fx-coupon-des .postive_price_module_discount{
+    font-weight: bold;
+    color: #1b9b2a;
+}
+
+.fx-coupon-des{
+ margin-right: 4px;
+ color:#385f6a;
 }
 
 @media screen and (max-width: 480px) {
