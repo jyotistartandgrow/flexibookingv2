@@ -19,7 +19,12 @@ export default function App({ initialRoute = "/" }) {
     const navigate = useNavigate();
     useEffect(() => {
       if (window.location.pathname === "/") {
-        navigate(initialRoute);
+        let type = new URLSearchParams(window.location.search).get("type");
+        if (type) {
+          navigate(`${initialRoute}?type=${type}`);
+        } else {
+          navigate(initialRoute);
+        }
       }
     }, []);
     return null;

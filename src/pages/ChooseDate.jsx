@@ -20,18 +20,20 @@ import {
 import { decodeHtml } from "../Utils/Functions";
 
 export default function ChooseDate() {
+  const bookingtype = new URLSearchParams(window.location.search).get("type");
   const calendarRef = useRef(null);
   const dispatch = useDispatch();
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
-  const [isVisible, setIsVisible] = useState("booking");
+  const [isVisible, setIsVisible] = useState(bookingtype ?? "booking");
   const [isVisibleGift, setIsVisibleGift] = useState(false);
   const [disabledDates, setDisabledDates] = useState([]);
   const [responsearr, setResponsear] = useState([]);
   const [coupon, setCoupon] = useState("");
   const [fields, setFields] = useState([{ code: "" }]);
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
+  const [errorlist, setErrorlist] = useState({});
   const toggleDiv = (type) => {
     setIsVisible(type);
   };
@@ -169,31 +171,44 @@ export default function ChooseDate() {
       }
     );
     if (data?.data?.is_bookable) {
+      dispatch(setLoading(true));
       dispatch(setStep("servicesstep"));
+      dispatch(setLoading(false));
     }
   };
 
   const viewService = () => {
-    dispatch(setLoading(true));
     console.log("Receiver Info:", receiverInfo);
-    if (
-      receiverInfo.firstName === "" ||
-      receiverInfo.lastName === "" ||
-      receiverInfo.email === "" ||
-      receiverInfo.phoneNumber === "" ||
-      receiverInfo.country === "" ||
-      receiverInfo.zip === ""
-    ) {
-      Swal.fire({
-        toast: true,
-        position: "top-end", // or 'bottom-end', 'top-start', etc.
-        showConfirmButton: false,
-        timer: 3000, // auto-close after 3 seconds
-        icon: "warning",
-        title: "Please fill in all information fields",
-      });
+    if (!receiverInfo.firstName) {
+      setErrorlist({ firstName: true });
       return;
     }
+    if (!receiverInfo.lastName) {
+      setErrorlist({ lastName: true });
+      return;
+    }
+    if (!receiverInfo.email) {
+      setErrorlist({ email: true });
+      return;
+    }
+    if (!receiverInfo.phoneNumber) {
+      setErrorlist({ phoneNumber: true });
+      return;
+    }
+    if (!receiverInfo.country) {
+      setErrorlist({ country: true });
+      return;
+    }
+    if (!receiverInfo.zip) {
+      setErrorlist({ zip: true });
+      return;
+    }
+    if (!receiverInfo.address) {
+      setErrorlist({ address: true });
+      return;
+    }
+
+    dispatch(setLoading(true));
     dispatch(setStep("servicesstep"));
     dispatch(setLoading(false));
   };
@@ -301,6 +316,7 @@ export default function ChooseDate() {
               <input
                 type="text"
                 placeholder="First Name"
+                className={errorlist.firstName ? "fx-invalid" : ""}
                 onBlur={(e) =>
                   dispatch(
                     setReceiverInfo({
@@ -310,9 +326,13 @@ export default function ChooseDate() {
                   )
                 }
               />
+              {errorlist.firstName && (
+                <span class="fx-errortext">Enter First Name</span>
+              )}
               <input
                 type="text"
                 placeholder="Last Name"
+                className={errorlist.lastName ? "fx-invalid" : ""}
                 onBlur={(e) =>
                   dispatch(
                     setReceiverInfo({
@@ -322,12 +342,16 @@ export default function ChooseDate() {
                   )
                 }
               />
+              {errorlist.lastName && (
+                <span class="fx-errortext">Enter Last Name</span>
+              )}
             </div>
             <div className="fx-inputgroup">
               <div className="fx-input-wrapper">
                 <input
                   type="email"
                   placeholder="Email"
+                  className={errorlist.email ? "fx-invalid" : ""}
                   onBlur={(e) =>
                     dispatch(
                       setReceiverInfo({
@@ -338,11 +362,15 @@ export default function ChooseDate() {
                   }
                 />
                 <i className="pi pi-envelope"></i>
+                {errorlist.email && (
+                  <span class="fx-errortext">Enter Email</span>
+                )}
               </div>
               <div className="fx-input-wrapper">
                 <input
                   type="text"
                   placeholder="Phone Number"
+                  className={errorlist.phoneNumber ? "fx-invalid" : ""}
                   onBlur={(e) =>
                     dispatch(
                       setReceiverInfo({
@@ -353,6 +381,9 @@ export default function ChooseDate() {
                   }
                 />
                 <i className="pi pi-phone"></i>
+                {errorlist.phoneNumber && (
+                  <span class="fx-errortext">Enter Phone number</span>
+                )}
               </div>
             </div>
             <div className="fx-inputgroup">
@@ -360,6 +391,7 @@ export default function ChooseDate() {
                 <input
                   type="text"
                   placeholder="Country"
+                  className={errorlist.country ? "fx-invalid" : ""}
                   onBlur={(e) =>
                     dispatch(
                       setReceiverInfo({
@@ -370,11 +402,15 @@ export default function ChooseDate() {
                   }
                 />
                 <i className="pi pi-flag"></i>
+                {errorlist.country && (
+                  <span class="fx-errortext">Enter Country</span>
+                )}
               </div>
               <div className="fx-input-wrapper">
                 <input
                   type="text"
                   placeholder="Zip"
+                  className={errorlist.zip ? "fx-invalid" : ""}
                   onBlur={(e) =>
                     dispatch(
                       setReceiverInfo({
@@ -384,6 +420,7 @@ export default function ChooseDate() {
                     )
                   }
                 />
+                {errorlist.zip && <span class="fx-errortext">Enter Zip</span>}
               </div>
             </div>
             <div className="fx-inputgroup">
@@ -391,7 +428,7 @@ export default function ChooseDate() {
                 <input
                   type="text"
                   placeholder="Address"
-                  className="bigtextbox"
+                  className={errorlist.address ? "fx-invalid bigtextbox" : "bigtextbox"}
                   value={receiverInfo.address}
                   onBlur={(e) =>
                     dispatch(
@@ -402,6 +439,9 @@ export default function ChooseDate() {
                     )
                   }
                 />
+                {errorlist.address && (
+                  <span class="fx-errortext">Enter Address</span>
+                )}
               </div>
             </div>
             <div className="fx-element-box">

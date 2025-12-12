@@ -203,11 +203,27 @@ h1{
 }
 
 .fx-skeleton-row {
-    display: flex;
+    display: none;
     gap: 20px;
     position: absolute;
     width: 100%;
     z-index: 999;
+}
+
+.fx-skeleton-row.show {
+  display: flex;
+}
+
+.fx-skeleton-row.hide {
+  display: none;
+}
+
+.fx-no-data.show {
+    display: flex;
+}
+
+.fx-no-data.hide {
+    display: none;
 }
 
 .fx-card-skeleton {
@@ -292,10 +308,19 @@ h1{
     width: 100%;
     height: 100%;
     background: #62626230;  /* fully transparent */
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     z-index: 9999;
+}
+
+
+.fx-fullscreen-loader.show {
+  display: flex;
+}
+
+.fx-fullscreen-loader.hide {
+  display: none;
 }
 
 /* Segmented spinner */

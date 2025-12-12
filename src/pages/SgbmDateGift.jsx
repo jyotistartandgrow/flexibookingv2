@@ -11,11 +11,9 @@ export default function SgbmDateGift() {
   return (
     <div className="fx-leftbar">
       <Steps />
-      {loading && (
-        <div className="fx-fullscreen-loader">
-          <div className="fx-seg-loader"></div>
-        </div>
-      )}
+      <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
+        <div className="fx-seg-loader"></div>
+      </div>
       {/* Booking and Gift Tabs */}
       <ChooseDate />
       {/* End Booking and Gift Tabs */}
