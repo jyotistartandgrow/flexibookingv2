@@ -178,12 +178,18 @@ h1{
     width:50%;
 }
 .fx-leftcontentbox.fx-checkoutpage{
-    margin-top:110px !important;
+    margin-top:165px !important;
 }
 .fx-booking .fx-commoninput .fx-element-box.fx-checkoutbuttonbar{
     width: 93%;
     position: fixed;
     bottom: 10px;
+}
+.p-sidebar-icons{
+    display: none;
+}
+.p-sidebar-header{
+    height:65px;
 }
 }
 @media screen and (min-width: 1024px) {

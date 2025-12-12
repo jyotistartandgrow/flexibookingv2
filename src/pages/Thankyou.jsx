@@ -235,7 +235,8 @@ export default function Thankyou() {
                 </p>
               </div>
             </div>
-            <table className="billing-shipping-notification noborder">
+
+            <table className="fx-billing-shipping-notification noborder">
               <tbody>
                 <tr>
                   <th>
@@ -258,6 +259,7 @@ export default function Thankyou() {
                 </tr>
               </tbody>
             </table>
+
             <table className="discountbox">
               <tbody>
                 <tr>
@@ -277,7 +279,7 @@ export default function Thankyou() {
               </tbody>
             </table>
 
-            <table className="footer">
+            <table className="fx-footer-thankyou">
               <tbody>
                 <tr>
                   <td colspan="2" className="copyright">
