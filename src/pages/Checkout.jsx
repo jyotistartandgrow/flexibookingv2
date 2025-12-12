@@ -160,8 +160,7 @@ export default function Checkout() {
       className="fx-leftcontentbox fx-checkoutpage"
       style={{ display: step === "checkoutstep" ? "block" : "none" }}
     >
-      <h1 className="fx-main-heading">Checkout</h1>
-
+      {/* <h1 className="fx-main-heading">Checkout</h1> */}
       <div className="fx-commoninput">
         <div className="fx-inputgroup">
           <div className="fx-element-box">

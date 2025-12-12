@@ -235,7 +235,8 @@ export default function Thankyou() {
                 </p>
               </div>
             </div>
-            <table className="billing-shipping-notification noborder">
+
+            <table className="fx-billing-shipping-notification noborder">
               <tbody>
                 <tr>
                   <th>
@@ -247,8 +248,8 @@ export default function Thankyou() {
                   </th>
                 </tr>
                 <tr>
-                  <td className="addresstext addresstext-notic">
-                    <i className="fa fa-hand-o-right" aria-hidden="true"></i>
+                  <td className="fx-coupon-des">
+                    <i className="pi pi-angle-double-right"></i>
                     coupon/s <strong>{bookingData?.coupon}</strong> with total
                     discount of{" "}
                     <span className="postive_price_module_discount">
@@ -258,6 +259,7 @@ export default function Thankyou() {
                 </tr>
               </tbody>
             </table>
+
             <table className="discountbox">
               <tbody>
                 <tr>
@@ -277,7 +279,7 @@ export default function Thankyou() {
               </tbody>
             </table>
 
-            <table className="footer">
+            <table className="fx-footer-thankyou">
               <tbody>
                 <tr>
                   <td colspan="2" className="copyright">

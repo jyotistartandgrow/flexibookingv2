@@ -192,6 +192,35 @@
     line-height: 1.3;
     font-weight: 300;
 }
+.fx-footer-thankyou{
+    width:100%;
+    text-align: center;
+}
+.fx-footer-thankyou img{
+    width: 150px;
+}
+.fx-billing-shipping-notification{
+    background:#fff7f7;
+    width: 100%;
+    padding: 12px;
+    text-align: left;
+    border-radius:8px;
+    border: 1px solid #ffb7b7;
+}
+
+.fx-billing-shipping-notification th{
+    padding-bottom:6px;
+}
+.fx-coupon-des .postive_price_module_discount{
+    font-weight: bold;
+    color: #1b9b2a;
+}
+
+.fx-coupon-des{
+ margin-right: 4px;
+ color:#385f6a;
+}
+
 @media screen and (max-width: 480px) {
 .fx-booking .fx-confirm-left{
     padding: 30px;
