@@ -209,6 +209,11 @@ export default function Service() {
               e.currentTarget.parentNode.querySelector(".fx-tooltip");
             tooltip?.classList.remove("fx-tooltip-visible");
           }}
+          onTouchStart={(e) => {
+            const tooltip =
+              e.currentTarget.parentNode.querySelector(".fx-tooltip");
+            tooltip?.classList.toggle("fx-tooltip-visible");
+          }}
         >
           <div className="custom-day">{day}</div>
         </div>

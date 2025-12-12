@@ -138,6 +138,11 @@ export default function ChooseDate() {
               e.currentTarget.parentNode.querySelector(".fx-tooltip");
             tooltip?.classList.remove("fx-tooltip-visible");
           }}
+          onTouchStart={(e) => {
+            const tooltip =
+              e.currentTarget.parentNode.querySelector(".fx-tooltip");
+            tooltip?.classList.toggle("fx-tooltip-visible");
+          }}
         >
           <div className="custom-day">{day}</div>
         </div>
@@ -174,6 +179,15 @@ export default function ChooseDate() {
       dispatch(setLoading(true));
       dispatch(setStep("servicesstep"));
       dispatch(setLoading(false));
+    } else {
+      Swal.fire({
+        toast: true,
+        position: "top-end", // or 'bottom-end', 'top-start', etc.
+        showConfirmButton: false,
+        timer: 3000, // auto-close after 3 seconds
+        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
+        title: "There is no service available on selected Date",
+      });
     }
   };
 
@@ -208,9 +222,8 @@ export default function ChooseDate() {
       return;
     }
 
-    dispatch(setLoading(true));
-    dispatch(setStep("servicesstep"));
-    dispatch(setLoading(false));
+    dispatch(setDate(moment()));
+    checkavailability();
   };
 
   const getserviceavailabilitycalendar = async (monthYear) => {
@@ -428,8 +441,9 @@ export default function ChooseDate() {
                 <input
                   type="text"
                   placeholder="Address"
-                  className={errorlist.address ? "fx-invalid bigtextbox" : "bigtextbox"}
-                  value={receiverInfo.address}
+                  className={
+                    errorlist.address ? "fx-invalid bigtextbox" : "bigtextbox"
+                  }
                   onBlur={(e) =>
                     dispatch(
                       setReceiverInfo({
