@@ -97,7 +97,7 @@ export default function Thankyou() {
   return (
     <div className="fx-booking fx-container">
       <div className="fx-confirmation-wrapper">
-        <img src={logo} className="fx-thanku-logo" />
+        <img src={logo} className="fx-thanku-logo" onClick={() => (window.location.href = "/")}/>
         <div className="fx-confirm-left">
           <div className="fx-voucher-icon">
             <i className="pi pi-file-pdf"></i>
@@ -260,7 +260,7 @@ export default function Thankyou() {
               </tbody>
             </table>
 
-            <table className="discountbox">
+            {/* <table className="discountbox">
               <tbody>
                 <tr>
                   <td>
@@ -289,7 +289,7 @@ export default function Thankyou() {
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </table> */}
           </div>
         </div>
       </div>

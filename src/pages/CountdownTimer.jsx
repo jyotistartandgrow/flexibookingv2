@@ -12,6 +12,7 @@ function formatTime(seconds) {
 export default function CountdownTimer({ startSeconds = 180 }) {
   const dispatch = useDispatch();
   const sessionExpired = useSelector((state) => state.step4.session_expired);
+  const step = useSelector((state) => state.step1.step);
   const [time, setTime] = useState(startSeconds);
   const [running, setRunning] = useState(true);
 
@@ -20,7 +21,7 @@ export default function CountdownTimer({ startSeconds = 180 }) {
   };
 
   useEffect(() => {
-    if (!sessionExpired) {
+    if (!sessionExpired && step == "paymentstep") {
       let interval;
 
       if (running && time > 0) {
@@ -36,7 +37,7 @@ export default function CountdownTimer({ startSeconds = 180 }) {
 
       return () => clearInterval(interval);
     }
-  }, [running, time]);
+  }, [running, time, step]);
   return (
     <div>
       <h4>

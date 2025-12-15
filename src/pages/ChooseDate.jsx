@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import calendar from "../assets/calendar.png";
 import { Calendar } from "primereact/calendar";
 import iconapplied from "../assets/icons8-confirm.svg";
-import { Tooltip } from "primereact/tooltip";
+import { addLocale } from "primereact/api";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -18,6 +18,10 @@ import {
   setLoading,
 } from "../store/step1Slice";
 import { decodeHtml } from "../Utils/Functions";
+
+addLocale("en-monday", {
+  firstDayOfWeek: 1, // Monday
+});
 
 export default function ChooseDate() {
   const bookingtype = new URLSearchParams(window.location.search).get("type");
@@ -238,7 +242,7 @@ export default function ChooseDate() {
 
     if (dataa?.data) {
       setResponsear(dataa?.data);
-      if (dataa?.data && disabledDates.length === 0) {
+      if (dataa?.data) {
         const datedarr = [];
         dataa?.data.forEach((dateItem) => {
           if (dateItem.is_bookable === false) {
@@ -253,7 +257,8 @@ export default function ChooseDate() {
   };
 
   const handleMonthChange = (e) => {
-    setMonth(moment(e.year + "-" + e.month).format("YYYY-MM"));
+    const month = String(e.month).padStart(2, "0"); // ensure 01–12
+    setMonth(`${e.year}-${month}`); // YYYY-MM
   };
 
   return (
@@ -304,6 +309,8 @@ export default function ChooseDate() {
                   // force open
                   calendarRef.current?.show();
                 }}
+                locale="en-monday"
+                dateFormat="dd/mm/yy"
               />
               <img src={calendar} className="fx-calendaricon" />
             </div>
