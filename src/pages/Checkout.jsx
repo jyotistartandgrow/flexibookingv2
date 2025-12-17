@@ -43,18 +43,6 @@ export default function Checkout() {
   };
 
   const checkout = async () => {
-    if (!term) {
-      Swal.fire({
-        toast: true,
-        position: "top-end", // or 'bottom-end', 'top-start', etc.
-        showConfirmButton: false,
-        timer: 3000, // auto-close after 3 seconds
-        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Please accept terms and conditions before proceeding",
-      });
-      return;
-    }
-
     if (!billdata.sgbm_field_1) {
       setErrorlist({ sgbm_field_1: true });
       return;
@@ -85,6 +73,18 @@ export default function Checkout() {
     }
     if (!billdata.sgbm_field_10) {
       setErrorlist({ sgbm_field_10: true });
+      return;
+    }
+
+    if (!term) {
+      Swal.fire({
+        toast: true,
+        position: "top-end", // or 'bottom-end', 'top-start', etc.
+        showConfirmButton: false,
+        timer: 3000, // auto-close after 3 seconds
+        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
+        title: "Please accept terms and conditions before proceeding",
+      });
       return;
     }
 

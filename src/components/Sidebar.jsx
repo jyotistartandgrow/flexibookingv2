@@ -35,7 +35,13 @@ export default function Sidebar() {
         >
           <div className="fx-bottombar-top-details">
             <span className="fx-order-details">Order Details </span>
-            <i className="pi pi-chevron-up"></i>
+            <i
+              className={
+                step != "paymentstep" && step != "checkoutstep"
+                  ? "pi pi-chevron-up"
+                  : "pi pi-chevron-down"
+              }
+            ></i>
           </div>
           <div className="fx-bottombar-bottom-details">
             <div className="fx-left-content-date">
@@ -67,7 +73,9 @@ export default function Sidebar() {
 
       <Sidebarpanel
         visible={visibleBottom}
-        position="bottom"
+        position={
+          step != "paymentstep" && step != "checkoutstep" ? "bottom" : "top"
+        }
         onHide={() => setVisibleBottom(false)}
       >
         <div className="fx-sidebar fx-mob-footer-order-details">

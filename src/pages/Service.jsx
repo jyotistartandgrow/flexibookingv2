@@ -4,6 +4,7 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { Carousel } from "primereact/carousel";
+import { addLocale } from "primereact/api";
 import calendar from "../assets/simple-line-icons_calender.svg";
 import percentage from "../assets/ic_round-discount.svg";
 import percentthirty from "../assets/icons8-clock 9.svg";
@@ -25,11 +26,18 @@ import {
 } from "../store/step2Slice";
 import Swal from "sweetalert2";
 
+addLocale("en-monday", {
+  firstDayOfWeek: 1, // Monday
+});
+
 export default function Service() {
   const dispatch = useDispatch();
   const op = useRef(null);
 
   const date = useSelector((state) => state.step1.date);
+  if (!date) {
+    dispatch(setDate(moment().format("YYYY-MM-DD")));
+  }
   const step = useSelector((state) => state.step1.step);
   const [products, setProductsArr] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -61,6 +69,8 @@ export default function Service() {
 
     if (date) {
       if (date !== prevDate.current) {
+        setBook(0);
+        setSlot("");
         console.log("Selected date in Service component:", date);
         fetchProductsByDate(date);
       }
@@ -148,10 +158,8 @@ export default function Service() {
 
   const handleMonthChange = (e) => {
     dispatch(setLoading(true));
-    getslotavailabilitycalendar(
-      moment(e.year + "-" + e.month).format("YYYY-MM"),
-      serviceid
-    );
+    const month = String(e.month).padStart(2, "0"); // ensure 01–12
+    getslotavailabilitycalendar(`${e.year}-${month}`, serviceid);
   };
 
   const dateTemplate = (dateMeta) => {
@@ -208,6 +216,11 @@ export default function Service() {
             const tooltip =
               e.currentTarget.parentNode.querySelector(".fx-tooltip");
             tooltip?.classList.remove("fx-tooltip-visible");
+          }}
+          onTouchStart={(e) => {
+            const tooltip =
+              e.currentTarget.parentNode.querySelector(".fx-tooltip");
+            tooltip?.classList.toggle("fx-tooltip-visible");
           }}
         >
           <div className="custom-day">{day}</div>
@@ -623,6 +636,8 @@ export default function Service() {
                           minDate={new Date()}
                           disabledDates={disabledDates}
                           onMonthChange={handleMonthChange}
+                          dateFormat="dd/mm/yy"
+                          locale="en-monday"
                         />
                       </OverlayPanel>
                     </div>
