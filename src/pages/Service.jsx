@@ -35,6 +35,9 @@ export default function Service() {
   const op = useRef(null);
 
   const date = useSelector((state) => state.step1.date);
+  if (!date) {
+    dispatch(setDate(moment().format("YYYY-MM-DD")));
+  }
   const step = useSelector((state) => state.step1.step);
   const [products, setProductsArr] = useState([]);
   const [visible, setVisible] = useState(false);

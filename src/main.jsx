@@ -27,3 +27,9 @@ mountReactApp("react_sgbm_starting_date", "/");
 
 // mount for shortcode 2
 mountReactApp("react_sgbm_starting_gift", "/?type=gift");
+
+// mount for shortcode 3
+mountReactApp("react_sgbm_starting_category", "/startingcategory");
+
+// mount for shortcode 4
+mountReactApp("react_sgbm_starting_service", "/startingservice");
