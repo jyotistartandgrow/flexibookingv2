@@ -58,16 +58,7 @@
  display: block;
 }
 
-.fx-step-top-fixed-box{
-    display: block;
-    position: fixed;
-    width: 100%;
-    z-index: 99;
-    background: #fff;
-    left: 0px;
-    top: 0px;
-    padding: 16px;
-}
+
 
 .fx-stepper-tabstyle {
   position: relative;
@@ -183,6 +174,10 @@
   left: 5%;
 }
 
+.fx-step-top-fixed-box{
+  margin-bottom:20px;
+}
+
 .fx-stepper-tabstyle .checkoutstep.complete {
   background: #fff;
   width: 52%;
@@ -247,6 +242,16 @@
   .fx-stepper-tabstyle .step{
         padding-right: 20px;
   }
+  .fx-step-top-fixed-box{
+    display: block;
+    position: fixed;
+    width: 100%;
+    z-index: 99;
+    background: #fff;
+    left: 0px;
+    top: 0px;
+    padding: 16px;
+}
   .fx-stepper-tabstyle .servicesstep.active{
     width: 44%;
     left: 12%;

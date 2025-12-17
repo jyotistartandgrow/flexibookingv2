@@ -38,7 +38,8 @@
   display: flex;
   gap:8px;
 }
- .fx-booking .fx-commoninput .bigtextbox{
+
+.fx-booking .fx-commoninput .bigtextbox{
   height: 112px !important;
 }
  .fx-booking .fx-commoninput input[type="text"],
@@ -483,7 +484,7 @@
 .fx-booking .fx-errortext{
   color:var(--error-color);
   float: left;
-  margin-top:8px;
+  margin-top:-5px;
 }
 .fx-booking .fx-phone-input .country-code {
   display: flex;
@@ -514,7 +515,15 @@
 .fx-booking .fx-phone-input input::placeholder {
   color: #999;
 }
-
+.fx-booking .fx-errorbar{
+  display: flex;
+  width: 100%;
+  gap:30px;
+}
+.fx-booking .fx-errorbar div{
+  width:50%;
+  height:15px;
+}
 
 @media screen and (max-width: 480px) {
 .fx-booking .fx-couponcontainer{
@@ -527,15 +536,31 @@
   width:100% !important;
 }
 .fx-booking .fx-inputgroup{
-  gap:10px;
+  gap:0px;
 }
 .fx-booking .fx-commoninput .fx-inputgroup{
   flex-direction: column;
+  margin-bottom: 10px;
 }
 .fx-booking .fx-inputgroup{
   flex-direction: column;
 }
 .fx-booking .fx-element-box .btn-primary, .fx-booking .fx-element-box input[type="submit"], .fx-booking .fx-element-box input[type="button"], .fx-booking .fx-element-box button[type="button"]{
       width: 100%;
+}
+//  .fx-booking input[type="text"],
+//  .fx-booking input[type="email"] {
+//   margin-bottom: 0px;
+//  }
+ .fx-booking .fx-errortext{
+  margin-top: 0px;
+ }
+.fx-couponcontainerinputbox {
+        display: flex;
+}
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+.fx-couponcontainerinputbox{
+  display: flex;
 }
 }
