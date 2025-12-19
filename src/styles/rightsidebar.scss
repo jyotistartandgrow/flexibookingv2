@@ -137,7 +137,7 @@
 
   }
 
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 1200px) {
   .p-sidebar-bottom .p-sidebar{
     height:90%;
   }
@@ -296,6 +296,11 @@
     font-size: var(--card-headingsize);
     font-weight: 800;
   }
+   .fx-down-icon-botttom{
+      width:100%;
+      text-align: center;
+      padding: 6px 0px;
+    }
 }
 
 
@@ -336,7 +341,7 @@
         .fx-booking .fx-mobilesidebar .fx-bottom-date{
             margin-left: 4px;
         }
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1200px) {
 
 .fx-mob-footer-order-details .fx-coupon-box {
         display: flex;
@@ -381,4 +386,5 @@
         top: 10px;
         left: 50%;
     }
+   
 }

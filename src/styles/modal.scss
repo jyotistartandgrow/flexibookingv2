@@ -467,7 +467,7 @@ h2 {
     padding-bottom: 76px;
    }
 }
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1200px) {
   .fx-main-modal-box{
     width:90%;
     height:900px;
@@ -475,17 +475,17 @@ h2 {
   .fx-booking .fx-popup{
     height: 900px;
   }
-  .fx-booking .fx-popup .fx-leftpopup{
-    width: 100%;
-    height: 350px;
-  }
-  .fx-booking .fx-popup .fx-leftpopup img{
-    height: 350px;
-  }
-  .fx-booking .fx-popup .fx-rightpopup{
-    height:550px;
-    width: 100%;
-  }
+  // .fx-booking .fx-popup .fx-leftpopup{
+  //   width: 100%;
+  //   height: 350px;
+  // }
+  // .fx-booking .fx-popup .fx-leftpopup img{
+  //   height: 350px;
+  // }
+  // .fx-booking .fx-popup .fx-rightpopup{
+  //   height:550px;
+  //   width: 100%;
+  // }
   .fx-booking .fx-timelistboxbar{
     height: 150px;
   }

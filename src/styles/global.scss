@@ -195,8 +195,11 @@ h1{
 .fx-leftcontentbox{
     margin-top: 24px;
 }
+ .p-sidebar-bottom, .p-sidebar-to, .p-sidebar {
+        height: 90%;
+    }
 }
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 1200px) {
   .fx-booking .fx-leftbar {
     max-width:950px;
     width: 100%;
@@ -343,7 +346,7 @@ h1{
     to { transform: rotate(360deg); }
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1200px) {
     .fx-booking.fx-container{
         padding:70px 30px;
     }
@@ -361,8 +364,9 @@ h1{
         display: block;
         box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.3);
         z-index: 999;
+        left:0px;
     }
-    .p-sidebar-bottom .p-sidebar {
+    .p-sidebar-bottom .p-sidebar-top .p-sidebar {
         height: 90%;
     }
     
