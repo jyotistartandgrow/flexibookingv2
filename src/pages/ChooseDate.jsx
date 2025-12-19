@@ -333,22 +333,25 @@ export default function ChooseDate() {
           <h3>Gift receiver information</h3>
           <div className="fx-giftbox">
             <div className="fx-inputgroup">
-              <input
-                type="text"
-                placeholder="First Name"
-                className={errorlist.firstName ? "fx-invalid" : ""}
-                onBlur={(e) =>
-                  dispatch(
-                    setReceiverInfo({
-                      ...receiverInfo,
-                      firstName: e.target.value,
-                    })
-                  )
-                }
-              />
-              {errorlist.firstName && (
-                <span class="fx-errortext">Enter First Name</span>
-              )}
+              <div className="fx-input-wrapper">
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  className={errorlist.firstName ? "fx-invalid" : ""}
+                  onBlur={(e) =>
+                    dispatch(
+                      setReceiverInfo({
+                        ...receiverInfo,
+                        firstName: e.target.value,
+                      })
+                    )
+                  }
+                />
+                {errorlist.firstName && (
+                  <span class="fx-errortext">Enter First Name</span>
+                )}
+              </div>
+              <div className="fx-input-wrapper">
               <input
                 type="text"
                 placeholder="Last Name"
@@ -365,6 +368,10 @@ export default function ChooseDate() {
               {errorlist.lastName && (
                 <span class="fx-errortext">Enter Last Name</span>
               )}
+              </div>
+            </div>
+            <div>
+
             </div>
             <div className="fx-inputgroup">
               <div className="fx-input-wrapper">

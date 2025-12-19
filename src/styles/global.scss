@@ -192,8 +192,14 @@ h1{
 .p-sidebar-header{
     height:65px;
 }
+.fx-leftcontentbox{
+    margin-top: 24px;
 }
-@media screen and (min-width: 1024px) {
+ .p-sidebar-bottom, .p-sidebar-to, .p-sidebar {
+        height: 90%;
+    }
+}
+@media screen and (min-width: 1200px) {
   .fx-booking .fx-leftbar {
     max-width:950px;
     width: 100%;
@@ -338,4 +344,30 @@ h1{
 /* Rotate */
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+    .fx-booking.fx-container{
+        padding:70px 30px;
+    }
+    .fx-booking .fx-sidebar{
+        display: none;
+    }
+    .fx-booking .fx-mobilesidebar{
+        width: 100%;
+        height: auto;
+        position: fixed;
+        bottom: -2px;
+        padding: 15px;
+        font-size: var(--card-headingsize);
+        background: var(--white);
+        display: block;
+        box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.3);
+        z-index: 999;
+        left:0px;
+    }
+    .p-sidebar-bottom .p-sidebar-top .p-sidebar {
+        height: 90%;
+    }
+    
 }

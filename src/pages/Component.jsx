@@ -72,6 +72,24 @@ export default function Component() {
     },
   ];
 
+  const responsiveOptions = [
+        {
+            breakpoint: '1024px', // For screens less than 1024px
+            numVisible: 3,
+            numScroll: 3
+        },
+        {
+            breakpoint: '768px', // For screens less than 768px (tablets)
+            numVisible: 2,
+            numScroll: 2
+        },
+        {
+            breakpoint: '560px', // For screens less than 560px (mobile phones)
+            numVisible: 1,
+            numScroll: 1
+        }
+    ]
+
   // Template for each carousel item
   const productTemplate = (product) => {
     return (
@@ -850,6 +868,7 @@ export default function Component() {
           itemTemplate={productTemplate}
           numVisible={4}
           numScroll={3}
+          responsiveOptions={responsiveOptions}
           circular
           autoplayInterval={3000}
         />
@@ -1138,6 +1157,7 @@ export default function Component() {
                 itemTemplate={productTemplate}
                 numVisible={4}
                 numScroll={3}
+                responsiveOptions={responsiveOptions}
                 circular
                 autoplayInterval={3000}
               />
