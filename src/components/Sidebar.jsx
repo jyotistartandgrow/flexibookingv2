@@ -92,12 +92,7 @@ export default function Sidebar() {
           )}
           <h3>Order Details</h3>
           <Commonbox />
-          {step == "paymentstep" ||
-            (step == "checkoutstep" && (
-              <div className="fx-down-icon-botttom" onClick={() => setVisibleBottom(false)}>
-                <i className="pi pi-chevron-up"></i>
-              </div>
-            ))}
+         
         </div>
       </Sidebarpanel>
     </>
