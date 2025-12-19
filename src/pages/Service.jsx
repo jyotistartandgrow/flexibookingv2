@@ -35,10 +35,8 @@ export default function Service() {
   const op = useRef(null);
 
   const date = useSelector((state) => state.step1.date);
-  if (!date) {
-    dispatch(setDate(moment().format("YYYY-MM-DD")));
-  }
   const step = useSelector((state) => state.step1.step);
+  const category = useSelector((state) => state.step1.category);
   const [products, setProductsArr] = useState([]);
   const [visible, setVisible] = useState(false);
   const [productDetails, setProductDetails] = useState({});
@@ -67,6 +65,9 @@ export default function Service() {
   useEffect(() => {
     if (step !== "servicesstep") return;
 
+    if (!date) {
+      dispatch(setDate(moment().format("YYYY-MM-DD")));
+    }
     if (date) {
       if (date !== prevDate.current) {
         setBook(0);
@@ -85,7 +86,9 @@ export default function Service() {
   const fetchProductsByDate = async (selectedDate) => {
     setLoadingske(true);
     const { data } = await axiosInstance(
-      `/services?date=${moment(selectedDate).format("YYYY-MM-DD")}`,
+      `/services?date=${moment(selectedDate).format(
+        "YYYY-MM-DD"
+      )}&category=${category}`,
       {
         method: "get",
       }

@@ -5,6 +5,7 @@ import { setStep } from "../store/step1Slice";
 export default function Steps({ type = "date" }) {
   const dispatch = useDispatch();
   const date = useSelector((state) => state.step1.date);
+  const category = useSelector((state) => state.step1.category);
   const step = useSelector((state) => state.step1.step);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
   const serviceid = useSelector((state) => state.step2.service);
@@ -19,6 +20,8 @@ export default function Steps({ type = "date" }) {
   let checkoutstepclass = "step checkoutstep";
   let paymentstepclass = "step paymentstep";
   if (step == "datestep") {
+    datestepclass = datestepclass + " active";
+  } else if (step == "categorystep") {
     datestepclass = datestepclass + " active";
   } else if (step == "servicesstep") {
     servicesstepclass = servicesstepclass + " active";
@@ -62,7 +65,12 @@ export default function Steps({ type = "date" }) {
           </div>
         )}
         {type == "category" && (
-          <div className={datestepclass}>
+          <div
+            className={datestepclass}
+            onClick={() => {
+              if (category) dispatch(setStep("categorystep"));
+            }}
+          >
             <div>
               1 <span>CATEGORY</span>
             </div>

@@ -14,6 +14,7 @@ const initialState = {
   step: "datestep",
   couponcode: [],
   loading: false,
+  category: "",
 };
 
 const step1Slice = createSlice({
@@ -35,9 +36,18 @@ const step1Slice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
+    setCategory: (state, action) => {
+      state.category = action.payload;
+    },
   },
 });
 
-export const { setDate, setReceiverInfo, setStep, setCouponlist, setLoading } =
-  step1Slice.actions;
+export const {
+  setDate,
+  setReceiverInfo,
+  setStep,
+  setCouponlist,
+  setLoading,
+  setCategory,
+} = step1Slice.actions;
 export default step1Slice.reducer;

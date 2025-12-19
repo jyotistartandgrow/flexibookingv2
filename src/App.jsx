@@ -14,6 +14,7 @@ export default function App({ initialRoute = "/" }) {
   const SgbmDateGift = lazy(() => import("./pages/SgbmDateGift"));
   const Thankyou = lazy(() => import("./pages/Thankyou"));
   const SgbmService = lazy(() => import("./pages/SgbmService"));
+  const SgbmCategory = lazy(() => import("./pages/SgbmCategory"));
 
   // Force route redirect when the app loads
   function InitialRedirect() {
@@ -40,6 +41,7 @@ export default function App({ initialRoute = "/" }) {
           <Route path="/" element={<Layout />}>
             <Route index element={<SgbmDateGift />} />
             <Route path="startingservice" element={<SgbmService />} />
+            <Route path="startingcategory" element={<SgbmCategory />} />
             <Route path="component" element={<Component />} />
 
             {/* 404 Fallback */}
