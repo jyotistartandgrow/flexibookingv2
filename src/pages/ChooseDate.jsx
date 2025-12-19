@@ -197,6 +197,7 @@ export default function ChooseDate() {
 
   const viewService = () => {
     console.log("Receiver Info:", receiverInfo);
+    dispatch(setDate(moment()));
     if (!receiverInfo.firstName) {
       setErrorlist({ firstName: true });
       return;
@@ -226,8 +227,10 @@ export default function ChooseDate() {
       return;
     }
 
-    dispatch(setDate(moment()));
-    checkavailability();
+    //checkavailability();
+    dispatch(setLoading(true));
+    dispatch(setStep("servicesstep"));
+    dispatch(setLoading(false));
   };
 
   const getserviceavailabilitycalendar = async (monthYear) => {
@@ -352,27 +355,25 @@ export default function ChooseDate() {
                 )}
               </div>
               <div className="fx-input-wrapper">
-              <input
-                type="text"
-                placeholder="Last Name"
-                className={errorlist.lastName ? "fx-invalid" : ""}
-                onBlur={(e) =>
-                  dispatch(
-                    setReceiverInfo({
-                      ...receiverInfo,
-                      lastName: e.target.value,
-                    })
-                  )
-                }
-              />
-              {errorlist.lastName && (
-                <span class="fx-errortext">Enter Last Name</span>
-              )}
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  className={errorlist.lastName ? "fx-invalid" : ""}
+                  onBlur={(e) =>
+                    dispatch(
+                      setReceiverInfo({
+                        ...receiverInfo,
+                        lastName: e.target.value,
+                      })
+                    )
+                  }
+                />
+                {errorlist.lastName && (
+                  <span class="fx-errortext">Enter Last Name</span>
+                )}
               </div>
             </div>
-            <div>
-
-            </div>
+            <div></div>
             <div className="fx-inputgroup">
               <div className="fx-input-wrapper">
                 <input

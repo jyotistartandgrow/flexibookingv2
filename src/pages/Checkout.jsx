@@ -21,11 +21,11 @@ export default function Checkout() {
   const { data: countries } = useFetch("/countries", {
     method: "get",
   });
-
   const [billdata, setBilldata] = useState({});
   const [states, setState] = useState({});
   const [term, setTerm] = useState(false);
-  const [gift, setGift] = useState(receiverInfo.firstName ? 1 : 0);
+  let receiver = receiverInfo.firstName ? 1 : 0;
+  const [gift, setGift] = useState(receiver);
   const [invoice, setInvoice] = useState(false);
   const [numberOnly, setNumberOnly] = useState("");
   const [errorlist, setErrorlist] = useState({});

@@ -23,7 +23,7 @@ import useDeviceType from "../Utils/useDeviceType";
 const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
 const stripePromise = loadStripe(PUBLIC_KEY);
 
-export default function Commonbox() {
+export default function Commonbox({ setVisibleBottom }) {
   const dispatch = useDispatch();
   const toast = useRef(null);
   const date = useSelector((state) => state.step1.date);
@@ -262,12 +262,14 @@ export default function Commonbox() {
                   Total <span> {decodeHtml(cart.total_formatted)}</span>
                 </p>
               </div>
-               {step == "paymentstep" ||
-            (step == "checkoutstep" && (
-              <div className="fx-down-icon-botttom" onClick={() => setVisibleBottom(false)}>
-                <i className="pi pi-chevron-up"></i>
-              </div>
-            ))}
+              {(step == "paymentstep" || step == "checkoutstep") && (
+                <div
+                  className="fx-down-icon-botttom"
+                  onClick={() => setVisibleBottom(false)}
+                >
+                  <i className="pi pi-chevron-up"></i>
+                </div>
+              )}
             </div>
           </>
         )}

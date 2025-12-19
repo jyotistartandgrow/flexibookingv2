@@ -91,8 +91,7 @@ export default function Sidebar() {
             </div>
           )}
           <h3>Order Details</h3>
-          <Commonbox />
-         
+          <Commonbox setVisibleBottom={setVisibleBottom} />
         </div>
       </Sidebarpanel>
     </>
