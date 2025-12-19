@@ -51,7 +51,7 @@ export default function Steps({ type = "date" }) {
           : "fx-step-top-fixed-box"
       }
     >
-      <div className="fx-stepper-tabstyle">
+      <div className={`fx-stepper-tabstyle fx-${type}-step`}>
         {type == "date" && (
           <div
             className={datestepclass}
