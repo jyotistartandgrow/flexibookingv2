@@ -67,10 +67,7 @@ export default function Sidebar() {
                 </div>
               </>
             )}
-
-            
           </div>
-         
         </div>
       )}
 
@@ -85,14 +82,22 @@ export default function Sidebar() {
           <div className="logo">
             <img src={logo} className="fx-right-logo" />
           </div>
-          <div
-            className="fx-mob-down-arrow"
-            onClick={() => setVisibleBottom(false)}
-          >
-            <i className="pi pi-chevron-down"></i>
-          </div>
+          {step != "paymentstep" && step != "checkoutstep" && (
+            <div
+              className="fx-mob-down-arrow"
+              onClick={() => setVisibleBottom(false)}
+            >
+              <i className="pi pi-chevron-down"></i>
+            </div>
+          )}
           <h3>Order Details</h3>
           <Commonbox />
+          {step == "paymentstep" ||
+            (step == "checkoutstep" && (
+              <div className="fx-down-icon-botttom" onClick={() => setVisibleBottom(false)}>
+                <i className="pi pi-chevron-up"></i>
+              </div>
+            ))}
         </div>
       </Sidebarpanel>
     </>

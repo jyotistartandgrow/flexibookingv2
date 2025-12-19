@@ -261,9 +261,6 @@ export default function Commonbox() {
                 <p>
                   Total <span> {decodeHtml(cart.total_formatted)}</span>
                 </p>
-                <div className="fx-down-icon-botttom">
-                <i className="pi pi-chevron-up"></i>
-                </div>
               </div>
             </div>
           </>
