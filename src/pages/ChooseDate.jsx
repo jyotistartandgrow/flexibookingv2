@@ -16,6 +16,7 @@ import {
   setStep,
   setCouponlist,
   setLoading,
+  setGift,
 } from "../store/step1Slice";
 import { decodeHtml } from "../Utils/Functions";
 
@@ -43,6 +44,10 @@ export default function ChooseDate() {
   };
 
   useEffect(() => {
+    if (bookingtype && bookingtype == "gift") {
+      dispatch(setDate(moment()));
+      dispatch(setGift(true));
+    }
     getserviceavailabilitycalendar(month);
   }, [month]);
 
@@ -197,6 +202,7 @@ export default function ChooseDate() {
 
   const viewService = () => {
     console.log("Receiver Info:", receiverInfo);
+
     if (!receiverInfo.firstName) {
       setErrorlist({ firstName: true });
       return;
@@ -226,7 +232,6 @@ export default function ChooseDate() {
       return;
     }
 
-    dispatch(setDate(moment()));
     checkavailability();
   };
 
@@ -273,7 +278,10 @@ export default function ChooseDate() {
             <a
               href="#/"
               className={isVisible == "booking" ? "selected" : ""}
-              onClick={() => toggleDiv("booking")}
+              onClick={() => {
+                toggleDiv("booking");
+                dispatch(setGift(false));
+              }}
             >
               Booking
             </a>
@@ -282,7 +290,11 @@ export default function ChooseDate() {
             <a
               href="#/"
               className={isVisible == "gift" ? "selected" : ""}
-              onClick={() => toggleDiv("gift")}
+              onClick={() => {
+                dispatch(setDate(moment()));
+                dispatch(setGift(true));
+                toggleDiv("gift");
+              }}
             >
               Gift
             </a>
@@ -337,7 +349,7 @@ export default function ChooseDate() {
                 <input
                   type="text"
                   placeholder="First Name"
-                  className={errorlist.firstName ? "fx-invalid" : "inputbox"}
+                  className={errorlist.firstName ? "fx-invalid fx-inputbox-generic" : "fx-inputbox-gift"}
                   onBlur={(e) =>
                     dispatch(
                       setReceiverInfo({
@@ -352,34 +364,32 @@ export default function ChooseDate() {
                 )}
               </div>
               <div className="fx-input-wrapper">
-              <input
-                type="text"
-                placeholder="Last Name"
-                className={errorlist.lastName ? "fx-invalid" : ""}
-                onBlur={(e) =>
-                  dispatch(
-                    setReceiverInfo({
-                      ...receiverInfo,
-                      lastName: e.target.value,
-                    })
-                  )
-                }
-              />
-              {errorlist.lastName && (
-                <span class="fx-errortext">Enter Last Name</span>
-              )}
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  className={errorlist.lastName ? "fx-invalid" : ""}
+                  onChange={(e) =>
+                    dispatch(
+                      setReceiverInfo({
+                        ...receiverInfo,
+                        lastName: e.target.value,
+                      })
+                    )
+                  }
+                />
+                {errorlist.lastName && (
+                  <span class="fx-errortext">Enter Last Name</span>
+                )}
               </div>
             </div>
-            <div>
-
-            </div>
+            <div></div>
             <div className="fx-inputgroup">
               <div className="fx-input-wrapper">
                 <input
                   type="email"
                   placeholder="Email"
                   className={errorlist.email ? "fx-invalid" : ""}
-                  onBlur={(e) =>
+                  onChange={(e) =>
                     dispatch(
                       setReceiverInfo({
                         ...receiverInfo,
@@ -398,7 +408,7 @@ export default function ChooseDate() {
                   type="text"
                   placeholder="Phone Number"
                   className={errorlist.phoneNumber ? "fx-invalid" : ""}
-                  onBlur={(e) =>
+                  onChange={(e) =>
                     dispatch(
                       setReceiverInfo({
                         ...receiverInfo,
@@ -419,7 +429,7 @@ export default function ChooseDate() {
                   type="text"
                   placeholder="Country"
                   className={errorlist.country ? "fx-invalid" : ""}
-                  onBlur={(e) =>
+                  onChange={(e) =>
                     dispatch(
                       setReceiverInfo({
                         ...receiverInfo,
@@ -438,7 +448,7 @@ export default function ChooseDate() {
                   type="text"
                   placeholder="Zip"
                   className={errorlist.zip ? "fx-invalid" : ""}
-                  onBlur={(e) =>
+                  onChange={(e) =>
                     dispatch(
                       setReceiverInfo({
                         ...receiverInfo,
@@ -458,7 +468,7 @@ export default function ChooseDate() {
                   className={
                     errorlist.address ? "fx-invalid bigtextbox" : "bigtextbox"
                   }
-                  onBlur={(e) =>
+                  onChange={(e) =>
                     dispatch(
                       setReceiverInfo({
                         ...receiverInfo,

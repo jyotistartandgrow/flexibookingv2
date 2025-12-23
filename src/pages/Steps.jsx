@@ -8,6 +8,7 @@ export default function Steps({ type = "date" }) {
   const category = useSelector((state) => state.step1.category);
   const step = useSelector((state) => state.step1.step);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
+  const gift = useSelector((state) => state.step1.gift);
   const serviceid = useSelector((state) => state.step2.service);
   const extra = useSelector((state) => state.step3.extra);
   const checkoutkey = useSelector((state) => state.step4.checkoutkey);
@@ -51,7 +52,7 @@ export default function Steps({ type = "date" }) {
           : "fx-step-top-fixed-box"
       }
     >
-      <div className="fx-stepper-tabstyle">
+      <div className={`fx-stepper-tabstyle fx-${type}-step`}>
         {type == "date" && (
           <div
             className={datestepclass}
@@ -60,7 +61,7 @@ export default function Steps({ type = "date" }) {
             }}
           >
             <div>
-              1 <span>DATE</span>
+              1 <span>{gift ? "INFORMATION" : "DATE"}</span>
             </div>
           </div>
         )}

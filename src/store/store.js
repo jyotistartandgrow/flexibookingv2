@@ -15,13 +15,24 @@ const persistConfig = {
   // whitelist: ["step1"],  // optional → only persist selected slices
 };
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   step1: step1Reducer,
   step2: step2Reducer,
   step3: step3Reducer,
   step4: step4Reducer,
 });
 
+// 🔹 Root reducer with RESET support
+const rootReducer = (state, action) => {
+  if (action.type === "app/reset") {
+    // clear persisted storage
+    storageSession.removeItem("persist:root");
+    state = undefined; // 👈 resets ALL slices
+  }
+  return appReducer(state, action);
+};
+
+// 🔹 Persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({

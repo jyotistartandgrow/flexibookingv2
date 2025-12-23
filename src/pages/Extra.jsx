@@ -183,7 +183,7 @@ export default function Service() {
       extra_svc_ids: extraid,
       no_of_persons: book,
     });
-    if (data && data.status == 200) {
+    if (data && data.status == 200 && data.data.booking_string) {
       dispatch(setExtracapacity(book));
       dispatch(setExtra(extraid));
       dispatch(setBookingkey(data.data.booking_string));

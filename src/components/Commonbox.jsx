@@ -23,12 +23,13 @@ import useDeviceType from "../Utils/useDeviceType";
 const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
 const stripePromise = loadStripe(PUBLIC_KEY);
 
-export default function Commonbox() {
+export default function Commonbox({ setVisibleBottom }) {
   const dispatch = useDispatch();
   const toast = useRef(null);
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
   const cart = useSelector((state) => state.step2.cart);
+  const gift = useSelector((state) => state.step1.gift);
   const paymentstring = useSelector((state) => state.step4.paymentstring);
   const couponcode = useSelector((state) => state.step1.couponcode);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
@@ -200,11 +201,13 @@ export default function Commonbox() {
             <div className="fx-element-box" onClick={() => addmoreCoupon()}>
               <p className="fx-addmorelink">Add More</p>
             </div>
-            <div className="fx-bookingdate">
-              Date
-              <br />
-              <span>{moment(date).format("MMMM DD YYYY")}</span>
-            </div>
+            {!gift && (
+              <div className="fx-bookingdate">
+                Date
+                <br />
+                <span>{moment(date).format("MMMM DD YYYY")}</span>
+              </div>
+            )}
           </div>
         )}
       {cart?.service?.length > 0 &&
@@ -262,12 +265,14 @@ export default function Commonbox() {
                   Total <span> {decodeHtml(cart.total_formatted)}</span>
                 </p>
               </div>
-               {step == "paymentstep" ||
-            (step == "checkoutstep" && (
-              <div className="fx-down-icon-botttom" onClick={() => setVisibleBottom(false)}>
-                <i className="pi pi-chevron-up"></i>
-              </div>
-            ))}
+              {(step == "paymentstep" || step == "checkoutstep") && (
+                <div
+                  className="fx-down-icon-botttom"
+                  onClick={() => setVisibleBottom(false)}
+                >
+                  <i className="pi pi-chevron-up"></i>
+                </div>
+              )}
             </div>
           </>
         )}

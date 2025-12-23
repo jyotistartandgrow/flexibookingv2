@@ -36,6 +36,7 @@ export default function Service() {
 
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
+  const gift = useSelector((state) => state.step1.gift);
   const category = useSelector((state) => state.step1.category);
   const [products, setProductsArr] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -88,7 +89,7 @@ export default function Service() {
     const { data } = await axiosInstance(
       `/services?date=${moment(selectedDate).format(
         "YYYY-MM-DD"
-      )}&category=${category}`,
+      )}&category=${category}&gift=${gift}`,
       {
         method: "get",
       }
@@ -131,8 +132,12 @@ export default function Service() {
         setDateslot(data?.data?.date_slots);
       }
 
-      const monthYear = moment().format("YYYY-MM");
-      getslotavailabilitycalendar(monthYear, id);
+      if (!gift) {
+        const monthYear = moment().format("YYYY-MM");
+        getslotavailabilitycalendar(monthYear, id);
+      } else {
+        dispatch(setLoading(false));
+      }
     }
   };
 
@@ -358,26 +363,62 @@ export default function Service() {
     dispatch(setLoading(false));
   };
 
+  const giftbookservice = async () => {
+    dispatch(setLoading(true));
+    const { data } = await axiosInstance(
+      `/price-format?service_id=${productDetails.id}&capacity=1&date=${moment(
+        date
+      ).format("YYYY-MM-DD")}`,
+      {
+        method: "get",
+      }
+    );
+    let cartobj = {
+      id: productDetails.id,
+      name: productDetails.service_name,
+      price: productDetails.svc_price,
+      total: data?.data?.service_total,
+      total_formatted: data?.data?.service_total,
+      slot: "",
+      capacity: 1,
+    };
+    dispatch(
+      setCart({
+        service: [cartobj],
+        total: data?.data?.total,
+        total_formatted: data?.data?.total_formated,
+        discount: 0,
+        subtotal: data?.data?.total_formated,
+      })
+    );
+    dispatch(setTimeslot(""));
+    dispatch(setCapacity(1));
+    dispatch(setService(serviceid));
+    setVisible(false);
+    dispatch(setStep("extrastep"));
+    dispatch(setLoading(false));
+  };
+
   const slotObj = dateslot.find((s) =>
     moment(moment(date).format("YYYY-MM-DD")).isSame(s.date)
   );
   const responsiveOptions = [
-        {
-            breakpoint: '1024px', // For screens less than 1024px
-            numVisible: 3,
-            numScroll: 3
-        },
-        {
-            breakpoint: '768px', // For screens less than 768px (tablets)
-            numVisible: 2,
-            numScroll: 2
-        },
-        {
-            breakpoint: '560px', // For screens less than 560px (mobile phones)
-            numVisible: 1,
-            numScroll: 1
-        }
-    ]
+    {
+      breakpoint: "1024px", // For screens less than 1024px
+      numVisible: 3,
+      numScroll: 3,
+    },
+    {
+      breakpoint: "768px", // For screens less than 768px (tablets)
+      numVisible: 2,
+      numScroll: 2,
+    },
+    {
+      breakpoint: "560px", // For screens less than 560px (mobile phones)
+      numVisible: 1,
+      numScroll: 1,
+    },
+  ];
   return (
     <div
       className="fx-leftcontentbox"
@@ -578,7 +619,11 @@ export default function Service() {
                   {decodeHtml(productDetails.svc_price)}
                 </p>
               </div>
-              <div className="fx-rightpopup">
+              <div
+                className={
+                  gift ? "fx-rightpopup-middle fx-rightpopup" : "fx-rightpopup"
+                }
+              >
                 <h4>{productDetails.service_name}</h4>
                 <a className="close" href="#" onClick={() => setVisible(false)}>
                   &times;
@@ -597,102 +642,373 @@ export default function Service() {
                     {readmorecl ? "Read Less" : "Read More"}
                   </span>
                 </p>
-                <p className="datetext">{moment(date).format("MMM YYYY")}</p>
-                <div className="calendarboxbar">
-                  {dateslot &&
-                    dateslot.map((slot, k) => (
-                      <div
-                        key={k}
-                        className={
-                          moment(moment(date).format("YYYY-MM-DD")).isSame(
-                            slot.date
-                          )
-                            ? "calendarbox active"
-                            : "calendarbox"
-                        }
-                        onClick={() => getslotbydate(slot.date)}
-                      >
-                        {moment(slot.date).format("ddd")}
-                        <br />
-                        <span>{moment(slot.date).format("DD")}</span>
-                        <hr />
-                      </div>
-                    ))}
-                  <div className="calendarbox">
-                    <img
-                      src={calendar}
-                      alt="Open Calendar"
-                      id="fx-openCalendar"
-                      onClick={(e) => op.current.toggle(e)}
-                    />
-                    <div id="fx-calendarContainer">
-                      <OverlayPanel ref={op}>
-                        <Calendar
-                          inline
-                          value={date}
-                          onChange={(e) => {
-                            dispatch(setDate(e.value));
-                            op.current.toggle(e);
-                          }}
-                          dateTemplate={dateTemplate}
-                          className="fx-datepicker"
-                          minDate={new Date()}
-                          disabledDates={disabledDates}
-                          onMonthChange={handleMonthChange}
-                          dateFormat="dd/mm/yy"
-                          locale="en-monday"
+                {!gift && (
+                  <>
+                    {" "}
+                    <p className="datetext">
+                      {moment(date).format("MMM YYYY")}
+                    </p>
+                    <div className="calendarboxbar">
+                      {dateslot &&
+                        dateslot.map((slot, k) => (
+                          <div
+                            key={k}
+                            className={
+                              moment(moment(date).format("YYYY-MM-DD")).isSame(
+                                slot.date
+                              )
+                                ? "calendarbox active"
+                                : "calendarbox"
+                            }
+                            onClick={() => getslotbydate(slot.date)}
+                          >
+                            {moment(slot.date).format("ddd")}
+                            <br />
+                            <span>{moment(slot.date).format("DD")}</span>
+                            <hr />
+                          </div>
+                        ))}
+                      <div className="calendarbox">
+                        <img
+                          src={calendar}
+                          alt="Open Calendar"
+                          id="fx-openCalendar"
+                          onClick={(e) => op.current.toggle(e)}
                         />
-                      </OverlayPanel>
+                        <div id="fx-calendarContainer">
+                          <OverlayPanel ref={op}>
+                            <Calendar
+                              inline
+                              value={date}
+                              onChange={(e) => {
+                                dispatch(setDate(e.value));
+                                op.current.toggle(e);
+                              }}
+                              dateTemplate={dateTemplate}
+                              className="fx-datepicker"
+                              minDate={new Date()}
+                              disabledDates={disabledDates}
+                              onMonthChange={handleMonthChange}
+                              dateFormat="dd/mm/yy"
+                              locale="en-monday"
+                            />
+                          </OverlayPanel>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                    <div id="fx-modaltab_nav">
+                      {!slotObj?.slots.single_time_slot.slot_type && (
+                        <>
+                          <ul>
+                            <li
+                              className={
+                                slotVisible == "morning" ? "selected" : ""
+                              }
+                            >
+                              <a
+                                href="#"
+                                className={
+                                  slotVisible == "morning" ? "selected" : ""
+                                }
+                                onClick={() => setSlotVisible("morning")}
+                              >
+                                Morning
+                              </a>
+                            </li>
+                            <li
+                              className={
+                                slotVisible == "afternoon" ? "selected" : ""
+                              }
+                            >
+                              <a
+                                href="#"
+                                className={
+                                  slotVisible == "afternoon" ? "selected" : ""
+                                }
+                                onClick={() => setSlotVisible("afternoon")}
+                              >
+                                Afternoon
+                              </a>
+                            </li>
+                            <li
+                              className={slotVisible == "all" ? "selected" : ""}
+                            >
+                              <a
+                                href="#"
+                                className={
+                                  slotVisible == "all" ? "selected" : ""
+                                }
+                                onClick={() => setSlotVisible("all")}
+                              >
+                                All
+                              </a>
+                            </li>
+                          </ul>
 
-                <div id="fx-modaltab_nav">
-                  {!slotObj?.slots.single_time_slot.slot_type && (
-                    <>
-                      <ul>
-                        <li
-                          className={slotVisible == "morning" ? "selected" : ""}
-                        >
-                          <a
-                            href="#"
+                          <div
                             className={
-                              slotVisible == "morning" ? "selected" : ""
+                              slotVisible == "morning"
+                                ? "fx-tabcontent selected"
+                                : "fx-tabcontent"
                             }
-                            onClick={() => setSlotVisible("morning")}
                           >
-                            Morning
-                          </a>
-                        </li>
-                        <li
-                          className={
-                            slotVisible == "afternoon" ? "selected" : ""
-                          }
-                        >
-                          <a
-                            href="#"
-                            className={
-                              slotVisible == "afternoon" ? "selected" : ""
-                            }
-                            onClick={() => setSlotVisible("afternoon")}
-                          >
-                            Afternoon
-                          </a>
-                        </li>
-                        <li className={slotVisible == "all" ? "selected" : ""}>
-                          <a
-                            href="#"
-                            className={slotVisible == "all" ? "selected" : ""}
-                            onClick={() => setSlotVisible("all")}
-                          >
-                            All
-                          </a>
-                        </li>
-                      </ul>
+                            <h5>Choose the time</h5>
+                            <div className="fx-timelistboxbar">
+                              {(() => {
+                                const slotItems = slotObj?.slots?.morning || [];
 
+                                if (!slotObj || slotItems.length === 0) {
+                                  return (
+                                    <div className="fx-timelistbox">
+                                      No slots available
+                                    </div>
+                                  );
+                                }
+
+                                return slotItems.map((item, idx) => (
+                                  <div
+                                    className={
+                                      slot == item.time_slot && book > 0
+                                        ? "fx-timelistbox fx-slotbox-active"
+                                        : "fx-timelistbox"
+                                    }
+                                    key={idx}
+                                  >
+                                    <div className="fx-timeslotsection">
+                                      <div className="time">
+                                        {item.time_slot}
+                                      </div>
+                                      <img
+                                        className="fx-offericon"
+                                        src={percentage}
+                                      />
+                                      {(() => {
+                                        let percentIcon = null;
+                                        if (
+                                          item.capacity_left_percent > 0 &&
+                                          item.capacity_left_percent <= 30
+                                        ) {
+                                          percentIcon = percentthirty;
+                                        } else if (
+                                          item.capacity_left_percent > 30 &&
+                                          item.capacity_left_percent <= 60
+                                        ) {
+                                          percentIcon = percentsixty;
+                                        } else if (
+                                          item.capacity_left_percent > 60
+                                        ) {
+                                          percentIcon = percentninty;
+                                        }
+                                        return (
+                                          <div
+                                            className="fx-slotquantity"
+                                            style={{
+                                              ...(percentIcon && {
+                                                backgroundImage: `url("${percentIcon}")`,
+                                              }),
+                                              backgroundSize: "cover",
+                                            }}
+                                          >
+                                            {item.capacity_left}
+                                          </div>
+                                        );
+                                      })()}
+                                    </div>
+
+                                    <div className="fx-common">
+                                      <div className="fx-quantitybox">
+                                        {item.slot_type == "active" && (
+                                          <>
+                                            <button
+                                              type="button"
+                                              className="decrement"
+                                              onClick={() =>
+                                                slotbook("minus", item)
+                                              }
+                                            >
+                                              -
+                                            </button>
+                                            <input
+                                              type="number"
+                                              value={
+                                                slot == item.time_slot
+                                                  ? book
+                                                  : 0
+                                              }
+                                              defaultValue={0}
+                                              min={0}
+                                              max={item.capacity_left}
+                                            />
+                                            <button
+                                              type="button"
+                                              className="increment"
+                                              onClick={() =>
+                                                slotbook("add", item)
+                                              }
+                                            >
+                                              +
+                                            </button>
+                                          </>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ));
+                              })()}
+                            </div>
+                            <div
+                              className={
+                                slotVisible == "morning" && book > 0
+                                  ? "continuebtn"
+                                  : "continuebtn fx-disable-button"
+                              }
+                              onClick={() =>
+                                slotVisible == "morning" && book > 0
+                                  ? bookservice()
+                                  : ""
+                              }
+                            >
+                              Continue
+                            </div>
+                          </div>
+                          <div
+                            className={
+                              slotVisible == "afternoon"
+                                ? "fx-tabcontent selected"
+                                : "fx-tabcontent"
+                            }
+                          >
+                            <h5>Choose the time</h5>
+                            <div className="fx-timelistboxbar">
+                              {(() => {
+                                const slotAfItems =
+                                  slotObj?.slots?.afternoon || [];
+
+                                if (!slotObj || slotAfItems.length === 0) {
+                                  return (
+                                    <div className="fx-timelistbox">
+                                      No slots available
+                                    </div>
+                                  );
+                                }
+
+                                return slotAfItems.map((item, idx) => (
+                                  <div
+                                    className={
+                                      slot == item.time_slot && book > 0
+                                        ? "fx-timelistbox fx-slotbox-active"
+                                        : "fx-timelistbox"
+                                    }
+                                    key={"af=" + idx}
+                                  >
+                                    <div className="fx-timeslotsection">
+                                      <div className="time">
+                                        {item.time_slot}
+                                      </div>
+                                      <img
+                                        className="fx-offericon"
+                                        src={percentage}
+                                      />
+                                      {(() => {
+                                        let percentIcon = null;
+                                        if (
+                                          item.capacity_left_percent > 0 &&
+                                          item.capacity_left_percent <= 30
+                                        ) {
+                                          percentIcon = percentthirty;
+                                        } else if (
+                                          item.capacity_left_percent > 30 &&
+                                          item.capacity_left_percent <= 60
+                                        ) {
+                                          percentIcon = percentsixty;
+                                        } else if (
+                                          item.capacity_left_percent > 60
+                                        ) {
+                                          percentIcon = percentninty;
+                                        }
+                                        return (
+                                          <div
+                                            className="fx-slotquantity"
+                                            style={{
+                                              ...(percentIcon && {
+                                                backgroundImage: `url("${percentIcon}")`,
+                                              }),
+                                              backgroundSize: "cover",
+                                            }}
+                                          >
+                                            {item.capacity_left}
+                                          </div>
+                                        );
+                                      })()}
+                                    </div>
+
+                                    <div className="fx-common">
+                                      <div className="fx-quantitybox">
+                                        {item.slot_type == "active" && (
+                                          <>
+                                            <button
+                                              type="button"
+                                              className="decrement"
+                                              onClick={() =>
+                                                slotbook("minus", item)
+                                              }
+                                            >
+                                              -
+                                            </button>
+
+                                            <input
+                                              type="number"
+                                              min={0}
+                                              max={item.capacity_left}
+                                              value={
+                                                slot === item.time_slot
+                                                  ? book
+                                                  : 0
+                                              }
+                                            />
+
+                                            <button
+                                              type="button"
+                                              className="increment"
+                                              onClick={() =>
+                                                slotbook("add", item)
+                                              }
+                                            >
+                                              +
+                                            </button>
+                                          </>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ));
+                              })()}
+                            </div>
+                            <div
+                              className={
+                                slotVisible == "afternoon" && book > 0
+                                  ? "continuebtn"
+                                  : "continuebtn fx-disable-button"
+                              }
+                              onClick={() =>
+                                slotVisible == "afternoon" && book > 0
+                                  ? bookservice()
+                                  : ""
+                              }
+                            >
+                              Continue
+                            </div>
+                          </div>
+                        </>
+                      )}
                       <div
                         className={
-                          slotVisible == "morning"
+                          slotVisible == "all" ||
+                          dateslot.find((s) =>
+                            moment(moment(date).format("YYYY-MM-DD")).isSame(
+                              s.date
+                            )
+                          )?.slots.single_time_slot.slot_type
                             ? "fx-tabcontent selected"
                             : "fx-tabcontent"
                         }
@@ -700,12 +1016,115 @@ export default function Service() {
                         <h5>Choose the time</h5>
                         <div className="fx-timelistboxbar">
                           {(() => {
-                            const slotItems = slotObj?.slots?.morning || [];
+                            const slotItems = slotObj?.slots?.time_slots || [];
+                            const singleslotItem =
+                              slotObj?.slots?.single_time_slot || {};
 
-                            if (!slotObj || slotItems.length === 0) {
+                            if (
+                              (!slotObj || slotItems.length === 0) &&
+                              (!singleslotItem ||
+                                singleslotItem.length === 0 ||
+                                singleslotItem.time_slot == "")
+                            ) {
                               return (
                                 <div className="fx-timelistbox">
                                   No slots available
+                                </div>
+                              );
+                            }
+
+                            if (singleslotItem && singleslotItem.time_slot) {
+                              return (
+                                <div
+                                  className={
+                                    slot == singleslotItem.time_slot && book > 0
+                                      ? "fx-timelistbox fx-slotbox-active"
+                                      : "fx-timelistbox"
+                                  }
+                                >
+                                  <div className="fx-timeslotsection">
+                                    <div className="time">
+                                      {singleslotItem.time_slot}
+                                    </div>
+                                    <img
+                                      className="fx-offericon"
+                                      src={percentage}
+                                    />
+                                    {(() => {
+                                      let percentIcon = null;
+                                      if (
+                                        singleslotItem.capacity_left_percent >
+                                          0 &&
+                                        singleslotItem.capacity_left_percent <=
+                                          30
+                                      ) {
+                                        percentIcon = percentthirty;
+                                      } else if (
+                                        singleslotItem.capacity_left_percent >
+                                          30 &&
+                                        singleslotItem.capacity_left_percent <=
+                                          60
+                                      ) {
+                                        percentIcon = percentsixty;
+                                      } else if (
+                                        singleslotItem.capacity_left_percent >
+                                        60
+                                      ) {
+                                        percentIcon = percentninty;
+                                      }
+                                      return (
+                                        <div
+                                          className="fx-slotquantity"
+                                          style={{
+                                            ...(percentIcon && {
+                                              backgroundImage: `url("${percentIcon}")`,
+                                            }),
+                                            backgroundSize: "cover",
+                                          }}
+                                        >
+                                          {singleslotItem.capacity_left}
+                                        </div>
+                                      );
+                                    })()}
+                                  </div>
+
+                                  <div className="fx-common">
+                                    <div className="fx-quantitybox">
+                                      {singleslotItem.slot_type == "active" && (
+                                        <>
+                                          <button
+                                            type="button"
+                                            className="decrement"
+                                            onClick={() =>
+                                              slotbook("minus", singleslotItem)
+                                            }
+                                          >
+                                            -
+                                          </button>
+                                          <input
+                                            type="number"
+                                            value={
+                                              slot == singleslotItem.time_slot
+                                                ? book
+                                                : 0
+                                            }
+                                            defaultValue={0}
+                                            min={0}
+                                            max={singleslotItem.capacity_left}
+                                          />
+                                          <button
+                                            type="button"
+                                            className="increment"
+                                            onClick={() =>
+                                              slotbook("add", singleslotItem)
+                                            }
+                                          >
+                                            +
+                                          </button>
+                                        </>
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
                               );
                             }
@@ -797,12 +1216,12 @@ export default function Service() {
                         </div>
                         <div
                           className={
-                            slotVisible == "morning" && book > 0
+                            slotVisible == "all" && book > 0
                               ? "continuebtn"
                               : "continuebtn fx-disable-button"
                           }
                           onClick={() =>
-                            slotVisible == "morning" && book > 0
+                            slotVisible == "all" && book > 0
                               ? bookservice()
                               : ""
                           }
@@ -810,340 +1229,17 @@ export default function Service() {
                           Continue
                         </div>
                       </div>
-                      <div
-                        className={
-                          slotVisible == "afternoon"
-                            ? "fx-tabcontent selected"
-                            : "fx-tabcontent"
-                        }
-                      >
-                        <h5>Choose the time</h5>
-                        <div className="fx-timelistboxbar">
-                          {(() => {
-                            const slotAfItems = slotObj?.slots?.afternoon || [];
-
-                            if (!slotObj || slotAfItems.length === 0) {
-                              return (
-                                <div className="fx-timelistbox">
-                                  No slots available
-                                </div>
-                              );
-                            }
-
-                            return slotAfItems.map((item, idx) => (
-                              <div
-                                className={
-                                  slot == item.time_slot && book > 0
-                                    ? "fx-timelistbox fx-slotbox-active"
-                                    : "fx-timelistbox"
-                                }
-                                key={"af=" + idx}
-                              >
-                                <div className="fx-timeslotsection">
-                                  <div className="time">{item.time_slot}</div>
-                                  <img
-                                    className="fx-offericon"
-                                    src={percentage}
-                                  />
-                                  {(() => {
-                                    let percentIcon = null;
-                                    if (
-                                      item.capacity_left_percent > 0 &&
-                                      item.capacity_left_percent <= 30
-                                    ) {
-                                      percentIcon = percentthirty;
-                                    } else if (
-                                      item.capacity_left_percent > 30 &&
-                                      item.capacity_left_percent <= 60
-                                    ) {
-                                      percentIcon = percentsixty;
-                                    } else if (
-                                      item.capacity_left_percent > 60
-                                    ) {
-                                      percentIcon = percentninty;
-                                    }
-                                    return (
-                                      <div
-                                        className="fx-slotquantity"
-                                        style={{
-                                          ...(percentIcon && {
-                                            backgroundImage: `url("${percentIcon}")`,
-                                          }),
-                                          backgroundSize: "cover",
-                                        }}
-                                      >
-                                        {item.capacity_left}
-                                      </div>
-                                    );
-                                  })()}
-                                </div>
-
-                                <div className="fx-common">
-                                  <div className="fx-quantitybox">
-                                    {item.slot_type == "active" && (
-                                      <>
-                                        <button
-                                          type="button"
-                                          className="decrement"
-                                          onClick={() =>
-                                            slotbook("minus", item)
-                                          }
-                                        >
-                                          -
-                                        </button>
-
-                                        <input
-                                          type="number"
-                                          min={0}
-                                          max={item.capacity_left}
-                                          value={
-                                            slot === item.time_slot ? book : 0
-                                          }
-                                        />
-
-                                        <button
-                                          type="button"
-                                          className="increment"
-                                          onClick={() => slotbook("add", item)}
-                                        >
-                                          +
-                                        </button>
-                                      </>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            ));
-                          })()}
-                        </div>
-                        <div
-                          className={
-                            slotVisible == "afternoon" && book > 0
-                              ? "continuebtn"
-                              : "continuebtn fx-disable-button"
-                          }
-                          onClick={() =>
-                            slotVisible == "afternoon" && book > 0
-                              ? bookservice()
-                              : ""
-                          }
-                        >
-                          Continue
-                        </div>
-                      </div>
-                    </>
-                  )}
+                    </div>
+                  </>
+                )}
+                {gift && (
                   <div
-                    className={
-                      slotVisible == "all" ||
-                      dateslot.find((s) =>
-                        moment(moment(date).format("YYYY-MM-DD")).isSame(s.date)
-                      )?.slots.single_time_slot.slot_type
-                        ? "fx-tabcontent selected"
-                        : "fx-tabcontent"
-                    }
+                    className="continuebtn"
+                    onClick={() => giftbookservice()}
                   >
-                    <h5>Choose the time</h5>
-                    <div className="fx-timelistboxbar">
-                      {(() => {
-                        const slotItems = slotObj?.slots?.time_slots || [];
-                        const singleslotItem =
-                          slotObj?.slots?.single_time_slot || {};
-
-                        if (
-                          (!slotObj || slotItems.length === 0) &&
-                          (!singleslotItem ||
-                            singleslotItem.length === 0 ||
-                            singleslotItem.time_slot == "")
-                        ) {
-                          return (
-                            <div className="fx-timelistbox">
-                              No slots available
-                            </div>
-                          );
-                        }
-
-                        if (singleslotItem && singleslotItem.time_slot) {
-                          return (
-                            <div
-                              className={
-                                slot == singleslotItem.time_slot && book > 0
-                                  ? "fx-timelistbox fx-slotbox-active"
-                                  : "fx-timelistbox"
-                              }
-                            >
-                              <div className="fx-timeslotsection">
-                                <div className="time">
-                                  {singleslotItem.time_slot}
-                                </div>
-                                <img
-                                  className="fx-offericon"
-                                  src={percentage}
-                                />
-                                {(() => {
-                                  let percentIcon = null;
-                                  if (
-                                    singleslotItem.capacity_left_percent > 0 &&
-                                    singleslotItem.capacity_left_percent <= 30
-                                  ) {
-                                    percentIcon = percentthirty;
-                                  } else if (
-                                    singleslotItem.capacity_left_percent > 30 &&
-                                    singleslotItem.capacity_left_percent <= 60
-                                  ) {
-                                    percentIcon = percentsixty;
-                                  } else if (
-                                    singleslotItem.capacity_left_percent > 60
-                                  ) {
-                                    percentIcon = percentninty;
-                                  }
-                                  return (
-                                    <div
-                                      className="fx-slotquantity"
-                                      style={{
-                                        ...(percentIcon && {
-                                          backgroundImage: `url("${percentIcon}")`,
-                                        }),
-                                        backgroundSize: "cover",
-                                      }}
-                                    >
-                                      {singleslotItem.capacity_left}
-                                    </div>
-                                  );
-                                })()}
-                              </div>
-
-                              <div className="fx-common">
-                                <div className="fx-quantitybox">
-                                  {singleslotItem.slot_type == "active" && (
-                                    <>
-                                      <button
-                                        type="button"
-                                        className="decrement"
-                                        onClick={() =>
-                                          slotbook("minus", singleslotItem)
-                                        }
-                                      >
-                                        -
-                                      </button>
-                                      <input
-                                        type="number"
-                                        value={
-                                          slot == singleslotItem.time_slot
-                                            ? book
-                                            : 0
-                                        }
-                                        defaultValue={0}
-                                        min={0}
-                                        max={singleslotItem.capacity_left}
-                                      />
-                                      <button
-                                        type="button"
-                                        className="increment"
-                                        onClick={() =>
-                                          slotbook("add", singleslotItem)
-                                        }
-                                      >
-                                        +
-                                      </button>
-                                    </>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        }
-
-                        return slotItems.map((item, idx) => (
-                          <div
-                            className={
-                              slot == item.time_slot && book > 0
-                                ? "fx-timelistbox fx-slotbox-active"
-                                : "fx-timelistbox"
-                            }
-                            key={idx}
-                          >
-                            <div className="fx-timeslotsection">
-                              <div className="time">{item.time_slot}</div>
-                              <img className="fx-offericon" src={percentage} />
-                              {(() => {
-                                let percentIcon = null;
-                                if (
-                                  item.capacity_left_percent > 0 &&
-                                  item.capacity_left_percent <= 30
-                                ) {
-                                  percentIcon = percentthirty;
-                                } else if (
-                                  item.capacity_left_percent > 30 &&
-                                  item.capacity_left_percent <= 60
-                                ) {
-                                  percentIcon = percentsixty;
-                                } else if (item.capacity_left_percent > 60) {
-                                  percentIcon = percentninty;
-                                }
-                                return (
-                                  <div
-                                    className="fx-slotquantity"
-                                    style={{
-                                      ...(percentIcon && {
-                                        backgroundImage: `url("${percentIcon}")`,
-                                      }),
-                                      backgroundSize: "cover",
-                                    }}
-                                  >
-                                    {item.capacity_left}
-                                  </div>
-                                );
-                              })()}
-                            </div>
-
-                            <div className="fx-common">
-                              <div className="fx-quantitybox">
-                                {item.slot_type == "active" && (
-                                  <>
-                                    <button
-                                      type="button"
-                                      className="decrement"
-                                      onClick={() => slotbook("minus", item)}
-                                    >
-                                      -
-                                    </button>
-                                    <input
-                                      type="number"
-                                      value={slot == item.time_slot ? book : 0}
-                                      defaultValue={0}
-                                      min={0}
-                                      max={item.capacity_left}
-                                    />
-                                    <button
-                                      type="button"
-                                      className="increment"
-                                      onClick={() => slotbook("add", item)}
-                                    >
-                                      +
-                                    </button>
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ));
-                      })()}
-                    </div>
-                    <div
-                      className={
-                        slotVisible == "all" && book > 0
-                          ? "continuebtn"
-                          : "continuebtn fx-disable-button"
-                      }
-                      onClick={() =>
-                        slotVisible == "all" && book > 0 ? bookservice() : ""
-                      }
-                    >
-                      Continue
-                    </div>
+                    Continue
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
