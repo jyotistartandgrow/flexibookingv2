@@ -380,7 +380,7 @@ export default function Service() {
       total: data?.data?.service_total,
       total_formatted: data?.data?.service_total,
       slot: "",
-      capacity: 1,
+      capacity: "",
     };
     dispatch(
       setCart({

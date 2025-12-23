@@ -219,7 +219,7 @@ export default function Commonbox({ setVisibleBottom }) {
                 return (
                   <div className="fx-serviceitem" key={"ct-" + ckey}>
                     <div className="itemname">
-                      {ct.name} X {ct.capacity}
+                      {ct.name} {!gift && `X ${ct.capacity}`}
                       <br />
                       <span onClick={() => edititem(ct.id)}>Edit</span>{" "}
                     </div>
@@ -235,7 +235,7 @@ export default function Commonbox({ setVisibleBottom }) {
                   return (
                     <div className="fx-serviceitem" key={"ct-" + ckey}>
                       <div className="itemname">
-                        {ct.name} X {ct.capacity}
+                        {ct.name} {!gift && `X ${ct.capacity}`}
                         <br />
                         <span onClick={() => edititem(ct.id)}>Edit</span>{" "}
                       </div>
