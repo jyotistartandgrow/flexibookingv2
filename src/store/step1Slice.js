@@ -15,6 +15,7 @@ const initialState = {
   couponcode: [],
   loading: false,
   category: "",
+  gift: false,
 };
 
 const step1Slice = createSlice({
@@ -39,6 +40,9 @@ const step1Slice = createSlice({
     setCategory: (state, action) => {
       state.category = action.payload;
     },
+    setGift: (state, action) => {
+      state.gift = action.payload;
+    },
   },
 });
 
@@ -49,5 +53,6 @@ export const {
   setCouponlist,
   setLoading,
   setCategory,
+  setGift,
 } = step1Slice.actions;
 export default step1Slice.reducer;

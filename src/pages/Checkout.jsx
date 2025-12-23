@@ -17,6 +17,7 @@ export default function Checkout() {
   const step = useSelector((state) => state.step1.step);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
+  const gift = useSelector((state) => state.step1.gift);
 
   const { data: countries } = useFetch("/countries", {
     method: "get",
@@ -24,8 +25,6 @@ export default function Checkout() {
   const [billdata, setBilldata] = useState({});
   const [states, setState] = useState({});
   const [term, setTerm] = useState(false);
-  let receiver = receiverInfo.firstName ? 1 : 0;
-  const [gift, setGift] = useState(receiver);
   const [invoice, setInvoice] = useState(false);
   const [numberOnly, setNumberOnly] = useState("");
   const [errorlist, setErrorlist] = useState({});
@@ -142,7 +141,6 @@ export default function Checkout() {
       dispatch(setCheckoutkey(data.data.checkout));
       dispatch(setPaymentstring(data.data.data));
       dispatch(setStep("paymentstep"));
-      dispatch(setLoading(false));
     } else {
       Swal.fire({
         toast: true,
@@ -152,8 +150,8 @@ export default function Checkout() {
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
         title: data?.message ?? "There is some error , please try again",
       });
-      dispatch(setLoading(false));
     }
+    dispatch(setLoading(false));
   };
   return (
     <div

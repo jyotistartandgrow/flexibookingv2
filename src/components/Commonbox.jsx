@@ -29,6 +29,7 @@ export default function Commonbox({ setVisibleBottom }) {
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
   const cart = useSelector((state) => state.step2.cart);
+  const gift = useSelector((state) => state.step1.gift);
   const paymentstring = useSelector((state) => state.step4.paymentstring);
   const couponcode = useSelector((state) => state.step1.couponcode);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
@@ -200,11 +201,13 @@ export default function Commonbox({ setVisibleBottom }) {
             <div className="fx-element-box" onClick={() => addmoreCoupon()}>
               <p className="fx-addmorelink">Add More</p>
             </div>
-            <div className="fx-bookingdate">
-              Date
-              <br />
-              <span>{moment(date).format("MMMM DD YYYY")}</span>
-            </div>
+            {!gift && (
+              <div className="fx-bookingdate">
+                Date
+                <br />
+                <span>{moment(date).format("MMMM DD YYYY")}</span>
+              </div>
+            )}
           </div>
         )}
       {cart?.service?.length > 0 &&
