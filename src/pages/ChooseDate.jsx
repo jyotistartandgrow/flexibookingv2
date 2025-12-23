@@ -337,7 +337,7 @@ export default function ChooseDate() {
                 <input
                   type="text"
                   placeholder="First Name"
-                  className={errorlist.firstName ? "fx-invalid" : ""}
+                  className={errorlist.firstName ? "fx-invalid" : "inputbox"}
                   onBlur={(e) =>
                     dispatch(
                       setReceiverInfo({
