@@ -109,10 +109,12 @@
   border-radius: 33px;
   color: var(--primary-color);
   margin-top:16px;
+  background: var(--white);
 }
 
 .fx-booking .fx-servicebox .fx-servicecontentbox .booknowbtn a {
  text-decoration: none;
+ color: var(--primary-color);
 }
 
 /* service section list view */

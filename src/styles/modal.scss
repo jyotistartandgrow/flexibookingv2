@@ -1,6 +1,7 @@
 /* Popup modal css */
 .fx-booking .fx-overlay {
    display: inline-block;
+   width: 100%;
 
   &.light {
     background: rgba(255, 255, 255, 0.5);
@@ -98,6 +99,10 @@ h2 {
 }
 .p-dialog-header-icons button[type=button]{
   padding:5px;
+}
+.p-dialog-header-icons button[type=button]{
+  background: var(--white);
+  color: var(--darkgrey);
 }
 .fx-booking .fx-popup .fx-rightpopup {
   width: 50%;
@@ -246,6 +251,7 @@ h2 {
   margin-bottom: 0px;
   padding: 0px;
   margin-top: 0px;
+  color: var(--darkgrey);
 }
 
 .fx-booking .fx-popup #fx-modaltab_nav div.fx-tabcontent {

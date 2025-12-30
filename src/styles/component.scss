@@ -53,7 +53,11 @@
   font-weight: 400;
   cursor: pointer;
   margin-bottom: 0px;
+  max-width: inherit;
+  height: inherit;
 }
+                  
+
 
  .fx-booking .fx-commoninput input[type="text"].fx-invalid,.fx-booking .fx-commoninput input[type="email"].fx-invalid{
   border: 1px solid var(--error-color)  !important;
@@ -95,6 +99,12 @@
   font-weight: 400;
   cursor: pointer;
   margin-bottom: 15px;
+  max-width: 100%;
+  height: inherit;
+}
+
+.fx-booking input[type="text"].fx-inputbox-gift {
+  border-radius: 4px;
 }
 
  .fx-booking .fx-input-wrapper {
