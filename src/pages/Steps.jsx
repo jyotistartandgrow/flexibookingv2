@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setStep } from "../store/step1Slice";
+import { setStep, setAll } from "../store/step1Slice";
 
 export default function Steps({ type = "date" }) {
   const dispatch = useDispatch();
@@ -12,7 +12,10 @@ export default function Steps({ type = "date" }) {
   const serviceid = useSelector((state) => state.step2.service);
   const extra = useSelector((state) => state.step3.extra);
   const checkoutkey = useSelector((state) => state.step4.checkoutkey);
-  if (type == "service") {
+  if (type == "category" || type == "service") {
+    dispatch(setAll(true));
+  }
+  if (type == "service" && step == "datestep") {
     dispatch(setStep("servicesstep"));
   }
   let datestepclass = "step datestep";

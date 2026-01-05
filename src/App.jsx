@@ -1,12 +1,5 @@
-// src/App.jsx
-import { Suspense, lazy, useEffect } from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { Suspense, lazy } from "react";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 
 export default function App({ initialRoute = "/" }) {
   const Layout = lazy(() => import("./components/Layout"));
@@ -15,41 +8,23 @@ export default function App({ initialRoute = "/" }) {
   const Thankyou = lazy(() => import("./pages/Thankyou"));
   const SgbmService = lazy(() => import("./pages/SgbmService"));
   const SgbmCategory = lazy(() => import("./pages/SgbmCategory"));
-
-  // Force route redirect when the app loads
-  function InitialRedirect() {
-    const navigate = useNavigate();
-    useEffect(() => {
-      if (window.location.pathname === "/") {
-        let type = new URLSearchParams(window.location.search).get("type");
-        if (type) {
-          navigate(`${initialRoute}?type=${type}`);
-        } else {
-          navigate(initialRoute);
-        }
-      }
-    }, []);
-    return null;
-  }
+  const RedeemGift = lazy(() => import("./pages/RedeemGift"));
 
   return (
-    <BrowserRouter>
-      <InitialRedirect />
+    <MemoryRouter initialEntries={[initialRoute]}>
       <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
         <Routes>
-          {/* Layout wraps all public routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<SgbmDateGift />} />
             <Route path="startingservice" element={<SgbmService />} />
             <Route path="startingcategory" element={<SgbmCategory />} />
+            <Route path="redeemgift" element={<RedeemGift />} />
             <Route path="component" element={<Component />} />
-
-            {/* 404 Fallback */}
             <Route path="*" element={<h1>Page Not Found</h1>} />
           </Route>
           <Route path="thankyou" element={<Thankyou />} />
         </Routes>
       </Suspense>
-    </BrowserRouter>
+    </MemoryRouter>
   );
 }

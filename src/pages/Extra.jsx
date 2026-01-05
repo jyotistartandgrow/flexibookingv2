@@ -22,6 +22,7 @@ export default function Service() {
   const capacity = useSelector((state) => state.step2.capacity);
   const slot = useSelector((state) => state.step2.slot);
   const cart = useSelector((state) => state.step2.cart);
+  const gift = useSelector((state) => state.step1.gift);
 
   const [products, setProductsArr] = useState([]);
   const [isVisible, setIsVisible] = useState("grid");
@@ -182,6 +183,7 @@ export default function Service() {
       time_slot: slot,
       extra_svc_ids: extraid,
       no_of_persons: book,
+      gift,
     });
     if (data && data.status == 200 && data.data.booking_string) {
       dispatch(setExtracapacity(book));

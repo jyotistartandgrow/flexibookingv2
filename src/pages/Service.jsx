@@ -37,6 +37,7 @@ export default function Service() {
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
   const gift = useSelector((state) => state.step1.gift);
+  const all = useSelector((state) => state.step1.all);
   const category = useSelector((state) => state.step1.category);
   const [products, setProductsArr] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -86,10 +87,12 @@ export default function Service() {
 
   const fetchProductsByDate = async (selectedDate) => {
     setLoadingske(true);
+    let allService = gift ? true : false;
+    allService = all ? true : allService;
     const { data } = await axiosInstance(
       `/services?date=${moment(selectedDate).format(
         "YYYY-MM-DD"
-      )}&category=${category}&gift=${gift}`,
+      )}&category=${category}&all=${allService}`,
       {
         method: "get",
       }
@@ -97,16 +100,28 @@ export default function Service() {
     if (data && data.status == 200 && data.total_services > 0) {
       setProductsArr(data.data);
       setLoadingske(false);
+    } else {
+      setProductsArr([]);
+      setLoadingske(false);
+      Swal.fire({
+        toast: true,
+        position: "top-end", // or 'bottom-end', 'top-start', etc.
+        showConfirmButton: false,
+        timer: 3000, // auto-close after 3 seconds
+        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
+        title: data?.message || "No services found for the selected date",
+      });
     }
   };
 
   const servicedetail = async (id) => {
     dispatch(setLoading(true));
     setServiceId(id);
+    let allService = all ? true : false;
     const { data } = await axiosInstance(
       `/service-details?date=${moment(date).format(
         "YYYY-MM-DD"
-      )}&service_id=${id}`,
+      )}&service_id=${id}&all=${allService}`,
       {
         method: "get",
       }
@@ -380,7 +395,7 @@ export default function Service() {
       total: data?.data?.service_total,
       total_formatted: data?.data?.service_total,
       slot: "",
-      capacity: 1,
+      capacity: "",
     };
     dispatch(
       setCart({

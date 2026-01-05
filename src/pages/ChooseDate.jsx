@@ -45,7 +45,7 @@ export default function ChooseDate() {
 
   useEffect(() => {
     if (bookingtype && bookingtype == "gift") {
-      dispatch(setDate(moment()));
+      dispatch(setDate(moment().add(1, "day")));
       dispatch(setGift(true));
     }
     getserviceavailabilitycalendar(month);
@@ -291,7 +291,6 @@ export default function ChooseDate() {
               href="#/"
               className={isVisible == "gift" ? "selected" : ""}
               onClick={() => {
-                dispatch(setDate(moment()));
                 dispatch(setGift(true));
                 toggleDiv("gift");
               }}
