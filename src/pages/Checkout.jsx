@@ -134,6 +134,7 @@ export default function Checkout() {
         age_group_to_3: 100,
         age_group_total_3: 0,
         input_coupon_code: "",
+        is_gift: gift,
       },
     });
 

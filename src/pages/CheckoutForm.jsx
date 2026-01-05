@@ -7,8 +7,10 @@ import Swal from "sweetalert2";
 import { setStep, setLoading } from "../store/step1Slice";
 import { setCheckoutkey, setPaymentstring } from "../store/step4Slice";
 import CountdownTimer from "./CountdownTimer";
+import { useNavigate } from "react-router-dom";
 
 export default function CheckoutForm() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const stripe = useStripe();
   const elements = useElements();
@@ -17,6 +19,7 @@ export default function CheckoutForm() {
   const checkoutKey = useSelector((state) => state.step4.checkoutkey);
   const sessionExpired = useSelector((state) => state.step4.session_expired);
   const loading = useSelector((state) => state.step1.loading);
+  const gift = useSelector((state) => state.step1.gift);
 
   //const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -66,6 +69,7 @@ export default function CheckoutForm() {
       booking: bookingKey,
       checkout: checkoutKey,
       paymentMethod: paymentMethod.id,
+      gift,
     });
 
     if (data && data.status == 200 && data.data.status == "success") {
@@ -83,11 +87,12 @@ export default function CheckoutForm() {
           const { data } = await axiosInstance.post(`/payment-save`, {
             booking: bookingKey,
             checkout: checkoutKey,
+            gift,
           });
           if (data && data.status == 200) {
             console.log(data);
             dispatch(setLoading(false));
-            window.location.href = `/thankyou?pid=${bookingKey}`;
+            navigate(`/thankyou?pid=${bookingKey}`);
           }
         }
       }

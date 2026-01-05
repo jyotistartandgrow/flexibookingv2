@@ -12,10 +12,13 @@ const initialState = {
     address: "",
   },
   step: "datestep",
+  redeemstep: "codestep",
   couponcode: [],
   loading: false,
   category: "",
   gift: false,
+  all: false,
+  voucher: null,
 };
 
 const step1Slice = createSlice({
@@ -31,6 +34,9 @@ const step1Slice = createSlice({
     setStep: (state, action) => {
       state.step = action.payload;
     },
+    setRedeemStep: (state, action) => {
+      state.redeemstep = action.payload;
+    },
     setCouponlist: (state, action) => {
       state.couponcode = action.payload;
     },
@@ -43,6 +49,12 @@ const step1Slice = createSlice({
     setGift: (state, action) => {
       state.gift = action.payload;
     },
+    setAll: (state, action) => {
+      state.all = action.payload;
+    },
+    setVoucher: (state, action) => {
+      state.voucher = action.payload;
+    },
   },
 });
 
@@ -50,9 +62,12 @@ export const {
   setDate,
   setReceiverInfo,
   setStep,
+  setRedeemStep,
   setCouponlist,
   setLoading,
   setCategory,
   setGift,
+  setAll,
+  setVoucher
 } = step1Slice.actions;
 export default step1Slice.reducer;

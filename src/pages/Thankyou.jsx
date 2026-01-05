@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import logo from "../assets/logo.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -16,7 +16,7 @@ import Swal from "sweetalert2";
 export default function Thankyou() {
   const dispatch = useDispatch();
   const componentRef = useRef();
-  const bookingkey = new URLSearchParams(window.location.search).get("pid");
+  const bookingkey = useSelector((state) => state.step3.bookingkey);
   const [bookingData, setBookingData] = useState(null);
   const [email, setEmail] = useState("");
 
