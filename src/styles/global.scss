@@ -199,6 +199,7 @@ h1{
  .p-sidebar-bottom, .p-sidebar-to, .p-sidebar {
         height: 90%;
     }
+
 }
 @media screen and (min-width: 1200px) {
   .fx-booking .fx-leftbar {
@@ -289,6 +290,13 @@ h1{
     .fx-skeleton-row{
             flex-direction: column;
     }
+      .fx-booking .fx-mobilesidebar-top{
+    top: 79px;
+    height: 87px;
+    box-shadow: none;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+  }
 }
 
 /* SHIMMER EFFECT */
@@ -370,5 +378,6 @@ h1{
     .p-sidebar-bottom .p-sidebar-top .p-sidebar {
         height: 90%;
     }
+   
     
 }

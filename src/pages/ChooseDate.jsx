@@ -348,8 +348,8 @@ export default function ChooseDate() {
                 <input
                   type="text"
                   placeholder="First Name"
-                  className={errorlist.firstName ? "fx-invalid" : ""}
-                  onChange={(e) =>
+                  className={errorlist.firstName ? "fx-invalid fx-inputbox-generic" : "fx-inputbox-gift"}
+                  onBlur={(e) =>
                     dispatch(
                       setReceiverInfo({
                         ...receiverInfo,

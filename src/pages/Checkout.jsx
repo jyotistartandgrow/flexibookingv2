@@ -337,16 +337,23 @@ export default function Checkout() {
             inputId="option1"
           />
 
-          <label htmlFor="option2">Invoice Request</label>
-          <InputSwitch
-            checked={invoice ? true : false}
-            onChange={() => setInvoice(!invoice)}
-            inputId="option2"
-          />
+          
         </div>
         {gift == true && (
           <>
             <h3>Gift Receiver Information</h3>
+            <div className="fx-commoninput">
+                <div class="fx-inputgroup">
+                    <div class="fx-element-box">
+                      <label>First Name</label>
+                      <input placeholder="First Name" class="" type="text" fdprocessedid="ffetu"></input>
+                    </div>
+                    <div class="fx-element-box">
+                        <label>Last Name</label>
+                        <input placeholder="First Name" class="" type="text" fdprocessedid="ffetu"></input>
+                    </div>
+                </div>
+            </div>
             <div className="fx-giftbox fx-commoninput" id="gift-section">
               <div className="fx-inputgroup">
                 <input
@@ -465,6 +472,12 @@ export default function Checkout() {
           </>
         )}
 
+<label htmlFor="option2">Invoice Request</label>
+          <InputSwitch
+            checked={invoice ? true : false}
+            onChange={() => setInvoice(!invoice)}
+            inputId="option2"
+          />
         <div className="fx-inputgroup">
           <input
             type="checkbox"
