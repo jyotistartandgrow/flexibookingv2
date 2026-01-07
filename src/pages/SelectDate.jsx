@@ -40,7 +40,7 @@ export default function SelectDate() {
   };
   return (
     <div
-      class="fx-tabcontent"
+      class="fx-tabcontent fx-gift-date-box"
       style={{ display: step === "datestep" ? "block" : "none" }}
     >
       <div class="fx-element-box">

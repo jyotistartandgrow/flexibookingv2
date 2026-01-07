@@ -29,7 +29,7 @@ export default function ReedemSteps() {
 
   return (
     <div className="fx-step-top-fixed-box">
-      <div className={`fx-stepper-tabstyle`}>
+      <div className={`fx-stepper-tabstyle step-for-redeem`}>
         <div
           className={codestepclass}
           onClick={() => {
@@ -60,6 +60,7 @@ export default function ReedemSteps() {
             3 <span>SELECT SLOT</span>
           </div>
         </div>
+        
         <div className={checkoutstepclass}>
           <div>
             4 <span>CHECKOUT</span>
