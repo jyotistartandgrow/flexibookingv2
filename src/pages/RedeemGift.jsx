@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import Code from "./Code";
 import SelectDate from "./SelectDate";
 import SelectSlot from "./SelectSlot";
+import Checkout from "./Checkout";
 
 export default function SgbmDateGift() {
   const loading = useSelector((state) => state.step1.loading);
@@ -21,6 +22,9 @@ export default function SgbmDateGift() {
       {/* Slot Tabs */}
       <SelectSlot />
       {/* End Slot Tabs */}
+      {/* Checkout Tabs */}
+      <Checkout />
+      {/* End Checkout Tabs */}
     </div>
   );
 }
