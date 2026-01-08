@@ -33,6 +33,7 @@ export default function SelectDate() {
         icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
         title: "Please select a date",
       });
+      dispatch(setLoading(false));
       return;
     }
     dispatch(setRedeemStep("slotstep"));
@@ -40,10 +41,10 @@ export default function SelectDate() {
   };
   return (
     <div
-      class="fx-tabcontent fx-gift-date-box"
+      className="fx-tabcontent fx-gift-date-box"
       style={{ display: step === "datestep" ? "block" : "none" }}
     >
-      <div class="fx-element-box">
+      <div className="fx-element-box">
         <div className="fx-calendar fx-commoninput">
           <Calendar
             value={date}
@@ -61,10 +62,10 @@ export default function SelectDate() {
           <img src={calendar} className="fx-calendaricon" />
         </div>
       </div>
-      <div class="fx-element-box">
+      <div className="fx-element-box">
         <input
           type="submit"
-          class="btn-primary"
+          className="btn-primary"
           value="Continue"
           onClick={() => getslot()}
         />

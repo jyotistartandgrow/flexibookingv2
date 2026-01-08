@@ -46,15 +46,15 @@ export default function Code() {
   };
   return (
     <div
-      class="fx-booking"
+      className="fx-booking"
       style={{ display: step === "codestep" ? "block" : "none" }}
     >
-      <div class="fx-redeem-container">
-        <h2 class="fx-redeem-title">Redeem Your gift</h2>
-        <div class="fx-input-group">
+      <div className="fx-redeem-container">
+        <h2 className="fx-redeem-title">Redeem Your gift</h2>
+        <div className="fx-input-group">
           <input
             type="text"
-            class="fx-voucher-input"
+            className="fx-voucher-input"
             placeholder="Enter your voucher code"
             aria-label="Voucher code"
             value={code}
@@ -62,7 +62,7 @@ export default function Code() {
           />
           <button
             type="button"
-            class="fx-btn-verify"
+            className="fx-btn-verify"
             onClick={() => reedemcode()}
           >
             Verify

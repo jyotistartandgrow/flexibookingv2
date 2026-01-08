@@ -20,8 +20,6 @@ function mountReactApp(id, initialRoute) {
 
   if (!el) return;
 
-  console.log("Mounting:", id, "Route:", initialRoute);
-
   // Prevent double mounting (important in WP)
   if (el.dataset.mounted) return;
   el.dataset.mounted = "true";

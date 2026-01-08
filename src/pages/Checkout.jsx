@@ -29,6 +29,10 @@ export default function Checkout() {
   const [numberOnly, setNumberOnly] = useState("");
   const [errorlist, setErrorlist] = useState({});
 
+  useEffect(() => {
+    setErrorlist({});
+  }, [billdata]);
+
   const getState = async (country) => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance(`/states?country_code=${country}`, {
@@ -336,23 +340,31 @@ export default function Checkout() {
             onChange={() => setGift(!gift)}
             inputId="option1"
           />
-
-          
         </div>
         {gift == true && (
           <>
             <h3>Gift Receiver Information</h3>
             <div className="fx-commoninput">
-                <div class="fx-inputgroup">
-                    <div class="fx-element-box">
-                      <label>First Name</label>
-                      <input placeholder="First Name" class="" type="text" fdprocessedid="ffetu"></input>
-                    </div>
-                    <div class="fx-element-box">
-                        <label>Last Name</label>
-                        <input placeholder="First Name" class="" type="text" fdprocessedid="ffetu"></input>
-                    </div>
+              <div class="fx-inputgroup">
+                <div class="fx-element-box">
+                  <label>First Name</label>
+                  <input
+                    placeholder="First Name"
+                    class=""
+                    type="text"
+                    fdprocessedid="ffetu"
+                  ></input>
                 </div>
+                <div class="fx-element-box">
+                  <label>Last Name</label>
+                  <input
+                    placeholder="First Name"
+                    class=""
+                    type="text"
+                    fdprocessedid="ffetu"
+                  ></input>
+                </div>
+              </div>
             </div>
             <div className="fx-giftbox fx-commoninput" id="gift-section">
               <div className="fx-inputgroup">
@@ -472,12 +484,12 @@ export default function Checkout() {
           </>
         )}
 
-<label htmlFor="option2">Invoice Request</label>
-          <InputSwitch
-            checked={invoice ? true : false}
-            onChange={() => setInvoice(!invoice)}
-            inputId="option2"
-          />
+        <label htmlFor="option2">Invoice Request</label>
+        <InputSwitch
+          checked={invoice ? true : false}
+          onChange={() => setInvoice(!invoice)}
+          inputId="option2"
+        />
         <div className="fx-inputgroup">
           <input
             type="checkbox"
