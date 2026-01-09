@@ -45,8 +45,8 @@ export default function SelectDate() {
       style={{ display: step === "datestep" ? "block" : "none" }}
     >
       <div className="fx-element-box">
+         <h2 className="fx-redeem-title">Select date</h2>
         <div className="fx-calendar fx-commoninput">
-          <h2 className="fx-redeem-title">Select date</h2>
           <Calendar
             value={date}
             onChange={(e) => dispatch(setDate(e.value))}
