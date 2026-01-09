@@ -19,10 +19,16 @@ export default function Commonbox({ setVisibleBottom }) {
             Date
             <br />
             <span>{moment(date).format("MMMM DD YYYY")}</span>
-            <span>{slot}</span>
           </div>
         </div>
       )}
+       <div className="fx-bookingdatebar">
+          <div className="fx-bookingdate">
+            Time
+            <br />
+            <span>{slot}</span>
+          </div>
+        </div>
       {voucherdetail?.products?.length > 0 && (
         <>
           <div className="fx-servicelistbox">
