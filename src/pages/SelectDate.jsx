@@ -46,6 +46,7 @@ export default function SelectDate() {
     >
       <div className="fx-element-box">
         <div className="fx-calendar fx-commoninput">
+          <h2 className="fx-redeem-title">Select date</h2>
           <Calendar
             value={date}
             onChange={(e) => dispatch(setDate(e.value))}

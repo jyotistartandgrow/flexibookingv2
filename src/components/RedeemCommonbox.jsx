@@ -1,15 +1,13 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 
 export default function Commonbox({ setVisibleBottom }) {
-  const toast = useRef(null);
   const date = useSelector((state) => state.step1.date);
-  const step = useSelector((state) => state.step1.reedemstep);
+  const step = useSelector((state) => state.step1.redeemstep);
   const voucherdetail = useSelector((state) => state.step3.voucherdetail);
   const slot = useSelector((state) => state.step3.slot);
-
   return (
     <>
       {!voucherdetail.products && !date && (
@@ -57,7 +55,7 @@ export default function Commonbox({ setVisibleBottom }) {
                 Total <span> {decodeHtml(voucherdetail.total)}</span>
               </p>
             </div>
-            {(step == "paymentstep" || step == "checkoutstep") && (
+            {step == "checkoutstep" && (
               <div
                 className="fx-down-icon-botttom"
                 onClick={() => setVisibleBottom(false)}

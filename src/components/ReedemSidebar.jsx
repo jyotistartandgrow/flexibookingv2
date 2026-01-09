@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import RedeemCommonbox from "./RedeemCommonbox";
 
 export default function Sidebar() {
-  const step = useSelector((state) => state.step1.step);
+  const step = useSelector((state) => state.step1.redeemstep);
   const date = useSelector((state) => state.step1.date);
   const voucherdetail = useSelector((state) => state.step3.voucherdetail);
   const [visibleBottom, setVisibleBottom] = useState(false);
@@ -26,7 +26,7 @@ export default function Sidebar() {
       {date && (
         <div
           className={
-            step != "paymentstep" && step != "checkoutstep"
+            step != "checkoutstep"
               ? "fx-mobilesidebar"
               : "fx-mobilesidebar fx-mobilesidebar-top"
           }
@@ -36,7 +36,7 @@ export default function Sidebar() {
             <span className="fx-order-details">Order Details </span>
             <i
               className={
-                step != "paymentstep" && step != "checkoutstep"
+                step != "checkoutstep"
                   ? "pi pi-chevron-up"
                   : "pi pi-chevron-down"
               }
@@ -72,16 +72,14 @@ export default function Sidebar() {
 
       <Sidebarpanel
         visible={visibleBottom}
-        position={
-          step != "paymentstep" && step != "checkoutstep" ? "bottom" : "top"
-        }
+        position={step != "checkoutstep" ? "bottom" : "top"}
         onHide={() => setVisibleBottom(false)}
       >
         <div className="fx-sidebar fx-mob-footer-order-details">
           <div className="logo">
             <img src={logo} className="fx-right-logo" />
           </div>
-          {step != "paymentstep" && step != "checkoutstep" && (
+          {step != "checkoutstep" && (
             <div
               className="fx-mob-down-arrow"
               onClick={() => setVisibleBottom(false)}
