@@ -159,6 +159,11 @@ h3 {
     padding: 4px;
 }
 
+h1.fx-all-main-heading{
+    margin-top: 40px;
+    font-size:30px;
+}
+
 @media screen and (max-width: 480px) {
 /* body{
     overflow: auto !important;
@@ -198,7 +203,13 @@ h1{
 }
  .p-sidebar-bottom, .p-sidebar-to, .p-sidebar {
         height: 90%;
-    }
+}
+h1.fx-all-main-heading{
+    margin-top: 40px;
+    font-size:24px;
+    margin-top: 40px;
+    font-size:30px;
+}
 
 }
 @media screen and (min-width: 1200px) {
@@ -296,6 +307,7 @@ h1{
     box-shadow: none;
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #ccc;
+    left: 0px;
   }
 }
 

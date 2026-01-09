@@ -439,7 +439,7 @@ export default function Service() {
       className="fx-leftcontentbox"
       style={{ display: step === "servicesstep" ? "block" : "none" }}
     >
-      <h1 className="fx-main-heading">What experience are you looking for?</h1>
+      <h1 className="fx-all-main-heading">What experience are you looking for?</h1>
       <div id="fx-Icontab_nav">
         <ul>
           <li className="selected">

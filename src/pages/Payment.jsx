@@ -87,7 +87,7 @@ export default function Payment() {
     >
       {isDesktop && (
         <>
-          <h1 className="fx-main-heading">Checkout</h1>
+          <h1 className="fx-all-main-heading">Checkout</h1>
           <div className="fx-order-summary">
             <div className="fx-service-date">
               <strong>Service Date:</strong>
@@ -151,7 +151,7 @@ export default function Payment() {
 
       {!isDesktop && (
         <div className="fx-paymentbox">
-          <h1 className="fx-main-heading">Payment</h1>
+          <h1 className="fx-all-main-heading">Payment</h1>
           <Elements stripe={stripePromise}>
             <CheckoutForm />
           </Elements>

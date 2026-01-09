@@ -278,7 +278,7 @@ export default function Commonbox({ setVisibleBottom }) {
         )}
       {paymentstring && isDesktop && (
         <div className="fx-paymentbox">
-          <h1 className="fx-main-heading">Payment</h1>
+          <h1 className="fx-all-main-heading">Payment</h1>
           <Elements stripe={stripePromise}>
             <CheckoutForm />
           </Elements>

@@ -155,12 +155,6 @@
 
 }
 
-.fx-stepper-tabstyle .datestep.complete {
-  // background: #fff;
-  width: 20%;
-  text-align: center;
-  padding-right: 0px;
-}
 
 .fx-stepper-tabstyle .servicesstep.complete {
   background: #fff;
@@ -184,15 +178,21 @@
   left: 20%;
 }
 
+.step-for-redeem .slotstep.complete{
+  background: #fff;
+}
 
-.fx-stepper-tabstyle .datestep.complete{
-  width: 48%;
-    padding-left: 23%;
+.step-for-redeem .checkoutstep{
+  padding-left: 16%;
 }
 
 .step-for-redeem .codestep{
   width: 27%;
   z-index: 999;
+}
+
+.step-for-redeem .complete.codestep, .step-for-redeem .complete.datestep{
+      background: #fff;
 }
 
 .step-for-redeem .datestep{
@@ -359,4 +359,19 @@
     margin-top: 57px;
     padding: 20px 0px;
   }
+  .step-for-redeem .slotstep.complete{
+    background: #fff;
+    width: 46%;
+  }
+  .step-for-redeem .checkoutstep.active{
+        width: 50%;
+        left: 36%;
+  }
+  .fx-stepper-tabstyle .datestep.complete {
+  // background: #fff;
+  width: 20%;
+  text-align: center;
+  padding-right: 0px;
+}
+
 }
