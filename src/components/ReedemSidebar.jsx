@@ -12,6 +12,7 @@ import RedeemCommonbox from "./RedeemCommonbox";
 export default function Sidebar() {
   const step = useSelector((state) => state.step1.redeemstep);
   const date = useSelector((state) => state.step1.date);
+  const slot = useSelector((state) => state.step3.slot);
   const voucherdetail = useSelector((state) => state.step3.voucherdetail);
   const [visibleBottom, setVisibleBottom] = useState(false);
 
@@ -48,9 +49,7 @@ export default function Sidebar() {
               <span className="fx-bottom-date">
                 {moment(date).format("MMM DD")}
               </span>
-              <span className="fx-bottom-date">
-                {moment(date).format("MMM DD")}
-              </span>
+              <span className="fx-bottom-date">, {slot}</span>
             </div>
             {voucherdetail?.service?.length > 0 && (
               <>
