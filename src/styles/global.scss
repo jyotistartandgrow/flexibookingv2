@@ -342,6 +342,14 @@ h1.fx-all-main-heading{
     z-index: 9999;
 }
 
+.fx-slot-item.fx-slotbox-active{
+    background-color: #F7F9FF;
+}
+
+.btn-primary.fx-redeem-btn-primary{
+    margin-top: 16px;
+}
+
 
 .fx-fullscreen-loader.show {
   display: flex;

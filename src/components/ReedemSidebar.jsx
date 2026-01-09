@@ -48,6 +48,9 @@ export default function Sidebar() {
               <span className="fx-bottom-date">
                 {moment(date).format("MMM DD")}
               </span>
+              <span className="fx-bottom-date">
+                {moment(date).format("MMM DD")}
+              </span>
             </div>
             {voucherdetail?.service?.length > 0 && (
               <>

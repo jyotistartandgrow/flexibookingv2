@@ -60,14 +60,15 @@ export default function Code() {
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
-          <button
+          
+        </div>
+        <button
             type="button"
-            className="fx-btn-verify"
+            className="btn-primary fx-redeem-btn-primary"
             onClick={() => reedemcode()}
           >
             Verify
           </button>
-        </div>
       </div>
     </div>
   );

@@ -302,10 +302,7 @@
     padding-left: 10px;
   }
 
-  .step-for-redeem .datestep.complete{
-    width: 29%;
-    padding-left: 36px;
-  }
+
   .fx-stepper-tabstyle .extrastep.active{
     left: 29%;
         width: 40%;
@@ -361,11 +358,11 @@
   }
   .step-for-redeem .slotstep.complete{
     background: #fff;
-    width: 46%;
+    width: 42%;
   }
   .step-for-redeem .checkoutstep.active{
-        width: 50%;
-        left: 36%;
+        width: 55%;
+        left: 32%;
   }
   .fx-stepper-tabstyle .datestep.complete {
   // background: #fff;
@@ -373,5 +370,10 @@
   text-align: center;
   padding-right: 0px;
 }
+
+  .step-for-redeem .datestep.complete{
+    width: 29%;
+    padding-left: 36px;
+  }
 
 }
