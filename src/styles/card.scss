@@ -110,6 +110,7 @@
   color: var(--primary-color);
   margin-top:16px;
   background: var(--white);
+  float:inherit;
 }
 
 .fx-booking .fx-servicebox .fx-servicecontentbox .booknowbtn a {
@@ -267,6 +268,7 @@
   position: absolute;
   right: 16px;
   bottom: 15px;
+  background: #fff;
 }
 
 /* extra card section */
@@ -465,7 +467,7 @@
   height:auto;
 }
 .fx-booking .fx-servicebox .fx-servicepicbox{
-  height:auto;
+  height:180px;
 }
 .fx-booking .fx-extracontainer .fx-extrabox{
   max-width: 100%;
@@ -489,3 +491,19 @@
 }
 }
 
+.p-carousel .p-carousel-item {
+  padding: 0 8px;
+}
+ .p-carousel-items-container .fx-servicebox {
+    max-width: 224px;
+    height: auto;
+    box-shadow: 0px 0px 3px 0px var(--box-shadow);
+}
+
+ .p-carousel-items-container{
+  padding: 3px 0px;
+ }
+
+ button[type=button].p-carousel-next{
+      padding: 10px 2px;
+ }

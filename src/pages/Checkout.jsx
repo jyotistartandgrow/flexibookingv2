@@ -207,7 +207,7 @@ export default function Checkout() {
             )}
           </div>
           <div className="fx-element-box">
-            <label>Mobile</label>
+            <label className="fx-mobile-input">Mobile</label>
             <div className="fx-phone-input">
               <PhoneInput
                 country={"in"}
