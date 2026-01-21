@@ -24,6 +24,10 @@
   width: 100%;
   margin-bottom: 12px;
 }
+
+ .fx-booking .fx-commoninput label.fx-mobile-input{
+
+}
  .fx-booking .fx-commoninput label{
   font-family: "Roboto", sans-serif;
   font-size:16px;
@@ -52,9 +56,10 @@
   font-size: var(--normal-descriptionsize);
   font-weight: 400;
   cursor: pointer;
-  margin-bottom: 0px;
+  margin: 0px;
   max-width: inherit;
   height: inherit;
+  margin-top: 0px;
 }
                   
 
@@ -213,7 +218,8 @@
   border: none !important;
   outline: none;
   font-size: var(--small-descriptionsize);
-  margin-bottom: 0px;
+  margin: 0px;
+  height:40px;
 }
  .fx-booking .fx-coupon-box input:focus{
   border:none;

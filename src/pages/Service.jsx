@@ -430,8 +430,8 @@ export default function Service() {
     },
     {
       breakpoint: "560px", // For screens less than 560px (mobile phones)
-      numVisible: 1,
-      numScroll: 1,
+      numVisible: 2,
+      numScroll: 2,
     },
   ];
   return (
