@@ -276,7 +276,7 @@ export default function ChooseDate() {
         <ul>
           <li>
             <a
-              href="#/"
+              href="/"
               className={isVisible == "booking" ? "selected" : ""}
               onClick={() => {
                 toggleDiv("booking");
@@ -288,7 +288,7 @@ export default function ChooseDate() {
           </li>
           <li>
             <a
-              href="#/"
+              href="/?type=gift"
               className={isVisible == "gift" ? "selected" : ""}
               onClick={() => {
                 dispatch(setGift(true));

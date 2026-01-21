@@ -9,7 +9,12 @@ import useFetch from "../Utils/CustomHook";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { InputSwitch } from "primereact/inputswitch";
-import { setReceiverInfo, setStep, setLoading } from "../store/step1Slice";
+import {
+  setReceiverInfo,
+  setStep,
+  setLoading,
+  setGift,
+} from "../store/step1Slice";
 import { setCheckoutkey, setPaymentstring } from "../store/step4Slice";
 
 export default function Checkout() {
@@ -93,15 +98,15 @@ export default function Checkout() {
 
     dispatch(setLoading(true));
     const gift_info = {
-      recipient_first_name: gift ? receiverInfo.firstName ?? "" : "",
-      recipient_last_name: gift ? receiverInfo.lastName ?? "" : "",
-      recipient_email: gift ? receiverInfo.email ?? "" : "",
-      recipient_contact: gift ? receiverInfo.phoneNumber ?? "" : "",
+      recipient_first_name: gift ? (receiverInfo.firstName ?? "") : "",
+      recipient_last_name: gift ? (receiverInfo.lastName ?? "") : "",
+      recipient_email: gift ? (receiverInfo.email ?? "") : "",
+      recipient_contact: gift ? (receiverInfo.phoneNumber ?? "") : "",
       recipient_address: "",
-      recipient_country: gift ? receiverInfo.country ?? "" : "",
+      recipient_country: gift ? (receiverInfo.country ?? "") : "",
       recipient_state: "",
       recipient_city: "",
-      recipient_postcode: gift ? receiverInfo.zip ?? "" : "",
+      recipient_postcode: gift ? (receiverInfo.zip ?? "") : "",
     };
 
     billdata.country_code = billdata.sgbm_field_8;
@@ -350,134 +355,119 @@ export default function Checkout() {
                   <label>First Name</label>
                   <input
                     placeholder="First Name"
-                    class=""
                     type="text"
-                    fdprocessedid="ffetu"
-                  ></input>
-                </div>
-                <div class="fx-element-box">
-                  <label>Last Name</label>
-                  <input
-                    placeholder="First Name"
-                    class=""
-                    type="text"
-                    fdprocessedid="ffetu"
-                  ></input>
-                </div>
-              </div>
-            </div>
-            <div className="fx-giftbox fx-commoninput" id="gift-section">
-              <div className="fx-inputgroup">
-                <input
-                  type="text"
-                  placeholder="First Name"
-                  value={receiverInfo.firstName}
+                    value={receiverInfo.firstName}
                   onBlur={(e) =>
                     dispatch(
                       setReceiverInfo({
                         ...receiverInfo,
                         firstName: e.target.value,
-                      })
+                      }),
                     )
                   }
-                />
-                <input
-                  type="text"
-                  placeholder="Last Name"
-                  value={receiverInfo.lastName}
-                  onBlur={(e) =>
-                    dispatch(
-                      setReceiverInfo({
-                        ...receiverInfo,
-                        lastName: e.target.value,
-                      })
-                    )
-                  }
-                />
-              </div>
-              <div className="fx-inputgroup">
-                <div className="fx-input-wrapper">
+                  ></input>
+                </div>
+                <div class="fx-element-box">
+                  <label>Last Name</label>
                   <input
-                    type="email"
-                    placeholder="Email"
-                    value={receiverInfo.email}
+                    placeholder="Last Name"
+                    type="text"
+                    value={receiverInfo.lastName}
                     onBlur={(e) =>
                       dispatch(
                         setReceiverInfo({
                           ...receiverInfo,
-                          email: e.target.value,
-                        })
+                          lastName: e.target.value,
+                        }),
                       )
                     }
-                  />
-                  <i className="fa fa-envelope-o"></i>
+                  ></input>
                 </div>
-                <div className="fx-input-wrapper">
+              </div>
+              <div class="fx-inputgroup">
+                <div class="fx-element-box">
+                  <label>Email</label>
                   <input
+                    placeholder="Email"
                     type="text"
+                    value={receiverInfo.email}
+                  onBlur={(e) =>
+                    dispatch(
+                      setReceiverInfo({
+                        ...receiverInfo,
+                        email: e.target.value,
+                      }),
+                    )
+                  }
+                  ></input>
+                </div>
+                <div class="fx-element-box">
+                  <label>Phone Number</label>
+                  <input
                     placeholder="Phone Number"
+                    type="text"
                     value={receiverInfo.phoneNumber}
                     onBlur={(e) =>
                       dispatch(
                         setReceiverInfo({
                           ...receiverInfo,
                           phoneNumber: e.target.value,
-                        })
+                        }),
                       )
                     }
-                  />
-                  <i className="fa fa-phone"></i>
+                  ></input>
                 </div>
               </div>
-              <div className="fx-inputgroup">
-                <div className="fx-input-wrapper">
+              <div class="fx-inputgroup">
+                <div class="fx-element-box">
+                  <label>Country</label>
                   <input
-                    type="text"
                     placeholder="Country"
-                    value={receiverInfo.country}
-                    onBlur={(e) =>
-                      dispatch(
-                        setReceiverInfo({
-                          ...receiverInfo,
-                          country: e.target.value,
-                        })
-                      )
-                    }
-                  />
-                  <i className="fa fa-flag-o"></i>
-                </div>
-                <div className="fx-input-wrapper">
-                  <input
                     type="text"
+                    value={receiverInfo.country}
+                  onBlur={(e) =>
+                    dispatch(
+                      setReceiverInfo({
+                        ...receiverInfo,
+                        country: e.target.value,
+                      }),
+                    )
+                  }
+                  ></input>
+                </div>
+                <div class="fx-element-box">
+                  <label>Zip</label>
+                  <input
                     placeholder="Zip"
+                    type="text"
                     value={receiverInfo.zip}
                     onBlur={(e) =>
                       dispatch(
                         setReceiverInfo({
                           ...receiverInfo,
                           zip: e.target.value,
-                        })
+                        }),
                       )
                     }
-                  />
+                  ></input>
                 </div>
               </div>
-              <div className="fx-inputgroup">
-                <div className="fx-input-wrapper">
+              <div class="fx-inputgroup">
+                <div class="fx-element-box">
+                  <label>Address</label>
                   <input
-                    type="text"
                     placeholder="Address"
-                    className="bigtextbox"
+                    type="text"
                     value={receiverInfo.address}
-                    onBlur={(e) =>
-                      dispatch(
-                        setReceiverInfo({
-                          ...receiverInfo,
-                          address: e.target.value,
-                        })
-                      )
-                    }
-                  />
+                  onBlur={(e) =>
+                    dispatch(
+                      setReceiverInfo({
+                        ...receiverInfo,
+                        address: e.target.value,
+                      }),
+                    )
+                  }
+                  ></input>
                 </div>
               </div>
             </div>

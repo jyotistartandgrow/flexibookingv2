@@ -489,3 +489,18 @@
 }
 }
 
+/* Add gap between carousel cards */
+.p-carousel .p-carousel-item {
+  padding: 0 12px; /* horizontal gap */
+}
+
+/* Smooth touch swipe */
+.p-carousel-items-container {
+  scroll-behavior: smooth;
+  touch-action: pan-x;
+}
+
+/* Better momentum on iOS */
+.p-carousel-items-content {
+  -webkit-overflow-scrolling: touch;
+}
