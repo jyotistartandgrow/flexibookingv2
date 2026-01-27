@@ -25,13 +25,13 @@ addLocale("en-monday", {
 });
 
 export default function ChooseDate() {
-  const bookingtype = new URLSearchParams(window.location.search).get("type");
   const calendarRef = useRef(null);
   const dispatch = useDispatch();
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
+  const gift = useSelector((state) => state.step1.gift);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
-  const [isVisible, setIsVisible] = useState(bookingtype ?? "booking");
+  const [isVisible, setIsVisible] = useState(gift ? "gift" : "booking");
   const [isVisibleGift, setIsVisibleGift] = useState(false);
   const [disabledDates, setDisabledDates] = useState([]);
   const [responsearr, setResponsear] = useState([]);
@@ -44,9 +44,8 @@ export default function ChooseDate() {
   };
 
   useEffect(() => {
-    if (bookingtype && bookingtype == "gift") {
+    if (gift) {
       dispatch(setDate(moment().add(1, "day")));
-      dispatch(setGift(true));
     }
     getserviceavailabilitycalendar(month);
   }, [month]);
@@ -80,7 +79,7 @@ export default function ChooseDate() {
     setFields((prev) => {
       // update only one field
       const updated = prev.map((item, i) =>
-        i === key ? { ...item, code: coupon } : item
+        i === key ? { ...item, code: coupon } : item,
       );
 
       // compute valid coupons using UPDATED list
@@ -102,14 +101,14 @@ export default function ChooseDate() {
     const { day, month, year } = dateMeta;
     let tooltipId = `tooltip-${year}-${month}-${day}`;
     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(
-      day
+      day,
     ).padStart(2, "0")}`;
     if (
       disabledDates.find(
         (d) =>
           d.getFullYear() === year &&
           d.getMonth() === month &&
-          d.getDate() === day
+          d.getDate() === day,
       )
     ) {
       tooltipText = "Date not available";
@@ -167,6 +166,12 @@ export default function ChooseDate() {
   };
 
   const checkavailability = async () => {
+    if (gift) {
+      dispatch(setLoading(true));
+      dispatch(setStep("servicesstep"));
+      dispatch(setLoading(false));
+      return;
+    }
     if (!date) {
       Swal.fire({
         toast: true,
@@ -182,7 +187,7 @@ export default function ChooseDate() {
       `/availability?date=${moment(date).format("YYYY-MM-DD")}`,
       {
         method: "get",
-      }
+      },
     );
     if (data?.data?.is_bookable) {
       dispatch(setLoading(true));
@@ -242,7 +247,7 @@ export default function ChooseDate() {
       `/service-availability-calendar?month=${monthYear}`,
       {
         method: "get",
-      }
+      },
     );
 
     if (dataa?.data) {
@@ -276,7 +281,7 @@ export default function ChooseDate() {
         <ul>
           <li>
             <a
-              href="/"
+              href="#/"
               className={isVisible == "booking" ? "selected" : ""}
               onClick={() => {
                 toggleDiv("booking");
@@ -288,7 +293,7 @@ export default function ChooseDate() {
           </li>
           <li>
             <a
-              href="/?type=gift"
+              href="#/"
               className={isVisible == "gift" ? "selected" : ""}
               onClick={() => {
                 dispatch(setGift(true));
@@ -348,13 +353,17 @@ export default function ChooseDate() {
                 <input
                   type="text"
                   placeholder="First Name"
-                  className={errorlist.firstName ? "fx-invalid fx-inputbox-generic" : "fx-inputbox-gift"}
+                  className={
+                    errorlist.firstName
+                      ? "fx-invalid fx-inputbox-generic"
+                      : "fx-inputbox-gift"
+                  }
                   onBlur={(e) =>
                     dispatch(
                       setReceiverInfo({
                         ...receiverInfo,
                         firstName: e.target.value,
-                      })
+                      }),
                     )
                   }
                 />
@@ -372,7 +381,7 @@ export default function ChooseDate() {
                       setReceiverInfo({
                         ...receiverInfo,
                         lastName: e.target.value,
-                      })
+                      }),
                     )
                   }
                 />
@@ -393,7 +402,7 @@ export default function ChooseDate() {
                       setReceiverInfo({
                         ...receiverInfo,
                         email: e.target.value,
-                      })
+                      }),
                     )
                   }
                 />
@@ -412,7 +421,7 @@ export default function ChooseDate() {
                       setReceiverInfo({
                         ...receiverInfo,
                         phoneNumber: e.target.value,
-                      })
+                      }),
                     )
                   }
                 />
@@ -433,7 +442,7 @@ export default function ChooseDate() {
                       setReceiverInfo({
                         ...receiverInfo,
                         country: e.target.value,
-                      })
+                      }),
                     )
                   }
                 />
@@ -452,7 +461,7 @@ export default function ChooseDate() {
                       setReceiverInfo({
                         ...receiverInfo,
                         zip: e.target.value,
-                      })
+                      }),
                     )
                   }
                 />
@@ -472,7 +481,7 @@ export default function ChooseDate() {
                       setReceiverInfo({
                         ...receiverInfo,
                         address: e.target.value,
-                      })
+                      }),
                     )
                   }
                 />
