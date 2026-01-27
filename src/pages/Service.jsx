@@ -680,7 +680,7 @@ export default function Service() {
                             {moment(slot.date).format("ddd")}
                             <br />
                             <span>{moment(slot.date).format("DD")}</span>
-                            <hr />
+                            <div className="fx-date-progress-bar"></div>
                           </div>
                         ))}
                       <div className="calendarbox">

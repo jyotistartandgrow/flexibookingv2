@@ -163,7 +163,16 @@ h1.fx-all-main-heading{
     margin-top: 40px;
     font-size:30px;
 }
-
+.fx-booking .fx-commoninput .fx-toggleswitch{
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.fx-booking .fx-commoninput .fx-toggleswitch .p-inputswitch{
+   top:-5px;
+  
+}
 @media screen and (max-width: 480px) {
 /* body{
     overflow: auto !important;
@@ -187,6 +196,7 @@ h1{
 .fx-leftcontentbox.fx-checkoutpage{
     margin-top:165px !important;
 }
+
 .fx-booking .fx-commoninput .fx-element-box.fx-checkoutbuttonbar{
     width: 93%;
     position: fixed;
@@ -368,6 +378,23 @@ h1.fx-all-main-heading{
     border-top-color: #333;         /* dark segment */
     border-right-color: #b5b5b5;     /* medium segment */
     animation: spin 0.8s linear infinite;
+}
+
+h1.fx-main-page-heading{
+    font-size: 24px;
+}
+
+.fx-booking .fx-popup .fx-rightpopup .calendarbox.active .fx-date-progress-bar{
+    background-color: var(--primary-color);
+}
+
+.fx-date-progress-bar{
+    background-color: var(--border-color);
+    height: 3px;
+    border-radius: 4px;
+    width: 32%;
+    display: block;
+    margin-top: 3px;
 }
 
 /* Rotate */

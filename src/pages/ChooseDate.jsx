@@ -276,7 +276,7 @@ export default function ChooseDate() {
       className="fx-leftcontentbox"
       style={{ display: step === "datestep" ? "block" : "none" }}
     >
-      <h1 className="fx-all-main-heading">Book your Services</h1>
+      <h1 className="fx-all-main-heading fx-main-page-heading">Book your Services</h1>
       <div id="fx-tab_nav">
         <ul>
           <li>

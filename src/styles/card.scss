@@ -371,7 +371,7 @@
 .fx-booking .fx-extracontentbox .fx-common .fx-quantitybox button{
   width: 27px;
   height: 27px;
-  color: var(darkgrey);
+  color: var(--darkgrey);
   font-size: var(--normal-descriptionsize);
   border: 0.76px solid var(--border-color);
   background: none;
@@ -489,6 +489,7 @@
   height: 39px;
   overflow: hidden;
 }
+
 }
 
 .p-carousel .p-carousel-item {
@@ -507,3 +508,7 @@
  button[type=button].p-carousel-next{
       padding: 10px 2px;
  }
+
+ .p-carousel-container button[type=button].p-carousel-next, .p-carousel-container button[type=button].p-carousel-prev{
+  padding: 12px 0px;
+}

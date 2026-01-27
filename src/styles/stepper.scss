@@ -132,7 +132,7 @@
   border: 1px solid #003087;
   background: #fff;
   text-align: center;
-  left: 31%;
+  left: 30%;
   padding-right: 0px;
 }
 
@@ -153,6 +153,12 @@
   left: 65%;
   padding-right: 0px;
 
+}
+
+.fx-stepper-tabstyle .datestep.complete {
+  background: #fff;
+  width: 20%;
+  z-index: 5;
 }
 
 
