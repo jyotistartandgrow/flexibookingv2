@@ -23,6 +23,7 @@
   text-align: left;
   width: 100%;
   margin-bottom: 12px;
+  position: relative;
 }
 
  .fx-booking .fx-commoninput label.fx-mobile-input{
@@ -33,7 +34,6 @@
   font-size:16px;
   font-weight: 400;
   color: var(darkgrey);
-  display: block;
   text-transform: capitalize;
   margin-bottom: 7px;
 }
@@ -78,7 +78,22 @@
   font-weight: 400;
   cursor: pointer;
   margin-bottom: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
  }
+.fx-selectwrapper::after {
+    content: '';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #555;
+    border-bottom: 2px solid #555;
+    transform: translateY(-60%) rotate(45deg);
+    pointer-events: none;
+}
 
  /* .fx-booking .fx-commoninput input[type="text"]:focus-visible,
  .fx-booking .fx-commoninput input[type="email"]:focus-visible
@@ -90,7 +105,7 @@
   display: flex;
   gap: 30px;
 }
-.fx-booking input[type="text"].inputbox{
+.fx-booking input[type="text"].inputbox, .fx-booking input[type="email"].inputbox{
   border-radius: 4px;
 }
  .fx-booking input[type="text"],
@@ -106,6 +121,7 @@
   margin-bottom: 15px;
   max-width: 100%;
   height: inherit;
+  margin-top: 0px;
 }
 
 .fx-booking input[type="text"].fx-inputbox-gift {
@@ -406,6 +422,7 @@
     border: none;
     font-size: var(--normal-descriptionsize);
     box-sizing: border-box;
+    margin:0px;
 }
  .fx-extracontentboxlist .fx-quantitybox .increment {
     border-radius: 50%;
@@ -427,7 +444,9 @@
         display: flex;
     justify-content: space-between;
     float: right;
-    margin-top: -16px;
+ position: absolute;
+ right:10px;
+ bottom: 5px;
 }
 
  /* Radio button styles */
@@ -492,7 +511,9 @@
   width: 100%;
   font-family: 'Roboto', sans-serif;
 }
-
+.fx-booking .fx-phone-input .arrow{
+  margin-left: inherit;
+}
 .fx-booking .fx-phone-input .country-list{
   margin-top:0px !important;
 }
@@ -560,6 +581,10 @@
 .fx-booking .fx-commoninput .fx-inputgroup{
   flex-direction: column;
   margin-bottom: 10px;
+}
+.fx-booking .fx-commoninput .fx-checkboxcontainer{
+  flex-direction: row;
+  align-items: flex-start;
 }
 .fx-booking .fx-inputgroup{
   flex-direction: column;

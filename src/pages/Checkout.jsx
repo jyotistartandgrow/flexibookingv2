@@ -248,7 +248,7 @@ export default function Checkout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className="fx-element-box">
+          <div className="fx-element-box fx-selectwrapper">
             <label>Country</label>
             <select
               onChange={(e) => {
@@ -266,7 +266,7 @@ export default function Checkout() {
               <span class="fx-errortext">Enter Country</span>
             )}
           </div>
-          <div className="fx-element-box">
+          <div className="fx-element-box fx-selectwrapper">
             <label>State</label>
             <select
               onChange={(e) => {
@@ -333,14 +333,14 @@ export default function Checkout() {
           </div>
         </div>
 
-        <div className="">
+        <div className="fx-toggleswitch">
           <label htmlFor="option1">Gift</label>
           <InputSwitch
             checked={gift ? true : false}
             onChange={() => setGift(!gift)}
             inputId="option1"
           />
-        </div>
+        
         {gift == true && (
           <>
             <h3>Gift Receiver Information</h3>
@@ -490,7 +490,8 @@ export default function Checkout() {
           onChange={() => setInvoice(!invoice)}
           inputId="option2"
         />
-        <div className="fx-inputgroup">
+        </div>
+        <div className="fx-inputgroup fx-checkboxcontainer">
           <input
             type="checkbox"
             id="checkbox-checked"
