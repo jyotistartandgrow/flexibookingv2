@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setRedeemStep } from "../store/step1Slice";
+import moment from "moment";
+import { decodeHtml } from "../Utils/Functions";
+import { Sidebar as Sidebarpanel } from "primereact/sidebar";
+import logo from "../assets/logo.png";
+import RedeemCommonbox from "../components/RedeemCommonbox";
+
 
 export default function ReedemSteps() {
   const dispatch = useDispatch();
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.redeemstep);
+  const slot = useSelector((state) => state.step3.slot);
+  const voucherdetail = useSelector((state) => state.step3.voucherdetail);
+  const [visibleBottom, setVisibleBottom] = useState(false);
   let codestepclass = "step codestep";
   let datestepclass = "step datestep";
   let slotstepclass = "step slotstep";
@@ -28,45 +37,116 @@ export default function ReedemSteps() {
   }
 
   return (
-    <div className="fx-step-top-fixed-box">
-      <div className={`fx-stepper-tabstyle step-for-redeem`}>
-        <div
-          className={codestepclass}
-          onClick={() => {
-            dispatch(setRedeemStep("codestep"));
-          }}
-        >
-          <div>
-            1 <span>ENTER YOUR CODE</span>
+    <>
+      <div className="fx-step-top-fixed-box">
+        <div className={`fx-stepper-tabstyle step-for-redeem`}>
+          <div
+            className={codestepclass}
+            onClick={() => {
+              dispatch(setRedeemStep("codestep"));
+            }}
+          >
+            <div>
+              1 <span>ENTER YOUR CODE</span>
+            </div>
           </div>
-        </div>
-        <div
-          className={datestepclass}
-          onClick={() => {
-            dispatch(setRedeemStep("datestep"));
-          }}
-        >
-          <div>
-            2 <span>SELECT DATE</span>
+          <div
+            className={datestepclass}
+            onClick={() => {
+              dispatch(setRedeemStep("datestep"));
+            }}
+          >
+            <div>
+              2 <span>SELECT DATE</span>
+            </div>
           </div>
-        </div>
-        <div
-          className={slotstepclass}
-          onClick={() => {
-            dispatch(setRedeemStep("slotstep"));
-          }}
-        >
-          <div>
-            3 <span>SELECT SLOT</span>
+          <div
+            className={slotstepclass}
+            onClick={() => {
+              dispatch(setRedeemStep("slotstep"));
+            }}
+          >
+            <div>
+              3 <span>SELECT SLOT</span>
+            </div>
           </div>
-        </div>
-        
-        <div className={checkoutstepclass}>
-          <div>
-            4 <span>CHECKOUT</span>
+
+          <div className={checkoutstepclass}>
+            <div>
+              4 <span>CHECKOUT</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      {date && (
+        <div
+          className={
+            step != "checkoutstep"
+              ? "fx-mobilesidebar"
+              : "fx-mobilesidebar fx-mobilesidebar-top"
+          }
+          onClick={() => setVisibleBottom(true)}
+        >
+          <div className="fx-bottombar-top-details">
+            <span className="fx-order-details">Order Details </span>
+            <i
+              className={
+                step != "checkoutstep"
+                  ? "pi pi-chevron-up"
+                  : "pi pi-chevron-down"
+              }
+            ></i>
+          </div>
+          <div className="fx-bottombar-bottom-details">
+            <div className="fx-left-content-date">
+              <i className="fa fa-calendar"></i>{" "}
+              <span className="fx-bottom-date">
+                {moment(date).format("MMM DD")}
+              </span>
+              <span className="fx-bottom-date">, {slot}</span>
+            </div>
+            {voucherdetail?.service?.length > 0 && (
+              <>
+                {voucherdetail.service.map((ct, ckey) => {
+                  return (
+                    <div
+                      className="fx-left-content-service"
+                      key={"ctm-" + ckey}
+                    >
+                      <span className="fx-bottom-service">, {ct.name}</span>
+                    </div>
+                  );
+                })}
+                <div className="fx-price">
+                  {decodeHtml(voucherdetail.total_formatted)}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      <Sidebarpanel
+        visible={visibleBottom}
+        position={step != "checkoutstep" ? "bottom" : "top"}
+        onHide={() => setVisibleBottom(false)}
+      >
+        <div className="fx-sidebar fx-mob-footer-order-details">
+          <div className="logo">
+            <img src={logo} className="fx-right-logo" />
+          </div>
+          {step != "checkoutstep" && (
+            <div
+              className="fx-mob-down-arrow"
+              onClick={() => setVisibleBottom(false)}
+            >
+              <i className="pi pi-chevron-down"></i>
+            </div>
+          )}
+          <h3>Order Details</h3>
+          <RedeemCommonbox setVisibleBottom={setVisibleBottom} />
+        </div>
+      </Sidebarpanel>
+    </>
   );
 }
