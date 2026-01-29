@@ -318,6 +318,7 @@ h1.fx-all-main-heading{
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #ccc;
     left: 0px;
+    position: absolute;
   }
 }
 
@@ -412,7 +413,7 @@ h1.fx-main-page-heading{
     .fx-booking .fx-mobilesidebar{
         width: 100%;
         height: auto;
-        position: fixed;
+        position: absolute;
         bottom: -2px;
         padding: 15px;
         font-size: var(--card-headingsize);
