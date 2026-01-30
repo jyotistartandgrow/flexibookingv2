@@ -168,6 +168,7 @@ h1.fx-all-main-heading{
     gap: 8px;
     margin-top: 10px;
     margin-bottom: 10px;
+    flex-direction:column;
 }
 .fx-booking .fx-commoninput .fx-toggleswitch .p-inputswitch{
    top:-5px;
@@ -307,20 +308,7 @@ h1.fx-all-main-heading{
     border-radius: 30px;
 }
 
-@media screen and (max-width: 480px) {
-    .fx-skeleton-row{
-            flex-direction: column;
-    }
-      .fx-booking .fx-mobilesidebar-top{
-    top: 79px;
-    height: 87px;
-    box-shadow: none;
-    border-bottom: 1px solid #ccc;
-    border-top: 1px solid #ccc;
-    left: 0px;
-    position: absolute;
-  }
-}
+
 
 /* SHIMMER EFFECT */
 .fx-card-skeleton div {
@@ -428,4 +416,22 @@ h1.fx-main-page-heading{
     }
    
     
+}
+
+@media screen and (max-width: 480px) {
+    .fx-skeleton-row{
+            flex-direction: column;
+    }
+      .fx-booking .fx-mobilesidebar-top{
+    top: 79px;
+    height: 87px;
+    box-shadow: none;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    left: 0px;
+    position: absolute;
+  }
+  h1.fx-main-page-heading{
+    font-size: 20px;
+}
 }
