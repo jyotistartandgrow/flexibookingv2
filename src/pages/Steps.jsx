@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setStep, setAll } from "../store/step1Slice";
+import { setStep, setAll, setGift } from "../store/step1Slice";
 import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 import Commonbox from "../components/Commonbox";
@@ -8,8 +8,10 @@ import logo from "../assets/logo.png";
 import { Toast } from "primereact/toast";
 import { Sidebar as Sidebarpanel } from "primereact/sidebar";
 
-
 export default function Steps({ type = "date" }) {
+  // Check for 'type' param in URL if not provided as prop
+  const params = new URLSearchParams(window.location.search);
+  let typeParam = params.get("type") || "";
   const dispatch = useDispatch();
   const date = useSelector((state) => state.step1.date);
   const category = useSelector((state) => state.step1.category);
@@ -27,6 +29,9 @@ export default function Steps({ type = "date" }) {
   }
   if (type == "service" && step == "datestep") {
     dispatch(setStep("servicesstep"));
+  }
+  if (type == "date" && !gift && typeParam == "gift") {
+    dispatch(setGift(true));
   }
   let datestepclass = "step datestep";
   let servicesstepclass = "step servicesstep";
