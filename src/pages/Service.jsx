@@ -430,8 +430,8 @@ export default function Service() {
     },
     {
       breakpoint: "560px", // For screens less than 560px (mobile phones)
-      numVisible: 2,
-      numScroll: 2,
+      numVisible: 1,
+      numScroll: 1,
     },
   ];
   return (
@@ -439,7 +439,12 @@ export default function Service() {
       className="fx-leftcontentbox"
       style={{ display: step === "servicesstep" ? "block" : "none" }}
     >
-      <h1 className="fx-all-main-heading">What experience are you looking for?</h1>
+      <h1 className="fx-all-main-heading">What experience are you looking for? <span class="fx-tooltip-container"><i
+                            class="pi pi-info-circle fx-info-icon"></i>
+                            <div class="fx-tooltip">
+                              Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                            </div>
+                        </span></h1>
       <div id="fx-Icontab_nav">
         <ul>
           <li className="selected">
@@ -774,9 +779,9 @@ export default function Service() {
 
                                 if (!slotObj || slotItems.length === 0) {
                                   return (
-                                    <div className="fx-timelistbox">
-                                      No slots available
-                                    </div>
+                                    
+                                     <p className="fx-noslots"> No slots available</p>
+                                    
                                   );
                                 }
 
@@ -901,9 +906,9 @@ export default function Service() {
 
                                 if (!slotObj || slotAfItems.length === 0) {
                                   return (
-                                    <div className="fx-timelistbox">
-                                      No slots available
-                                    </div>
+                                    
+                                       <p className="fx-noslots"> No slots available</p>
+                                    
                                   );
                                 }
 
@@ -1042,9 +1047,9 @@ export default function Service() {
                                 singleslotItem.time_slot == "")
                             ) {
                               return (
-                                <div className="fx-timelistbox">
-                                  No slots available
-                                </div>
+                                
+                                  <p className="fx-noslots"> No slots available</p>
+                               
                               );
                             }
 

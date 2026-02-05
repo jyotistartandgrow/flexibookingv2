@@ -29,7 +29,7 @@
 }
 .p-dialog .p-dialog-content{
   height: auto;
-    padding: 25px;
+  padding:0px;
 }
 .p-dialog-content{
 overflow-y: inherit !important;
@@ -130,7 +130,9 @@ h2 {
   margin-bottom:16px;
   line-height: 1.3;
 }
-
+.fx-booking .fx-popup .fx-rightpopup p.fx-noslots{
+  font-size:var(--small-descriptionsize);
+}
 .fx-booking .fx-popup .fx-rightpopup p .fx-des{
   max-height: 43px;
   min-height: auto;

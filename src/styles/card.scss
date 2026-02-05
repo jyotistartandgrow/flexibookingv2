@@ -130,7 +130,7 @@
 }
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist {
-  width: 180px;
+  width:167px;
   height: 121px;
   position: relative;
 }
@@ -405,6 +405,12 @@
   margin-bottom: 0px;
 }
 
+ .p-carousel-items-container .fx-servicebox {
+    max-width: 224px;
+    height: auto;
+    box-shadow: 0px 0px 3px 0px var(--box-shadow);
+}
+
 @media screen and (max-width: 580px) {
 .fx-booking .fx-servicecontainer{
   display: inline-block;
@@ -490,16 +496,18 @@
   overflow: hidden;
 }
 
+ .p-carousel-items-container .fx-servicebox {
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0px 0px 3px 0px var(--box-shadow);
+}
+
 }
 
 .p-carousel .p-carousel-item {
   padding: 0 8px;
 }
- .p-carousel-items-container .fx-servicebox {
-    max-width: 224px;
-    height: auto;
-    box-shadow: 0px 0px 3px 0px var(--box-shadow);
-}
+
 
  .p-carousel-items-container{
   padding: 3px 0px;

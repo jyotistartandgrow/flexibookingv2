@@ -386,6 +386,15 @@ h1.fx-main-page-heading{
     margin-top: 3px;
 }
 
+.p-carousel-container button[type=button].p-carousel-next, .p-carousel-container button[type=button].p-carousel-prev{
+    background:none;
+    color:#333;
+}
+
+// .p-carousel-items-container .fx-servicebox{
+//   width: 300px;
+// }
+
 /* Rotate */
 @keyframes spin {
     to { transform: rotate(360deg); }
@@ -414,9 +423,8 @@ h1.fx-main-page-heading{
     .p-sidebar-bottom .p-sidebar-top .p-sidebar {
         height: 90%;
     }
-   
-    
 }
+
 
 @media screen and (max-width: 480px) {
     .fx-skeleton-row{

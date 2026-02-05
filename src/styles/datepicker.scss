@@ -171,6 +171,12 @@ padding: 3px;
   color: #31639c;
   font-size: 20px;
 }
+
+button.p-datepicker-year.p-link, button.p-datepicker-month.p-link{
+    background: none;
+    color: #333;
+}
+
 @media screen and (max-width: 480px) {
 .fx-booking .fx-calendar{
   width:100%;
