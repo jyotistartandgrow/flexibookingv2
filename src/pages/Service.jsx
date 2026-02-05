@@ -284,7 +284,7 @@ export default function Service() {
           </p>
           <div className="booknowbtn">
             <a href="#" onClick={() => servicedetail(product.id)}>
-              Book Now
+              {gift ? "Select Gift" : "Book Now"}
             </a>
           </div>
         </div>
@@ -550,7 +550,7 @@ export default function Service() {
                       </p>
                       <div className="booknowbtn">
                         <a href="#" onClick={() => servicedetail(product.id)}>
-                          Book Now
+                          {gift ? "Select Gift" : "Book Now"}
                         </a>
                       </div>
                     </div>
@@ -584,7 +584,7 @@ export default function Service() {
                       className="booknowbtn"
                       onClick={() => servicedetail(product.id)}
                     >
-                      Book Now
+                      {gift ? "Select Gift" : "Book Now"}
                     </span>
                   </div>
                 </div>
