@@ -6,6 +6,9 @@
 .fx-booking .fx-datepicker{
   display: inherit;
 }
+.fx-datepicker{
+  width: 100%;
+}
 .fx-rightpopup .fx-element-box .fx-calendar{
   width: 330px;
 }
@@ -172,11 +175,11 @@ padding: 3px;
   font-size: 20px;
 }
 
-button.p-datepicker-year.p-link, button.p-datepicker-month.p-link{
-    background: none;
-    color: #333;
+button.p-datepicker-year.p-link,button.p-datepicker-month.p-link,button.p-datepicker-next,button.p-datepicker-prev {
+background-color: #fff;
+border-color: #fff;
+color: inherit;
 }
-
 @media screen and (max-width: 480px) {
 .fx-booking .fx-calendar{
   width:100%;

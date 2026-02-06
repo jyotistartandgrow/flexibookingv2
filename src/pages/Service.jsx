@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
+import { Sidebar as Calendarsidebar } from "primereact/sidebar";
 import { Carousel } from "primereact/carousel";
 import { addLocale } from "primereact/api";
 import calendar from "../assets/simple-line-icons_calender.svg";
@@ -25,6 +26,7 @@ import {
   setCart,
 } from "../store/step2Slice";
 import Swal from "sweetalert2";
+import useDeviceType from "../Utils/useDeviceType";
 
 addLocale("en-monday", {
   firstDayOfWeek: 1, // Monday
@@ -53,7 +55,9 @@ export default function Service() {
   const [readmorecl, setReadmorecl] = useState(false);
   const [skeloading, setLoadingske] = useState(false);
   const [currentitem, setCurrentItem] = useState({});
+  const [calendarVisible, setCalendarVisible] = useState(false);
   const prevDate = useRef(date);
+  const isDesktop = useDeviceType();
 
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -91,11 +95,11 @@ export default function Service() {
     allService = all ? true : allService;
     const { data } = await axiosInstance(
       `/services?date=${moment(selectedDate).format(
-        "YYYY-MM-DD"
+        "YYYY-MM-DD",
       )}&category=${category}&all=${allService}`,
       {
         method: "get",
-      }
+      },
     );
     if (data && data.status == 200 && data.total_services > 0) {
       setProductsArr(data.data);
@@ -117,14 +121,15 @@ export default function Service() {
   const servicedetail = async (id) => {
     dispatch(setLoading(true));
     setServiceId(id);
-    let allService = all ? true : false;
+    let allService = gift ? true : false;
+    allService = all ? true : allService;
     const { data } = await axiosInstance(
       `/service-details?date=${moment(date).format(
-        "YYYY-MM-DD"
+        "YYYY-MM-DD",
       )}&service_id=${id}&all=${allService}`,
       {
         method: "get",
-      }
+      },
     );
 
     if (data && data.status == 200) {
@@ -162,7 +167,7 @@ export default function Service() {
       `/slot-availability-calendar?month=${monthYear}&service_id=${id}`,
       {
         method: "get",
-      }
+      },
     );
 
     if (dataa?.data) {
@@ -192,14 +197,14 @@ export default function Service() {
     const { day, month, year } = dateMeta;
     let tooltipId = `tooltip-${year}-${month}-${day}`;
     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(
-      day
+      day,
     ).padStart(2, "0")}`;
     if (
       disabledDates.find(
         (d) =>
           d.getFullYear() === year &&
           d.getMonth() === month &&
-          d.getDate() === day
+          d.getDate() === day,
       )
     ) {
       tooltipText = "Date not available";
@@ -279,7 +284,7 @@ export default function Service() {
           </p>
           <div className="booknowbtn">
             <a href="#" onClick={() => servicedetail(product.id)}>
-              Book Now
+              {gift ? "Select Gift" : "Book Now"}
             </a>
           </div>
         </div>
@@ -350,7 +355,7 @@ export default function Service() {
       }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}`,
       {
         method: "get",
-      }
+      },
     );
     let cartobj = {
       id: productDetails.id,
@@ -368,7 +373,7 @@ export default function Service() {
         total_formatted: data?.data?.total_formated,
         discount: 0,
         subtotal: data?.data?.total_formated,
-      })
+      }),
     );
     dispatch(setTimeslot(slot));
     dispatch(setCapacity(book));
@@ -382,11 +387,11 @@ export default function Service() {
     dispatch(setLoading(true));
     const { data } = await axiosInstance(
       `/price-format?service_id=${productDetails.id}&capacity=1&date=${moment(
-        date
+        date,
       ).format("YYYY-MM-DD")}`,
       {
         method: "get",
-      }
+      },
     );
     let cartobj = {
       id: productDetails.id,
@@ -404,7 +409,7 @@ export default function Service() {
         total_formatted: data?.data?.total_formated,
         discount: 0,
         subtotal: data?.data?.total_formated,
-      })
+      }),
     );
     dispatch(setTimeslot(""));
     dispatch(setCapacity(1));
@@ -415,7 +420,7 @@ export default function Service() {
   };
 
   const slotObj = dateslot.find((s) =>
-    moment(moment(date).format("YYYY-MM-DD")).isSame(s.date)
+    moment(moment(date).format("YYYY-MM-DD")).isSame(s.date),
   );
   const responsiveOptions = [
     {
@@ -548,7 +553,7 @@ export default function Service() {
                       </p>
                       <div className="booknowbtn">
                         <a href="#" onClick={() => servicedetail(product.id)}>
-                          Book Now
+                          {gift ? "Select Gift" : "Book Now"}
                         </a>
                       </div>
                     </div>
@@ -582,7 +587,7 @@ export default function Service() {
                       className="booknowbtn"
                       onClick={() => servicedetail(product.id)}
                     >
-                      Book Now
+                      {gift ? "Select Gift" : "Book Now"}
                     </span>
                   </div>
                 </div>
@@ -675,7 +680,7 @@ export default function Service() {
                             key={k}
                             className={
                               moment(moment(date).format("YYYY-MM-DD")).isSame(
-                                slot.date
+                                slot.date,
                               )
                                 ? "calendarbox active"
                                 : "calendarbox"
@@ -693,26 +698,56 @@ export default function Service() {
                           src={calendar}
                           alt="Open Calendar"
                           id="fx-openCalendar"
-                          onClick={(e) => op.current.toggle(e)}
+                          onClick={(e) =>
+                            isDesktop
+                              ? op.current.toggle(e)
+                              : setCalendarVisible(true)
+                          }
                         />
                         <div id="fx-calendarContainer">
-                          <OverlayPanel ref={op}>
-                            <Calendar
-                              inline
-                              value={date}
-                              onChange={(e) => {
-                                dispatch(setDate(e.value));
-                                op.current.toggle(e);
-                              }}
-                              dateTemplate={dateTemplate}
-                              className="fx-datepicker"
-                              minDate={new Date()}
-                              disabledDates={disabledDates}
-                              onMonthChange={handleMonthChange}
-                              dateFormat="dd/mm/yy"
-                              locale="en-monday"
-                            />
-                          </OverlayPanel>
+                          {isDesktop ? (
+                            <OverlayPanel ref={op}>
+                              <Calendar
+                                inline
+                                value={date}
+                                onChange={(e) => {
+                                  dispatch(setDate(e.value));
+                                  op.current.hide();
+                                }}
+                                dateTemplate={dateTemplate}
+                                className="fx-datepicker"
+                                minDate={new Date()}
+                                disabledDates={disabledDates}
+                                onMonthChange={handleMonthChange}
+                                dateFormat="dd/mm/yy"
+                                locale="en-monday"
+                              />
+                            </OverlayPanel>
+                          ) : (
+                            <Calendarsidebar
+                              visible={calendarVisible}
+                              onHide={() => setCalendarVisible(false)}
+                              position="bottom"
+                              className="fx-calendar-sidebar"
+                            >
+                            
+                              <Calendar
+                                inline
+                                value={date}
+                                onChange={(e) => {
+                                  dispatch(setDate(e.value));
+                                  setCalendarVisible(false);
+                                }}
+                                dateTemplate={dateTemplate}
+                                className="fx-datepicker"
+                                minDate={new Date()}
+                                disabledDates={disabledDates}
+                                onMonthChange={handleMonthChange}
+                                dateFormat="dd/mm/yy"
+                                locale="en-monday"
+                              />
+                            </Calendarsidebar>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1026,8 +1061,8 @@ export default function Service() {
                           slotVisible == "all" ||
                           dateslot.find((s) =>
                             moment(moment(date).format("YYYY-MM-DD")).isSame(
-                              s.date
-                            )
+                              s.date,
+                            ),
                           )?.slots.single_time_slot.slot_type
                             ? "fx-tabcontent selected"
                             : "fx-tabcontent"

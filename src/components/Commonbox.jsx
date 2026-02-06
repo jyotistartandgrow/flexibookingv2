@@ -111,7 +111,7 @@ export default function Commonbox({ setVisibleBottom }) {
             total: coupondata?.data?.original_data?.amount,
             total_formatted: coupondata?.data?.total,
             discount: coupondata?.data?.coupon_discount,
-          })
+          }),
         );
       }
     }
@@ -132,7 +132,7 @@ export default function Commonbox({ setVisibleBottom }) {
     setFields((prev) => {
       // update only one field
       const updated = prev.map((item, i) =>
-        i === key ? { ...item, code: coupon } : item
+        i === key ? { ...item, code: coupon } : item,
       );
 
       // compute valid coupons using UPDATED list
@@ -276,6 +276,11 @@ export default function Commonbox({ setVisibleBottom }) {
             </div>
           </>
         )}
+      {!cart.service && gift && (
+        <p className="giftmessagebox">
+          Please select the service you want to gift to your friend.
+        </p>
+      )}
       {paymentstring && isDesktop && (
         <div className="fx-paymentbox">
           <h1 className="fx-all-main-heading">Payment</h1>
