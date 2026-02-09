@@ -36,6 +36,7 @@ export default function Service() {
   };
 
   useEffect(() => {
+    if (step !== "extrasstep") return;
     if (date && service) {
       setLoadingske(true);
       fetchProductsByDate(date);
@@ -54,7 +55,7 @@ export default function Service() {
     if (data && data.status == 200) {
       setProductsArr(data.data);
     }
-    setLoadingske(false);
+    //setLoadingske(false);
   };
 
   // Template for each carousel item
@@ -72,7 +73,7 @@ export default function Service() {
           <p>{decodeHtml(product.extra_desc)}</p>
           <div className="fx-common">
             <div className="fx-quantitybox">
-              {book == 0 && (
+              {extraid != product.id && (
                 <input
                   type="submit"
                   className="btn-secondary"
@@ -341,7 +342,7 @@ export default function Service() {
                             <p>{decodeHtml(product.extra_desc)}</p>
                             <div className="fx-common">
                               <div className="fx-quantitybox">
-                                {book == 0 && (
+                                {extraid != product.id && (
                                   <input
                                     type="submit"
                                     className="btn-secondary"
@@ -427,7 +428,7 @@ export default function Service() {
                           </p>
                           <div className="fx-common">
                             <div className="fx-quantitybox">
-                              {book == 0 && (
+                              {extraid != product.id && (
                                 <input
                                   type="submit"
                                   className="btn-secondary"

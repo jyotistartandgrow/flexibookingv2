@@ -183,6 +183,7 @@ export default function ChooseDate() {
       });
     }
 
+    dispatch(setLoading(true));
     const { data } = await axiosInstance(
       `/availability?date=${moment(date).format("YYYY-MM-DD")}`,
       {
@@ -190,7 +191,6 @@ export default function ChooseDate() {
       },
     );
     if (data?.data?.is_bookable) {
-      dispatch(setLoading(true));
       dispatch(setStep("servicesstep"));
       dispatch(setLoading(false));
     } else {
@@ -203,6 +203,7 @@ export default function ChooseDate() {
         title: "There is no service available on selected Date",
       });
     }
+    dispatch(setLoading(false));
   };
 
   const viewService = () => {

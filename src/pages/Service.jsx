@@ -81,10 +81,10 @@ export default function Service() {
         console.log("Selected date in Service component:", date);
         fetchProductsByDate(date);
       }
-      if (serviceid) {
-        dispatch(setLoading(true));
-        servicedetail(serviceid);
-      }
+      // if (serviceid) {
+      //   dispatch(setLoading(true));
+      //   servicedetail(serviceid);
+      // }
       prevDate.current = date;
     }
   }, [date, step, serviceid]);
@@ -444,12 +444,16 @@ export default function Service() {
       className="fx-leftcontentbox"
       style={{ display: step === "servicesstep" ? "block" : "none" }}
     >
-      <h1 className="fx-all-main-heading">What experience are you looking for? <span class="fx-tooltip-container"><i
-                            class="pi pi-info-circle fx-info-icon"></i>
-                            <div class="fx-tooltip">
-                              Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                            </div>
-                        </span></h1>
+      <h1 className="fx-all-main-heading">
+        What experience are you looking for?{" "}
+        <span class="fx-tooltip-container">
+          <i class="pi pi-info-circle fx-info-icon"></i>
+          <div class="fx-tooltip">
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry.
+          </div>
+        </span>
+      </h1>
       <div id="fx-Icontab_nav">
         <ul>
           <li className="selected">
@@ -730,7 +734,6 @@ export default function Service() {
                               position="bottom"
                               className="fx-calendar-sidebar"
                             >
-                            
                               <Calendar
                                 inline
                                 value={date}
@@ -814,9 +817,10 @@ export default function Service() {
 
                                 if (!slotObj || slotItems.length === 0) {
                                   return (
-                                    
-                                     <p className="fx-noslots"> No slots available</p>
-                                    
+                                    <p className="fx-noslots">
+                                      {" "}
+                                      No slots available
+                                    </p>
                                   );
                                 }
 
@@ -941,9 +945,10 @@ export default function Service() {
 
                                 if (!slotObj || slotAfItems.length === 0) {
                                   return (
-                                    
-                                       <p className="fx-noslots"> No slots available</p>
-                                    
+                                    <p className="fx-noslots">
+                                      {" "}
+                                      No slots available
+                                    </p>
                                   );
                                 }
 
@@ -1082,9 +1087,10 @@ export default function Service() {
                                 singleslotItem.time_slot == "")
                             ) {
                               return (
-                                
-                                  <p className="fx-noslots"> No slots available</p>
-                               
+                                <p className="fx-noslots">
+                                  {" "}
+                                  No slots available
+                                </p>
                               );
                             }
 
@@ -1271,7 +1277,13 @@ export default function Service() {
                         </div>
                         <div
                           className={
-                            slotVisible == "all" && book > 0
+                            (slotVisible == "all" ||
+                              dateslot.find((s) =>
+                                moment(
+                                  moment(date).format("YYYY-MM-DD"),
+                                ).isSame(s.date),
+                              )?.slots.single_time_slot.slot_type) &&
+                            book > 0
                               ? "continuebtn"
                               : "continuebtn fx-disable-button"
                           }

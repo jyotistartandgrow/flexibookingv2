@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  //base: "/wordpress/wp-content/plugins/sg-woocommerce-booking/react-frontend-v2/",
+  base: './', // ✅ Use relative path instead of absolute
   plugins: [react()],
   build: {
     manifest: true, // ✅ This creates the manifest.json
