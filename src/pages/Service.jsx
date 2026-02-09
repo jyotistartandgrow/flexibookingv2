@@ -324,6 +324,7 @@ export default function Service() {
   };
 
   const bookservice = async () => {
+    console.log("Booking service with slot:", slot, "and capacity:", book);
     if (book == 0 || !slot) {
       Swal.fire({
         toast: true,
@@ -1288,7 +1289,13 @@ export default function Service() {
                               : "continuebtn fx-disable-button"
                           }
                           onClick={() =>
-                            slotVisible == "all" && book > 0
+                            (slotVisible == "all" ||
+                              dateslot.find((s) =>
+                                moment(
+                                  moment(date).format("YYYY-MM-DD"),
+                                ).isSame(s.date),
+                              )?.slots.single_time_slot.slot_type) &&
+                            book > 0
                               ? bookservice()
                               : ""
                           }

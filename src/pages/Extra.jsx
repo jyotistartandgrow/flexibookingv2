@@ -36,12 +36,12 @@ export default function Service() {
   };
 
   useEffect(() => {
-    if (step !== "extrasstep") return;
+    if (step !== "extrastep") return;
     if (date && service) {
       setLoadingske(true);
       fetchProductsByDate(date);
     }
-  }, [date, service]);
+  }, [date, service, step]);
 
   const fetchProductsByDate = async (selectedDate) => {
     const { data } = await axiosInstance(
@@ -55,7 +55,7 @@ export default function Service() {
     if (data && data.status == 200) {
       setProductsArr(data.data);
     }
-    //setLoadingske(false);
+    setLoadingske(false);
   };
 
   // Template for each carousel item
@@ -270,49 +270,47 @@ export default function Service() {
             </li>
           </ul>
 
-          {skeloading && (
-            <div className="fx-skeleton-row">
-              <div className="fx-card-skeleton">
-                <div className="fx-sk-img"></div>
-                <div className="fx-sk-tag"></div>
-                <div className="fx-sk-title"></div>
-                <div className="fx-sk-text"></div>
-                <div className="fx-sk-text short"></div>
-                <div className="fx-sk-price"></div>
-                <div className="fx-sk-button"></div>
-              </div>
-
-              <div className="fx-card-skeleton">
-                <div className="fx-sk-img"></div>
-                <div className="fx-sk-tag"></div>
-                <div className="fx-sk-title"></div>
-                <div className="fx-sk-text"></div>
-                <div className="fx-sk-text short"></div>
-                <div className="fx-sk-price"></div>
-                <div className="fx-sk-button"></div>
-              </div>
-
-              <div className="fx-card-skeleton">
-                <div className="fx-sk-img"></div>
-                <div className="fx-sk-tag"></div>
-                <div className="fx-sk-title"></div>
-                <div className="fx-sk-text"></div>
-                <div className="fx-sk-text short"></div>
-                <div className="fx-sk-price"></div>
-                <div className="fx-sk-button"></div>
-              </div>
-
-              <div className="fx-card-skeleton">
-                <div className="fx-sk-img"></div>
-                <div className="fx-sk-tag"></div>
-                <div className="fx-sk-title"></div>
-                <div className="fx-sk-text"></div>
-                <div className="fx-sk-text short"></div>
-                <div className="fx-sk-price"></div>
-                <div className="fx-sk-button"></div>
-              </div>
+          <div className={`fx-skeleton-row ${skeloading ? "show" : "hide"}`}>
+            <div className="fx-card-skeleton">
+              <div className="fx-sk-img"></div>
+              <div className="fx-sk-tag"></div>
+              <div className="fx-sk-title"></div>
+              <div className="fx-sk-text"></div>
+              <div className="fx-sk-text short"></div>
+              <div className="fx-sk-price"></div>
+              <div className="fx-sk-button"></div>
             </div>
-          )}
+
+            <div className="fx-card-skeleton">
+              <div className="fx-sk-img"></div>
+              <div className="fx-sk-tag"></div>
+              <div className="fx-sk-title"></div>
+              <div className="fx-sk-text"></div>
+              <div className="fx-sk-text short"></div>
+              <div className="fx-sk-price"></div>
+              <div className="fx-sk-button"></div>
+            </div>
+
+            <div className="fx-card-skeleton">
+              <div className="fx-sk-img"></div>
+              <div className="fx-sk-tag"></div>
+              <div className="fx-sk-title"></div>
+              <div className="fx-sk-text"></div>
+              <div className="fx-sk-text short"></div>
+              <div className="fx-sk-price"></div>
+              <div className="fx-sk-button"></div>
+            </div>
+
+            <div className="fx-card-skeleton">
+              <div className="fx-sk-img"></div>
+              <div className="fx-sk-tag"></div>
+              <div className="fx-sk-title"></div>
+              <div className="fx-sk-text"></div>
+              <div className="fx-sk-text short"></div>
+              <div className="fx-sk-price"></div>
+              <div className="fx-sk-button"></div>
+            </div>
+          </div>
 
           {!skeloading && products.length == 0 && (
             <div className="fx-no-data">No services found</div>

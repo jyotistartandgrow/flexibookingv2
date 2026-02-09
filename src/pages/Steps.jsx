@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setStep, setAll, setGift } from "../store/step1Slice";
 import moment from "moment";
-import { decodeHtml } from "../Utils/Functions";
+import { decodeHtml, darkenHex } from "../Utils/Functions";
 import Commonbox from "../components/Commonbox";
 import logo from "../assets/logo.png";
 import { Toast } from "primereact/toast";
@@ -29,13 +29,17 @@ export default function Steps({ type = "date" }) {
     try {
       const response = await axiosInstance.get("/settings");
       const settings = response.data;
-      console.log("Fetched settings:", settings.data.primary_color);
 
       // Set CSS custom property
       if (settings.data.primary_color) {
         document.documentElement.style.setProperty(
           "--primary-color",
           settings.data.primary_color,
+        );
+
+        document.documentElement.style.setProperty(
+          "--darkblue-color",
+          darkenHex(settings.data.primary_color, 56),
         );
       }
     } catch (error) {

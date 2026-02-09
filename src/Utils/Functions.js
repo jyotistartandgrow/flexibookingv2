@@ -85,3 +85,21 @@ export const decodeHtml = (html) => {
   const doc = parser.parseFromString(html, "text/html");
   return doc.documentElement.textContent;
 };
+
+export const darkenHex = (hex, percent) => {
+  // percent = 86 means "86% darker"
+  const factor = (100 - percent) / 100;
+
+  hex = hex.replace("#", "");
+
+  const r = Math.round(parseInt(hex.substring(0, 2), 16) * factor);
+  const g = Math.round(parseInt(hex.substring(2, 4), 16) * factor);
+  const b = Math.round(parseInt(hex.substring(4, 6), 16) * factor);
+
+  return (
+    "#" +
+    r.toString(16).padStart(2, "0") +
+    g.toString(16).padStart(2, "0") +
+    b.toString(16).padStart(2, "0")
+  );
+};
