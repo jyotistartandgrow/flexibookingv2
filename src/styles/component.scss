@@ -447,10 +447,7 @@
  .fx-extracontentboxlist .fx-common {
         display: flex;
     justify-content: space-between;
-    float: right;
- position: absolute;
- right:10px;
- bottom: 5px;
+    margin-top: 16px;
 }
 
  /* Radio button styles */

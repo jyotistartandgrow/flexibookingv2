@@ -141,17 +141,16 @@
 
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist {
   width: 180px;
-  height: 121px;
+  height: 180px;
   position: relative;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist img {
     width: 100%;
-    height: auto;
-    max-height: 121px;
+    height: 180px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist {
     width: calc(100% - 180px);
-    height: 121px;
+    height: auto;
     padding: 15px 16px;
     background: var(--white);
     position: relative;
