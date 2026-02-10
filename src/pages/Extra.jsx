@@ -143,6 +143,9 @@ export default function Service() {
       let count = parseInt(currentbook) - parseInt(1);
       if (count >= 0) {
         setBook(count);
+        if(count == 0){
+          setExtraid(null);
+        }
       }
     }
   };
