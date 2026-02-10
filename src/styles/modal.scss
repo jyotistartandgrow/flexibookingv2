@@ -49,7 +49,6 @@ overflow-y: inherit !important;
 h2 {
   margin-top: 0;
   color: var(--darkgrey);
-  font-family: "Roboto", sans-serif;
 }
 
 .fx-booking .fx-popup .close {
@@ -113,7 +112,6 @@ h2 {
 }
 
 .fx-booking .fx-popup .fx-rightpopup h4 {
-  font-family: "Roboto", sans-serif;
   font-size: var(--main-headingsize);
   font-weight: 400;
   margin: 0px;
@@ -121,8 +119,6 @@ h2 {
 }
 
 .fx-booking .fx-popup .fx-rightpopup p {
-
-  font-family: "Roboto", sans-serif;
   font-size: var(--normal-descriptionsize);
   font-weight: 400;
   color: var(--grey);
@@ -148,7 +144,6 @@ h2 {
 
 .fx-booking .fx-popup .fx-rightpopup .datetext {
   font-size: var(--normal-descriptionsize);
-  font-family: "Roboto", sans-serif;
   color: var(--grey);
   font-weight: 400;
   margin: 0px;
@@ -228,7 +223,6 @@ h2 {
 }
 
 .fx-booking .fx-popup .fx-rightpopup h5 {
-  font-family: "Roboto", sans-serif;
   color: var(--darkgrey);
   font-size: var(--extrasmall-headingsize);
   font-weight: 400;
@@ -296,7 +290,6 @@ h2 {
 }
 
 .fx-booking .time {
-  font-family: "Roboto", sans-serif;
   font-weight: 400;
   font-size: var(--normal-descriptionsize);
   color: var(--grey);
@@ -330,7 +323,6 @@ h2 {
 }
 
 .fx-booking .soldbadge {
-  font-family: "Roboto", sans-serif;
   margin-left: 20px;
   background: var(--grey);
   border-radius: 4px;
@@ -393,7 +385,6 @@ h2 {
   background: var(--primary-color);
   text-align: center;
   border-radius: 33px;
-  font-family: "Roboto", sans-serif;
   color: var(--white);
   text-transform: uppercase;
 }
