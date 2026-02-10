@@ -536,7 +536,7 @@ export default function Service() {
 
         <div
           className={
-            isVisible == "grid" ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "grid" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
           }
         >
           <div className="fx-servicecontainer">
@@ -569,7 +569,7 @@ export default function Service() {
         </div>
         <div
           className={
-            isVisible == "list" ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "list" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
           }
         >
           {products.length > 0 &&
@@ -601,7 +601,7 @@ export default function Service() {
         </div>
         <div
           className={
-            isVisible == "slider" ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "slider" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
           }
         >
           <div className="slider responsive">

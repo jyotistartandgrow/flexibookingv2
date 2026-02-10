@@ -20,8 +20,8 @@ import { setCart } from "../store/step2Slice";
 import axiosInstance from "../Utils/Interceptor";
 import useDeviceType from "../Utils/useDeviceType";
 
-const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
-const stripePromise = loadStripe(PUBLIC_KEY);
+// const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
+// const stripePromise = loadStripe(PUBLIC_KEY);
 
 export default function Commonbox({ setVisibleBottom }) {
   const dispatch = useDispatch();
@@ -33,6 +33,8 @@ export default function Commonbox({ setVisibleBottom }) {
   const paymentstring = useSelector((state) => state.step4.paymentstring);
   const couponcode = useSelector((state) => state.step1.couponcode);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
+  const stripe_key = useSelector((state) => state.step1.stripe_key);
+  const [stripePromise] = useState(() => loadStripe(stripe_key));
   const [coupon, setCoupon] = useState("");
   const [fields, setFields] = useState([{ code: "" }]);
   const isDesktop = useDeviceType();

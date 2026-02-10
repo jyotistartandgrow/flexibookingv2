@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setStep, setAll, setGift } from "../store/step1Slice";
+import { setStep, setAll, setGift,setStripeKey } from "../store/step1Slice";
 import moment from "moment";
 import { decodeHtml, darkenHex } from "../Utils/Functions";
 import Commonbox from "../components/Commonbox";
@@ -41,6 +41,9 @@ export default function Steps({ type = "date" }) {
           "--darkblue-color",
           darkenHex(settings.data.primary_color, 56),
         );
+        if (settings.data.stripe_public_key) {
+          dispatch(setStripeKey(settings.data.stripe_public_key));
+        }
       }
     } catch (error) {
       console.error("Error fetching settings:", error);

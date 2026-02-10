@@ -14,8 +14,8 @@ import useDeviceType from "../Utils/useDeviceType";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
-const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
-const stripePromise = loadStripe(PUBLIC_KEY);
+// const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
+// const stripePromise = loadStripe(PUBLIC_KEY);
 export default function Payment() {
   const dispatch = useDispatch();
   const step = useSelector((state) => state.step1.step);
@@ -24,6 +24,8 @@ export default function Payment() {
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const couponcode = useSelector((state) => state.step1.couponcode);
   const isDesktop = useDeviceType();
+  const stripe_key = useSelector((state) => state.step1.stripe_key);
+  const [stripePromise] = useState(() => loadStripe(stripe_key));
 
   useEffect(() => {
     if (step == "paymentstep") {
@@ -76,8 +78,8 @@ export default function Payment() {
           }
         }
       }
-      dispatch(setLoading(false));
     }
+    dispatch(setLoading(false));
   };
 
   return (

@@ -72,28 +72,35 @@ export default function CheckoutForm() {
       gift,
     });
 
-    if (data && data.status == 200 && data.data.status == "success") {
+    let paymentSuccess = false;
+    if (data && data.status == 200) {
       console.log(data);
-      const clientSecret = data.data.data;
-      const result = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: { card: elements.getElement(CardElement) },
-      });
-
-      if (result.error) {
-        setMessage(result.error.message);
-      } else {
-        if (result.paymentIntent.status === "succeeded") {
+      if (data.data.status == "success") {
+        const clientSecret = data.data.data;
+        const result = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: { card: elements.getElement(CardElement) },
+        });
+        if (result.error) {
+          setMessage(result.error.message);
+        } else if (result.paymentIntent.status === "succeeded") {
           setMessage("Payment successful!");
-          const { data } = await axiosInstance.post(`/payment-save`, {
-            booking: bookingKey,
-            checkout: checkoutKey,
-            gift,
-          });
-          if (data && data.status == 200) {
-            console.log(data);
-            dispatch(setLoading(false));
-            navigate(`/thankyou?pid=${bookingKey}`);
-          }
+          paymentSuccess = true;
+        }
+      } else if (data.data.status == "succeeded") {
+        setMessage("Payment successful!");
+        paymentSuccess = true;
+      }
+
+      if (paymentSuccess) {
+        const { data } = await axiosInstance.post(`/payment-save`, {
+          booking: bookingKey,
+          checkout: checkoutKey,
+          gift,
+        });
+        if (data && data.status == 200) {
+          console.log(data);
+          dispatch(setLoading(false));
+          navigate(`/thankyou?pid=${bookingKey}`);
         }
       }
       dispatch(setLoading(false));
