@@ -19,6 +19,7 @@ const initialState = {
   gift: false,
   all: false,
   voucher: null,
+  stripe_key: null,
 };
 
 const step1Slice = createSlice({
@@ -55,6 +56,9 @@ const step1Slice = createSlice({
     setVoucher: (state, action) => {
       state.voucher = action.payload;
     },
+    setStripeKey: (state, action) => {
+      state.stripe_key = action.payload;
+    },
   },
 });
 
@@ -68,6 +72,7 @@ export const {
   setCategory,
   setGift,
   setAll,
-  setVoucher
+  setVoucher,
+  setStripeKey,
 } = step1Slice.actions;
 export default step1Slice.reducer;

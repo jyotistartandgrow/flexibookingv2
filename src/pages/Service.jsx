@@ -324,6 +324,7 @@ export default function Service() {
   };
 
   const bookservice = async () => {
+    console.log("Booking service with slot:", slot, "and capacity:", book);
     if (book == 0 || !slot) {
       Swal.fire({
         toast: true,
@@ -535,7 +536,7 @@ export default function Service() {
 
         <div
           className={
-            isVisible == "grid" ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "grid" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
           }
         >
           <div className="fx-servicecontainer">
@@ -568,7 +569,7 @@ export default function Service() {
         </div>
         <div
           className={
-            isVisible == "list" ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "list" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
           }
         >
           {products.length > 0 &&
@@ -600,7 +601,7 @@ export default function Service() {
         </div>
         <div
           className={
-            isVisible == "slider" ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "slider" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
           }
         >
           <div className="slider responsive">
@@ -1288,7 +1289,13 @@ export default function Service() {
                               : "continuebtn fx-disable-button"
                           }
                           onClick={() =>
-                            slotVisible == "all" && book > 0
+                            (slotVisible == "all" ||
+                              dateslot.find((s) =>
+                                moment(
+                                  moment(date).format("YYYY-MM-DD"),
+                                ).isSame(s.date),
+                              )?.slots.single_time_slot.slot_type) &&
+                            book > 0
                               ? bookservice()
                               : ""
                           }

@@ -81,12 +81,15 @@
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+  margin: 0px;
+    background: #fff;
+    height: auto;
  }
 .fx-selectwrapper::after {
     content: '';
     position: absolute;
     right: 14px;
-    top: 50%;
+    top: 44px;
     width: 8px;
     height: 8px;
     border-right: 2px solid #555;
