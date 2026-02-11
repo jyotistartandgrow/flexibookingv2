@@ -16,7 +16,13 @@ import {
   setSessionExpired,
 } from "../store/step4Slice";
 import { setCouponlist, setLoading } from "../store/step1Slice";
-import { setCart } from "../store/step2Slice";
+import {
+  setCart,
+  setTimeslot,
+  setCapacity,
+  setService,
+} from "../store/step2Slice";
+import { setExtracapacity, setExtra } from "../store/step3Slice";
 import axiosInstance from "../Utils/Interceptor";
 import useDeviceType from "../Utils/useDeviceType";
 
@@ -73,6 +79,15 @@ export default function Commonbox({ setVisibleBottom }) {
         [type]: updatedServices,
       }),
     );
+    dispatch(setCouponlist([])); // Clear coupons on service/extra change
+    if (type == "service") {
+      dispatch(setTimeslot(null));
+      dispatch(setCapacity(0));
+      dispatch(setService(null));
+    } else {
+      dispatch(setExtracapacity(0));
+      dispatch(setExtra(null));
+    }
     dispatch(setLoading(false));
     toast.current.show({
       severity: "success",
@@ -80,7 +95,11 @@ export default function Commonbox({ setVisibleBottom }) {
       detail: "Service has been removed from cart",
       life: 3000,
     });
-    dispatch(setStep("servicesstep"));
+    if (type == "service") {
+      dispatch(setStep("servicesstep"));
+    } else {
+      dispatch(setStep("extrastep"));
+    }
   };
 
   const reject = () => {
