@@ -223,9 +223,10 @@ export default function Commonbox({ setVisibleBottom }) {
                     <div className="itemname">
                       {ct.name} {!gift && `X ${ct.capacity}`}
                       <br />
-                      <span onClick={() => edititem(ct.id)}>Edit</span>{" "}
+                      <div className="time">{ct.slot}</div>
+                      <span onClick={() => edititem(ct.id)}><i className="pi pi-pencil"></i></span> <span><i className="pi pi-trash"></i></span>{" "}
                     </div>
-                    <div className="time">{ct.slot}</div>
+                   
                     <div className="price">
                       {decodeHtml(ct.total_formatted)}
                     </div>
@@ -239,9 +240,10 @@ export default function Commonbox({ setVisibleBottom }) {
                       <div className="itemname">
                         {ct.name} {!gift && `X ${ct.capacity}`}
                         <br />
-                        <span onClick={() => edititem(ct.id)}>Edit</span>{" "}
+                        <div className="time">{ct.slot}</div>
+                        <span onClick={() => edititem(ct.id)}><i className="pi pi-pencil"></i></span> <span><i className="pi pi-trash"></i></span>{" "}
                       </div>
-                      <div className="time">{ct.slot}</div>
+                      
                       <div className="price">
                         {decodeHtml(ct.total_formatted)}
                       </div>
