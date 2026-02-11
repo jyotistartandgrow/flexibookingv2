@@ -361,7 +361,7 @@ export default function Service() {
     );
     let cartobj = {
       id: productDetails.id,
-      name: productDetails.service_name,
+      name: productDetails.service_title,
       price: productDetails.svc_price,
       total: data?.data?.service_total,
       total_formatted: data?.data?.service_total,
