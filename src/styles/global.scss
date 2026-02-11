@@ -41,7 +41,7 @@ body {
         position: relative;
     border: 1px solid #e1e1e1;
     margin: 2%;
-    min-height: 600px;
+    min-height: 650px;
     background: #f9fafb;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
@@ -490,6 +490,38 @@ h1{
     height: auto;
     padding: 16px;
     background: var(--white);
+}
+
+.fx-rightpopup-details-box{
+    height: 501px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.fx-confirmation-popup{
+    padding: 20px;
+    background: #fff;
+}
+
+.fx-confirmation-popup button.p-component{
+    margin-top: 31px;
+    width: 100px;
+}
+
+.fx-confirmation-popup .p-dialog-content{
+    display: flex;
+    flex-direction:row;
+    padding: 11px 5px;
+    width: 320px;
+}
+
+.fx-confirmation-popup .p-dialog-header{
+    position: inherit;
+}
+
+.fx-confirmation-popup .p-dialog-footer{
+    padding: 0px;
+    text-align: left;
 }
 
 
