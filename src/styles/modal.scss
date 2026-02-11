@@ -105,10 +105,11 @@ h2 {
 }
 .fx-booking .fx-popup .fx-rightpopup {
   width: 50%;
-  height: auto;
+  height: 100%;
   float: left;
   padding:20px;
   overflow:auto;
+  position: relative;
 }
 
 .fx-booking .fx-popup .fx-rightpopup h4 {
@@ -225,7 +226,7 @@ h2 {
 .fx-booking .fx-popup .fx-rightpopup h5 {
   color: var(--darkgrey);
   font-size: var(--extrasmall-headingsize);
-  font-weight: 400;
+  font-weight: 600;
   margin-bottom: 10px;
   margin-top: 13px;
 }
@@ -276,7 +277,7 @@ h2 {
 }
 .fx-booking .fx-timelistboxbar{
   overflow: auto;
-  height:175px;
+  height:100%;
 }
 .fx-booking .fx-timelistbox {
   padding: 7px 12px;
@@ -387,6 +388,8 @@ h2 {
   border-radius: 33px;
   color: var(--white);
   text-transform: uppercase;
+  position:sticky;
+  bottom: 0px;
 }
 
 .fx-main-modal-box{

@@ -470,4 +470,27 @@ h1{
 }
 }
 
+.p-carousel-items-container .fx-extrabox{
+  max-width: 224px;
+  box-shadow: 0px 0px 3px 0px var(--box-shadow);
+}
+
+.fx-extrabox .fx-extrapicbox img{
+  display: block;
+    width: 100%;
+    max-width: 100%;
+    height: 100% !important;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.2s;
+}
+
+.fx-booking .fx-extrabox .fx-extracontentbox{
+    width: 100%;
+    height: auto;
+    padding: 16px;
+    background: var(--white);
+}
+
+
 
