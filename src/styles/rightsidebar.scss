@@ -48,7 +48,6 @@
 .fx-booking .fx-servicelistbox .fx-serviceitem{
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-bottom: 20px;
 }
 .fx-booking .fx-servicelistbox .fx-serviceitem.time{
@@ -60,12 +59,15 @@
   font-size: 18px;
   font-weight: 300;
   color: var(--darkgrey);
-  max-width: 28%;
+  max-width: 70%;
 }
 .fx-booking .fx-servicelistbox .fx-serviceitem .itemname span{
   font-size:14px;
   color: var(--darkgrey);
   text-decoration: underline;
+  float: left;
+  margin-right: 15px;
+  margin-top: 5px;
 }
 .fx-booking .fx-servicelistbox .fx-serviceitem .price{
   font-size:18px;
@@ -95,10 +97,16 @@
   font-weight: 400;
 }
 
-.fx-booking .fx-subtotalbar p span, .fx-booking .fx-discountbar p span, .p-sidebar-content .fx-subtotalbar p span, .p-sidebar-content .fx-discountbar p span{
+.fx-booking .fx-discountbar p span, .p-sidebar-content .fx-subtotalbar p span, .p-sidebar-content .fx-discountbar p span{
   color: var(--darkgrey);
   font-size: var(--big-descriptionsize);
   font-weight: 600;
+  float: right;
+}
+
+.fx-booking .fx-subtotalbar p span{
+  color: var(--darkgrey);
+  font-size: var(--big-descriptionsize);
   float: right;
 }
 
@@ -237,7 +245,6 @@
     text-decoration: underline;
 }
 .fx-mob-footer-order-details .time {
-    font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: var(--normal-descriptionsize);
     color: var(--grey);
