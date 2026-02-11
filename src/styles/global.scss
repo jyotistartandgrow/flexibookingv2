@@ -525,5 +525,9 @@ h1{
     text-align: left;
 }
 
+.p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext{
+        box-shadow: 0 0 0 0.2rem var(--primary-color);
+}
+
 
 
