@@ -1,0 +1,240 @@
+/* GiftCardPreview.css */
+/* GiftCardPreviewButton.css */
+
+.fx-preview-button-container {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.fx-preview-button {
+  background-color: transparent;
+  color: #14b8a6;
+  border: 2px solid #14b8a6;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fx-preview-button:hover {
+  background-color: #14b8a6;
+  color: white;
+  border-color: #14b8a6;
+}
+
+.fx-preview-button i {
+  font-size: 1.125rem;
+}
+
+.fx-gift-card-dialog .p-dialog-header {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.fx-gift-card-dialog .p-dialog-content {
+  padding: 2rem 1rem;
+}
+
+/* Override PrimeReact dialog styles with fx- prefix specificity */
+.fx-gift-card-dialog.p-dialog .p-dialog-header {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1.25rem 1.5rem;
+}
+
+.fx-gift-card-dialog.p-dialog .p-dialog-content {
+  padding: 2rem 1.5rem;
+  background-color: white;
+}
+
+.fx-gift-card-dialog.p-dialog .p-dialog-header-close {
+  color: #6b7280;
+}
+
+.fx-gift-card-dialog.p-dialog .p-dialog-header-close:hover {
+  color: #111827;
+  background-color: #f3f4f6;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .fx-preview-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .fx-gift-card-dialog.p-dialog .p-dialog-content {
+    padding: 1rem;
+  }
+}
+
+.fx-gift-card-container {
+  max-width: 448px;
+  margin: 0 auto 2rem;
+}
+
+.fx-gift-card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #374151;
+}
+
+.fx-gift-card {
+  position: relative;
+  background: white;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 4px solid #fbcfe8;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  flex-direction: column;
+}
+
+.fx-gift-card-decorative-circle-1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6rem;
+  height: 6rem;
+  opacity: 0.05;
+}
+
+.fx-gift-card-decorative-circle-1 svg {
+  fill: #f9a8d4;
+}
+
+.fx-gift-card-decorative-circle-2 {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 6rem;
+  height: 6rem;
+  opacity: 0.05;
+}
+
+.fx-gift-card-decorative-circle-2 svg {
+  fill: #f9a8d4;
+}
+
+.fx-gift-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.fx-gift-card-main-message {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  font-family: cursive;
+  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.fx-gift-card-total {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #9333ea;
+  margin-bottom: 2rem;
+}
+
+.fx-gift-card-recipient {
+  margin-bottom: 1.5rem;
+}
+
+.fx-gift-card-recipient-name {
+  color: #9333ea;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.fx-gift-card-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.fx-gift-card-divider-line {
+  height: 1px;
+  background-color: #fbcfe8;
+  flex: 1;
+  max-width: 80px;
+}
+
+.fx-gift-card-heart {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0 1rem;
+  fill: #f9a8d4;
+}
+
+.fx-gift-card-services {
+  margin-bottom: 1.5rem;
+}
+
+.fx-gift-card-service-item {
+  color: #4b5563;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.fx-gift-card-service-item span {
+  font-weight: 500;
+}
+
+.fx-gift-card-sender {
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+.fx-gift-card-footer {
+  padding: 1rem 0;
+  text-align: center;
+  border-top: 1px solid #fce7f3;
+}
+
+.fx-gift-card-brand-text {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.fx-gift-card-info-text {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .fx-gift-card-main-message {
+    font-size: 2rem;
+  }
+  
+  .fx-gift-card-total {
+    font-size: 2.5rem;
+  }
+  
+  .fx-gift-card-content {
+    padding: 2rem;
+  }
+}

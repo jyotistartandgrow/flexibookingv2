@@ -16,6 +16,8 @@ import {
   setGift,
 } from "../store/step1Slice";
 import { setCheckoutkey, setPaymentstring } from "../store/step4Slice";
+import GiftCardPreviewButton from "./Giftcardpreviewbutton";
+import { decodeHtml } from "../Utils/Functions";
 
 export default function Checkout() {
   const dispatch = useDispatch();
@@ -23,6 +25,7 @@ export default function Checkout() {
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
   const gift = useSelector((state) => state.step1.gift);
+  const cart = useSelector((state) => state.step2.cart);
 
   const { data: countries } = useFetch("/countries", {
     method: "get",
@@ -198,7 +201,9 @@ export default function Checkout() {
       {/* <h1 className="fx-main-heading">Checkout</h1> */}
       <div className="fx-commoninput">
         <div className="fx-inputgroup">
-          <div className={`fx-element-box ${visibleField.sgbm_field_1 ? "" : "fx-hidden"}`}>
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_1 ? "" : "fx-hidden"}`}
+          >
             <label>First Name</label>
             <input
               type="text"
@@ -212,7 +217,9 @@ export default function Checkout() {
               <span class="fx-errortext">Enter First Name</span>
             )}
           </div>
-          <div className={`fx-element-box ${visibleField.sgbm_field_2 ? "" : "fx-hidden"}`}>
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_2 ? "" : "fx-hidden"}`}
+          >
             <label>Last Name</label>
             <input
               type="text"
@@ -224,7 +231,9 @@ export default function Checkout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className={`fx-element-box ${visibleField.sgbm_field_3 ? "" : "fx-hidden"}`}>
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_3 ? "" : "fx-hidden"}`}
+          >
             <label>Email</label>
             <input
               type="email"
@@ -238,7 +247,9 @@ export default function Checkout() {
               <span class="fx-errortext">Enter Email</span>
             )}
           </div>
-          <div className={`fx-element-box ${visibleField.sgbm_field_4 ? "" : "fx-hidden"}`}>
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_4 ? "" : "fx-hidden"}`}
+          >
             <label className="fx-mobile-input">Mobile</label>
             <div className="fx-phone-input">
               <PhoneInput
@@ -262,7 +273,9 @@ export default function Checkout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className={`fx-element-box ${visibleField.sgbm_field_5 ? "" : "fx-hidden"}`}>
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_5 ? "" : "fx-hidden"}`}
+          >
             <label>Address</label>
             <input
               type="text"
@@ -280,7 +293,9 @@ export default function Checkout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className={`fx-element-box fx-selectwrapper ${visibleField.sgbm_field_8 ? "" : "fx-hidden"}`}>
+          <div
+            className={`fx-element-box fx-selectwrapper ${visibleField.sgbm_field_8 ? "" : "fx-hidden"}`}
+          >
             <label>Country</label>
             <select
               onChange={(e) => {
@@ -298,7 +313,9 @@ export default function Checkout() {
               <span class="fx-errortext">Enter Country</span>
             )}
           </div>
-          <div className={`fx-element-box fx-selectwrapper ${visibleField.sgbm_field_7 ? "" : "fx-hidden"}`}>
+          <div
+            className={`fx-element-box fx-selectwrapper ${visibleField.sgbm_field_7 ? "" : "fx-hidden"}`}
+          >
             <label>State</label>
             <select
               onChange={(e) => {
@@ -317,7 +334,9 @@ export default function Checkout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className={`fx-element-box ${visibleField.sgbm_field_6 ? "" : "fx-hidden"}`}>
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_6 ? "" : "fx-hidden"}`}
+          >
             <label>City</label>
             <input
               type="text"
@@ -331,7 +350,9 @@ export default function Checkout() {
               <span class="fx-errortext">Enter City</span>
             )}
           </div>
-          <div className={`fx-element-box ${visibleField.sgbm_field_9 ? "" : "fx-hidden"}`}>
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_9 ? "" : "fx-hidden"}`}
+          >
             <label>Zip</label>
             <input
               type="text"
@@ -347,7 +368,9 @@ export default function Checkout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className={`fx-element-box ${visibleField.sgbm_field_10 ? "" : "fx-hidden"}`}>
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_10 ? "" : "fx-hidden"}`}
+          >
             <label>Order Notes</label>
             <input
               type="text"
@@ -376,6 +399,15 @@ export default function Checkout() {
           {gift == true && (
             <>
               <h3>Gift Receiver Information</h3>
+              {/* Preview Button */}
+              <GiftCardPreviewButton
+                receiverFirstName={receiverInfo.firstName}
+                receiverLastName={receiverInfo.lastName}
+                services={cart}
+                total={decodeHtml(cart.total_formatted)}
+                senderName={billdata.sgbm_field_1 || "You"}
+                message="Enjoy your special day!"
+              />
               <div className="fx-commoninput">
                 <div class="fx-inputgroup">
                   <div class="fx-element-box">
