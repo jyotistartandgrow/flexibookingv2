@@ -19,6 +19,7 @@ import { Calendar } from "primereact/calendar";
 import { Tooltip } from "primereact/tooltip";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { setDate, setStep, setLoading } from "../store/step1Slice";
+import { setBookingkey } from "../store/step3Slice";
 import {
   setTimeslot,
   setCapacity,
@@ -380,8 +381,7 @@ export default function Service() {
     dispatch(setCapacity(book));
     dispatch(setService(serviceid));
     setVisible(false);
-    dispatch(setStep("extrastep"));
-    dispatch(setLoading(false));
+    hasExtra();
   };
 
   const giftbookservice = async () => {
@@ -416,8 +416,64 @@ export default function Service() {
     dispatch(setCapacity(1));
     dispatch(setService(serviceid));
     setVisible(false);
-    dispatch(setStep("extrastep"));
-    dispatch(setLoading(false));
+    hasExtra();
+  };
+
+  const hasExtra = async () => {
+    const { data } = await axiosInstance(
+      `/has-extra?date=${moment(date).format(
+        "YYYY-MM-DD",
+      )}&service_id=${serviceid}`,
+      {
+        method: "get",
+      },
+    );
+    if (data && data.status == 200) {
+      if (data.has_extra) {
+        dispatch(setStep("extrastep"));
+        dispatch(setLoading(false));
+      } else {
+        addtocart();
+      }
+    } else {
+      dispatch(setLoading(false));
+      Swal.fire({
+        toast: true,
+        position: "top-end", // or 'bottom-end', 'top-start', etc.
+        showConfirmButton: false,
+        timer: 3000, // auto-close after 3 seconds
+        icon: "error", // 'success', 'error', 'warning', 'info', 'question'
+        title: "Failed to fetch extras",
+      });
+    }
+  };
+
+  const addtocart = async () => {
+    dispatch(setLoading(true));
+    const { data } = await axiosInstance.post(`/addtocart`, {
+      service_id: serviceid,
+      date: moment(date).format("YYYY-MM-DD"),
+      total_service_booking: book,
+      time_slot: slot,
+      extra_svc_ids: [],
+      no_of_persons: 0,
+      gift,
+    });
+    if (data && data.status == 200 && data.data.booking_string) {
+      dispatch(setBookingkey(data.data.booking_string));
+      dispatch(setStep("checkoutstep"));
+      dispatch(setLoading(false));
+    } else {
+      Swal.fire({
+        toast: true,
+        position: "top-end", // or 'bottom-end', 'top-start', etc.
+        showConfirmButton: false,
+        timer: 3000, // auto-close after 3 seconds
+        icon: "error", // 'success', 'error', 'warning', 'info', 'question'
+        title: data?.message ?? "There is some error , please try again",
+      });
+      dispatch(setLoading(false));
+    }
   };
 
   const slotObj = dateslot.find((s) =>
@@ -536,7 +592,9 @@ export default function Service() {
 
         <div
           className={
-            isVisible == "grid" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "grid" && !skeloading
+              ? "fx-tabcontent selected"
+              : "fx-tabcontent"
           }
         >
           <div className="fx-servicecontainer">
@@ -569,7 +627,9 @@ export default function Service() {
         </div>
         <div
           className={
-            isVisible == "list" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "list" && !skeloading
+              ? "fx-tabcontent selected"
+              : "fx-tabcontent"
           }
         >
           {products.length > 0 &&
@@ -601,7 +661,9 @@ export default function Service() {
         </div>
         <div
           className={
-            isVisible == "slider" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "slider" && !skeloading
+              ? "fx-tabcontent selected"
+              : "fx-tabcontent"
           }
         >
           <div className="slider responsive">

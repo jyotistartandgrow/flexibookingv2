@@ -247,29 +247,31 @@ export default function Thankyou() {
                 </div>
               </div>
 
-              <table className="fx-billing-shipping-notification noborder">
-                <tbody>
-                  <tr>
-                    <th>
-                      <i
-                        className="fa fa-exclamation-triangle"
-                        aria-hidden="true"
-                      ></i>
-                      This order has
-                    </th>
-                  </tr>
-                  <tr>
-                    <td className="fx-coupon-des">
-                      <i className="pi pi-angle-double-right"></i>
-                      coupon/s <strong>{bookingData?.coupon}</strong> with total
-                      discount of{" "}
-                      <span className="postive_price_module_discount">
-                        {decodeHtml(bookingData?.coupon_discount)}
-                      </span>{" "}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              {bookingData?.coupon && (
+                <table className="fx-billing-shipping-notification noborder">
+                  <tbody>
+                    <tr>
+                      <th>
+                        <i
+                          className="fa fa-exclamation-triangle"
+                          aria-hidden="true"
+                        ></i>
+                        This order has
+                      </th>
+                    </tr>
+                    <tr>
+                      <td className="fx-coupon-des">
+                        <i className="pi pi-angle-double-right"></i>
+                        coupon/s <strong>{bookingData?.coupon}</strong> with
+                        total discount of{" "}
+                        <span className="postive_price_module_discount">
+                          {decodeHtml(bookingData?.coupon_discount)}
+                        </span>{" "}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              )}
 
               {/* <table className="discountbox">
               <tbody>

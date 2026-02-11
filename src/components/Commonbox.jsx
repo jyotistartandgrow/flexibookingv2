@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
@@ -34,7 +34,9 @@ export default function Commonbox({ setVisibleBottom }) {
   const couponcode = useSelector((state) => state.step1.couponcode);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const stripe_key = useSelector((state) => state.step1.stripe_key);
-  const [stripePromise] = useState(() => loadStripe(stripe_key));
+  const stripePromise = useMemo(() => {
+    return stripe_key ? loadStripe(stripe_key) : null;
+  }, [stripe_key]);
   const [coupon, setCoupon] = useState("");
   const [fields, setFields] = useState([{ code: "" }]);
   const isDesktop = useDeviceType();
@@ -62,6 +64,25 @@ export default function Commonbox({ setVisibleBottom }) {
     dispatch(setStep("servicesstep"));
   };
 
+  const deleteaccept = async (id, type) => {
+    dispatch(setLoading(true));
+    const updatedServices = cart[type].filter((item) => item.id !== id);
+    dispatch(
+      setCart({
+        ...cart,
+        [type]: updatedServices,
+      }),
+    );
+    dispatch(setLoading(false));
+    toast.current.show({
+      severity: "success",
+      summary: "Deleted",
+      detail: "Service has been removed from cart",
+      life: 3000,
+    });
+    dispatch(setStep("servicesstep"));
+  };
+
   const reject = () => {
     toast.current.show({
       severity: "warn",
@@ -76,7 +97,19 @@ export default function Commonbox({ setVisibleBottom }) {
       message: "Are you sure you want to proceed?",
       header: "Confirmation",
       icon: "pi pi-exclamation-triangle",
+      className: "fx-confirmation-popup",
       accept: () => editaccept(id),
+      reject,
+    });
+  };
+
+  const deleteitem = (id, type) => {
+    confirmDialog({
+      message: "Are you sure you want to delete this service?",
+      header: "Delete Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      className: "fx-confirmation-popup",
+      accept: () => deleteaccept(id, type),
       reject,
     });
   };
@@ -121,6 +154,15 @@ export default function Commonbox({ setVisibleBottom }) {
   };
 
   const applycoupon = async (key) => {
+    if (coupon.trim() === "") {
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: "Please enter a coupon code",
+        life: 3000,
+      });
+      return;
+    }
     Swal.fire({
       toast: true,
       position: "top-end",
@@ -224,6 +266,9 @@ export default function Commonbox({ setVisibleBottom }) {
                       {ct.name} {!gift && `X ${ct.capacity}`}
                       <br />
                       <span onClick={() => edititem(ct.id)}>Edit</span>{" "}
+                      <span onClick={() => deleteitem(ct.id, "service")}>
+                        Delete
+                      </span>
                     </div>
                     <div className="time">{ct.slot}</div>
                     <div className="price">
@@ -240,6 +285,9 @@ export default function Commonbox({ setVisibleBottom }) {
                         {ct.name} {!gift && `X ${ct.capacity}`}
                         <br />
                         <span onClick={() => edititem(ct.id)}>Edit</span>{" "}
+                        <span onClick={() => deleteitem(ct.id, "extra")}>
+                          Delete
+                        </span>
                       </div>
                       <div className="time">{ct.slot}</div>
                       <div className="price">
@@ -292,7 +340,7 @@ export default function Commonbox({ setVisibleBottom }) {
         </div>
       )}
       <Toast ref={toast} />
-      <ConfirmDialog />
+      <ConfirmDialog className="fx-confirmation-popup" />
     </>
   );
 }

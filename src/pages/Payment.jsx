@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
@@ -25,7 +25,9 @@ export default function Payment() {
   const couponcode = useSelector((state) => state.step1.couponcode);
   const isDesktop = useDeviceType();
   const stripe_key = useSelector((state) => state.step1.stripe_key);
-  const [stripePromise] = useState(() => loadStripe(stripe_key));
+  const stripePromise = useMemo(() => {
+    return stripe_key ? loadStripe(stripe_key) : null;
+  }, [stripe_key]);
 
   useEffect(() => {
     if (step == "paymentstep") {
@@ -154,9 +156,11 @@ export default function Payment() {
       {!isDesktop && (
         <div className="fx-paymentbox">
           <h1 className="fx-all-main-heading">Payment</h1>
-          <Elements stripe={stripePromise}>
-            <CheckoutForm />
-          </Elements>
+          {stripePromise && (
+            <Elements stripe={stripePromise}>
+              <CheckoutForm />
+            </Elements>
+          )}
         </div>
       )}
     </div>

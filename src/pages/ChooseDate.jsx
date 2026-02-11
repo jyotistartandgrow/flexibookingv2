@@ -225,18 +225,18 @@ export default function ChooseDate() {
       setErrorlist({ phoneNumber: true });
       return;
     }
-    if (!receiverInfo.country) {
-      setErrorlist({ country: true });
-      return;
-    }
-    if (!receiverInfo.zip) {
-      setErrorlist({ zip: true });
-      return;
-    }
-    if (!receiverInfo.address) {
-      setErrorlist({ address: true });
-      return;
-    }
+    // if (!receiverInfo.country) {
+    //   setErrorlist({ country: true });
+    //   return;
+    // }
+    // if (!receiverInfo.zip) {
+    //   setErrorlist({ zip: true });
+    //   return;
+    // }
+    // if (!receiverInfo.address) {
+    //   setErrorlist({ address: true });
+    //   return;
+    // }
 
     checkavailability();
   };
@@ -432,7 +432,7 @@ export default function ChooseDate() {
                 )}
               </div>
             </div>
-            <div className="fx-inputgroup">
+            <div className="fx-inputgroup fx-hidden">
               <div className="fx-input-wrapper">
                 <input
                   type="text"
@@ -469,7 +469,7 @@ export default function ChooseDate() {
                 {errorlist.zip && <span class="fx-errortext">Enter Zip</span>}
               </div>
             </div>
-            <div className="fx-inputgroup">
+            <div className="fx-inputgroup fx-hidden">
               <div className="fx-input-wrapper">
                 <input
                   type="text"

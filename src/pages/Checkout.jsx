@@ -33,10 +33,37 @@ export default function Checkout() {
   const [invoice, setInvoice] = useState(false);
   const [numberOnly, setNumberOnly] = useState("");
   const [errorlist, setErrorlist] = useState({});
+  const [visibleField, setVisibleField] = useState({});
 
   useEffect(() => {
     setErrorlist({});
   }, [billdata]);
+
+  useEffect(() => {
+    if (step != "checkoutstep") {
+      return;
+    }
+    getFields();
+  }, [step]);
+
+  const getFields = async () => {
+    dispatch(setLoading(true));
+    const { data } = await axiosInstance(`/get-fields`, {
+      method: "get",
+    });
+    if (data) {
+      const fields = data.data; // Handle nested data structure
+      if (Array.isArray(fields)) {
+        fields.forEach((field) => {
+          if (field.field_options && field.field_options.is_visible == 1) {
+            setVisibleField((prev) => ({ ...prev, [field.field_key]: true }));
+          }
+        });
+      }
+    }
+
+    dispatch(setLoading(false));
+  };
 
   const getState = async (country) => {
     dispatch(setLoading(true));
@@ -51,35 +78,35 @@ export default function Checkout() {
   };
 
   const checkout = async () => {
-    if (!billdata.sgbm_field_1) {
+    if (!billdata.sgbm_field_1 && visibleField.sgbm_field_1) {
       setErrorlist({ sgbm_field_1: true });
       return;
     }
-    if (!billdata.sgbm_field_3) {
+    if (!billdata.sgbm_field_3 && visibleField.sgbm_field_3) {
       setErrorlist({ sgbm_field_3: true });
       return;
     }
-    if (numberOnly.trim() == "") {
+    if (numberOnly.trim() == "" && visibleField.sgbm_field_4) {
       setErrorlist({ sgbm_field_4: true });
       return;
     }
-    if (!billdata.sgbm_field_5) {
+    if (!billdata.sgbm_field_5 && visibleField.sgbm_field_5) {
       setErrorlist({ sgbm_field_5: true });
       return;
     }
-    if (!billdata.sgbm_field_6) {
+    if (!billdata.sgbm_field_6 && visibleField.sgbm_field_6) {
       setErrorlist({ sgbm_field_6: true });
       return;
     }
-    if (!billdata.sgbm_field_8) {
+    if (!billdata.sgbm_field_8 && visibleField.sgbm_field_8) {
       setErrorlist({ sgbm_field_8: true });
       return;
     }
-    if (!billdata.sgbm_field_9) {
+    if (!billdata.sgbm_field_9 && visibleField.sgbm_field_9) {
       setErrorlist({ sgbm_field_9: true });
       return;
     }
-    if (!billdata.sgbm_field_10) {
+    if (!billdata.sgbm_field_10 && visibleField.sgbm_field_10) {
       setErrorlist({ sgbm_field_10: true });
       return;
     }
@@ -171,7 +198,7 @@ export default function Checkout() {
       {/* <h1 className="fx-main-heading">Checkout</h1> */}
       <div className="fx-commoninput">
         <div className="fx-inputgroup">
-          <div className="fx-element-box">
+          <div className={`fx-element-box ${visibleField.sgbm_field_1 ? "" : "fx-hidden"}`}>
             <label>First Name</label>
             <input
               type="text"
@@ -185,7 +212,7 @@ export default function Checkout() {
               <span class="fx-errortext">Enter First Name</span>
             )}
           </div>
-          <div className="fx-element-box">
+          <div className={`fx-element-box ${visibleField.sgbm_field_2 ? "" : "fx-hidden"}`}>
             <label>Last Name</label>
             <input
               type="text"
@@ -197,7 +224,7 @@ export default function Checkout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className="fx-element-box">
+          <div className={`fx-element-box ${visibleField.sgbm_field_3 ? "" : "fx-hidden"}`}>
             <label>Email</label>
             <input
               type="email"
@@ -211,7 +238,7 @@ export default function Checkout() {
               <span class="fx-errortext">Enter Email</span>
             )}
           </div>
-          <div className="fx-element-box">
+          <div className={`fx-element-box ${visibleField.sgbm_field_4 ? "" : "fx-hidden"}`}>
             <label className="fx-mobile-input">Mobile</label>
             <div className="fx-phone-input">
               <PhoneInput
@@ -235,7 +262,7 @@ export default function Checkout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className="fx-element-box">
+          <div className={`fx-element-box ${visibleField.sgbm_field_5 ? "" : "fx-hidden"}`}>
             <label>Address</label>
             <input
               type="text"
@@ -253,12 +280,12 @@ export default function Checkout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className="fx-element-box fx-selectwrapper">
+          <div className={`fx-element-box fx-selectwrapper ${visibleField.sgbm_field_8 ? "" : "fx-hidden"}`}>
             <label>Country</label>
             <select
               onChange={(e) => {
                 setBilldata({ ...billdata, sgbm_field_8: e.target.value });
-                getState(e.target.value);
+                visibleField.sgbm_field_8 && getState(e.target.value);
               }}
               className={errorlist.sgbm_field_8 ? "fx-invalid" : ""}
             >
@@ -271,7 +298,7 @@ export default function Checkout() {
               <span class="fx-errortext">Enter Country</span>
             )}
           </div>
-          <div className="fx-element-box fx-selectwrapper">
+          <div className={`fx-element-box fx-selectwrapper ${visibleField.sgbm_field_7 ? "" : "fx-hidden"}`}>
             <label>State</label>
             <select
               onChange={(e) => {
@@ -290,7 +317,7 @@ export default function Checkout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className="fx-element-box">
+          <div className={`fx-element-box ${visibleField.sgbm_field_6 ? "" : "fx-hidden"}`}>
             <label>City</label>
             <input
               type="text"
@@ -304,7 +331,7 @@ export default function Checkout() {
               <span class="fx-errortext">Enter City</span>
             )}
           </div>
-          <div className="fx-element-box">
+          <div className={`fx-element-box ${visibleField.sgbm_field_9 ? "" : "fx-hidden"}`}>
             <label>Zip</label>
             <input
               type="text"
@@ -320,7 +347,7 @@ export default function Checkout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className="fx-element-box">
+          <div className={`fx-element-box ${visibleField.sgbm_field_10 ? "" : "fx-hidden"}`}>
             <label>Order Notes</label>
             <input
               type="text"
@@ -342,144 +369,144 @@ export default function Checkout() {
           <label htmlFor="option1">Gift</label>
           <InputSwitch
             checked={gift ? true : false}
-            onChange={() => setGift(!gift)}
+            onChange={() => dispatch(setGift(!gift))}
             inputId="option1"
           />
-        
-        {gift == true && (
-          <>
-            <h3>Gift Receiver Information</h3>
-            <div className="fx-commoninput">
-              <div class="fx-inputgroup">
-                <div class="fx-element-box">
-                  <label>First Name</label>
-                  <input
-                    placeholder="First Name"
-                    type="text"
-                    value={receiverInfo.firstName}
-                  onBlur={(e) =>
-                    dispatch(
-                      setReceiverInfo({
-                        ...receiverInfo,
-                        firstName: e.target.value,
-                      }),
-                    )
-                  }
-                  ></input>
-                </div>
-                <div class="fx-element-box">
-                  <label>Last Name</label>
-                  <input
-                    placeholder="Last Name"
-                    type="text"
-                    value={receiverInfo.lastName}
-                    onBlur={(e) =>
-                      dispatch(
-                        setReceiverInfo({
-                          ...receiverInfo,
-                          lastName: e.target.value,
-                        }),
-                      )
-                    }
-                  ></input>
-                </div>
-              </div>
-              <div class="fx-inputgroup">
-                <div class="fx-element-box">
-                  <label>Email</label>
-                  <input
-                    placeholder="Email"
-                    type="text"
-                    value={receiverInfo.email}
-                  onBlur={(e) =>
-                    dispatch(
-                      setReceiverInfo({
-                        ...receiverInfo,
-                        email: e.target.value,
-                      }),
-                    )
-                  }
-                  ></input>
-                </div>
-                <div class="fx-element-box">
-                  <label>Phone Number</label>
-                  <input
-                    placeholder="Phone Number"
-                    type="text"
-                    value={receiverInfo.phoneNumber}
-                    onBlur={(e) =>
-                      dispatch(
-                        setReceiverInfo({
-                          ...receiverInfo,
-                          phoneNumber: e.target.value,
-                        }),
-                      )
-                    }
-                  ></input>
-                </div>
-              </div>
-              <div class="fx-inputgroup">
-                <div class="fx-element-box">
-                  <label>Country</label>
-                  <input
-                    placeholder="Country"
-                    type="text"
-                    value={receiverInfo.country}
-                  onBlur={(e) =>
-                    dispatch(
-                      setReceiverInfo({
-                        ...receiverInfo,
-                        country: e.target.value,
-                      }),
-                    )
-                  }
-                  ></input>
-                </div>
-                <div class="fx-element-box">
-                  <label>Zip</label>
-                  <input
-                    placeholder="Zip"
-                    type="text"
-                    value={receiverInfo.zip}
-                    onBlur={(e) =>
-                      dispatch(
-                        setReceiverInfo({
-                          ...receiverInfo,
-                          zip: e.target.value,
-                        }),
-                      )
-                    }
-                  ></input>
-                </div>
-              </div>
-              <div class="fx-inputgroup">
-                <div class="fx-element-box">
-                  <label>Address</label>
-                  <input
-                    placeholder="Address"
-                    type="text"
-                    value={receiverInfo.address}
-                  onBlur={(e) =>
-                    dispatch(
-                      setReceiverInfo({
-                        ...receiverInfo,
-                        address: e.target.value,
-                      }),
-                    )
-                  }
-                  ></input>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
 
-        <label htmlFor="option2">Invoice Request</label>
-        <InputSwitch
-          checked={invoice ? true : false}
-          onChange={() => setInvoice(!invoice)}
-          inputId="option2"
-        />
+          {gift == true && (
+            <>
+              <h3>Gift Receiver Information</h3>
+              <div className="fx-commoninput">
+                <div class="fx-inputgroup">
+                  <div class="fx-element-box">
+                    <label>First Name</label>
+                    <input
+                      placeholder="First Name"
+                      type="text"
+                      value={receiverInfo.firstName}
+                      onBlur={(e) =>
+                        dispatch(
+                          setReceiverInfo({
+                            ...receiverInfo,
+                            firstName: e.target.value,
+                          }),
+                        )
+                      }
+                    ></input>
+                  </div>
+                  <div class="fx-element-box">
+                    <label>Last Name</label>
+                    <input
+                      placeholder="Last Name"
+                      type="text"
+                      value={receiverInfo.lastName}
+                      onBlur={(e) =>
+                        dispatch(
+                          setReceiverInfo({
+                            ...receiverInfo,
+                            lastName: e.target.value,
+                          }),
+                        )
+                      }
+                    ></input>
+                  </div>
+                </div>
+                <div class="fx-inputgroup">
+                  <div class="fx-element-box">
+                    <label>Email</label>
+                    <input
+                      placeholder="Email"
+                      type="text"
+                      value={receiverInfo.email}
+                      onBlur={(e) =>
+                        dispatch(
+                          setReceiverInfo({
+                            ...receiverInfo,
+                            email: e.target.value,
+                          }),
+                        )
+                      }
+                    ></input>
+                  </div>
+                  <div class="fx-element-box">
+                    <label>Phone Number</label>
+                    <input
+                      placeholder="Phone Number"
+                      type="text"
+                      value={receiverInfo.phoneNumber}
+                      onBlur={(e) =>
+                        dispatch(
+                          setReceiverInfo({
+                            ...receiverInfo,
+                            phoneNumber: e.target.value,
+                          }),
+                        )
+                      }
+                    ></input>
+                  </div>
+                </div>
+                <div class="fx-inputgroup">
+                  <div class="fx-element-box fx-hidden">
+                    <label>Country</label>
+                    <input
+                      placeholder="Country"
+                      type="text"
+                      value={receiverInfo.country}
+                      onBlur={(e) =>
+                        dispatch(
+                          setReceiverInfo({
+                            ...receiverInfo,
+                            country: e.target.value,
+                          }),
+                        )
+                      }
+                    ></input>
+                  </div>
+                  <div class="fx-element-box fx-hidden">
+                    <label>Zip</label>
+                    <input
+                      placeholder="Zip"
+                      type="text"
+                      value={receiverInfo.zip}
+                      onBlur={(e) =>
+                        dispatch(
+                          setReceiverInfo({
+                            ...receiverInfo,
+                            zip: e.target.value,
+                          }),
+                        )
+                      }
+                    ></input>
+                  </div>
+                </div>
+                <div class="fx-inputgroup">
+                  <div class="fx-element-box fx-hidden">
+                    <label>Address</label>
+                    <input
+                      placeholder="Address"
+                      type="text"
+                      value={receiverInfo.address}
+                      onBlur={(e) =>
+                        dispatch(
+                          setReceiverInfo({
+                            ...receiverInfo,
+                            address: e.target.value,
+                          }),
+                        )
+                      }
+                    ></input>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          <label htmlFor="option2">Invoice Request</label>
+          <InputSwitch
+            checked={invoice ? true : false}
+            onChange={() => setInvoice(!invoice)}
+            inputId="option2"
+          />
         </div>
         <div className="fx-inputgroup fx-checkboxcontainer">
           <input

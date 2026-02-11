@@ -53,7 +53,13 @@ export default function Service() {
       },
     );
     if (data && data.status == 200) {
-      setProductsArr(data.data);
+      if (data.data.length == 0) {
+        addtocart();
+        dispatch(setStep("checkoutstep"));
+        dispatch(setLoading(false));
+      } else {
+        setProductsArr(data.data);
+      }
     }
     setLoadingske(false);
   };
@@ -143,7 +149,7 @@ export default function Service() {
       let count = parseInt(currentbook) - parseInt(1);
       if (count >= 0) {
         setBook(count);
-        if(count == 0){
+        if (count == 0) {
           setExtraid(null);
         }
       }
