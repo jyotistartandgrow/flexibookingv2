@@ -30,7 +30,6 @@
 
 }
  .fx-booking .fx-commoninput label{
-  font-family: "Roboto", sans-serif;
   font-size:16px;
   font-weight: 400;
   color: var(darkgrey);
@@ -164,7 +163,6 @@
   width: 240px;
   font-weight: 400;
   font-size: var(--normal-descriptionsize);
-  font-family: "Roboto", sans-serif;
   border-radius: 44px;
   background: var(--primary-color);
   color: var(--white);
@@ -178,7 +176,6 @@
   padding: 12px 24px;
   font-weight: 400;
   font-size: var(--normal-descriptionsize);
-  font-family: "Roboto", sans-serif;
   border-radius: 44px;
   cursor: pointer;
 }
@@ -510,7 +507,6 @@
   border-radius: 4px;
   // overflow: hidden;
   width: 100%;
-  font-family: 'Roboto', sans-serif;
 }
 .fx-booking .fx-phone-input .arrow{
   margin-left: inherit;
