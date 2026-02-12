@@ -400,14 +400,14 @@ export default function Checkout() {
             <>
               <h3>Gift Receiver Information</h3>
               {/* Preview Button */}
-              <GiftCardPreviewButton
+              {/* <GiftCardPreviewButton
                 receiverFirstName={receiverInfo.firstName}
                 receiverLastName={receiverInfo.lastName}
                 services={cart}
                 total={decodeHtml(cart.total_formatted)}
                 senderName={billdata.sgbm_field_1 || "You"}
                 message="Enjoy your special day!"
-              />
+              /> */}
               <div className="fx-commoninput">
                 <div class="fx-inputgroup">
                   <div class="fx-element-box">

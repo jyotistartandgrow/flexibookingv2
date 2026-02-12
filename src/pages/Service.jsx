@@ -453,7 +453,7 @@ export default function Service() {
     const { data } = await axiosInstance.post(`/addtocart`, {
       service_id: serviceid,
       date: moment(date).format("YYYY-MM-DD"),
-      total_service_booking: book,
+      total_service_booking: gift ? 1 : book,
       time_slot: slot,
       extra_svc_ids: [],
       no_of_persons: 0,

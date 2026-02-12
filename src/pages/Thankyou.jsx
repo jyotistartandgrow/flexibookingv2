@@ -247,7 +247,7 @@ export default function Thankyou() {
                 </div>
               </div>
 
-              {bookingData?.coupon && (
+              {bookingData?.coupon != "N/A" && (
                 <table className="fx-billing-shipping-notification noborder">
                   <tbody>
                     <tr>
