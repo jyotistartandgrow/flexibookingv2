@@ -353,9 +353,10 @@ export default function ChooseDate() {
           <div className="fx-element-box">
             <input
               type="submit"
-              className="btn-primary"
+              className={!date ? "btn-primary fx-btn-disable" : "btn-primary"}
               value="Check Availability"
               onClick={() => checkavailability()}
+              disabled={!date}
             />
           </div>
         </div>

@@ -398,16 +398,18 @@ export default function Checkout() {
 
           {gift == true && (
             <>
-              <h3>Gift Receiver Information</h3>
-              {/* Preview Button */}
-              {/* <GiftCardPreviewButton
-                receiverFirstName={receiverInfo.firstName}
-                receiverLastName={receiverInfo.lastName}
-                services={cart}
-                total={decodeHtml(cart.total_formatted)}
-                senderName={billdata.sgbm_field_1 || "You"}
-                message="Enjoy your special day!"
-              /> */}
+              <div className="fx-gift-receiver-header">
+                <h3>Gift Receiver Information</h3>
+                {/* Preview Button */}
+                <GiftCardPreviewButton
+                  receiverFirstName={receiverInfo.firstName}
+                  receiverLastName={receiverInfo.lastName}
+                  services={cart}
+                  total={decodeHtml(cart.total_formatted)}
+                  senderName={billdata.sgbm_field_1 || "You"}
+                  message="Enjoy your special day!"
+                />
+              </div>
               <div className="fx-commoninput">
                 <div class="fx-inputgroup">
                   <div class="fx-element-box">

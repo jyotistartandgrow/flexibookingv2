@@ -170,7 +170,7 @@ h3 {
 .fx-leftcontentbox h1.fx-all-main-heading{
     margin-top: 40px;
     font-size:28px;
-    margin-top: 16px;
+    margin-top: 20px;
 }
 .fx-booking .fx-commoninput .fx-toggleswitch{
     display: flex;
@@ -477,7 +477,8 @@ h1{
 
 .p-carousel-items-container .fx-extrabox{
   max-width: 224px;
-  box-shadow: 0px 0px 3px 0px var(--box-shadow);
+  border: 1px solid #e2e4e9;
+  border-radius:8px;
 }
 .p-carousel-items-container .fx-extrabox .fx-extrapicbox{
     position: relative;
@@ -490,6 +491,7 @@ h1{
     object-fit: cover;
     object-position: center;
     transition: transform 0.2s;
+    border-radius:8px 8px 0px 0px;
 }
 
 .fx-booking .fx-extrabox .fx-extracontentbox{
@@ -497,6 +499,26 @@ h1{
     height: auto;
     padding: 16px;
     background: var(--white);
+    border-radius:0px 0px 8px 8px;
+}
+
+.fx-booking .fx-extrabox .fx-extracontentbox h4{
+    font-size: var(--card-headingsize);
+    font-weight: 300;
+    margin: 0px;
+    margin-bottom: 6px;
+    height: 27px;
+    overflow: hidden;
+}
+
+.fx-booking .fx-extrabox .fx-extracontentbox p{
+    height: 42px;
+    font-size: var(--normal-descriptionsize);
+    font-weight: 300;
+    color: var(--grey);
+    margin-top: 4px;
+    margin-bottom: 4px;
+    overflow: hidden;
 }
 
 .fx-rightpopup-details-box{
