@@ -43,6 +43,19 @@ export default function ChooseDate() {
     setIsVisible(type);
   };
 
+  const validatePhoneNumber = (phone) => {
+    // Allows international formats: +, digits, spaces, hyphens, parentheses
+    // Must have 10-15 digits
+    const phoneRegex =
+      /^[+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,5}[-\s\.]?[0-9]{1,5}$/;
+    const digitsOnly = phone.replace(/\D/g, "");
+    return (
+      phoneRegex.test(phone) &&
+      digitsOnly.length >= 10 &&
+      digitsOnly.length <= 15
+    );
+  };
+
   useEffect(() => {
     if (gift) {
       dispatch(setDate(moment().add(1, "day")));
@@ -221,7 +234,10 @@ export default function ChooseDate() {
       setErrorlist({ email: true });
       return;
     }
-    if (!receiverInfo.phoneNumber) {
+    if (
+      !receiverInfo.phoneNumber ||
+      !validatePhoneNumber(receiverInfo.phoneNumber)
+    ) {
       setErrorlist({ phoneNumber: true });
       return;
     }
@@ -277,7 +293,9 @@ export default function ChooseDate() {
       className="fx-leftcontentbox"
       style={{ display: step === "datestep" ? "block" : "none" }}
     >
-      <h1 className="fx-all-main-heading fx-main-page-heading">Book your Services</h1>
+      <h1 className="fx-all-main-heading fx-main-page-heading">
+        {gift ? "Book your Gift" : "Book your Services"}
+      </h1>
       <div id="fx-tab_nav">
         <ul>
           <li>
@@ -425,10 +443,20 @@ export default function ChooseDate() {
                       }),
                     )
                   }
+                  onBlur={(e) => {
+                    const phone = e.target.value.trim();
+                    if (phone && !validatePhoneNumber(phone)) {
+                      setErrorlist((prev) => ({ ...prev, phoneNumber: true }));
+                    } else {
+                      setErrorlist((prev) => ({ ...prev, phoneNumber: false }));
+                    }
+                  }}
                 />
                 <i className="pi pi-phone"></i>
                 {errorlist.phoneNumber && (
-                  <span class="fx-errortext">Enter Phone number</span>
+                  <span class="fx-errortext">
+                    Enter valid phone number (min 10 digits)
+                  </span>
                 )}
               </div>
             </div>
