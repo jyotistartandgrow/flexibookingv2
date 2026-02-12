@@ -155,7 +155,7 @@
   padding: 0px;
   list-style: none;
   position: absolute;
-  top: 6px;
+  top: 4px;
   right: 0px;
 }
 
@@ -182,9 +182,10 @@
 }
 
 .fx-booking #fx-Icontab_nav li a.selected {
-  border: 1px solid var(--darkblue-color);
-  color: var(--darkblue-color);
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
 }
+
 
 .fx-booking #fx-Icontab_nav div.fx-tabcontent {
   display: none;

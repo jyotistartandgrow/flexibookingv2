@@ -8,11 +8,11 @@
 
 .fx-preview-button {
   background-color: transparent;
-  color: #14b8a6;
-  border: 2px solid #14b8a6;
+  color:var(--primary-color);
+  border: 2px solid var(--primary-color);
   padding: 0.75rem 1.5rem;
   font-weight: 600;
-  border-radius: 0.5rem;
+  border-radius: 48px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: inline-flex;
@@ -21,19 +21,26 @@
 }
 
 .fx-preview-button:hover {
-  background-color: #14b8a6;
+  background-color:var(--primary-color);
   color: white;
-  border-color: #14b8a6;
+  border-color:var(--primary-color);
 }
 
 .fx-preview-button i {
   font-size: 1.125rem;
 }
 
+.fx-gift-card-dialog{
+  box-shadow:none;
+  border-radius:0px;
+}
+
 .fx-gift-card-dialog .p-dialog-header {
-  background-color: #f9fafb;
+  background-color:inherit;
   border-bottom: 1px solid #e5e7eb;
 }
+
+
 
 .fx-gift-card-dialog .p-dialog-content {
   padding: 2rem 1rem;
@@ -41,14 +48,16 @@
 
 /* Override PrimeReact dialog styles with fx- prefix specificity */
 .fx-gift-card-dialog.p-dialog .p-dialog-header {
-  background-color: #f9fafb;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 1.25rem 1.5rem;
+  background-color:inherit;
+  border-bottom: 0px;
+  padding: 0px;
+  right:86px;
+  top:10px;
 }
 
 .fx-gift-card-dialog.p-dialog .p-dialog-content {
-  padding: 2rem 1.5rem;
-  background-color: white;
+  padding: 0px;
+  background-color:inherit;
 }
 
 .fx-gift-card-dialog.p-dialog .p-dialog-header-close {
@@ -237,4 +246,47 @@
   .fx-gift-card-content {
     padding: 2rem;
   }
+}
+
+.fx-gift-receiver-header{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.fx-gift-receiver-header h3{
+  width:50%;
+  font-size: 22px;
+    font-weight: 600;
+}
+
+.fx-gift-receiver-header .fx-preview-button-container{
+    float: right;
+    width: 50%;
+}
+
+.fx-gift-receiver-header .fx-preview-button-container .fx-preview-button{
+ float: right;
+}
+
+@media (max-width: 768px) {
+  .fx-gift-receiver-header{
+    display: flex;
+    flex-direction:column;
+    width: 100%;
+}
+
+.fx-gift-receiver-header .fx-preview-button-container{
+  width:100%;
+}
+
+.fx-gift-receiver-header h3{
+  width:100%;
+}
+
+.fx-gift-card-dialog.p-dialog .p-dialog-header{
+  right: 26px;
+    top: 26px;
+}
+
 }
