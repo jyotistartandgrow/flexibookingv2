@@ -523,9 +523,22 @@ export default function ChooseDate() {
             <div className="fx-element-box">
               <input
                 type="submit"
-                className="btn-primary"
+                className={
+                  !receiverInfo.firstName ||
+                  !receiverInfo.lastName ||
+                  !receiverInfo.email ||
+                  !receiverInfo.phoneNumber
+                    ? "btn-primary fx-btn-disable"
+                    : "btn-primary"
+                }
                 value="View Services"
                 onClick={() => viewService()}
+                disabled={
+                  !receiverInfo.firstName ||
+                  !receiverInfo.lastName ||
+                  !receiverInfo.email ||
+                  !receiverInfo.phoneNumber
+                }
               />
             </div>
           </div>
