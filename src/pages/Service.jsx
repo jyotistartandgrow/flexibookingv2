@@ -910,10 +910,10 @@ export default function Service() {
                                         <div className="time">
                                           {item.time_slot}
                                         </div>
-                                        <img
+                                        {/* <img
                                           className="fx-offericon"
                                           src={percentage}
-                                        />
+                                        /> */}
                                         {(() => {
                                           let percentIcon = null;
                                           if (
@@ -1024,10 +1024,10 @@ export default function Service() {
                                         <div className="time">
                                           {item.time_slot}
                                         </div>
-                                        <img
+                                        {/* <img
                                           className="fx-offericon"
                                           src={percentage}
-                                        />
+                                        /> */}
                                         {(() => {
                                           let percentIcon = null;
                                           if (
@@ -1154,10 +1154,10 @@ export default function Service() {
                                       <div className="time">
                                         {singleslotItem.time_slot}
                                       </div>
-                                      <img
+                                      {/* <img
                                         className="fx-offericon"
                                         src={percentage}
-                                      />
+                                      /> */}
                                       {(() => {
                                         let percentIcon = null;
                                         if (
@@ -1252,10 +1252,10 @@ export default function Service() {
                                 >
                                   <div className="fx-timeslotsection">
                                     <div className="time">{item.time_slot}</div>
-                                    <img
+                                    {/* <img
                                       className="fx-offericon"
                                       src={percentage}
-                                    />
+                                    /> */}
                                     {(() => {
                                       let percentIcon = null;
                                       if (

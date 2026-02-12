@@ -212,7 +212,7 @@ export default function Commonbox({ setVisibleBottom }) {
 
   return (
     <>
-      {!cart.service && !date && (
+      {!cart.service && !date && !gift && (
         <p className="giftmessagebox">
           book your service on a specific date" and "do a gift to a friend
         </p>
