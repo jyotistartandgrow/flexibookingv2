@@ -169,7 +169,8 @@ h3 {
 
 .fx-leftcontentbox h1.fx-all-main-heading{
     margin-top: 40px;
-    font-size:32px;
+    font-size:28px;
+    margin-top: 16px;
 }
 .fx-booking .fx-commoninput .fx-toggleswitch{
     display: flex;
@@ -194,7 +195,7 @@ svg.p-icon.p-datepicker-prev-icon {
     background-color: #ccc;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 768px) {
 /* body{
     overflow: auto !important;
 }
@@ -204,8 +205,11 @@ svg.p-icon.p-datepicker-prev-icon {
 }
 .fx-booking .fx-leftbar{
     padding:15px;
-    padding-bottom:107px;
+    padding-bottom:16px;
     overflow:auto;
+}
+.fx-booking.fx-container{
+    min-height:auto;
 }
 .fx-booking .fx-sidebar{
     display: none;
@@ -256,7 +260,7 @@ h1{
     gap: 20px;
     position: absolute;
     width: 100%;
-    z-index: 999;
+    z-index: 9;
 }
 
 .fx-skeleton-row.show {
@@ -475,7 +479,9 @@ h1{
   max-width: 224px;
   box-shadow: 0px 0px 3px 0px var(--box-shadow);
 }
-
+.p-carousel-items-container .fx-extrabox .fx-extrapicbox{
+    position: relative;
+}
 .fx-extrabox .fx-extrapicbox img{
   display: block;
     width: 100%;
@@ -523,6 +529,10 @@ h1{
 .fx-confirmation-popup .p-dialog-footer{
     padding: 0px;
     text-align: left;
+}
+
+.p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext{
+        box-shadow: 0 0 0 0.2rem var(--primary-color);
 }
 
 
