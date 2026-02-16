@@ -332,7 +332,7 @@ export default function ChooseDate() {
           <div className="fx-element-box">
             <div className="fx-calendar fx-commoninput">
               <Calendar
-                value={date}
+                value={date ? new Date(date) : null}
                 onChange={(e) => dispatch(setDate(e.value))}
                 dateTemplate={dateTemplate}
                 className="fx-datepicker"

@@ -1,0 +1,107 @@
+/* Parent Container */
+.fx-top-order-details-card {
+    width: 100%;
+    max-width: 600px;
+    background: #ffffff;
+    border: 1px solid #e0e4e8;
+    border-radius: 8px;
+    padding: 16px 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    margin: 20px auto;
+}
+
+/* Header Row Styles */
+.fx-top-order-details-card .fx-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.fx-top-order-details-card .fx-header-row .fx-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #344054;
+}
+
+.fx-top-order-details-card .fx-header-row .fx-chevron {
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #344054;
+    border-bottom: 2px solid #344054;
+    transform: rotate(-45deg); /* Right */
+    transition: transform 0.3s ease;
+}
+
+/* Toggle state for Chevron */
+.fx-top-order-details-card.fx-is-open .fx-header-row .fx-chevron {
+    transform: rotate(45deg); /* Down */
+}
+
+/* Summary Row Styles */
+.fx-top-order-details-card .fx-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #667085;
+    font-size: 14px;
+}
+
+.fx-top-order-details-card .fx-summary-row .fx-info-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.fx-top-order-details-card .fx-summary-row .fx-calendar-icon {
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid #667085;
+    border-radius: 2px;
+    position: relative;
+}
+
+.fx-top-order-details-card .fx-summary-row .fx-calendar-icon::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    background: #667085;
+}
+
+.fx-top-order-details-card .fx-summary-row .fx-price {
+    font-weight: 600;
+    color: #1d2939;
+}
+
+/* Slide-down Details */
+.fx-top-order-details-card .fx-collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out, margin-top 0.3s ease, opacity 0.2s ease;
+    color: #475467;
+    font-size: 13px;
+    opacity: 0;
+}
+
+/* Active Slide-down State */
+.fx-top-order-details-card.fx-is-open .fx-collapsible-content {
+    max-height: 300px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #f2f4f7;
+    opacity: 1;
+}
+
+.fx-top-order-details-card .fx-detail-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+}
