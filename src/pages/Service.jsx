@@ -1198,6 +1198,7 @@ export default function Service() {
                                 ));
                               })()}
                             </div>
+                              <div className="fx-popup-rightslot-continuebtn">
                             <div
                               className={
                                 slotVisible == "afternoon" && book > 0
@@ -1212,6 +1213,7 @@ export default function Service() {
                             >
                               Continue
                             </div>
+                          </div>
                           </div>
                         </>
                       )}
@@ -1429,6 +1431,7 @@ export default function Service() {
                             ));
                           })()}
                         </div>
+                        <div className="fx-popup-rightslot-continuebtn">
                         <div
                           className={
                             (slotVisible == "all" ||
@@ -1455,6 +1458,7 @@ export default function Service() {
                         >
                           Continue
                         </div>
+                      </div>
                       </div>
                     </div>
                   </>

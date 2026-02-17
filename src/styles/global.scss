@@ -36,10 +36,8 @@ body {
 
 .fx-booking.fx-container {
     display: flex;
+    width: 1320px;
     height: 100%;
-    width: 96%;
-    max-width: 100%;
-    max-height: 100%;
         position: relative;
     border: 1px solid #e1e1e1;
     margin: 2%;
@@ -47,6 +45,7 @@ body {
     background: #f9fafb;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    margin: auto;
 }
 
 .fx-down-icon-botttom{
@@ -203,6 +202,7 @@ svg.p-icon.p-datepicker-prev-icon {
  */
  .fx-booking.fx-container{
     display: inherit !important;
+    width: 100%;
 }
 .fx-booking .fx-leftbar{
     padding:15px;
@@ -244,14 +244,13 @@ h1{
         height: 90%;
 }
 
-
 }
 @media screen and (min-width: 1200px) {
   .fx-booking .fx-leftbar {
-    max-width:900px;
+    max-width:850px;
     width: 100%;
     margin: 0 auto;
-    padding-top: 40px;
+    padding-top: 32px;
     right: 180px;
   }
 }
@@ -575,7 +574,7 @@ h1{
 
 
 body.swal2-toast-shown .swal2-container{
-    z-index: 999;
+    z-index: 9999;
 }
 
 body.swal2-toast-shown .swal2-container input[type="checkbox"]{
@@ -583,3 +582,26 @@ body.swal2-toast-shown .swal2-container input[type="checkbox"]{
 }
 
 
+
+
+//  For Rightdetils Setting
+// .fx-booking.fx-container .fx-sidebar{
+//     display: none;
+// }
+
+// .fx-booking.fx-container .fx-leftbar{
+//     right: 0px;
+// }
+
+// //  For Top Setting
+
+// .fx-booking.fx-container .fx-top-order-details-box{
+//  display: block;
+// }
+
+// @media screen and (max-width: 768px) {
+
+// .fx-booking.fx-container .fx-top-order-details-box{
+//     display: none;
+// }
+// }
