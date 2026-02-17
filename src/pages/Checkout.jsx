@@ -35,8 +35,33 @@ export default function Checkout() {
   const [term, setTerm] = useState(false);
   const [invoice, setInvoice] = useState(false);
   const [numberOnly, setNumberOnly] = useState("");
+  const [phoneValid, setPhoneValid] = useState(true);
   const [errorlist, setErrorlist] = useState({});
+  const [receiverErrors, setReceiverErrors] = useState({});
   const [visibleField, setVisibleField] = useState({});
+
+  // Validation functions
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone) => {
+    return phone && phone.trim().length > 0;
+  };
+
+  const validatePhoneForCountry = (phone, countryData) => {
+    if (!phone || !countryData) return false;
+    
+    // Remove dial code to get the actual number
+    const number = phone.replace(countryData.dialCode, "").trim();
+    // Check if number is not empty and has reasonable length (typically 7-15 digits)
+    if (number.length < 7 || number.length > 15) return false;
+    
+    // Check if it only contains digits and spaces/dashes
+    const phoneRegex = /^[0-9\s-]+$/;
+    return phoneRegex.test(number);
+  };
 
   useEffect(() => {
     setErrorlist({});
@@ -81,17 +106,56 @@ export default function Checkout() {
   };
 
   const checkout = async () => {
+    // Validate gift receiver information if gift is enabled
+    if (gift) {
+      const errors = {};
+      
+      if (!receiverInfo.email || !validateEmail(receiverInfo.email)) {
+        errors.email = true;
+      }
+      
+      if (!validatePhone(receiverInfo.phoneNumber)) {
+        errors.phoneNumber = true;
+      }
+      
+      if (Object.keys(errors).length > 0) {
+        setReceiverErrors(errors);
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          icon: "error",
+          title: "Please enter valid receiver email and phone number",
+        });
+        return;
+      }
+      setReceiverErrors({});
+    }
+
     if (!billdata.sgbm_field_1 && visibleField.sgbm_field_1) {
       setErrorlist({ sgbm_field_1: true });
       return;
     }
-    if (!billdata.sgbm_field_3 && visibleField.sgbm_field_3) {
-      setErrorlist({ sgbm_field_3: true });
-      return;
+    if (visibleField.sgbm_field_3) {
+      if (!billdata.sgbm_field_3 || !validateEmail(billdata.sgbm_field_3)) {
+        setErrorlist({ sgbm_field_3: true });
+        return;
+      }
     }
-    if (numberOnly.trim() == "" && visibleField.sgbm_field_4) {
-      setErrorlist({ sgbm_field_4: true });
-      return;
+    if (visibleField.sgbm_field_4) {
+      if (numberOnly.trim() == "" || !phoneValid) {
+        setErrorlist({ sgbm_field_4: true });
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          icon: "error",
+          title: "Please enter a valid phone number for the selected country",
+        });
+        return;
+      }
     }
     if (!billdata.sgbm_field_5 && visibleField.sgbm_field_5) {
       setErrorlist({ sgbm_field_5: true });
@@ -190,6 +254,15 @@ export default function Checkout() {
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
         title: data?.message ?? "There is some error , please try again",
       });
+      if (data?.message == "Error Fetching Booking Information !!") {
+        Swal.fire({
+          icon: "error",
+          title: `Session Expired`,
+          text: "Your session has expired. Please start the booking process again.",
+        });
+        dispatch({ type: "app/reset" });
+        window.location.reload();
+      }
     }
     dispatch(setLoading(false));
   };
@@ -242,9 +315,16 @@ export default function Checkout() {
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_3: e.target.value })
               }
+              onBlur={(e) => {
+                if (e.target.value && !validateEmail(e.target.value)) {
+                  setErrorlist({ ...errorlist, sgbm_field_3: true });
+                } else {
+                  setErrorlist({ ...errorlist, sgbm_field_3: false });
+                }
+              }}
             />
             {errorlist.sgbm_field_3 && (
-              <span class="fx-errortext">Enter Email</span>
+              <span class="fx-errortext">Enter a valid email address</span>
             )}
           </div>
           <div
@@ -261,13 +341,25 @@ export default function Checkout() {
                   // Remove dial code to check number only
                   const number = phone.replace("+" + country.dialCode, "");
                   setNumberOnly(number);
+                  
+                  // Validate phone for country
+                  const isValid = validatePhoneForCountry(phone, country);
+                  setPhoneValid(isValid);
+                  
+                  // Clear error if valid
+                  if (isValid && errorlist.sgbm_field_4) {
+                    setErrorlist({ ...errorlist, sgbm_field_4: false });
+                  }
                 }}
                 enableSearch={true} // search country
                 disableDropdown={false} // keep dropdown
                 inputStyle={{ width: "100%" }}
+                isValid={(value, country) => {
+                  return validatePhoneForCountry(value, country);
+                }}
               />
               {errorlist.sgbm_field_4 && (
-                <span class="fx-errortext">Enter Phone number</span>
+                <span class="fx-errortext">Enter a valid phone number for the selected country</span>
               )}
             </div>
           </div>
@@ -389,15 +481,15 @@ export default function Checkout() {
         </div>
 
         <div className="fx-toggleswitch">
-          <label htmlFor="option1">Gift</label>
-          <InputSwitch
-            checked={gift ? true : false}
-            onChange={() => dispatch(setGift(!gift))}
-            inputId="option1"
-          />
-
           {gift == true && (
             <>
+              {/* <label htmlFor="option1">Gift</label>
+              <InputSwitch
+                checked={gift ? true : false}
+                onChange={() => dispatch(setGift(!gift))}
+                inputId="option1"
+              /> */}
+
               <div className="fx-gift-receiver-header">
                 <h3>Gift Receiver Information</h3>
                 {/* Preview Button */}
@@ -450,9 +542,10 @@ export default function Checkout() {
                     <label>Email</label>
                     <input
                       placeholder="Email"
-                      type="text"
+                      type="email"
                       value={receiverInfo.email}
-                      onBlur={(e) =>
+                      className={receiverErrors.email ? "fx-invalid" : ""}
+                      onChange={(e) =>
                         dispatch(
                           setReceiverInfo({
                             ...receiverInfo,
@@ -460,7 +553,17 @@ export default function Checkout() {
                           }),
                         )
                       }
+                      onBlur={(e) => {
+                        if (e.target.value && !validateEmail(e.target.value)) {
+                          setReceiverErrors({ ...receiverErrors, email: true });
+                        } else {
+                          setReceiverErrors({ ...receiverErrors, email: false });
+                        }
+                      }}
                     ></input>
+                    {receiverErrors.email && (
+                      <span class="fx-errortext">Enter a valid email address</span>
+                    )}
                   </div>
                   <div class="fx-element-box">
                     <label>Phone Number</label>
@@ -468,7 +571,8 @@ export default function Checkout() {
                       placeholder="Phone Number"
                       type="text"
                       value={receiverInfo.phoneNumber}
-                      onBlur={(e) =>
+                      className={receiverErrors.phoneNumber ? "fx-invalid" : ""}
+                      onChange={(e) =>
                         dispatch(
                           setReceiverInfo({
                             ...receiverInfo,
@@ -476,7 +580,17 @@ export default function Checkout() {
                           }),
                         )
                       }
+                      onBlur={(e) => {
+                        if (!validatePhone(e.target.value)) {
+                          setReceiverErrors({ ...receiverErrors, phoneNumber: true });
+                        } else {
+                          setReceiverErrors({ ...receiverErrors, phoneNumber: false });
+                        }
+                      }}
                     ></input>
+                    {receiverErrors.phoneNumber && (
+                      <span class="fx-errortext">Enter a valid phone number</span>
+                    )}
                   </div>
                 </div>
                 <div class="fx-inputgroup">

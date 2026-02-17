@@ -38,6 +38,7 @@ export default function ChooseDate() {
   const [coupon, setCoupon] = useState("");
   const [fields, setFields] = useState([{ code: "" }]);
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
+  const [viewDate, setViewDate] = useState(new Date());
   const [errorlist, setErrorlist] = useState({});
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -284,9 +285,72 @@ export default function ChooseDate() {
   };
 
   const handleMonthChange = (e) => {
+    if (e.month < 0) {
+      return;
+    }
     const month = String(e.month).padStart(2, "0"); // ensure 01–12
+    const selectedDate = moment(`${e.year}-${month}`, "YYYY-MM");
+    const currentMonth = moment().startOf("month");
+
+    if (!selectedDate.isValid()) {
+      return;
+    }
+    if (selectedDate.isBefore(currentMonth)) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "warning",
+        title: "Cannot select past months",
+      });
+      // Reset to current month
+      setViewDate(new Date());
+      return;
+    }
+
     setMonth(`${e.year}-${month}`); // YYYY-MM
+    setViewDate(new Date(e.year, e.month, 1));
   };
+
+  const handleViewDateChange = (e) => {
+    setViewDate(e.value);
+
+    // Check if we're at current month or earlier
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    const viewMonth = e.value.getMonth();
+    const viewYear = e.value.getFullYear();
+
+    const isCurrentOrPastMonth =
+      viewYear < currentYear ||
+      (viewYear === currentYear && viewMonth <= currentMonth);
+
+    // Disable/enable the previous button
+    setTimeout(() => {
+      const prevButton = document.querySelector(".p-datepicker-prev");
+      if (prevButton) {
+        if (isCurrentOrPastMonth) {
+          prevButton.style.pointerEvents = "none";
+          prevButton.style.opacity = "0.4";
+          prevButton.style.cursor = "not-allowed";
+        } else {
+          prevButton.style.pointerEvents = "";
+          prevButton.style.opacity = "";
+          prevButton.style.cursor = "";
+        }
+      }
+    }, 0);
+  };
+
+  // Initial setup when calendar opens
+  useEffect(() => {
+    if (calendarRef.current) {
+      handleViewDateChange({ value: viewDate });
+    }
+  }, []);
 
   return (
     <div
@@ -337,6 +401,8 @@ export default function ChooseDate() {
                 dateTemplate={dateTemplate}
                 className="fx-datepicker"
                 minDate={new Date()}
+                onViewDateChange={handleViewDateChange}
+                viewDate={viewDate}
                 disabledDates={disabledDates}
                 onMonthChange={handleMonthChange}
                 ref={calendarRef}
