@@ -562,5 +562,24 @@ h1{
     background-color: #ccc;
 }
 
+// .fx-element-box .btn-primary.fx-btn-disable:hover{
+//     background:#ccc !important;
+// }
+
+.fx-booking .fx-element-box input.btn-primary.fx-btn-disable[type="submit"]:focus,
+.fx-booking .fx-element-box input.btn-primary.fx-btn-disable[type="submit"]:hover {
+   background:#ccc;
+   cursor: not-allowed;
+}
+
+
+
+body.swal2-toast-shown .swal2-container{
+    z-index: 999;
+}
+
+body.swal2-toast-shown .swal2-container input[type="checkbox"]{
+  display: none;
+}
 
 
