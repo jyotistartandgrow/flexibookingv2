@@ -508,6 +508,9 @@
   // overflow: hidden;
   width: 100%;
 }
+.fx-booking .fx-phone-input .react-tel-input input[type=tel]{
+  padding-left: 48px;
+}
 .fx-booking .fx-phone-input .arrow{
   margin-left: inherit;
 }

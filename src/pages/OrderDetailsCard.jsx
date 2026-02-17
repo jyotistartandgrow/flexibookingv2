@@ -14,6 +14,7 @@ const OrderDetailsCard = () => {
   };
 
   return (
+    <div className="fx-top-order-details-box">
     <div
       className={`fx-top-order-details-card ${isOpenn ? "fx-is-open" : ""}`}
       onClick={toggleCard}
@@ -60,6 +61,7 @@ const OrderDetailsCard = () => {
           <strong>Visa ending in 4242</strong>
         </div> */}
       </div>
+    </div>
     </div>
   );
 };

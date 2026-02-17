@@ -1,7 +1,14 @@
 /* Parent Container */
+
+.fx-top-order-details-box{
+ height: 78px;
+ position: relative;
+ margin: 20px auto;
+ display: none;
+}
+
 .fx-top-order-details-card {
     width: 100%;
-    max-width: 600px;
     background: #ffffff;
     border: 1px solid #e0e4e8;
     border-radius: 8px;
@@ -12,9 +19,31 @@
     cursor: pointer;
     overflow: hidden;
     transition: all 0.2s ease;
-    margin: 20px auto;
+    display: block;
+    position: absolute;
+    z-index:999;
 }
 
+.fx-top-order-details-card .fx-right-bottom-bar{
+    position:inherit;
+}
+
+.fx-top-order-details-card .fx-bookingdatebar{
+    padding:0px;
+    padding-bottom: 10px;
+}
+.fx-top-order-details-card .fx-servicelistbox{
+    padding:0px;
+    padding-top:10px;
+}
+.fx-top-order-details-card .fx-subtotalbar, .fx-top-order-details-card .fx-discountbar, .fx-top-order-details-card .p-sidebar-content .fx-subtotalbar, .fx-top-order-details-card .p-sidebar-content .fx-discountbar{
+    padding: 0px;
+    padding-bottom: 10px;
+}
+.fx-top-order-details-card .fx-totalbar{
+    padding:0px;
+    padding-top:10px;
+}
 /* Header Row Styles */
 .fx-top-order-details-card .fx-header-row {
     display: flex;
@@ -98,6 +127,7 @@
     padding-top: 12px;
     border-top: 1px solid #f2f4f7;
     opacity: 1;
+    overflow: auto;
 }
 
 .fx-top-order-details-card .fx-detail-line {

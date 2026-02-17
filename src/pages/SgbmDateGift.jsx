@@ -9,14 +9,14 @@ import { useSelector } from "react-redux";
 
 export default function SgbmDateGift() {
   const loading = useSelector((state) => state.step1.loading);
-  //const date = useSelector((state) => state.step1.date);
+  const date = useSelector((state) => state.step1.date);
   return (
     <div className="fx-leftbar">
       <Steps />
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
         <div className="fx-seg-loader"></div>
       </div>
-      {/* {date && <OrderDetailsCard />} */}
+      {date && <OrderDetailsCard />}
       {/* Booking and Gift Tabs */}
       <ChooseDate />
       {/* End Booking and Gift Tabs */}
