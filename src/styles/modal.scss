@@ -87,7 +87,7 @@ h2 {
 
 .fx-booking .fx-popup .fx-pricebox {
   left: 0px;
-  bottom: -4px;
+  bottom:0px;
   right: inherit;
 
 
@@ -110,7 +110,12 @@ h2 {
   overflow:auto;
   position: relative;
 }
-
+.fx-booking .fx-rightpopup-middle .fx-center-content{
+  display: flex;
+  height:90%;
+  flex-direction: column;
+  justify-content: center;
+}
 .fx-booking .fx-popup .fx-rightpopup h4 {
   font-size: var(--main-headingsize);
   font-weight: 400;
@@ -172,6 +177,7 @@ h2 {
   font-weight: 400;
   line-height: 1.3;
   position: relative;
+  cursor: pointer;
 }
 
 .fx-booking .fx-popup .fx-rightpopup .calendarbox.active {
@@ -395,7 +401,7 @@ h2 {
   border-radius: 33px;
   color: var(--white);
   text-transform: uppercase;
- 
+  cursor: pointer;
 }
 
 .fx-main-modal-box{

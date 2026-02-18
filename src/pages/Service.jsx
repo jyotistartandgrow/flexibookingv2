@@ -767,28 +767,56 @@ export default function Service() {
                   gift ? "fx-rightpopup-middle fx-rightpopup" : "fx-rightpopup"
                 }
               >
-                <div></div>
-                <h4>{productDetails.service_title}</h4>
-                <a className="close" href="#" onClick={() => setVisible(false)}>
-                  &times;
-                </a>
+                {gift && (
+                  <div className="fx-center-content">
+                    <h4>{productDetails.service_title}</h4>
+                    <a
+                      className="close"
+                      href="#"
+                      onClick={() => setVisible(false)}
+                    >
+                      &times;
+                    </a>
 
-                <p>
-                  <span
-                    className={readmorecl ? "fx-expand-readmore" : "fx-des"}
-                  >
-                    {decodeHtml(productDetails.svc_long_desc)}
-                  </span>
-                  <span
-                    className="readmore"
-                    onClick={() => setReadmorecl(!readmorecl)}
-                  >
-                    {readmorecl ? "Read Less" : "Read More"}
-                  </span>
-                </p>
+                    <p>
+                      <span
+                        className={readmorecl ? "fx-expand-readmore" : "fx-des"}
+                      >
+                        {decodeHtml(productDetails.svc_long_desc)}
+                      </span>
+                      <span
+                        className="readmore"
+                        onClick={() => setReadmorecl(!readmorecl)}
+                      >
+                        {readmorecl ? "Read Less" : "Read More"}
+                      </span>
+                    </p>
+                  </div>
+                )}
+
                 {!gift && (
                   <>
-                    {" "}
+                    <h4>{productDetails.service_title}</h4>
+                    <a
+                      className="close"
+                      href="#"
+                      onClick={() => setVisible(false)}
+                    >
+                      &times;
+                    </a>
+                    <p>
+                      <span
+                        className={readmorecl ? "fx-expand-readmore" : "fx-des"}
+                      >
+                        {decodeHtml(productDetails.svc_long_desc)}
+                      </span>
+                      <span
+                        className="readmore"
+                        onClick={() => setReadmorecl(!readmorecl)}
+                      >
+                        {readmorecl ? "Read Less" : "Read More"}
+                      </span>
+                    </p>{" "}
                     <p className="datetext">
                       {moment(date).format("MMM YYYY")}
                     </p>
