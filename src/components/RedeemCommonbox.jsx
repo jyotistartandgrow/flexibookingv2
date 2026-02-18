@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 
-export default function Commonbox({ setVisibleBottom }) {
+export default function ({ setVisibleBottom }) {
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.redeemstep);
   const voucherdetail = useSelector((state) => state.step3.voucherdetail);
@@ -22,13 +22,15 @@ export default function Commonbox({ setVisibleBottom }) {
           </div>
         </div>
       )}
-       <div className="fx-bookingdatebar">
+      {slot && (
+        <div className="fx-bookingdatebar">
           <div className="fx-bookingdate">
             Time
             <br />
             <span>{slot}</span>
           </div>
         </div>
+      )}
       {voucherdetail?.products?.length > 0 && (
         <>
           <div className="fx-servicelistbox">
