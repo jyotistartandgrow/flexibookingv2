@@ -381,7 +381,7 @@ export default function ChooseDate() {
                       ? "fx-invalid fx-inputbox-generic"
                       : "fx-inputbox-gift"
                   }
-                  onBlur={(e) =>
+                  onChange={(e) =>
                     dispatch(
                       setReceiverInfo({
                         ...receiverInfo,

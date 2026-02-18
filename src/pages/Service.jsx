@@ -454,6 +454,7 @@ export default function Service() {
   };
 
   const hasExtra = async () => {
+    dispatch(setLoading(true));
     const { data } = await axiosInstance(
       `/has-extra?date=${moment(date).format(
         "YYYY-MM-DD",
