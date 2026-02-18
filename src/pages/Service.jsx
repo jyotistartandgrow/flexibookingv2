@@ -426,18 +426,23 @@ export default function Service() {
       },
     );
     let cartobj = {
-      id: productDetails.id,
+      id: data?.data?.service_id,
       name: productDetails.service_name,
       price: productDetails.svc_price,
       total: data?.data?.service_total,
       total_formatted: data?.data?.service_total,
       slot: slot,
-      capacity: book,
+      capacity: data?.data?.service_capacity,
     };
+    let extraobj = cart.extra ? cart.extra : [];
+    if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
+      extraobj = [];
+    }
     dispatch(
       setCart({
         ...cart,
         service: [cartobj],
+        extra: extraobj,
         total: data?.data?.total,
         total_formatted: data?.data?.total_formated,
         discount: 0,
@@ -472,10 +477,15 @@ export default function Service() {
       slot: "",
       capacity: 1,
     };
+    let extraobj = cart.extra ? cart.extra : [];
+    if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
+      extraobj = [];
+    }
     dispatch(
       setCart({
         ...cart,
         service: [cartobj],
+        extra: extraobj,
         total: data?.data?.total,
         total_formatted: data?.data?.total_formated,
         discount: 0,
@@ -1198,22 +1208,22 @@ export default function Service() {
                                 ));
                               })()}
                             </div>
-                              <div className="fx-popup-rightslot-continuebtn">
-                            <div
-                              className={
-                                slotVisible == "afternoon" && book > 0
-                                  ? "continuebtn"
-                                  : "continuebtn fx-disable-button"
-                              }
-                              onClick={() =>
-                                slotVisible == "afternoon" && book > 0
-                                  ? bookservice()
-                                  : ""
-                              }
-                            >
-                              Continue
+                            <div className="fx-popup-rightslot-continuebtn">
+                              <div
+                                className={
+                                  slotVisible == "afternoon" && book > 0
+                                    ? "continuebtn"
+                                    : "continuebtn fx-disable-button"
+                                }
+                                onClick={() =>
+                                  slotVisible == "afternoon" && book > 0
+                                    ? bookservice()
+                                    : ""
+                                }
+                              >
+                                Continue
+                              </div>
                             </div>
-                          </div>
                           </div>
                         </>
                       )}
@@ -1432,33 +1442,33 @@ export default function Service() {
                           })()}
                         </div>
                         <div className="fx-popup-rightslot-continuebtn">
-                        <div
-                          className={
-                            (slotVisible == "all" ||
-                              dateslot.find((s) =>
-                                moment(
-                                  moment(date).format("YYYY-MM-DD"),
-                                ).isSame(s.date),
-                              )?.slots.single_time_slot.slot_type) &&
-                            book > 0
-                              ? "continuebtn"
-                              : "continuebtn fx-disable-button"
-                          }
-                          onClick={() =>
-                            (slotVisible == "all" ||
-                              dateslot.find((s) =>
-                                moment(
-                                  moment(date).format("YYYY-MM-DD"),
-                                ).isSame(s.date),
-                              )?.slots.single_time_slot.slot_type) &&
-                            book > 0
-                              ? bookservice()
-                              : ""
-                          }
-                        >
-                          Continue
+                          <div
+                            className={
+                              (slotVisible == "all" ||
+                                dateslot.find((s) =>
+                                  moment(
+                                    moment(date).format("YYYY-MM-DD"),
+                                  ).isSame(s.date),
+                                )?.slots.single_time_slot.slot_type) &&
+                              book > 0
+                                ? "continuebtn"
+                                : "continuebtn fx-disable-button"
+                            }
+                            onClick={() =>
+                              (slotVisible == "all" ||
+                                dateslot.find((s) =>
+                                  moment(
+                                    moment(date).format("YYYY-MM-DD"),
+                                  ).isSame(s.date),
+                                )?.slots.single_time_slot.slot_type) &&
+                              book > 0
+                                ? bookservice()
+                                : ""
+                            }
+                          >
+                            Continue
+                          </div>
                         </div>
-                      </div>
                       </div>
                     </div>
                   </>
