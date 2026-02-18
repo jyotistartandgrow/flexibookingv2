@@ -810,7 +810,9 @@ export default function Service() {
                   gift ? "fx-rightpopup-middle fx-rightpopup" : "fx-rightpopup"
                 }
               >
-                <div></div>
+                {
+                  gift && (
+                <div className="fx-center-content">
                 <h4>{productDetails.service_name}</h4>
                 <a className="close" href="#" onClick={() => setVisible(false)}>
                   &times;
@@ -829,6 +831,9 @@ export default function Service() {
                     {readmorecl ? "Read Less" : "Read More"}
                   </span>
                 </p>
+                </div>
+                )
+                }
                 {!gift && (
                   <>
                     {" "}

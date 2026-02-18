@@ -1,10 +1,10 @@
 /* GiftCardPreview.css */
 /* GiftCardPreviewButton.css */
 
-.fx-preview-button-container {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
+// .fx-preview-button-container {
+//   margin-top: 1rem;
+//   margin-bottom: 1rem;
+// }
 
 .fx-preview-button {
   background-color: transparent;
@@ -98,7 +98,7 @@
   background: white;
   border-radius: 1.5rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  border: 4px solid #fbcfe8;
+  border: 4px solid var(--primary-color);
   overflow: hidden;
   aspect-ratio: 3 / 4;
   display: flex;
@@ -145,10 +145,9 @@
 
 .fx-gift-card-main-message {
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 0.75rem;
-  font-family: cursive;
-  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+  background: var(--primary-color);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -156,8 +155,8 @@
 
 .fx-gift-card-total {
   font-size: 3rem;
-  font-weight: 700;
-  color: #9333ea;
+  font-weight: 500;
+  color: var(--darkgrey);
   margin-bottom: 2rem;
 }
 
@@ -166,7 +165,7 @@
 }
 
 .fx-gift-card-recipient-name {
-  color: #9333ea;
+  color: var(--darkgrey);
   font-weight: 600;
   font-size: 1.125rem;
 }
@@ -181,7 +180,7 @@
 
 .fx-gift-card-divider-line {
   height: 1px;
-  background-color: #fbcfe8;
+  background-color: var(--primary-color);
   flex: 1;
   max-width: 80px;
 }
@@ -190,7 +189,7 @@
   width: 1.5rem;
   height: 1.5rem;
   margin: 0 1rem;
-  fill: #f9a8d4;
+  fill: var(--primary-color);
 }
 
 .fx-gift-card-services {
@@ -198,7 +197,7 @@
 }
 
 .fx-gift-card-service-item {
-  color: #4b5563;
+  color: var(--darkgrey);
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }
@@ -208,7 +207,7 @@
 }
 
 .fx-gift-card-sender {
-  color: #6b7280;
+  color: var(--darkgrey);
   font-size: 0.875rem;
   font-style: italic;
 }
@@ -221,14 +220,14 @@
 
 .fx-gift-card-brand-text {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: var(--darkgrey);
   font-weight: 500;
   letter-spacing: 0.05em;
 }
 
 .fx-gift-card-info-text {
   text-align: center;
-  color: #6b7280;
+  color: var(--darkgrey);
   font-size: 0.875rem;
   margin-top: 1rem;
 }
@@ -257,7 +256,8 @@
 .fx-gift-receiver-header h3{
   width:50%;
   font-size: 22px;
-    font-weight: 600;
+    font-weight:400;
+    margin: 0px;
 }
 
 .fx-gift-receiver-header .fx-preview-button-container{
@@ -287,6 +287,9 @@
 .fx-gift-card-dialog.p-dialog .p-dialog-header{
   right: 26px;
     top: 26px;
+}
+.fx-gift-receiver-header h3{
+  margin-bottom: 20px;
 }
 
 }

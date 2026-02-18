@@ -252,6 +252,14 @@ h1{
         height: 90%;
 }
 
+.fx-booking .fx-giftbox{
+    width: 100%;
+}
+
+.fx-booking .fx-rightpopup-middle .fx-center-content{
+    justify-content: flex-start;
+}
+
 }
 @media screen and (min-width: 1200px) {
   .fx-booking .fx-leftbar {
@@ -594,37 +602,38 @@ body.swal2-toast-shown .swal2-container input[type="checkbox"]{
     flex-direction: row;
 }
 
-.fx-extracontentboxlist .fx-quantitybox input[type="number"],
-.fx-extracontentboxlist .fx-quantitybox input[type="number"]:hover,
-.fx-extracontentboxlist .fx-quantitybox input[type="number"]:focus,
-.fx-extracontentboxlist .fx-quantitybox input[type="number"]:active {
-    appearance: textfield !important;
+/* chrome, edge, safari */
+.fx-extracontentboxlist .fx-quantitybox input[type="number"]::-webkit-outer-spin-button,
+.fx-extracontentboxlist .fx-quantitybox input[type="number"]::-webkit-inner-spin-button,
+.fx-extracontentboxlist .fx-quantitybox input[type="number"]:hover::-webkit-inner-spin-button,
+.fx-extracontentboxlist .fx-quantitybox input[type="number"]:focus::-webkit-inner-spin-button {
     -webkit-appearance: none !important;
-    -moz-appearance: textfield !important;
-    appearance: textfield !important;
+    appearance: none !important;
+    margin: 0 !important;
+    display: none !important;
 }
 
 
 
 
 //  For Rightdetils Setting
-// .fx-booking.fx-container .fx-sidebar{
-//     display: none;
-// }
+.fx-booking.fx-container .fx-sidebar{
+    display: none;
+}
 
-// .fx-booking.fx-container .fx-leftbar{
-//     right: 0px;
-// }
+.fx-booking.fx-container .fx-leftbar{
+    right: 0px;
+}
 
-// //  For Top Setting
+//  For Top Setting
 
-// .fx-booking.fx-container .fx-top-order-details-box{
-//  display: block;
-// }
+.fx-booking.fx-container .fx-top-order-details-box{
+ display: block;
+}
 
-// @media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
 
-// .fx-booking.fx-container .fx-top-order-details-box{
-//     display: none;
-// }
-// }
+.fx-booking.fx-container .fx-top-order-details-box{
+    display: none;
+}
+}
