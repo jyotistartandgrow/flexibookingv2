@@ -193,6 +193,14 @@ svg.p-icon.p-datepicker-prev-icon {
 
 .fx-booking .fx-popup .fx-rightpopup .fx-disable-button{
     background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.fx-extracontentboxlist .fx-quantitybox button:hover{
+    color:var(--darkblue-color);
+}
+.fx-extracontentboxlist .fx-quantitybox input[type=number]{
+    appearance: textfield;
 }
 
 @media screen and (max-width: 768px) {
@@ -574,11 +582,26 @@ h1{
 
 
 body.swal2-toast-shown .swal2-container{
-    z-index: 9999;
+    z-index: 99999;
 }
 
 body.swal2-toast-shown .swal2-container input[type="checkbox"]{
   display: none;
+}
+
+.swal2-container .swal2-popup.swal2-toast.swal2-icon-warning.swal2-show{
+    display: flex !important;
+    flex-direction: row;
+}
+
+.fx-extracontentboxlist .fx-quantitybox input[type="number"],
+.fx-extracontentboxlist .fx-quantitybox input[type="number"]:hover,
+.fx-extracontentboxlist .fx-quantitybox input[type="number"]:focus,
+.fx-extracontentboxlist .fx-quantitybox input[type="number"]:active {
+    appearance: textfield !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
 }
 
 

@@ -5,18 +5,18 @@ import { decodeHtml } from "../Utils/Functions";
 import Commonbox from "../components/Commonbox";
 
 const OrderDetailsCard = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenn, setIsOpenn] = useState(false);
   const date = useSelector((state) => state.step1.date);
   const cart = useSelector((state) => state.step2.cart);
 
   const toggleCard = () => {
-    setIsOpen(!isOpen);
+    setIsOpenn(!isOpenn);
   };
 
   return (
     <div className="fx-top-order-details-box">
     <div
-      className={`fx-top-order-details-card ${isOpen ? "fx-is-open" : ""}`}
+      className={`fx-top-order-details-card ${isOpenn ? "fx-is-open" : ""}`}
       onClick={toggleCard}
     >
       {/* Header Section */}

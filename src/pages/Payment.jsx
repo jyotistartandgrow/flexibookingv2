@@ -41,7 +41,7 @@ export default function Payment() {
       `/auto-apply-coupon?booking_key=${bookingkey}`,
       {
         method: "get",
-      }
+      },
     );
     if (data && data.status == 200 && data?.data.status) {
       const updatedCart = {
@@ -51,36 +51,40 @@ export default function Payment() {
         subtotal: data?.data?.subtotal,
       };
       dispatch(setCart(updatedCart));
+    }
+    console.log(couponcode);
+    if (couponcode && couponcode.length > 0) {
+      // apply coupons one by one
+      for (let i = 0; i < couponcode.length; i++) {
+        const { data: coupondata } = await axiosInstance.post(`/apply-coupon`, {
+          booking_key: bookingkey,
+          coupon_code: couponcode[i],
+        });
 
-      if (couponcode && couponcode.length > 0) {
-        // apply coupons one by one
-        for (let i = 0; i < couponcode.length; i++) {
-          const { data: coupondata } = await axiosInstance.post(
-            `/apply-coupon`,
-            {
-              booking_key: bookingkey,
-              coupon_code: couponcode[i],
-            }
+        if (
+          coupondata &&
+          coupondata.status == 200 &&
+          coupondata.data.status == true
+        ) {
+          dispatch(
+            setCart({
+              ...cart,
+              total: coupondata?.data?.original_data?.amount,
+              total_formatted: coupondata?.data?.total,
+              discount: coupondata?.data?.coupon_discount,
+              subtotal: coupondata?.data?.original_data?.subtotal,
+            }),
           );
-
-          if (
-            coupondata &&
-            coupondata.status == 200 &&
-            coupondata.data.status == true
-          ) {
-            dispatch(
-              setCart({
-                ...cart,
-                total: coupondata?.data?.original_data?.amount,
-                total_formatted: coupondata?.data?.total,
-                discount: coupondata?.data?.coupon_discount,
-                subtotal: coupondata?.data?.original_data?.subtotal,
-              })
-            );
-          }
+        }else{
+          Swal.fire({
+            icon: "error",
+            title: `${couponcode[i]} Coupon Error`,
+            text: coupondata?.data?.error || "Failed to apply coupon",
+          });
         }
       }
     }
+
     dispatch(setLoading(false));
   };
 

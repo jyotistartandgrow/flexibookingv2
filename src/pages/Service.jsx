@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, use } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
@@ -42,6 +42,10 @@ export default function Service() {
   const gift = useSelector((state) => state.step1.gift);
   const all = useSelector((state) => state.step1.all);
   const category = useSelector((state) => state.step1.category);
+  const serviceID = useSelector((state) => state.step2.service);
+  const extraid = useSelector((state) => state.step3.extra);
+  const extracapacity = useSelector((state) => state.step3.extracapacity);
+  const cart = useSelector((state) => state.step2.cart);
   const [products, setProductsArr] = useState([]);
   const [visible, setVisible] = useState(false);
   const [productDetails, setProductDetails] = useState({});
@@ -57,7 +61,9 @@ export default function Service() {
   const [skeloading, setLoadingske] = useState(false);
   const [currentitem, setCurrentItem] = useState({});
   const [calendarVisible, setCalendarVisible] = useState(false);
+  const [viewDate, setViewDate] = useState(new Date());
   const prevDate = useRef(date);
+  const isInitialMount = useRef(true);
   const isDesktop = useDeviceType();
 
   const toggleDiv = (type) => {
@@ -76,19 +82,26 @@ export default function Service() {
       dispatch(setDate(moment().format("YYYY-MM-DD")));
     }
     if (date) {
-      if (date !== prevDate.current) {
+      // Fetch products on initial mount or when date changes
+      if (isInitialMount.current || date !== prevDate.current) {
         setBook(0);
         setSlot("");
         console.log("Selected date in Service component:", date);
         fetchProductsByDate(date);
+        isInitialMount.current = false;
       }
-      // if (serviceid) {
-      //   dispatch(setLoading(true));
-      //   servicedetail(serviceid);
-      // }
+      if (serviceid) {
+        dispatch(setLoading(true));
+        servicedetail(serviceid);
+      }
       prevDate.current = date;
     }
   }, [date, step, serviceid]);
+
+  useEffect(() => {
+    // Initialize calendar navigation controls on mount
+    handleViewDateChange({ value: viewDate });
+  }, []);
 
   const fetchProductsByDate = async (selectedDate) => {
     setLoadingske(true);
@@ -186,9 +199,63 @@ export default function Service() {
   };
 
   const handleMonthChange = (e) => {
-    dispatch(setLoading(true));
+    if (e.month < 0) {
+      return;
+    }
     const month = String(e.month).padStart(2, "0"); // ensure 01–12
+    const selectedDate = moment(`${e.year}-${month}`, "YYYY-MM");
+    const currentMonth = moment().startOf("month");
+
+    if (!selectedDate.isValid()) {
+      return;
+    }
+    if (selectedDate.isBefore(currentMonth)) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "warning",
+        title: "Cannot select past months",
+      });
+      // Reset to current month
+      setViewDate(new Date());
+      return;
+    }
+    dispatch(setLoading(true));
     getslotavailabilitycalendar(`${e.year}-${month}`, serviceid);
+  };
+
+  const handleViewDateChange = (e) => {
+    setViewDate(e.value);
+
+    // Check if we're at current month or earlier
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    const viewMonth = e.value.getMonth();
+    const viewYear = e.value.getFullYear();
+
+    const isCurrentOrPastMonth =
+      viewYear < currentYear ||
+      (viewYear === currentYear && viewMonth <= currentMonth);
+
+    // Disable/enable the previous button
+    setTimeout(() => {
+      const prevButton = document.querySelector(".p-datepicker-prev");
+      if (prevButton) {
+        if (isCurrentOrPastMonth) {
+          prevButton.style.pointerEvents = "none";
+          prevButton.style.opacity = "0.4";
+          prevButton.style.cursor = "not-allowed";
+        } else {
+          prevButton.style.pointerEvents = "";
+          prevButton.style.opacity = "";
+          prevButton.style.cursor = "";
+        }
+      }
+    }, 0);
   };
 
   const dateTemplate = (dateMeta) => {
@@ -325,7 +392,6 @@ export default function Service() {
   };
 
   const bookservice = async () => {
-    console.log("Booking service with slot:", slot, "and capacity:", book);
     if (book == 0 || !slot) {
       Swal.fire({
         toast: true,
@@ -354,23 +420,29 @@ export default function Service() {
     const { data } = await axiosInstance(
       `/price-format?service_id=${
         productDetails.id
-      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}`,
+      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&extra_id=${extraid}&extra_capacity=${extracapacity}`,
       {
         method: "get",
       },
     );
     let cartobj = {
-      id: productDetails.id,
+      id: data?.data?.service_id,
       name: productDetails.service_name,
       price: productDetails.svc_price,
       total: data?.data?.service_total,
       total_formatted: data?.data?.service_total,
       slot: slot,
-      capacity: book,
+      capacity: data?.data?.service_capacity,
     };
+    let extraobj = cart.extra ? cart.extra : [];
+    if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
+      extraobj = [];
+    }
     dispatch(
       setCart({
+        ...cart,
         service: [cartobj],
+        extra: extraobj,
         total: data?.data?.total,
         total_formatted: data?.data?.total_formated,
         discount: 0,
@@ -389,7 +461,9 @@ export default function Service() {
     const { data } = await axiosInstance(
       `/price-format?service_id=${productDetails.id}&capacity=1&date=${moment(
         date,
-      ).format("YYYY-MM-DD")}`,
+      ).format(
+        "YYYY-MM-DD",
+      )}&extra_id=${extraid}&extra_capacity=${extracapacity}`,
       {
         method: "get",
       },
@@ -401,11 +475,17 @@ export default function Service() {
       total: data?.data?.service_total,
       total_formatted: data?.data?.service_total,
       slot: "",
-      capacity: "",
+      capacity: 1,
     };
+    let extraobj = cart.extra ? cart.extra : [];
+    if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
+      extraobj = [];
+    }
     dispatch(
       setCart({
+        ...cart,
         service: [cartobj],
+        extra: extraobj,
         total: data?.data?.total,
         total_formatted: data?.data?.total_formated,
         discount: 0,
@@ -678,6 +758,19 @@ export default function Service() {
             />
           </div>
         </div>
+        <div
+          className="fx-bottom-bar"
+          style={{
+            display: step === "servicesstep" && serviceID ? "block" : "none",
+          }}
+        >
+          <input
+            type="submit"
+            className="btn-primary fx-continue"
+            value="Continue"
+            onClick={() => dispatch(setStep("extrastep"))}
+          />
+        </div>
         <Dialog
           visible={visible}
           onHide={() => {
@@ -790,6 +883,8 @@ export default function Service() {
                                 onMonthChange={handleMonthChange}
                                 dateFormat="dd/mm/yy"
                                 locale="en-monday"
+                                onViewDateChange={handleViewDateChange}
+                                viewDate={viewDate}
                               />
                             </OverlayPanel>
                           ) : (
@@ -813,6 +908,8 @@ export default function Service() {
                                 onMonthChange={handleMonthChange}
                                 dateFormat="dd/mm/yy"
                                 locale="en-monday"
+                                onViewDateChange={handleViewDateChange}
+                                viewDate={viewDate}
                               />
                             </Calendarsidebar>
                           )}
@@ -981,21 +1078,21 @@ export default function Service() {
                               })()}
                             </div>
                             <div className="fx-popup-rightslot-continuebtn">
-                            <div
-                              className={
-                                slotVisible == "morning" && book > 0
-                                  ? "continuebtn"
-                                  : "continuebtn fx-disable-button"
-                              }
-                              onClick={() =>
-                                slotVisible == "morning" && book > 0
-                                  ? bookservice()
-                                  : ""
-                              }
-                            >
-                              Continue
+                              <div
+                                className={
+                                  slotVisible == "morning" && book > 0
+                                    ? "continuebtn"
+                                    : "continuebtn fx-disable-button"
+                                }
+                                onClick={() =>
+                                  slotVisible == "morning" && book > 0
+                                    ? bookservice()
+                                    : ""
+                                }
+                              >
+                                Continue
+                              </div>
                             </div>
-                          </div>
                           </div>
                           <div
                             className={
@@ -1111,22 +1208,22 @@ export default function Service() {
                                 ));
                               })()}
                             </div>
-                              <div className="fx-popup-rightslot-continuebtn">
-                            <div
-                              className={
-                                slotVisible == "afternoon" && book > 0
-                                  ? "continuebtn"
-                                  : "continuebtn fx-disable-button"
-                              }
-                              onClick={() =>
-                                slotVisible == "afternoon" && book > 0
-                                  ? bookservice()
-                                  : ""
-                              }
-                            >
-                              Continue
+                            <div className="fx-popup-rightslot-continuebtn">
+                              <div
+                                className={
+                                  slotVisible == "afternoon" && book > 0
+                                    ? "continuebtn"
+                                    : "continuebtn fx-disable-button"
+                                }
+                                onClick={() =>
+                                  slotVisible == "afternoon" && book > 0
+                                    ? bookservice()
+                                    : ""
+                                }
+                              >
+                                Continue
+                              </div>
                             </div>
-                          </div>
                           </div>
                         </>
                       )}
@@ -1345,33 +1442,33 @@ export default function Service() {
                           })()}
                         </div>
                         <div className="fx-popup-rightslot-continuebtn">
-                        <div
-                          className={
-                            (slotVisible == "all" ||
-                              dateslot.find((s) =>
-                                moment(
-                                  moment(date).format("YYYY-MM-DD"),
-                                ).isSame(s.date),
-                              )?.slots.single_time_slot.slot_type) &&
-                            book > 0
-                              ? "continuebtn"
-                              : "continuebtn fx-disable-button"
-                          }
-                          onClick={() =>
-                            (slotVisible == "all" ||
-                              dateslot.find((s) =>
-                                moment(
-                                  moment(date).format("YYYY-MM-DD"),
-                                ).isSame(s.date),
-                              )?.slots.single_time_slot.slot_type) &&
-                            book > 0
-                              ? bookservice()
-                              : ""
-                          }
-                        >
-                          Continue
+                          <div
+                            className={
+                              (slotVisible == "all" ||
+                                dateslot.find((s) =>
+                                  moment(
+                                    moment(date).format("YYYY-MM-DD"),
+                                  ).isSame(s.date),
+                                )?.slots.single_time_slot.slot_type) &&
+                              book > 0
+                                ? "continuebtn"
+                                : "continuebtn fx-disable-button"
+                            }
+                            onClick={() =>
+                              (slotVisible == "all" ||
+                                dateslot.find((s) =>
+                                  moment(
+                                    moment(date).format("YYYY-MM-DD"),
+                                  ).isSame(s.date),
+                                )?.slots.single_time_slot.slot_type) &&
+                              book > 0
+                                ? bookservice()
+                                : ""
+                            }
+                          >
+                            Continue
+                          </div>
                         </div>
-                      </div>
                       </div>
                     </div>
                   </>

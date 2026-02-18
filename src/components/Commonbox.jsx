@@ -66,19 +66,44 @@ export default function Commonbox({ setVisibleBottom }) {
     }
   }, [step]);
 
-  const editaccept = (id) => {
-    dispatch(setStep("servicesstep"));
+  const editaccept = (id, type) => {
+    if (type === "service") {
+      dispatch(setStep("servicesstep"));
+    } else {
+      dispatch(setStep("extrastep"));
+    }
   };
 
   const deleteaccept = async (id, type) => {
     dispatch(setLoading(true));
     const updatedServices = cart[type].filter((item) => item.id !== id);
-    dispatch(
-      setCart({
-        ...cart,
-        [type]: updatedServices,
-      }),
+
+    let serviceid = type === "service" ? "" : cart.service && cart.service[0] ? cart.service[0].id : "";
+    let extraid = type === "extra" ? "" : cart.extra && cart.extra[0] ? cart.extra[0].id : "";
+    let servicecapacity = type === "service" ? 0 : cart.service && cart.service[0] ? cart.service[0].capacity : 0;
+    let extracapacity = type === "extra" ? 0 : cart.extra && cart.extra[0] ? cart.extra[0].capacity : 0;
+    const { data } = await axiosInstance(
+      `/price-format?service_id=${serviceid}&capacity=${servicecapacity}&date=${moment(
+        date,
+      ).format(
+        "YYYY-MM-DD",
+      )}&extra_id=${extraid}&extra_capacity=${extracapacity}`,
+      {
+        method: "get",
+      },
     );
+    if (data && data.status == 200) {
+      dispatch(
+        setCart({
+          ...cart,
+          [type]: updatedServices,
+          total: data?.data?.total,
+          total_formatted: data?.data?.total_formated,
+          discount: 0,
+          subtotal: data?.data?.total_formated,
+        }),
+      );
+    }
     dispatch(setCouponlist([])); // Clear coupons on service/extra change
     if (type == "service") {
       dispatch(setTimeslot(null));
@@ -111,13 +136,13 @@ export default function Commonbox({ setVisibleBottom }) {
     });
   };
 
-  const edititem = (id) => {
+  const edititem = (id, type) => {
     confirmDialog({
       message: "Are you sure you want to proceed?",
       header: "Confirmation",
       icon: "pi pi-exclamation-triangle",
       className: "fx-confirmation-popup",
-      accept: () => editaccept(id),
+      accept: () => editaccept(id, type),
       reject,
     });
   };
@@ -273,7 +298,7 @@ export default function Commonbox({ setVisibleBottom }) {
             )}
           </div>
         )}
-      {cart?.service?.length > 0 &&
+      {(cart?.service?.length > 0 || cart?.extra?.length > 0) &&
         ((step !== "paymentstep" && !paymentstring) ||
           (step === "paymentstep" && !isDesktop)) && (
           <>
@@ -285,7 +310,7 @@ export default function Commonbox({ setVisibleBottom }) {
                       {ct.name} {!gift && `X ${ct.capacity}`}
                       <br />
                       <div className="time">{ct.slot}</div>
-                      <span onClick={() => edititem(ct.id)}>
+                      <span onClick={() => edititem(ct.id, "service")}>
                         <i className="pi pi-pencil"></i>
                       </span>{" "}
                       <span onClick={() => deleteitem(ct.id, "service")}>
@@ -307,7 +332,7 @@ export default function Commonbox({ setVisibleBottom }) {
                         {ct.name} {!gift && `X ${ct.capacity}`}
                         <br />
                         <div className="time">{ct.slot}</div>
-                        <span onClick={() => edititem(ct.id)}>
+                        <span onClick={() => edititem(ct.id, "extra")}>
                           <i className="pi pi-pencil"></i>
                         </span>{" "}
                         <span onClick={() => deleteitem(ct.id, "extra")}>

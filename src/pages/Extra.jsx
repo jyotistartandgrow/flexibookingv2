@@ -23,10 +23,12 @@ export default function Service() {
   const slot = useSelector((state) => state.step2.slot);
   const cart = useSelector((state) => state.step2.cart);
   const gift = useSelector((state) => state.step1.gift);
+  const extracapacity = useSelector((state) => state.step3.extracapacity);
+  const extraID = useSelector((state) => state.step3.extra);
 
   const [products, setProductsArr] = useState([]);
   const [isVisible, setIsVisible] = useState("grid");
-  const [book, setBook] = useState(0);
+  const [book, setBook] = useState(extracapacity ? extracapacity : 0);
   const [extraid, setExtraid] = useState(null);
   const [skeloading, setLoadingske] = useState(true);
   const [extradetails, setExtradetails] = useState({});
@@ -37,6 +39,8 @@ export default function Service() {
 
   useEffect(() => {
     if (step !== "extrastep") return;
+    setBook(extracapacity ? extracapacity : 0);
+    setExtraid(extraID ? extraID : null);
     if (date && service) {
       setLoadingske(true);
       fetchProductsByDate(date);
