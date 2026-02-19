@@ -25,6 +25,7 @@ export default function Payment() {
   const couponcode = useSelector((state) => state.step1.couponcode);
   const isDesktop = useDeviceType();
   const stripe_key = useSelector((state) => state.step1.stripe_key);
+  const topbar = useSelector((state) => state.step1.topbar);
   const stripePromise = useMemo(() => {
     return stripe_key ? loadStripe(stripe_key) : null;
   }, [stripe_key]);
@@ -75,11 +76,11 @@ export default function Payment() {
               subtotal: coupondata?.data?.original_data?.subtotal,
             }),
           );
-        }else{
+        } else {
           Swal.fire({
             icon: "error",
             title: `${couponcode[i]} Coupon Error`,
-            text: coupondata?.data?.error || "Failed to apply coupon",
+            text: decodeHtml(coupondata?.data?.error) || "Failed to apply coupon",
           });
         }
       }
@@ -93,7 +94,17 @@ export default function Payment() {
       className="fx-leftcontentbox"
       style={{ display: step === "paymentstep" ? "block" : "none" }}
     >
-      {isDesktop && (
+      {(!isDesktop || topbar) && (
+        <div className="fx-paymentbox">
+          <h1 className="fx-all-main-heading">Payment</h1>
+          {stripePromise && (
+            <Elements stripe={stripePromise}>
+              <CheckoutForm />
+            </Elements>
+          )}
+        </div>
+      )}
+      {isDesktop && !topbar && (
         <>
           <h1 className="fx-all-main-heading">Checkout</h1>
           <div className="fx-order-summary">
@@ -155,17 +166,6 @@ export default function Payment() {
             </div>
           </div>
         </>
-      )}
-
-      {!isDesktop && (
-        <div className="fx-paymentbox">
-          <h1 className="fx-all-main-heading">Payment</h1>
-          {stripePromise && (
-            <Elements stripe={stripePromise}>
-              <CheckoutForm />
-            </Elements>
-          )}
-        </div>
       )}
     </div>
   );

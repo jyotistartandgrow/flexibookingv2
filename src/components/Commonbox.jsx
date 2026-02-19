@@ -36,6 +36,7 @@ export default function Commonbox({ setVisibleBottom }) {
   const step = useSelector((state) => state.step1.step);
   const cart = useSelector((state) => state.step2.cart);
   const gift = useSelector((state) => state.step1.gift);
+  const topbar = useSelector((state) => state.step1.topbar);
   const paymentstring = useSelector((state) => state.step4.paymentstring);
   const couponcode = useSelector((state) => state.step1.couponcode);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
@@ -78,10 +79,30 @@ export default function Commonbox({ setVisibleBottom }) {
     dispatch(setLoading(true));
     const updatedServices = cart[type].filter((item) => item.id !== id);
 
-    let serviceid = type === "service" ? "" : cart.service && cart.service[0] ? cart.service[0].id : "";
-    let extraid = type === "extra" ? "" : cart.extra && cart.extra[0] ? cart.extra[0].id : "";
-    let servicecapacity = type === "service" ? 0 : cart.service && cart.service[0] ? cart.service[0].capacity : 0;
-    let extracapacity = type === "extra" ? 0 : cart.extra && cart.extra[0] ? cart.extra[0].capacity : 0;
+    let serviceid =
+      type === "service"
+        ? ""
+        : cart.service && cart.service[0]
+          ? cart.service[0].id
+          : "";
+    let extraid =
+      type === "extra"
+        ? ""
+        : cart.extra && cart.extra[0]
+          ? cart.extra[0].id
+          : "";
+    let servicecapacity =
+      type === "service"
+        ? 0
+        : cart.service && cart.service[0]
+          ? cart.service[0].capacity
+          : 0;
+    let extracapacity =
+      type === "extra"
+        ? 0
+        : cart.extra && cart.extra[0]
+          ? cart.extra[0].capacity
+          : 0;
     const { data } = await axiosInstance(
       `/price-format?service_id=${serviceid}&capacity=${servicecapacity}&date=${moment(
         date,
@@ -212,9 +233,8 @@ export default function Commonbox({ setVisibleBottom }) {
       position: "top-end",
       showConfirmButton: false,
       timer: 3000,
-      icon: "success",
-      title:
-        "Coupon Applied! Once you proceed to payment, the discount will be applied.",
+      icon: "info",
+      title: "Once you proceed to payment, the discount will be applied.",
     });
 
     setFields((prev) => {
@@ -300,6 +320,7 @@ export default function Commonbox({ setVisibleBottom }) {
         )}
       {(cart?.service?.length > 0 || cart?.extra?.length > 0) &&
         ((step !== "paymentstep" && !paymentstring) ||
+          topbar ||
           (step === "paymentstep" && !isDesktop)) && (
           <>
             <div className="fx-servicelistbox">
@@ -381,7 +402,7 @@ export default function Commonbox({ setVisibleBottom }) {
           Please select the service you want to gift to your friend.
         </p>
       )}
-      {paymentstring && isDesktop && (
+      {paymentstring && isDesktop && !topbar && (
         <div className="fx-paymentbox">
           <h1 className="fx-all-main-heading">Payment</h1>
           <Elements stripe={stripePromise}>

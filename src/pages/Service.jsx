@@ -1,13 +1,11 @@
-import { useState, useEffect, useRef, use } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { Sidebar as Calendarsidebar } from "primereact/sidebar";
 import { Carousel } from "primereact/carousel";
-import { addLocale } from "primereact/api";
 import calendar from "../assets/simple-line-icons_calender.svg";
-import percentage from "../assets/ic_round-discount.svg";
 import percentthirty from "../assets/icons8-clock 9.svg";
 import percentsixty from "../assets/icons8-clock 8.svg";
 import percentninty from "../assets/icons8-clock 7.svg";
@@ -15,8 +13,6 @@ import axiosInstance from "../Utils/Interceptor";
 import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 import { Dialog } from "primereact/dialog";
-import { Calendar } from "primereact/calendar";
-import { Tooltip } from "primereact/tooltip";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { setDate, setStep, setLoading } from "../store/step1Slice";
 import { setBookingkey } from "../store/step3Slice";
@@ -28,10 +24,7 @@ import {
 } from "../store/step2Slice";
 import Swal from "sweetalert2";
 import useDeviceType from "../Utils/useDeviceType";
-
-addLocale("en-monday", {
-  firstDayOfWeek: 1, // Monday
-});
+import CalendarPage from "./CalendarPage";
 
 export default function Service() {
   const dispatch = useDispatch();
@@ -61,7 +54,6 @@ export default function Service() {
   const [skeloading, setLoadingske] = useState(false);
   const [currentitem, setCurrentItem] = useState({});
   const [calendarVisible, setCalendarVisible] = useState(false);
-  const [viewDate, setViewDate] = useState(new Date());
   const prevDate = useRef(date);
   const isInitialMount = useRef(true);
   const isDesktop = useDeviceType();
@@ -97,11 +89,6 @@ export default function Service() {
       prevDate.current = date;
     }
   }, [date, step, serviceid]);
-
-  useEffect(() => {
-    // Initialize calendar navigation controls on mount
-    handleViewDateChange({ value: viewDate });
-  }, []);
 
   const fetchProductsByDate = async (selectedDate) => {
     setLoadingske(true);
@@ -219,43 +206,10 @@ export default function Service() {
         title: "Cannot select past months",
       });
       // Reset to current month
-      setViewDate(new Date());
       return;
     }
     dispatch(setLoading(true));
     getslotavailabilitycalendar(`${e.year}-${month}`, serviceid);
-  };
-
-  const handleViewDateChange = (e) => {
-    setViewDate(e.value);
-
-    // Check if we're at current month or earlier
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-
-    const viewMonth = e.value.getMonth();
-    const viewYear = e.value.getFullYear();
-
-    const isCurrentOrPastMonth =
-      viewYear < currentYear ||
-      (viewYear === currentYear && viewMonth <= currentMonth);
-
-    // Disable/enable the previous button
-    setTimeout(() => {
-      const prevButton = document.querySelector(".p-datepicker-prev");
-      if (prevButton) {
-        if (isCurrentOrPastMonth) {
-          prevButton.style.pointerEvents = "none";
-          prevButton.style.opacity = "0.4";
-          prevButton.style.cursor = "not-allowed";
-        } else {
-          prevButton.style.pointerEvents = "";
-          prevButton.style.opacity = "";
-          prevButton.style.cursor = "";
-        }
-      }
-    }, 0);
   };
 
   const dateTemplate = (dateMeta) => {
@@ -427,7 +381,7 @@ export default function Service() {
     );
     let cartobj = {
       id: data?.data?.service_id,
-      name: productDetails.service_name,
+      name: productDetails.service_title,
       price: productDetails.svc_price,
       total: data?.data?.service_total,
       total_formatted: data?.data?.service_total,
@@ -470,7 +424,7 @@ export default function Service() {
     );
     let cartobj = {
       id: productDetails.id,
-      name: productDetails.service_name,
+      name: productDetails.service_title,
       price: productDetails.svc_price,
       total: data?.data?.service_total,
       total_formatted: data?.data?.service_total,
@@ -500,6 +454,7 @@ export default function Service() {
   };
 
   const hasExtra = async () => {
+    dispatch(setLoading(true));
     const { data } = await axiosInstance(
       `/has-extra?date=${moment(date).format(
         "YYYY-MM-DD",
@@ -533,7 +488,7 @@ export default function Service() {
     const { data } = await axiosInstance.post(`/addtocart`, {
       service_id: serviceid,
       date: moment(date).format("YYYY-MM-DD"),
-      total_service_booking: book,
+      total_service_booking: gift ? 1 : book,
       time_slot: slot,
       extra_svc_ids: [],
       no_of_persons: 0,
@@ -761,7 +716,10 @@ export default function Service() {
         <div
           className="fx-bottom-bar"
           style={{
-            display: step === "servicesstep" && serviceID ? "block" : "none",
+            display:
+              step === "servicesstep" && serviceID && !skeloading
+                ? "block"
+                : "none",
           }}
         >
           <input
@@ -794,11 +752,11 @@ export default function Service() {
                 {productDetails.svc_img && (
                   <img
                     src={productDetails.svc_img}
-                    alt={productDetails.service_name}
+                    alt={productDetails.service_title}
                   />
                 )}
                 <span className="fx-servicepiccontentbox">
-                  {productDetails.service_name}
+                  {productDetails.service_title}
                 </span>
                 <p className="fx-pricebox">
                   {decodeHtml(productDetails.svc_price)}
@@ -810,33 +768,56 @@ export default function Service() {
                   gift ? "fx-rightpopup-middle fx-rightpopup" : "fx-rightpopup"
                 }
               >
-                {
-                  gift && (
-                <div className="fx-center-content">
-                <h4>{productDetails.service_name}</h4>
-                <a className="close" href="#" onClick={() => setVisible(false)}>
-                  &times;
-                </a>
+                {gift && (
+                  <div className="fx-center-content">
+                    <h4>{productDetails.service_title}</h4>
+                    <a
+                      className="close"
+                      href="#"
+                      onClick={() => setVisible(false)}
+                    >
+                      &times;
+                    </a>
 
-                <p>
-                  <span
-                    className={readmorecl ? "fx-expand-readmore" : "fx-des"}
-                  >
-                    {decodeHtml(productDetails.svc_long_desc)}
-                  </span>
-                  <span
-                    className="readmore"
-                    onClick={() => setReadmorecl(!readmorecl)}
-                  >
-                    {readmorecl ? "Read Less" : "Read More"}
-                  </span>
-                </p>
-                </div>
-                )
-                }
+                    <p>
+                      <span
+                        className={readmorecl ? "fx-expand-readmore" : "fx-des"}
+                      >
+                        {decodeHtml(productDetails.svc_long_desc)}
+                      </span>
+                      <span
+                        className="readmore"
+                        onClick={() => setReadmorecl(!readmorecl)}
+                      >
+                        {readmorecl ? "Read Less" : "Read More"}
+                      </span>
+                    </p>
+                  </div>
+                )}
+
                 {!gift && (
                   <>
-                    {" "}
+                    <h4>{productDetails.service_title}</h4>
+                    <a
+                      className="close"
+                      href="#"
+                      onClick={() => setVisible(false)}
+                    >
+                      &times;
+                    </a>
+                    <p>
+                      <span
+                        className={readmorecl ? "fx-expand-readmore" : "fx-des"}
+                      >
+                        {decodeHtml(productDetails.svc_long_desc)}
+                      </span>
+                      <span
+                        className="readmore"
+                        onClick={() => setReadmorecl(!readmorecl)}
+                      >
+                        {readmorecl ? "Read Less" : "Read More"}
+                      </span>
+                    </p>{" "}
                     <p className="datetext">
                       {moment(date).format("MMM YYYY")}
                     </p>
@@ -874,7 +855,7 @@ export default function Service() {
                         <div id="fx-calendarContainer">
                           {isDesktop ? (
                             <OverlayPanel ref={op}>
-                              <Calendar
+                              <CalendarPage
                                 inline
                                 value={date}
                                 onChange={(e) => {
@@ -882,14 +863,8 @@ export default function Service() {
                                   op.current.hide();
                                 }}
                                 dateTemplate={dateTemplate}
-                                className="fx-datepicker"
-                                minDate={new Date()}
                                 disabledDates={disabledDates}
-                                onMonthChange={handleMonthChange}
-                                dateFormat="dd/mm/yy"
-                                locale="en-monday"
-                                onViewDateChange={handleViewDateChange}
-                                viewDate={viewDate}
+                                handleMonthChange={handleMonthChange}
                               />
                             </OverlayPanel>
                           ) : (
@@ -899,7 +874,7 @@ export default function Service() {
                               position="bottom"
                               className="fx-calendar-sidebar"
                             >
-                              <Calendar
+                              <CalendarPage
                                 inline
                                 value={date}
                                 onChange={(e) => {
@@ -907,14 +882,8 @@ export default function Service() {
                                   setCalendarVisible(false);
                                 }}
                                 dateTemplate={dateTemplate}
-                                className="fx-datepicker"
-                                minDate={new Date()}
                                 disabledDates={disabledDates}
-                                onMonthChange={handleMonthChange}
-                                dateFormat="dd/mm/yy"
-                                locale="en-monday"
-                                onViewDateChange={handleViewDateChange}
-                                viewDate={viewDate}
+                                handleMonthChange={handleMonthChange}
                               />
                             </Calendarsidebar>
                           )}
@@ -1004,10 +973,10 @@ export default function Service() {
                                       <div className="time">
                                         {item.time_slot}
                                       </div>
-                                      <img
+                                      {/* <img
                                         className="fx-offericon"
                                         src={percentage}
-                                      />
+                                      /> */}
                                       {(() => {
                                         let percentIcon = null;
                                         if (
@@ -1134,10 +1103,10 @@ export default function Service() {
                                       <div className="time">
                                         {item.time_slot}
                                       </div>
-                                      <img
+                                      {/* <img
                                         className="fx-offericon"
                                         src={percentage}
-                                      />
+                                      /> */}
                                       {(() => {
                                         let percentIcon = null;
                                         if (
@@ -1278,10 +1247,10 @@ export default function Service() {
                                     <div className="time">
                                       {singleslotItem.time_slot}
                                     </div>
-                                    <img
+                                    {/* <img
                                       className="fx-offericon"
                                       src={percentage}
-                                    />
+                                    /> */}
                                     {(() => {
                                       let percentIcon = null;
                                       if (
@@ -1372,10 +1341,10 @@ export default function Service() {
                               >
                                 <div className="fx-timeslotsection">
                                   <div className="time">{item.time_slot}</div>
-                                  <img
+                                  {/* <img
                                     className="fx-offericon"
                                     src={percentage}
-                                  />
+                                  /> */}
                                   {(() => {
                                     let percentIcon = null;
                                     if (

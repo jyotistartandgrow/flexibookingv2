@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setStep, setAll, setGift,setStripeKey } from "../store/step1Slice";
+import { setStep, setAll, setGift, setStripeKey } from "../store/step1Slice";
 import moment from "moment";
 import { decodeHtml, darkenHex } from "../Utils/Functions";
 import Commonbox from "../components/Commonbox";
@@ -8,6 +8,7 @@ import logo from "../assets/logo.png";
 import { Toast } from "primereact/toast";
 import { Sidebar as Sidebarpanel } from "primereact/sidebar";
 import axiosInstance from "../Utils/Interceptor";
+import useDeviceType from "../Utils/useDeviceType";
 
 export default function Steps({ type = "date" }) {
   // Check for 'type' param in URL if not provided as prop
@@ -24,6 +25,7 @@ export default function Steps({ type = "date" }) {
   const checkoutkey = useSelector((state) => state.step4.checkoutkey);
   const cart = useSelector((state) => state.step2.cart);
   const [visibleBottom, setVisibleBottom] = useState(false);
+  const isDesktop = useDeviceType();
 
   const getSettings = async () => {
     try {
@@ -231,7 +233,7 @@ export default function Steps({ type = "date" }) {
             </div>
           )}
           <h3>Order Details</h3>
-          <Commonbox setVisibleBottom={setVisibleBottom} />
+          {!isDesktop && <Commonbox setVisibleBottom={setVisibleBottom} />}
         </div>
       </Sidebarpanel>
     </>

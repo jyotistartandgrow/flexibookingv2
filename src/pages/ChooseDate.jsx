@@ -1,12 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import calendar from "../assets/calendar.png";
-import { Calendar } from "primereact/calendar";
 import iconapplied from "../assets/icons8-confirm.svg";
-import { addLocale } from "primereact/api";
-import "primereact/resources/themes/saga-blue/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
 import moment from "moment";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
@@ -19,13 +14,9 @@ import {
   setGift,
 } from "../store/step1Slice";
 import { decodeHtml } from "../Utils/Functions";
-
-addLocale("en-monday", {
-  firstDayOfWeek: 1, // Monday
-});
+import CalendarPage from "./CalendarPage";
 
 export default function ChooseDate() {
-  const calendarRef = useRef(null);
   const dispatch = useDispatch();
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
@@ -38,7 +29,6 @@ export default function ChooseDate() {
   const [coupon, setCoupon] = useState("");
   const [fields, setFields] = useState([{ code: "" }]);
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
-  const [viewDate, setViewDate] = useState(new Date());
   const [errorlist, setErrorlist] = useState({});
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -304,53 +294,11 @@ export default function ChooseDate() {
         icon: "warning",
         title: "Cannot select past months",
       });
-      // Reset to current month
-      setViewDate(new Date());
       return;
     }
 
     setMonth(`${e.year}-${month}`); // YYYY-MM
-    setViewDate(new Date(e.year, e.month, 1));
   };
-
-  const handleViewDateChange = (e) => {
-    setViewDate(e.value);
-
-    // Check if we're at current month or earlier
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-
-    const viewMonth = e.value.getMonth();
-    const viewYear = e.value.getFullYear();
-
-    const isCurrentOrPastMonth =
-      viewYear < currentYear ||
-      (viewYear === currentYear && viewMonth <= currentMonth);
-
-    // Disable/enable the previous button
-    setTimeout(() => {
-      const prevButton = document.querySelector(".p-datepicker-prev");
-      if (prevButton) {
-        if (isCurrentOrPastMonth) {
-          prevButton.style.pointerEvents = "none";
-          prevButton.style.opacity = "0.4";
-          prevButton.style.cursor = "not-allowed";
-        } else {
-          prevButton.style.pointerEvents = "";
-          prevButton.style.opacity = "";
-          prevButton.style.cursor = "";
-        }
-      }
-    }, 0);
-  };
-
-  // Initial setup when calendar opens
-  useEffect(() => {
-    if (calendarRef.current) {
-      handleViewDateChange({ value: viewDate });
-    }
-  }, []);
 
   return (
     <div
@@ -395,23 +343,12 @@ export default function ChooseDate() {
         >
           <div className="fx-element-box">
             <div className="fx-calendar fx-commoninput">
-              <Calendar
-                value={date ? new Date(date) : null}
+              <CalendarPage
+                value={date}
                 onChange={(e) => dispatch(setDate(e.value))}
                 dateTemplate={dateTemplate}
-                className="fx-datepicker"
-                minDate={new Date()}
-                onViewDateChange={handleViewDateChange}
-                viewDate={viewDate}
                 disabledDates={disabledDates}
-                onMonthChange={handleMonthChange}
-                ref={calendarRef}
-                onClick={() => {
-                  // force open
-                  calendarRef.current?.show();
-                }}
-                locale="en-monday"
-                dateFormat="dd/mm/yy"
+                handleMonthChange={handleMonthChange}
               />
               <img src={calendar} className="fx-calendaricon" />
             </div>
@@ -444,7 +381,7 @@ export default function ChooseDate() {
                       ? "fx-invalid fx-inputbox-generic"
                       : "fx-inputbox-gift"
                   }
-                  onBlur={(e) =>
+                  onChange={(e) =>
                     dispatch(
                       setReceiverInfo({
                         ...receiverInfo,
