@@ -78,7 +78,7 @@ h2 {
 
 .fx-booking .fx-popup .fx-leftpopup img {
   width: 100%;
-  height: 581px;
+  height: 580px;
 }
 
 .fx-booking .fx-popup .fx-servicepiccontentbox {
@@ -377,11 +377,13 @@ h2 {
 .fx-booking .fx-popup .fx-quantitybox .decrement {
   border-radius: 50%;
   margin-bottom: 0px;
+  color: var(--darkblue-color);
 }
 
 .fx-booking .fx-quantitybox .increment {
   border-radius: 50%;
   margin-bottom: 0px;
+  color: var(--darkblue-color);
 }
 .fx-popup-rightslot-continuebtn{
  position:sticky;
