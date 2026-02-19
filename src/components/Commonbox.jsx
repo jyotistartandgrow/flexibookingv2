@@ -44,18 +44,20 @@ export default function Commonbox({ setVisibleBottom }) {
   const stripePromise = useMemo(() => {
     return stripe_key ? loadStripe(stripe_key) : null;
   }, [stripe_key]);
-  const [coupon, setCoupon] = useState("");
-  const [fields, setFields] = useState([{ code: "" }]);
+  const [fields, setFields] = useState([{ code: "", applied: false }]);
+  const [isInitialized, setIsInitialized] = useState(false);
   const isDesktop = useDeviceType();
   useEffect(() => {
-    let field = [];
-    if (couponcode && couponcode.length > 0) {
+    // Only initialize from Redux once on mount, don't overwrite local state later
+    if (!isInitialized && couponcode && couponcode.length > 0) {
+      let field = [];
       couponcode.forEach((coup) => {
-        field.push({ code: coup });
+        field.push({ code: coup, applied: true });
       });
       setFields(field);
+      setIsInitialized(true);
     }
-  }, [couponcode]);
+  }, [couponcode, isInitialized]);
 
   useEffect(() => {
     if (paymentstring) {
@@ -180,8 +182,7 @@ export default function Commonbox({ setVisibleBottom }) {
   };
 
   const addmoreCoupon = () => {
-    setFields([...fields, { code: "" }]);
-    setCoupon("");
+    setFields([...fields, { code: "", applied: false }]);
   };
 
   const removeCoupon = async (key) => {
@@ -189,10 +190,10 @@ export default function Commonbox({ setVisibleBottom }) {
     let couponcode = fields[key].code;
     const updated = fields.filter((_, i) => i !== key);
     setFields(updated);
-    // compute valid coupons using UPDATED list
+    // compute valid coupons - only include actually applied coupons
     const validCoupons = updated
-      .map((f) => f.code.trim())
-      .filter((c) => c !== "");
+      .filter((f) => f.applied && f.code.trim() !== "")
+      .map((f) => f.code.trim());
     dispatch(setCouponlist(validCoupons));
     if (cart.discount && cart.discount != 0) {
       const { data: coupondata } = await axiosInstance.post(`/coupon-removal`, {
@@ -219,7 +220,7 @@ export default function Commonbox({ setVisibleBottom }) {
   };
 
   const applycoupon = async (key) => {
-    if (coupon.trim() === "") {
+    if (fields[key].code.trim() === "") {
       toast.current.show({
         severity: "error",
         summary: "Error",
@@ -237,16 +238,16 @@ export default function Commonbox({ setVisibleBottom }) {
       title: "Once you proceed to payment, the discount will be applied.",
     });
 
+    // Mark this coupon as applied
     setFields((prev) => {
-      // update only one field
       const updated = prev.map((item, i) =>
-        i === key ? { ...item, code: coupon } : item,
+        i === key ? { ...item, applied: true } : item,
       );
 
-      // compute valid coupons using UPDATED list
+      // compute valid coupons - only include actually applied coupons
       const validCoupons = updated
-        .map((f) => f.code.trim())
-        .filter((c) => c !== "");
+        .filter((f) => f.applied && f.code.trim() !== "")
+        .map((f) => f.code.trim());
 
       // dispatch inside the setter
       dispatch(setCouponlist(validCoupons));
@@ -272,17 +273,17 @@ export default function Commonbox({ setVisibleBottom }) {
                   <input
                     type="text"
                     placeholder="Enter your coupon code"
-                    value={
-                      fields[index].code === "" ? coupon : fields[index].code
-                    }
+                    value={fields[index].code}
                     onChange={(e) => {
-                      if (fields[index].code === "") {
-                        setCoupon(e.target.value); // editable BEFORE apply
+                      if (!fields[index].applied) {
+                        const newFields = [...fields];
+                        newFields[index].code = e.target.value;
+                        setFields(newFields);
                       }
                     }}
-                    disabled={fields[index].code !== ""} // disable AFTER apply
+                    disabled={fields[index].applied}
                   />
-                  {fields[index].code === "" && (
+                  {!fields[index].applied && (
                     <button
                       className="fx-apply-btn"
                       onClick={() => applycoupon(index)}
@@ -290,7 +291,7 @@ export default function Commonbox({ setVisibleBottom }) {
                       APPLY
                     </button>
                   )}
-                  {fields[index].code !== "" && (
+                  {fields[index].applied && (
                     <button className="fx-apply-btn fx-applied-btn">
                       APPLIED <img src={iconapplied} />
                     </button>

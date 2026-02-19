@@ -4,12 +4,15 @@ import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 import Commonbox from "../components/Commonbox";
 import { setTopbar } from "../store/step1Slice";
+import useDeviceType from "../Utils/useDeviceType";
 
 const OrderDetailsCard = () => {
   const dispatch = useDispatch();
   const [isOpenn, setIsOpenn] = useState(false);
   const date = useSelector((state) => state.step1.date);
   const cart = useSelector((state) => state.step2.cart);
+  const topbar = useSelector((state) => state.step1.topbar);
+  const isDesktop = useDeviceType();
 
   const toggleCard = () => {
     setIsOpenn(!isOpenn);
@@ -23,16 +26,15 @@ const OrderDetailsCard = () => {
     <div className="fx-top-order-details-box">
       <div
         className={`fx-top-order-details-card ${isOpenn ? "fx-is-open" : ""}`}
-        onClick={toggleCard}
       >
         {/* Header Section */}
-        <div className="fx-header-row">
+        <div className="fx-header-row" onClick={toggleCard}>
           <span className="fx-title">Order Details</span>
           <div className="fx-chevron"></div>
         </div>
         {/* Summary Section */}
 
-        <div className="fx-summary-row">
+        <div className="fx-summary-row" onClick={toggleCard}>
           <div className="fx-info-group">
             <div className="fx-calendar-icon"></div>
             <span>
@@ -55,7 +57,7 @@ const OrderDetailsCard = () => {
         {/* Sliding Content */}
 
         <div className="fx-collapsible-content">
-          <Commonbox />
+          {topbar && isDesktop && <Commonbox />}
           {/* <div className="fx-detail-line">
           <span>Service Provider:</span>
           <strong>Wellness Spa Plus</strong>
