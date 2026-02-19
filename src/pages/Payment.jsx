@@ -80,7 +80,8 @@ export default function Payment() {
           Swal.fire({
             icon: "error",
             title: `${couponcode[i]} Coupon Error`,
-            text: decodeHtml(coupondata?.data?.error) || "Failed to apply coupon",
+            text:
+              decodeHtml(coupondata?.data?.error) || "Failed to apply coupon",
           });
         }
       }
@@ -91,7 +92,7 @@ export default function Payment() {
 
   return (
     <div
-      className="fx-leftcontentbox"
+      className={`fx-leftcontentbox ${topbar ? "fx-content-with-topbar" : ""}`}
       style={{ display: step === "paymentstep" ? "block" : "none" }}
     >
       {(!isDesktop || topbar) && (

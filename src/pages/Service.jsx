@@ -785,12 +785,14 @@ export default function Service() {
                       >
                         {decodeHtml(productDetails.svc_long_desc)}
                       </span>
-                      <span
-                        className="readmore"
-                        onClick={() => setReadmorecl(!readmorecl)}
-                      >
-                        {readmorecl ? "Read Less" : "Read More"}
-                      </span>
+                      {productDetails.svc_long_desc != "N/A" && (
+                        <span
+                          className="readmore"
+                          onClick={() => setReadmorecl(!readmorecl)}
+                        >
+                          {readmorecl ? "Read Less" : "Read More"}
+                        </span>
+                      )}
                     </p>
                   </div>
                 )}
@@ -811,12 +813,14 @@ export default function Service() {
                       >
                         {decodeHtml(productDetails.svc_long_desc)}
                       </span>
-                      <span
-                        className="readmore"
-                        onClick={() => setReadmorecl(!readmorecl)}
-                      >
-                        {readmorecl ? "Read Less" : "Read More"}
-                      </span>
+                      {productDetails.svc_long_desc != "N/A" && (
+                        <span
+                          className="readmore"
+                          onClick={() => setReadmorecl(!readmorecl)}
+                        >
+                          {readmorecl ? "Read Less" : "Read More"}
+                        </span>
+                      )}
                     </p>{" "}
                     <p className="datetext">
                       {moment(date).format("MMM YYYY")}
@@ -1224,7 +1228,8 @@ export default function Service() {
                               (!slotObj || slotItems.length === 0) &&
                               (!singleslotItem ||
                                 singleslotItem.length === 0 ||
-                                singleslotItem.time_slot == "")
+                                singleslotItem.time_slot == "" ||
+                                singleslotItem.time_slot <= 0)
                             ) {
                               return (
                                 <p className="fx-noslots">
