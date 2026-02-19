@@ -16,6 +16,14 @@ export default function CountdownTimer({ startSeconds = 180 }) {
   const [time, setTime] = useState(startSeconds);
   const [running, setRunning] = useState(true);
 
+  // Reset timer when entering payment step
+  useEffect(() => {
+    if (step === "paymentstep" && !sessionExpired) {
+      setTime(startSeconds);
+      setRunning(true);
+    }
+  }, [step, sessionExpired, startSeconds]);
+
   const reinitiate = () => {
     dispatch(setStep("checkoutstep"));
   };
