@@ -57,7 +57,6 @@ body {
     position: relative;
     max-width: 900px;
     padding-bottom: 16px;
-    margin: auto;
 }
 
 h1 {
@@ -262,15 +261,6 @@ h1{
 }
 
 }
-@media screen and (min-width: 1200px) {
-  .fx-booking .fx-leftbar {
-    max-width:850px;
-    width: 100%;
-    margin: 0 auto;
-    padding-top: 32px;
-    right: 180px;
-  }
-}
 
 .fx-skeleton-row {
     display: none;
@@ -439,33 +429,8 @@ h1{
     to { transform: rotate(360deg); }
 }
 
-@media (min-width: 768px) and (max-width: 1100px) {
-    .fx-booking.fx-container{
-        padding:70px 30px;
-    }
-    .fx-booking .fx-sidebar{
-        display: none;
-    }
-    .fx-booking .fx-mobilesidebar{
-        width: 100%;
-        height: auto;
-        position: absolute;
-        bottom: -2px;
-        padding: 15px;
-        font-size: var(--card-headingsize);
-        background: var(--white);
-        display: block;
-        box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.3);
-        z-index: 999;
-        left:0px;
-    }
-    .p-sidebar-bottom .p-sidebar-top .p-sidebar {
-        height: 90%;
-    }
-}
 
-
-@media screen and (max-width: 1100px) {
+@media screen and (max-width:768px) {
     .fx-skeleton-row{
             flex-direction: column;
     }
@@ -485,7 +450,6 @@ h1{
       height: auto;
   }
   .fx-leftcontentbox h1.fx-all-main-heading{
-    margin-top: 40px;
     margin-top: 0px;
     font-size: 20px;
     padding-left: 0px;
@@ -619,6 +583,73 @@ body.swal2-toast-shown .swal2-container input[type="checkbox"]{
     display: none !important;
 }
 
+.fx-content-with-topbar .fx-paymentbox{
+    padding: 0px;
+    margin-top: 0px;
+    width: 50%;
+}
+
+@media screen and (max-width:768px) {
+    .fx-content-with-topbar .fx-paymentbox{
+    padding: 0px;
+    margin-top:180px;
+    width:100%;
+}
+}
+
+
+@media screen and (min-width: 1200px) {
+  .fx-booking .fx-leftbar {
+    max-width:850px;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 32px;
+    right: 180px;
+  }
+}
+
+
+
+//  For Ipad
+@media (min-width: 766px) and (max-width: 1100px) {
+    .fx-booking.fx-container{
+        padding:70px 30px;
+        width:100%;
+    }
+    .fx-leftcontentbox h1.fx-all-main-heading{
+        margin-top:30px;
+    }
+    .fx-booking .fx-sidebar{
+        display: none;
+    }
+    .fx-booking .fx-mobilesidebar{
+        width: 100%;
+        height: auto;
+        position: absolute;
+        bottom: -2px;
+        padding: 15px;
+        font-size: var(--card-headingsize);
+        background: var(--white);
+        display: block;
+        box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.3);
+        z-index: 999;
+        left:0px;
+    }
+    .p-sidebar-bottom .p-sidebar-top .p-sidebar {
+        height: 90%;
+    }
+    .fx-booking .fx-servicecontainer .fx-servicebox{
+        width: 48%;
+    }
+
+   .fx-booking.fx-container .fx-top-order-details-box{
+        display: none;
+    }
+    .fx-leftcontentbox{
+        min-height: 467px;
+    }
+}
+
 
 
 
@@ -626,16 +657,16 @@ body.swal2-toast-shown .swal2-container input[type="checkbox"]{
 .fx-booking.fx-container .fx-sidebar{
     display: none;
 }
-
+@media screen and (min-width: 1200px) {
+    .fx-booking.fx-container .fx-top-order-details-box{
+        display: block;
+    }
+}
 .fx-booking.fx-container .fx-leftbar{
     right: 0px;
 }
 
 //  For Top Setting
-
-.fx-booking.fx-container .fx-top-order-details-box{
- display: block;
-}
 
 @media screen and (max-width: 768px) {
 
@@ -644,3 +675,8 @@ body.swal2-toast-shown .swal2-container input[type="checkbox"]{
 }
 }
 
+@media (min-width: 768px) and (max-width: 1100px) {
+.fx-booking .fx-leftbar {
+    margin: auto;
+}
+}
