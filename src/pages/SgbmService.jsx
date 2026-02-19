@@ -9,13 +9,14 @@ import OrderDetailsCard from "./OrderDetailsCard";
 export default function SgbmService() {
   const loading = useSelector((state) => state.step1.loading);
   const date = useSelector((state) => state.step1.date);
+  const cart = useSelector((state) => state.step2.cart);
   return (
     <div className="fx-leftbar">
       <Steps type="service" />
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
         <div className="fx-seg-loader"></div>
       </div>
-      {date && <OrderDetailsCard />}
+      {date && cart?.service?.length > 0 && <OrderDetailsCard />}
       {/* Service Tabs */}
       <Service />
       {/* End Service Tabs */}
