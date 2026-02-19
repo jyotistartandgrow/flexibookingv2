@@ -617,23 +617,23 @@ body.swal2-toast-shown .swal2-container input[type="checkbox"]{
 
 
 //  For Rightdetils Setting
-// .fx-booking.fx-container .fx-sidebar{
-//     display: none;
-// }
+.fx-booking.fx-container .fx-sidebar{
+    display: none;
+}
 
-// .fx-booking.fx-container .fx-leftbar{
-//     right: 0px;
-// }
+.fx-booking.fx-container .fx-leftbar{
+    right: 0px;
+}
 
-// //  For Top Setting
+//  For Top Setting
 
-// .fx-booking.fx-container .fx-top-order-details-box{
-//  display: block;
-// }
+.fx-booking.fx-container .fx-top-order-details-box{
+ display: block;
+}
 
-// @media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
 
-// .fx-booking.fx-container .fx-top-order-details-box{
-//     display: none;
-// }
-// }
+.fx-booking.fx-container .fx-top-order-details-box{
+    display: none;
+}
+}

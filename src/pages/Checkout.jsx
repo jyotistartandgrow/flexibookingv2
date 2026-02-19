@@ -52,12 +52,13 @@ export default function Checkout() {
 
   const validatePhoneForCountry = (phone, countryData) => {
     if (!phone || !countryData) return false;
-    
+    if (phone == countryData.dialCode) return true;
+
     // Remove dial code to get the actual number
     const number = phone.replace(countryData.dialCode, "").trim();
     // Check if number is not empty and has reasonable length (typically 7-15 digits)
     if (number.length < 7 || number.length > 15) return false;
-    
+
     // Check if it only contains digits and spaces/dashes
     const phoneRegex = /^[0-9\s-]+$/;
     return phoneRegex.test(number);
@@ -109,15 +110,15 @@ export default function Checkout() {
     // Validate gift receiver information if gift is enabled
     if (gift) {
       const errors = {};
-      
+
       if (!receiverInfo.email || !validateEmail(receiverInfo.email)) {
         errors.email = true;
       }
-      
+
       if (!validatePhone(receiverInfo.phoneNumber)) {
         errors.phoneNumber = true;
       }
-      
+
       if (Object.keys(errors).length > 0) {
         setReceiverErrors(errors);
         Swal.fire({
@@ -341,11 +342,11 @@ export default function Checkout() {
                   // Remove dial code to check number only
                   const number = phone.replace("+" + country.dialCode, "");
                   setNumberOnly(number);
-                  
+
                   // Validate phone for country
                   const isValid = validatePhoneForCountry(phone, country);
                   setPhoneValid(isValid);
-                  
+
                   // Clear error if valid
                   if (isValid && errorlist.sgbm_field_4) {
                     setErrorlist({ ...errorlist, sgbm_field_4: false });
@@ -359,7 +360,9 @@ export default function Checkout() {
                 }}
               />
               {errorlist.sgbm_field_4 && (
-                <span class="fx-errortext">Enter a valid phone number for the selected country</span>
+                <span class="fx-errortext">
+                  Enter a valid phone number for the selected country
+                </span>
               )}
             </div>
           </div>
@@ -557,12 +560,17 @@ export default function Checkout() {
                         if (e.target.value && !validateEmail(e.target.value)) {
                           setReceiverErrors({ ...receiverErrors, email: true });
                         } else {
-                          setReceiverErrors({ ...receiverErrors, email: false });
+                          setReceiverErrors({
+                            ...receiverErrors,
+                            email: false,
+                          });
                         }
                       }}
                     ></input>
                     {receiverErrors.email && (
-                      <span class="fx-errortext">Enter a valid email address</span>
+                      <span class="fx-errortext">
+                        Enter a valid email address
+                      </span>
                     )}
                   </div>
                   <div class="fx-element-box">
@@ -582,14 +590,22 @@ export default function Checkout() {
                       }
                       onBlur={(e) => {
                         if (!validatePhone(e.target.value)) {
-                          setReceiverErrors({ ...receiverErrors, phoneNumber: true });
+                          setReceiverErrors({
+                            ...receiverErrors,
+                            phoneNumber: true,
+                          });
                         } else {
-                          setReceiverErrors({ ...receiverErrors, phoneNumber: false });
+                          setReceiverErrors({
+                            ...receiverErrors,
+                            phoneNumber: false,
+                          });
                         }
                       }}
                     ></input>
                     {receiverErrors.phoneNumber && (
-                      <span class="fx-errortext">Enter a valid phone number</span>
+                      <span class="fx-errortext">
+                        Enter a valid phone number
+                      </span>
                     )}
                   </div>
                 </div>
