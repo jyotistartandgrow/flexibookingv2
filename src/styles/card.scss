@@ -132,7 +132,7 @@
 }
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist {
-  width:167px;
+  width:172px;
   height: 121px;
   position: relative;
 }
@@ -217,7 +217,7 @@
 }
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist {
-  width: calc(100% - 180px);
+  width: calc(100% - 140px);
   height: 121px;
   padding: 15px 16px;
   background: var(--white);
@@ -256,7 +256,7 @@
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .booknowbtn {
   height: 43px;
-  width: 134px;
+  width: 116px;
   padding: 10px;
   font-size: var(--normal-descriptionsize);
   font-weight: 400;
@@ -415,6 +415,7 @@
 @media screen and (max-width: 580px) {
 .fx-booking .fx-servicecontainer{
   display: inline-block;
+  padding-bottom: 60px;
 }
 .fx-booking .fx-extracontainer{
   display: inline-block;
@@ -441,6 +442,7 @@
 }
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist{
   height: 200px;
+  width: 140px;
 }
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img{
   height: 200px;
@@ -469,7 +471,6 @@
   right:inherit !important;
   left:16px;
   padding:9px;
-  height: 40px;
 }
 .fx-booking .fx-servicebox .fx-servicepicbox img{
   height:auto;
