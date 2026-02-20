@@ -29,15 +29,42 @@ export default function ReedemCheckout() {
   const [term, setTerm] = useState(false);
   const [numberOnly, setNumberOnly] = useState("");
   const [errorlist, setErrorlist] = useState({});
+  const [visibleField, setVisibleField] = useState({});
 
   useEffect(() => {
     if (step == "checkoutstep") {
+      getFields();
       setErrorlist({});
       setBilldata(voucherdetail.recepient_data || {});
       getState(voucherdetail.recepient_data?.recipient_country);
       setNumberOnly(voucherdetail.recepient_data?.recipient_contact || "");
     }
   }, [step]);
+
+  // Validation functions
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const getFields = async () => {
+    dispatch(setLoading(true));
+    const { data } = await axiosInstance(`/get-fields`, {
+      method: "get",
+    });
+    if (data) {
+      const fields = data.data; // Handle nested data structure
+      if (Array.isArray(fields)) {
+        fields.forEach((field) => {
+          if (field.field_options && field.field_options.is_visible == 1) {
+            setVisibleField((prev) => ({ ...prev, [field.field_key]: true }));
+          }
+        });
+      }
+    }
+
+    dispatch(setLoading(false));
+  };
 
   const getState = async (country) => {
     dispatch(setLoading(true));
@@ -135,7 +162,9 @@ export default function ReedemCheckout() {
       {/* <h1 className="fx-main-heading">Checkout</h1> */}
       <div className="fx-commoninput">
         <div className="fx-inputgroup">
-          <div className="fx-element-box">
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_1 ? "" : "fx-hidden"}`}
+          >
             <label>First Name</label>
             <input
               type="text"
@@ -153,7 +182,9 @@ export default function ReedemCheckout() {
               <span className="fx-errortext">Enter First Name</span>
             )}
           </div>
-          <div className="fx-element-box">
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_2 ? "" : "fx-hidden"}`}
+          >
             <label>Last Name</label>
             <input
               type="text"
@@ -169,7 +200,9 @@ export default function ReedemCheckout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className="fx-element-box">
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_3 ? "" : "fx-hidden"}`}
+          >
             <label>Email</label>
             <input
               type="email"
@@ -179,12 +212,21 @@ export default function ReedemCheckout() {
               onChange={(e) =>
                 setBilldata({ ...billdata, recipient_email: e.target.value })
               }
+              onBlur={(e) => {
+                if (e.target.value && !validateEmail(e.target.value)) {
+                  setErrorlist({ ...errorlist, recipient_email: true });
+                } else {
+                  setErrorlist({ ...errorlist, recipient_email: false });
+                }
+              }}
             />
             {errorlist.recipient_email && (
               <span className="fx-errortext">Enter Email</span>
             )}
           </div>
-          <div className="fx-element-box">
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_4 ? "" : "fx-hidden"}`}
+          >
             <label>Mobile</label>
             <div className="fx-phone-input">
               <PhoneInput
@@ -208,7 +250,9 @@ export default function ReedemCheckout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className="fx-element-box">
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_5 ? "" : "fx-hidden"}`}
+          >
             <label>Address</label>
             <input
               type="text"
@@ -229,7 +273,9 @@ export default function ReedemCheckout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className="fx-element-box">
+          <div
+            className={`fx-element-box fx-selectwrapper ${visibleField.sgbm_field_8 ? "" : "fx-hidden"}`}
+          >
             <label>Country</label>
             <select
               defaultValue={billdata.recipient_country}
@@ -253,7 +299,9 @@ export default function ReedemCheckout() {
               <span className="fx-errortext">Enter Country</span>
             )}
           </div>
-          <div className="fx-element-box">
+          <div
+            className={`fx-element-box fx-selectwrapper ${visibleField.sgbm_field_7 ? "" : "fx-hidden"}`}
+          >
             <label>State</label>
             <select
               defaultValue={billdata.recipient_state}
@@ -278,7 +326,9 @@ export default function ReedemCheckout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div className="fx-element-box">
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_6 ? "" : "fx-hidden"}`}
+          >
             <label>City</label>
             <input
               type="text"
@@ -293,7 +343,9 @@ export default function ReedemCheckout() {
               <span className="fx-errortext">Enter City</span>
             )}
           </div>
-          <div className="fx-element-box">
+          <div
+            className={`fx-element-box ${visibleField.sgbm_field_9 ? "" : "fx-hidden"}`}
+          >
             <label>Zip</label>
             <input
               type="text"

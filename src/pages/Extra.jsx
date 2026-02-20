@@ -70,63 +70,65 @@ export default function Service() {
 
   // Template for each carousel item
   const productTemplate = (product, pp) => {
-    return (
-      <div className="fx-extrabox" key={pp}>
-        <div className="fx-extrapicbox">
-          <img src={extra} alt={product.extra_name} />
-          <p className="fx-extrapicpriceboxright">
-            {decodeHtml(product.price)}
-          </p>
-        </div>
-        <div className="fx-extracontentbox">
-          <h4>{product.extra_name}</h4>
-          <p>{decodeHtml(product.extra_desc)}</p>
-          <div className="fx-common">
-            <div className="fx-quantitybox">
-              {extraid != product.id && (
-                <input
-                  type="submit"
-                  className="btn-secondary"
-                  value="Select"
-                  onClick={() => {
-                    setExtradetails(product);
-                    slotbook(product.id, "add", product.cap_left);
-                  }}
-                />
-              )}
-              {extraid == product.id && book > 0 && (
-                <>
-                  <button
-                    type="button"
-                    className="decrement"
-                    onClick={() =>
-                      slotbook(product.id, "minus", product.cap_left)
-                    }
-                  >
-                    -
-                  </button>
+    if (product.cap_left > 0) {
+      return (
+        <div className="fx-extrabox" key={pp}>
+          <div className="fx-extrapicbox">
+            <img src={extra} alt={product.extra_name} />
+            <p className="fx-extrapicpriceboxright">
+              {decodeHtml(product.price)}
+            </p>
+          </div>
+          <div className="fx-extracontentbox">
+            <h4>{product.extra_name}</h4>
+            <p>{decodeHtml(product.extra_desc)}</p>
+            <div className="fx-common">
+              <div className="fx-quantitybox">
+                {extraid != product.id && (
                   <input
-                    type="number"
-                    value={extraid == product.id ? book : 0}
-                    defaultValue={0}
-                    min={0}
+                    type="submit"
+                    className="btn-secondary"
+                    value="Select"
+                    onClick={() => {
+                      setExtradetails(product);
+                      slotbook(product.id, "add", product.cap_left);
+                    }}
                   />
-                  <button
-                    type="button"
-                    className="increment"
-                    onClick={() =>
-                      slotbook(product.id, "add", product.cap_left)
-                    }
-                  >
-                    +
-                  </button>
-                </>
-              )}
+                )}
+                {extraid == product.id && book > 0 && (
+                  <>
+                    <button
+                      type="button"
+                      className="decrement"
+                      onClick={() =>
+                        slotbook(product.id, "minus", product.cap_left)
+                      }
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      value={extraid == product.id ? book : 0}
+                      defaultValue={0}
+                      min={0}
+                    />
+                    <button
+                      type="button"
+                      className="increment"
+                      onClick={() =>
+                        slotbook(product.id, "add", product.cap_left)
+                      }
+                    >
+                      +
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   };
 
   const slotbook = (id, type, capacity_left) => {
@@ -340,17 +342,106 @@ export default function Service() {
                 <div className="fx-extracontainer">
                   {products.length > 0 &&
                     products.map((product, p1) => {
-                      return (
-                        <div className="fx-extrabox" key={p1}>
-                          <div className="fx-extrapicbox">
-                            <img src={extra} alt={product.extra_name} />
-                            <p className="fx-extrapicpriceboxright">
-                              {decodeHtml(product.price)}
-                            </p>
+                      if (product.cap_left > 0) {
+                        return (
+                          <div className="fx-extrabox" key={p1}>
+                            <div className="fx-extrapicbox">
+                              <img src={extra} alt={product.extra_name} />
+                              <p className="fx-extrapicpriceboxright">
+                                {decodeHtml(product.price)}
+                              </p>
+                            </div>
+                            <div className="fx-extracontentbox">
+                              <h4>{product.extra_name}</h4>
+                              <p>{decodeHtml(product.extra_desc)}</p>
+                              <div className="fx-common">
+                                <div className="fx-quantitybox">
+                                  {extraid != product.id && (
+                                    <input
+                                      type="submit"
+                                      className="btn-secondary"
+                                      value="Select"
+                                      onClick={() => {
+                                        setExtradetails(product);
+                                        slotbook(
+                                          product.id,
+                                          "add",
+                                          product.cap_left,
+                                        );
+                                      }}
+                                    />
+                                  )}
+                                  {extraid == product.id && book > 0 && (
+                                    <>
+                                      <button
+                                        type="button"
+                                        className="decrement"
+                                        onClick={() =>
+                                          slotbook(
+                                            product.id,
+                                            "minus",
+                                            product.cap_left,
+                                          )
+                                        }
+                                      >
+                                        -
+                                      </button>
+                                      <input
+                                        type="number"
+                                        value={extraid == product.id ? book : 0}
+                                        defaultValue={0}
+                                        min={0}
+                                      />
+                                      <button
+                                        type="button"
+                                        className="increment"
+                                        onClick={() =>
+                                          slotbook(
+                                            product.id,
+                                            "add",
+                                            product.cap_left,
+                                          )
+                                        }
+                                      >
+                                        +
+                                      </button>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                          <div className="fx-extracontentbox">
+                        );
+                      }
+                    })}
+                </div>
+              </div>
+
+              <div
+                className={
+                  isVisible == "list"
+                    ? "fx-tabcontent selected"
+                    : "fx-tabcontent"
+                }
+              >
+                {products.length > 0 &&
+                  products.map((product, p2) => {
+                    if (product.cap_left > 0) {
+                      return (
+                        <div className="fx-extraboxlist" key={p2}>
+                          <div className="fx-extrapicboxlist">
+                            <img src={extra} alt={product.extra_name} />
+                            <span className="fx-servicepiccontentbox">
+                              {product.extra_name}
+                            </span>
+                          </div>
+                          <div className="fx-extracontentboxlist">
                             <h4>{product.extra_name}</h4>
                             <p>{decodeHtml(product.extra_desc)}</p>
+                            <p className="price">
+                              {" "}
+                              <span>{decodeHtml(product.price)}</span>
+                            </p>
                             <div className="fx-common">
                               <div className="fx-quantitybox">
                                 {extraid != product.id && (
@@ -409,92 +500,7 @@ export default function Service() {
                           </div>
                         </div>
                       );
-                    })}
-                </div>
-              </div>
-
-              <div
-                className={
-                  isVisible == "list"
-                    ? "fx-tabcontent selected"
-                    : "fx-tabcontent"
-                }
-              >
-                {products.length > 0 &&
-                  products.map((product, p2) => {
-                    return (
-                      <div className="fx-extraboxlist" key={p2}>
-                        <div className="fx-extrapicboxlist">
-                          <img src={extra} alt={product.extra_name} />
-                          <span className="fx-servicepiccontentbox">
-                            {product.extra_name}
-                          </span>
-                        </div>
-                        <div className="fx-extracontentboxlist">
-                          <h4>{product.extra_name}</h4>
-                          <p>{decodeHtml(product.extra_desc)}</p>
-                          <p className="price">
-                            {" "}
-                            <span>{decodeHtml(product.price)}</span>
-                          </p>
-                          <div className="fx-common">
-                            <div className="fx-quantitybox">
-                              {extraid != product.id && (
-                                <input
-                                  type="submit"
-                                  className="btn-secondary"
-                                  value="Select"
-                                  onClick={() => {
-                                    setExtradetails(product);
-                                    slotbook(
-                                      product.id,
-                                      "add",
-                                      product.cap_left,
-                                    );
-                                  }}
-                                />
-                              )}
-                              {extraid == product.id && book > 0 && (
-                                <>
-                                  <button
-                                    type="button"
-                                    className="decrement"
-                                    onClick={() =>
-                                      slotbook(
-                                        product.id,
-                                        "minus",
-                                        product.cap_left,
-                                      )
-                                    }
-                                  >
-                                    -
-                                  </button>
-                                  <input
-                                    type="number"
-                                    value={extraid == product.id ? book : 0}
-                                    defaultValue={0}
-                                    min={0}
-                                  />
-                                  <button
-                                    type="button"
-                                    className="increment"
-                                    onClick={() =>
-                                      slotbook(
-                                        product.id,
-                                        "add",
-                                        product.cap_left,
-                                      )
-                                    }
-                                  >
-                                    +
-                                  </button>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
+                    }
                   })}
               </div>
 
