@@ -29,7 +29,7 @@ import useDeviceType from "../Utils/useDeviceType";
 // const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
 // const stripePromise = loadStripe(PUBLIC_KEY);
 
-export default function Commonbox({ setVisibleBottom }) {
+export default function Commonbox({ setVisibleBottom, toggleCard }) {
   const dispatch = useDispatch();
   const toast = useRef(null);
   const date = useSelector((state) => state.step1.date);
@@ -160,6 +160,7 @@ export default function Commonbox({ setVisibleBottom }) {
   };
 
   const edititem = (id, type) => {
+    if (toggleCard) toggleCard();
     confirmDialog({
       message: "Are you sure you want to proceed?",
       header: "Confirmation",
@@ -171,6 +172,7 @@ export default function Commonbox({ setVisibleBottom }) {
   };
 
   const deleteitem = (id, type) => {
+    if (toggleCard) toggleCard();
     confirmDialog({
       message: "Are you sure you want to delete this service?",
       header: "Delete Confirmation",
@@ -390,7 +392,9 @@ export default function Commonbox({ setVisibleBottom }) {
               {(step == "paymentstep" || step == "checkoutstep") && (
                 <div
                   className="fx-down-icon-botttom"
-                  onClick={() => setVisibleBottom(false)}
+                  onClick={() => {
+                    if (setVisibleBottom) setVisibleBottom(false);
+                  }}
                 >
                   <i className="pi pi-chevron-up"></i>
                 </div>

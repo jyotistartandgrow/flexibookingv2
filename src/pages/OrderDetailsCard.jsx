@@ -12,6 +12,7 @@ const OrderDetailsCard = () => {
   const date = useSelector((state) => state.step1.date);
   const cart = useSelector((state) => state.step2.cart);
   const topbar = useSelector((state) => state.step1.topbar);
+  const gift = useSelector((state) => state.step1.gift);
   const isDesktop = useDeviceType();
 
   const toggleCard = () => {
@@ -28,50 +29,39 @@ const OrderDetailsCard = () => {
         className={`fx-top-order-details-card ${isOpenn ? "fx-is-open" : ""}`}
       >
         {/* Header Section */}
-        <div className="fx-header-row" onClick={toggleCard}>
-          <span className="fx-title">Order Details</span>
-          <div className="fx-chevron"></div>
-        </div>
-        {/* Summary Section */}
-
-        <div className="fx-summary-row" onClick={toggleCard}>
-          <div className="fx-info-group">
-            <div className="fx-calendar-icon"></div>
-            <span>
-              {moment(date).format("MMM DD")},{" "}
-              {cart?.service?.length > 0 && (
-                <>
-                  {cart.service.map((ct) => {
-                    return ct.name;
-                  })}
-                </>
-              )}
-            </span>
+        <div onClick={toggleCard}>
+          <div className="fx-header-row">
+            <span className="fx-title">Order Details</span>
+            <div className="fx-chevron"></div>
           </div>
-          {cart?.total_formatted && (
-            <span className="fx-price">
-              {decodeHtml(cart?.total_formatted)}
-            </span>
-          )}
+          {/* Summary Section */}
+
+          <div className="fx-summary-row">
+            <div className="fx-info-group">
+              <div className="fx-calendar-icon"></div>
+              <span>
+                {!gift && `${moment(date).format("MMM DD")} `}
+                {cart?.service?.length > 0 && (
+                  <>
+                    {!gift && ", "}
+                    {cart.service.map((ct) => {
+                      return ct.name;
+                    })}
+                  </>
+                )}
+              </span>
+            </div>
+            {cart?.total_formatted && (
+              <span className="fx-price">
+                {decodeHtml(cart?.total_formatted)}
+              </span>
+            )}
+          </div>
         </div>
         {/* Sliding Content */}
 
         <div className="fx-collapsible-content">
-          {topbar && isDesktop && <Commonbox />}
-          {/* <div className="fx-detail-line">
-          <span>Service Provider:</span>
-          <strong>Wellness Spa Plus</strong>
-        </div>
-
-        <div className="fx-detail-line">
-          <span>Confirmation #:</span>
-          <strong>ABC-123456</strong>
-        </div>
-
-        <div className="fx-detail-line">
-          <span>Payment Method:</span>
-          <strong>Visa ending in 4242</strong>
-        </div> */}
+          {topbar && isDesktop && <Commonbox toggleCard={toggleCard} />}
         </div>
       </div>
     </div>

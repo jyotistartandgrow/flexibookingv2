@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setRedeemStep } from "../store/step1Slice";
 import moment from "moment";
-import { decodeHtml } from "../Utils/Functions";
+import { decodeHtml, darkenHex } from "../Utils/Functions";
 import { Sidebar as Sidebarpanel } from "primereact/sidebar";
 import logo from "../assets/logo.png";
 import RedeemCommonbox from "../components/RedeemCommonbox";
-
+import axiosInstance from "../Utils/Interceptor";
 
 export default function ReedemSteps() {
   const dispatch = useDispatch();
@@ -35,6 +35,32 @@ export default function ReedemSteps() {
     slotstepclass = slotstepclass + " complete";
     datestepclass = datestepclass + " complete";
   }
+
+  const getSettings = async () => {
+    try {
+      const response = await axiosInstance.get("/settings");
+      const settings = response.data;
+
+      // Set CSS custom property
+      if (settings.data.primary_color) {
+        document.documentElement.style.setProperty(
+          "--primary-color",
+          settings.data.primary_color,
+        );
+
+        document.documentElement.style.setProperty(
+          "--darkblue-color",
+          darkenHex(settings.data.primary_color, 56),
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+    }
+  };
+
+  useEffect(() => {
+    getSettings();
+  }, []);
 
   return (
     <>
