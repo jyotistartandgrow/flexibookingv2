@@ -283,7 +283,7 @@
   .fx-booking .fx-mobilesidebar{
     width:100%;
     height:auto;
-    position: fixed;
+    position: absolute;
     bottom:-2px;
     padding:15px;
     font-size: var(--card-headingsize);
