@@ -390,6 +390,18 @@
 
 
 
+// Step For Starting From Redeem
+.step-for-redeem .complete.datestep{
+      width: 47%;
+    z-index: 99;
+    padding-left: 26%;
+}
+
+.step-for-redeem .checkoutstep.active{
+      width: 50%;
+}
+
+
 
 // Step For Starting From Services
 .fx-service-step .servicesstep.active{
@@ -435,6 +447,7 @@
   padding-left: 72px;
 }
 
+
 @media screen and (max-width:768px) {
 .fx-service-step .servicesstep.complete{
   width: 24%;
@@ -459,7 +472,7 @@
   padding-right:37px;
 }
 .fx-service-step .step{
-  padding-right:40px;
+  padding-right:32px;
 }
 .fx-service-step .extrastep.active{
   left: 16%;

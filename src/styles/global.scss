@@ -215,7 +215,7 @@ svg.p-icon.p-datepicker-prev-icon {
     padding:15px;
     padding-bottom:16px;
     overflow:auto;
-    padding-bottom: 94px;
+    padding-bottom: 16px;
 }
 .fx-booking.fx-container{
     min-height:auto;
@@ -572,6 +572,21 @@ body.swal2-toast-shown .swal2-container input[type="checkbox"]{
     flex-direction: row;
 }
 
+button.p-confirm-dialog-accept.p-button.p-component{
+    background:var(--primary-color);
+    box-shadow:none;
+    margin-left:10px;
+}
+
+.fx-confirmation-popup button.p-component{
+    background: none;
+    box-shadow:none;
+}
+
+.fx-confirmation-popup button.p-component:hover{
+    color: var(--darkblue-color);
+}
+
 /* chrome, edge, safari */
 .fx-extracontentboxlist .fx-quantitybox input[type="number"]::-webkit-outer-spin-button,
 .fx-extracontentboxlist .fx-quantitybox input[type="number"]::-webkit-inner-spin-button,
@@ -625,7 +640,7 @@ body.swal2-toast-shown .swal2-container input[type="checkbox"]{
     .fx-booking .fx-mobilesidebar{
         width: 100%;
         height: auto;
-        position: absolute;
+        position: fixed;
         bottom: -2px;
         padding: 15px;
         font-size: var(--card-headingsize);
