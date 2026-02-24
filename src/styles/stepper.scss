@@ -295,16 +295,16 @@
   .fx-stepper-tabstyle .step{
         padding-right: 20px;
   }
-  .fx-step-top-fixed-box{
-    display: block;
-    position: absolute;
-    width: 100%;
-    z-index: 99;
-    background:none;
-    left: 0px;
-    top: 0px;
-    padding: 16px;
-}
+//   .fx-step-top-fixed-box{
+//     display: block;
+//     position: absolute;
+//     width: 100%;
+//     z-index: 99;
+//     background:none;
+//     left: 0px;
+//     top: 0px;
+//     padding: 16px;
+// }
   .fx-stepper-tabstyle .servicesstep.active{
     width: 44%;
     left: 12%;
@@ -320,7 +320,7 @@
   .fx-stepper-tabstyle .checkoutstep.active{
         width: 41%;
         left: 46%;
-        padding-left: 20px;
+        padding-left: 10px;
   }
   .fx-stepper-tabstyle .paymentstep.active{
         width: 40%;
