@@ -20,6 +20,16 @@ function mountReactApp(id, initialRoute) {
 
   if (!el) return;
 
+  // 👇 Get data attributes
+  const props = {
+    title: el.dataset.title,
+    topbar: el.dataset.topbar,
+    rightbar: el.dataset.rightbar,
+    bottombar: el.dataset.bottombar,
+    mobileHeading: el.dataset.mobileHeading,
+  };
+
+  console.log("Props from data attributes:", props);
   // Prevent double mounting (important in WP)
   if (el.dataset.mounted) return;
   el.dataset.mounted = "true";
@@ -28,9 +38,9 @@ function mountReactApp(id, initialRoute) {
     <StrictMode>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <App initialRoute={initialRoute} />
+          <App initialRoute={initialRoute} {...props} />
         </PersistGate>
       </Provider>
-    </StrictMode>
+    </StrictMode>,
   );
 }

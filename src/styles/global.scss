@@ -174,10 +174,11 @@ h3 {
 .fx-booking .fx-commoninput .fx-toggleswitch{
     display: flex;
     gap: 8px;
-    margin-top: 10px;
+    margin-top:24px;
     margin-bottom: 10px;
     flex-direction:column;
 }
+
 .fx-booking .fx-commoninput .fx-toggleswitch .p-inputswitch{
    top:-5px;
 }
@@ -226,9 +227,6 @@ svg.p-icon.p-datepicker-prev-icon {
 h1{
     font-size:22px;
     width:55%;
-}
-.fx-leftcontentbox.fx-checkoutpage{
-    margin-top:165px !important;
 }
 
 .fx-booking .fx-commoninput .fx-element-box.fx-checkoutbuttonbar{
@@ -604,10 +602,17 @@ button.p-confirm-dialog-accept.p-button.p-component{
     width: 50%;
 }
 
+.fx-paymentbox form h4{
+     font-weight: 400;
+     margin-top: 8px;
+}
+
+
+
 @media screen and (max-width:768px) {
     .fx-content-with-topbar .fx-paymentbox{
     padding: 0px;
-    margin-top:180px;
+    margin-top:40px;
     width:100%;
 }
 }
@@ -657,9 +662,6 @@ button.p-confirm-dialog-accept.p-button.p-component{
         width: 48%;
     }
 
-   .fx-booking.fx-container .fx-top-order-details-box{
-        display: none;
-    }
     .fx-leftcontentbox{
         min-height: 467px;
     }
@@ -680,18 +682,18 @@ button.p-confirm-dialog-accept.p-button.p-component{
 .fx-booking.fx-container .fx-leftbar{
     right: 0px;
 }
-
+.fx-top-order-details-box{
+ display: block;
+}
 //  For Top Setting
-
-@media screen and (max-width: 768px) {
-
-.fx-booking.fx-container .fx-top-order-details-box{
-    display: block;
-}
-}
 
 @media (min-width: 768px) and (max-width: 1100px) {
 .fx-booking .fx-leftbar {
     margin: auto;
 }
+}
+
+
+.fx-booking .fx-mobilesidebar{
+    display: none;
 }

@@ -443,7 +443,7 @@ export default function ChooseDate() {
               </div>
               <div className="fx-input-wrapper">
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Phone Number"
                   className={errorlist.phoneNumber ? "fx-invalid" : ""}
                   onChange={(e) =>
@@ -530,27 +530,28 @@ export default function ChooseDate() {
                 )}
               </div>
             </div>
-            <div className="fx-element-box">
-              <input
-                type="submit"
-                className={
-                  !receiverInfo.firstName ||
-                  !receiverInfo.lastName ||
-                  !receiverInfo.email ||
-                  !receiverInfo.phoneNumber
-                    ? "btn-primary fx-btn-disable"
-                    : "btn-primary"
-                }
-                value="View Services"
-                onClick={() => viewService()}
-                disabled={
-                  !receiverInfo.firstName ||
-                  !receiverInfo.lastName ||
-                  !receiverInfo.email ||
-                  !receiverInfo.phoneNumber
-                }
-              />
-            </div>
+            {(() => {
+                const isValid =
+                  receiverInfo.firstName &&
+                  receiverInfo.lastName &&
+                  receiverInfo.email &&
+                  receiverInfo.phoneNumber &&
+                  !errorlist.firstName &&
+                  !errorlist.lastName &&
+                  !errorlist.email &&
+                  !errorlist.phoneNumber;
+                return (
+                  <div className="fx-element-box">
+                    <input
+                      type="submit"
+                      className={isValid ? "btn-primary" : "btn-primary fx-btn-disable"}
+                      value="View Services"
+                      onClick={() => viewService()}
+                      disabled={!isValid}
+                    />
+                  </div>
+                );
+              })()}
           </div>
         </div>
 

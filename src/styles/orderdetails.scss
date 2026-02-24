@@ -137,3 +137,13 @@
     justify-content: space-between;
     padding: 6px 0;
 }
+.fx-top-order-details-card .fx-servicelistbox .fx-serviceitem .itemname, .fx-top-order-details-card .fx-bookingdate,
+.fx-top-order-details-card .fx-totalbar p{
+    font-size: var(--normal-descriptionsize);
+}
+.fx-top-order-details-card .fx-totalbar p span,.fx-top-order-details-card .fx-subtotalbar p span, .fx-top-order-details-card .fx-servicelistbox .fx-serviceitem .price{
+ font-size:var(--small-descriptionsize);
+}
+.fx-top-order-details-card .fx-discountbar p span{
+font-weight: 400;
+}

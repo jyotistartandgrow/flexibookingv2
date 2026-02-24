@@ -53,7 +53,6 @@ export default function Payment() {
       };
       dispatch(setCart(updatedCart));
     }
-    console.log(couponcode);
     if (couponcode && couponcode.length > 0) {
       // apply coupons one by one
       for (let i = 0; i < couponcode.length; i++) {
