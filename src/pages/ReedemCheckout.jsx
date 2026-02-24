@@ -11,6 +11,7 @@ import "react-phone-input-2/lib/style.css";
 import { setLoading } from "../store/step1Slice";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { validateEmail } from "../Utils/Functions";
 
 export default function ReedemCheckout() {
   const navigate = useNavigate();
@@ -40,12 +41,6 @@ export default function ReedemCheckout() {
       setNumberOnly(voucherdetail.recepient_data?.recipient_contact || "");
     }
   }, [step]);
-
-  // Validation functions
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
 
   const getFields = async () => {
     dispatch(setLoading(true));

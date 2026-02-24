@@ -13,7 +13,7 @@ import {
   setLoading,
   setGift,
 } from "../store/step1Slice";
-import { decodeHtml } from "../Utils/Functions";
+import { decodeHtml, validateEmail } from "../Utils/Functions";
 import CalendarPage from "./CalendarPage";
 
 export default function ChooseDate() {
@@ -428,10 +428,17 @@ export default function ChooseDate() {
                       }),
                     )
                   }
+                  onBlur={(e) => {
+                    if (e.target.value && !validateEmail(e.target.value)) {
+                      setErrorlist({ ...errorlist, email: true });
+                    } else {
+                      setErrorlist({ ...errorlist, email: false });
+                    }
+                  }}
                 />
                 <i className="pi pi-envelope"></i>
                 {errorlist.email && (
-                  <span class="fx-errortext">Enter Email</span>
+                  <span class="fx-errortext">Enter Valid Email</span>
                 )}
               </div>
               <div className="fx-input-wrapper">

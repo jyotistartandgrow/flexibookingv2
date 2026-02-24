@@ -61,7 +61,7 @@ const OrderDetailsCard = () => {
         {/* Sliding Content */}
 
         <div className="fx-collapsible-content">
-          {topbar && isDesktop && <Commonbox toggleCard={toggleCard} />}
+          {topbar && <Commonbox toggleCard={toggleCard} />}
         </div>
       </div>
     </div>
