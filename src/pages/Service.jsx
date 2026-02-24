@@ -538,13 +538,13 @@ export default function Service() {
     >
       <h1 className="fx-all-main-heading">
         What experience are you looking for?{" "}
-        <span class="fx-tooltip-container">
+        {/* <span class="fx-tooltip-container">
           <i class="pi pi-info-circle fx-info-icon"></i>
           <div class="fx-tooltip">
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry.
           </div>
-        </span>
+        </span> */}
       </h1>
       <div id="fx-Icontab_nav">
         <ul>
