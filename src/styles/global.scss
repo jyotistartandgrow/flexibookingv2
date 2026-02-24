@@ -607,6 +607,19 @@ button.p-confirm-dialog-accept.p-button.p-component{
      margin-top: 8px;
 }
 
+div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
+    display: none !important;
+}
+
+.swal2-actions button.swal2-confirm.swal2-styled{
+    width: 150px;
+    padding: 14px;
+    background:var(--primary-color);
+}
+
+.fx-element-box span.fx-errortext{
+    color: red;
+}
 
 
 @media screen and (max-width:768px) {
@@ -614,6 +627,12 @@ button.p-confirm-dialog-accept.p-button.p-component{
     padding: 0px;
     margin-top:40px;
     width:100%;
+}
+.fx-booking .fx-giftbox .fx-input-wrapper {
+    margin-bottom:16px;
+}
+.fx-viewservice-button .btn-primary{
+    margin-top: 10px;
 }
 }
 

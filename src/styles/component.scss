@@ -39,7 +39,7 @@
  .fx-booking .fx-commoninput .fx-inputgroup {
   width: 100%;
   display: flex;
-  gap:24px;
+  gap:12px;
 }
 
 .fx-booking .fx-commoninput .bigtextbox{
@@ -121,7 +121,6 @@
   font-size: var(--normal-descriptionsize);
   font-weight: 400;
   cursor: pointer;
-  margin-bottom: 15px;
   max-width: 100%;
   height: inherit;
   margin-top: 0px;
@@ -134,7 +133,9 @@
  .fx-booking .fx-input-wrapper {
   position: relative;
   width: 100%;
+  margin-bottom: 15px;
 }
+
 
  .fx-booking .fx-input-wrapper i {
   position: absolute;
@@ -505,13 +506,13 @@
 .fx-booking .fx-phone-input {
   // display: flex;
   align-items: center;
-  border: 1px solid var(--border-color, #ccc);
   border-radius: 4px;
   // overflow: hidden;
   width: 100%;
 }
 .fx-booking .fx-phone-input .react-tel-input input[type=tel]{
   padding-left: 48px;
+      border: 1px solid var(--border-color);
 }
 .fx-booking .fx-phone-input .arrow{
   margin-left: inherit;
@@ -523,7 +524,7 @@
 .fx-booking .fx-phone-input .country-list .search-box{
   width:87%;
 }
-.fx-booking .fx-errortext{
+.fx-booking .fx-giftbox .fx-errortext{
   color:var(--error-color);
   float: left;
 }
@@ -581,7 +582,7 @@
 }
 .fx-booking .fx-commoninput .fx-inputgroup{
   flex-direction: column;
-  margin-bottom: 10px;
+  margin-bottom:0px;
 }
 .fx-booking .fx-commoninput .fx-checkboxcontainer{
   flex-direction: row;
@@ -597,7 +598,7 @@
 //  .fx-booking input[type="email"] {
 //   margin-bottom: 0px;
 //  }
- .fx-booking .fx-errortext{
+ .fx-booking .fx-giftbox .fx-errortext{
   margin-top: 0px;
  }
 .fx-couponcontainerinputbox {
@@ -608,7 +609,7 @@
 .fx-couponcontainerinputbox{
   display: flex;
 }
-.fx-booking .fx-errortext{
+.fx-booking .fx-giftbox .fx-errortext{
   margin-top: 0px;
 }
 }

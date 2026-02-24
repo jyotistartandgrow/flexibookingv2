@@ -523,7 +523,7 @@ export default function ChooseDate() {
                 )}
               </div>
             </div>
-            <div className="fx-element-box">
+            <div className="fx-element-box fx-viewservice-button">
               <input
                 type="submit"
                 className={
