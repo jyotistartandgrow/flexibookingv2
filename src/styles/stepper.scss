@@ -175,6 +175,7 @@
   background: #fff;
   width: 48%;
   left: 5%;
+  padding-right: 30px;
 }
 
 .fx-step-top-fixed-box{
@@ -294,6 +295,11 @@
 
   .fx-stepper-tabstyle .step{
         padding-right: 20px;
+  }
+  .fx-stepper-tabstyle .servicesstep.complete{
+    width: 32%;
+    left: 4%;
+    padding-right: 29px;
   }
 //   .fx-step-top-fixed-box{
 //     display: block;

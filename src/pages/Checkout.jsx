@@ -508,7 +508,7 @@ export default function Checkout() {
               <div className="fx-commoninput">
                 <div class="fx-inputgroup">
                   <div class="fx-element-box">
-                    <label>First Name</label>
+                    <label>First Namev</label>
                     <input
                       placeholder="First Name"
                       type="text"

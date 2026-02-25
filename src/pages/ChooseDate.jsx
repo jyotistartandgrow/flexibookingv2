@@ -379,7 +379,7 @@ export default function ChooseDate() {
                   className={
                     errorlist.firstName
                       ? "fx-invalid fx-inputbox-generic"
-                      : "fx-inputbox-gift"
+                      : "fx-inputbox-gift fx-input-firstname-box"
                   }
                   onChange={(e) =>
                     dispatch(
@@ -398,7 +398,7 @@ export default function ChooseDate() {
                 <input
                   type="text"
                   placeholder="Last Name"
-                  className={errorlist.lastName ? "fx-invalid" : ""}
+                  className={errorlist.lastName ? "fx-invalid" : "fx-input-lastname-box"}
                   onChange={(e) =>
                     dispatch(
                       setReceiverInfo({
@@ -419,7 +419,7 @@ export default function ChooseDate() {
                 <input
                   type="email"
                   placeholder="Email"
-                  className={errorlist.email ? "fx-invalid" : ""}
+                  className={errorlist.email ? "fx-invalid" : "fx-input-email-box"}
                   onChange={(e) =>
                     dispatch(
                       setReceiverInfo({
@@ -438,7 +438,7 @@ export default function ChooseDate() {
                 <input
                   type="text"
                   placeholder="Phone Number"
-                  className={errorlist.phoneNumber ? "fx-invalid" : ""}
+                  className={errorlist.phoneNumber ? "fx-invalid" : "fx-input-number"}
                   onChange={(e) =>
                     dispatch(
                       setReceiverInfo({

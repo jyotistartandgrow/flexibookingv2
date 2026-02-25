@@ -78,7 +78,7 @@ export default function Payment() {
           );
         } else {
           Swal.fire({
-            iconHtml: '<i class="fa fa-exclamation-circle fx-swal-icon"></i>',
+            iconHtml: '<img class="fx-coupon-close-icon" src="/src/assets/close2.svg">',
             title: `${couponcode[i]} Coupon Error`,
             text:
             decodeHtml(coupondata?.data?.error) || "Failed to apply coupon",
