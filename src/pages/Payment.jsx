@@ -77,11 +77,14 @@ export default function Payment() {
           );
         } else {
           Swal.fire({
-            icon: "error",
+            iconHtml: '<i class="fa fa-exclamation-circle fx-swal-icon"></i>',
             title: `${couponcode[i]} Coupon Error`,
             text:
-              decodeHtml(coupondata?.data?.error) || "Failed to apply coupon",
-          });
+            decodeHtml(coupondata?.data?.error) || "Failed to apply coupon",
+            customClass: {
+            popup: "fx-coupon-box-popup",
+            },
+            });
         }
       }
     }

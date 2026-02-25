@@ -541,7 +541,7 @@ export default function ChooseDate() {
                   !errorlist.email &&
                   !errorlist.phoneNumber;
                 return (
-                  <div className="fx-element-box">
+                  <div className="fx-element-box fx-viewservice-button">
                     <input
                       type="submit"
                       className={isValid ? "btn-primary" : "btn-primary fx-btn-disable"}
