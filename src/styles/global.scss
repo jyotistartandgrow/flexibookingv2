@@ -452,7 +452,7 @@ h1{
     margin-top: 0px;
     font-size: 20px;
     padding-left: 0px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
 }
 
@@ -631,13 +631,17 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 
 .fx-booking input.fx-input-number[type=number]{
     border-radius: 4px;
-    height: 52px;
+    height: 58px;
+    width: 100%;
+    margin: 0px;
 }
 
-.fx-booking input.fx-input-number[type=number], .fx-booking input.fx-input-firstname-box[type=number], 
-.fx-booking input.fx-input-lastname-box[type=number], .fx-booking input.fx-input-email-box[type=number]{
+.fx-booking input.fx-input-number[type=text], .fx-booking input.fx-input-firstname-box[type=number], 
+.fx-booking input.fx-input-lastname-box[type=text], .fx-booking input.fx-input-email-box[type=email]{
     border-radius: 4px;
-    height: 52px;
+    height: 58px;
+    width: 100%;
+    margin: 0px;
 }
 
 .fx-coupon-box-popup h2#swal2-title {
@@ -653,6 +657,10 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 
 .fx-coupon-box-popup .fx-coupon-close-icon{
     width: 80px;
+}
+.fx-booking .fx-commoninput .fx-checkboxcontainer input[type="checkbox"]{
+    width: 38px;
+    height: 38px;
 }
 
 
