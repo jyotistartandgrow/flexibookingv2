@@ -75,9 +75,8 @@ export default function ChooseDate() {
       position: "top-end",
       showConfirmButton: false,
       timer: 3000,
-      icon: "success",
-      title:
-        "Coupon Applied! Once you proceed to payment, the discount will be applied.",
+      icon: "info",
+      title: "Once you proceed to payment, the discount will be applied.",
     });
 
     setFields((prev) => {
@@ -398,7 +397,9 @@ export default function ChooseDate() {
                 <input
                   type="text"
                   placeholder="Last Name"
-                  className={errorlist.lastName ? "fx-invalid" : "fx-input-lastname-box"}
+                  className={
+                    errorlist.lastName ? "fx-invalid" : "fx-input-lastname-box"
+                  }
                   onChange={(e) =>
                     dispatch(
                       setReceiverInfo({
@@ -419,7 +420,9 @@ export default function ChooseDate() {
                 <input
                   type="email"
                   placeholder="Email"
-                  className={errorlist.email ? "fx-invalid" : "fx-input-email-box"}
+                  className={
+                    errorlist.email ? "fx-invalid" : "fx-input-email-box"
+                  }
                   onChange={(e) =>
                     dispatch(
                       setReceiverInfo({
@@ -445,7 +448,9 @@ export default function ChooseDate() {
                 <input
                   type="number"
                   placeholder="Phone Number"
-                  className={errorlist.phoneNumber ? "fx-invalid" : "fx-input-number"}
+                  className={
+                    errorlist.phoneNumber ? "fx-invalid" : "fx-input-number"
+                  }
                   onChange={(e) =>
                     dispatch(
                       setReceiverInfo({
@@ -531,27 +536,29 @@ export default function ChooseDate() {
               </div>
             </div>
             {(() => {
-                const isValid =
-                  receiverInfo.firstName &&
-                  receiverInfo.lastName &&
-                  receiverInfo.email &&
-                  receiverInfo.phoneNumber &&
-                  !errorlist.firstName &&
-                  !errorlist.lastName &&
-                  !errorlist.email &&
-                  !errorlist.phoneNumber;
-                return (
-                  <div className="fx-element-box fx-viewservice-button">
-                    <input
-                      type="submit"
-                      className={isValid ? "btn-primary" : "btn-primary fx-btn-disable"}
-                      value="View Services"
-                      onClick={() => viewService()}
-                      disabled={!isValid}
-                    />
-                  </div>
-                );
-              })()}
+              const isValid =
+                receiverInfo.firstName &&
+                receiverInfo.lastName &&
+                receiverInfo.email &&
+                receiverInfo.phoneNumber &&
+                !errorlist.firstName &&
+                !errorlist.lastName &&
+                !errorlist.email &&
+                !errorlist.phoneNumber;
+              return (
+                <div className="fx-element-box fx-viewservice-button">
+                  <input
+                    type="submit"
+                    className={
+                      isValid ? "btn-primary" : "btn-primary fx-btn-disable"
+                    }
+                    value="View Services"
+                    onClick={() => viewService()}
+                    disabled={!isValid}
+                  />
+                </div>
+              );
+            })()}
           </div>
         </div>
 

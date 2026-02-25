@@ -79,7 +79,8 @@ export default function ReedemSteps() {
           <div
             className={datestepclass}
             onClick={() => {
-              dispatch(setRedeemStep("datestep"));
+              voucherdetail?.products?.length > 0 &&
+                dispatch(setRedeemStep("datestep"));
             }}
           >
             <div>
@@ -89,7 +90,8 @@ export default function ReedemSteps() {
           <div
             className={slotstepclass}
             onClick={() => {
-              dispatch(setRedeemStep("slotstep"));
+              voucherdetail?.products?.length > 0 &&
+                dispatch(setRedeemStep("slotstep"));
             }}
           >
             <div>
