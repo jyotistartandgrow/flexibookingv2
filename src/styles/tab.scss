@@ -46,9 +46,13 @@
 
 .fx-booking #fx-tab_nav div.fx-tabcontent {
   display: none;
-  margin-top:12px;
+  margin-top:20px;
   color: var(--grey);
 
+}
+
+.fx-booking input[type=text].fx-voucher-input{
+  border-radius: 4px;
 }
 
 .fx-booking #fx-tab_nav div.selected {

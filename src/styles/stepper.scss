@@ -241,7 +241,7 @@
 
 
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 768px) {
   .fx-booking .fx-step{
     width: 30px;
     height: 30px;
@@ -253,6 +253,10 @@
   .fx-booking .fx-line{
         margin-right: 3px;
         margin-left: 3px;
+  }
+  .fx-stepper-tabstyle .checkoutstep {
+    width: 85%;
+    z-index: 2;
   }
 }
 
@@ -283,12 +287,12 @@
     width:42%;
   }
   .fx-stepper-tabstyle .servicesstep{
-    width:24%;
+    width:25%;
     left:32%;
     padding-right:20px;
   }
   .fx-stepper-tabstyle .extrastep{
-    width:38%;
+    width:40%;
     left:32%;
     padding-right:20px;
   }

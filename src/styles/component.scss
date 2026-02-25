@@ -142,10 +142,11 @@
  .fx-booking .fx-input-wrapper i {
   position: absolute;
   right: 15px;
-  top: 21%;
+  top: 22%;
   font-size: 25px;
   color: var(--input-icon-color); /* Adjust color for the icon */
   pointer-events: none; /* Prevent the icon from blocking clicks on the input */
+  background: #fff;
 }
 
 /* Example email and phone icons */
@@ -449,7 +450,7 @@
  .fx-extracontentboxlist .fx-common {
         display: flex;
     justify-content: space-between;
-    margin-top: 16px;
+    margin-top: 20px;
 }
 
  /* Radio button styles */
