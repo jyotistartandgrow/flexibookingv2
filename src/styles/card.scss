@@ -148,8 +148,8 @@
 }
 
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist {
-  width: 180px;
-  height: 180px;
+  width: 160px;
+  height:180px;
   position: relative;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist img {
@@ -487,6 +487,8 @@
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist h4{
   font-size: 22px;
+  height: 31px;
+  overflow: hidden;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price{
   position: inherit;

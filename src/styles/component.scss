@@ -26,15 +26,17 @@
   position: relative;
 }
 
- .fx-booking .fx-commoninput label.fx-mobile-input{
-
+.fx-tabcontent.selected .fx-element-box:nth-child(2){
+  margin-top: 12px;
 }
+
  .fx-booking .fx-commoninput label{
   font-size:16px;
   font-weight: 400;
   color: var(darkgrey);
   text-transform: capitalize;
-  margin-bottom: 7px;
+  display: block;
+  margin-bottom: 4px;
 }
  .fx-booking .fx-commoninput .fx-inputgroup {
   width: 100%;
@@ -133,7 +135,7 @@
  .fx-booking .fx-input-wrapper {
   position: relative;
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 
@@ -420,7 +422,7 @@
     color: var(--darkblue-color);
 }
 .fx-extracontentboxlist .fx-quantitybox input[type="number"] {
-    width: 30px;
+    width: 35px;
     height: 26px;
     text-align: center;
     border: none;

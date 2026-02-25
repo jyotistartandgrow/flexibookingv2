@@ -167,9 +167,10 @@ h3 {
 }
 
 .fx-leftcontentbox h1.fx-all-main-heading{
-    margin-top: 40px;
+    margin-top:24px;
     font-size:28px;
     margin-top: 20px;
+    margin-bottom: 16px;
 }
 .fx-booking .fx-commoninput .fx-toggleswitch{
     display: flex;
@@ -244,7 +245,7 @@ h1{
     height:auto;
 }
 .fx-leftcontentbox{
-    margin-top: 24px;
+    margin-top: 20px;
 }
  .p-sidebar-bottom, .p-sidebar-to, .p-sidebar {
         height: 90%;
@@ -451,6 +452,7 @@ h1{
     margin-top: 0px;
     font-size: 20px;
     padding-left: 0px;
+    margin-bottom: 12px;
 }
 }
 
@@ -620,12 +622,44 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 .fx-element-box span.fx-errortext{
     color: red;
 }
+.fx-tabcontent.selected h3{
+    font-weight: 400;
+    font-size: 24px;
+    margin-bottom: 12px;
+    margin-top:0px;
+}
+
+.fx-booking input.fx-input-number[type=number]{
+    border-radius: 4px;
+    height: 52px;
+}
+
+.fx-booking input.fx-input-number[type=number], .fx-booking input.fx-input-firstname-box[type=number], 
+.fx-booking input.fx-input-lastname-box[type=number], .fx-booking input.fx-input-email-box[type=number]{
+    border-radius: 4px;
+    height: 52px;
+}
+
+.fx-coupon-box-popup h2#swal2-title {
+    margin: 0;
+    padding: 0px;
+    font-weight: 400;
+    font-size: 35px;
+}
+
+.fx-coupon-box-popup div:where(.swal2-icon){
+     border-color:#fff;
+}
+
+.fx-coupon-box-popup .fx-coupon-close-icon{
+    width: 80px;
+}
 
 
 @media screen and (max-width:768px) {
     .fx-content-with-topbar .fx-paymentbox{
     padding: 0px;
-    margin-top:40px;
+    margin-top:24px;
     width:100%;
 }
 .fx-booking .fx-giftbox .fx-input-wrapper {
@@ -633,6 +667,10 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 }
 .fx-viewservice-button .btn-primary{
     margin-top: 10px;
+}
+.fx-tabcontent.selected h3{
+    font-weight: 400;
+    font-size:20px;
 }
 }
 
