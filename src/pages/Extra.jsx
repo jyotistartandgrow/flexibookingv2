@@ -12,9 +12,11 @@ import { setExtracapacity, setExtra, setBookingkey } from "../store/step3Slice";
 import { setStep, setLoading } from "../store/step1Slice";
 import { setCart } from "../store/step2Slice";
 import Swal from "sweetalert2";
+import useDeviceType from "../Utils/useDeviceType";
 
-export default function Service() {
+export default function Extra(props) {
   const dispatch = useDispatch();
+  const isDesktop = useDeviceType();
 
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
@@ -271,11 +273,22 @@ export default function Service() {
         className="fx-leftcontentbox"
         style={{ display: step === "extrastep" ? "block" : "none" }}
       >
-        <h1 className="fx-all-main-heading">
+        <h1
+          className="fx-all-main-heading"
+          style={{
+            display:
+              props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+          }}
+        >
           What experience are you looking for?
         </h1>
         <div id="fx-Icontab_nav">
-          <ul>
+          <ul
+            style={{
+              display:
+                props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+            }}
+          >
             <li className="selected">
               <a
                 href="#"

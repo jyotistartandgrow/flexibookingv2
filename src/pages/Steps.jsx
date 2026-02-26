@@ -10,7 +10,7 @@ import { Sidebar as Sidebarpanel } from "primereact/sidebar";
 import axiosInstance from "../Utils/Interceptor";
 import useDeviceType from "../Utils/useDeviceType";
 
-export default function Steps({ type = "date" }) {
+export default function Steps({ type = "date", ...props }) {
   // Check for 'type' param in URL if not provided as prop
   const params = new URLSearchParams(window.location.search);
   let typeParam = params.get("type") || "";
@@ -175,6 +175,7 @@ export default function Steps({ type = "date" }) {
               : "fx-mobilesidebar fx-mobilesidebar-top"
           }
           onClick={() => setVisibleBottom(true)}
+          style={{ display: props.bottombar == "true" ? "block" : "none" }}
         >
           <div className="fx-bottombar-top-details">
             <span className="fx-order-details">Order Details </span>
@@ -234,7 +235,9 @@ export default function Steps({ type = "date" }) {
             </div>
           )}
           <h3>Order Details</h3>
-          {!isDesktop && !topbar && <Commonbox setVisibleBottom={setVisibleBottom} />}
+          {!isDesktop && !topbar && (
+            <Commonbox setVisibleBottom={setVisibleBottom} />
+          )}
         </div>
       </Sidebarpanel>
     </>

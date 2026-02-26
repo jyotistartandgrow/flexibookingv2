@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
-import { decodeHtml } from "../Utils/Functions";
 import RedeemCommonbox from "../components/RedeemCommonbox";
 import { setTopbar } from "../store/step1Slice";
-import useDeviceType from "../Utils/useDeviceType";
 
-const OrderDetailsCard = () => {
+const RedeemDetailCard = (props) => {
   const dispatch = useDispatch();
   const [isOpenn, setIsOpenn] = useState(false);
-  const date = useSelector((state) => state.step1.date);
   const topbar = useSelector((state) => state.step1.topbar);
   const voucher = useSelector((state) => state.step1.voucher);
-  const isDesktop = useDeviceType();
 
   const toggleCard = () => {
     setIsOpenn(!isOpenn);
   };
 
   useEffect(() => {
-    dispatch(setTopbar(true));
-  }, [isOpenn, dispatch]);
+    if (props.topbar == "true") {
+      dispatch(setTopbar(true));
+    }
+  }, [props.topbar, dispatch]);
 
   return (
     <div className="fx-top-order-details-box">
@@ -50,4 +47,4 @@ const OrderDetailsCard = () => {
   );
 };
 
-export default OrderDetailsCard;
+export default RedeemDetailCard;

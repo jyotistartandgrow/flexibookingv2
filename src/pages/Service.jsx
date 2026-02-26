@@ -26,7 +26,7 @@ import Swal from "sweetalert2";
 import useDeviceType from "../Utils/useDeviceType";
 import CalendarPage from "./CalendarPage";
 
-export default function Service() {
+export default function Service(props) {
   const dispatch = useDispatch();
   const op = useRef(null);
 
@@ -305,9 +305,7 @@ export default function Service() {
             from <span>{decodeHtml(product.svc_price)}</span>
           </p>
           <div className="booknowbtn" onClick={() => servicedetail(product.id)}>
-            <a href="#" >
-              {gift ? "Select Gift" : "Book Now"}
-            </a>
+            <a href="#">{gift ? "Select Gift" : "Book Now"}</a>
           </div>
         </div>
       </div>
@@ -536,7 +534,13 @@ export default function Service() {
       className="fx-leftcontentbox"
       style={{ display: step === "servicesstep" ? "block" : "none" }}
     >
-      <h1 className="fx-all-main-heading">
+      <h1
+        className="fx-all-main-heading"
+        style={{
+          display:
+            props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+        }}
+      >
         What experience are you looking for?{" "}
         {/* <span class="fx-tooltip-container">
           <i class="pi pi-info-circle fx-info-icon"></i>
@@ -547,7 +551,12 @@ export default function Service() {
         </span> */}
       </h1>
       <div id="fx-Icontab_nav">
-        <ul>
+        <ul
+          style={{
+            display:
+              props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+          }}
+        >
           <li className="selected">
             <a
               href="#"
@@ -649,10 +658,11 @@ export default function Service() {
                       <p className="price">
                         from <span>{decodeHtml(product.svc_price)}</span>
                       </p>
-                      <div className="booknowbtn" onClick={() => servicedetail(product.id)}>
-                        <a href="#">
-                          {gift ? "Select Gift" : "Book Now"}
-                        </a>
+                      <div
+                        className="booknowbtn"
+                        onClick={() => servicedetail(product.id)}
+                      >
+                        <a href="#">{gift ? "Select Gift" : "Book Now"}</a>
                       </div>
                     </div>
                   </div>

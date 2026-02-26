@@ -753,9 +753,9 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 
 
 //  For Rightdetils Setting
-.fx-booking.fx-container .fx-sidebar{
-    display: none;
-}
+// .fx-booking.fx-container .fx-sidebar{
+//     display: none;
+// }
 @media screen and (min-width: 1200px) {
     .fx-booking.fx-container .fx-top-order-details-box{
         display: block;
@@ -775,9 +775,9 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 }
 }
 
-.fx-booking .fx-mobilesidebar{
-    display: none;
-}
+// .fx-booking .fx-mobilesidebar{
+//     display: none;
+// }
 @media screen and (max-width:768px) {
 .fx-leftcontentbox.fx-checkoutpage{
     margin-top: 20px;
