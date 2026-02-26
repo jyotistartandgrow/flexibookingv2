@@ -286,6 +286,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                           }
                         }}
                         disabled={fields[index].applied}
+                        className={fields[index].applied ? "fx-coupon-applied" : ""}
                       />
                       {!fields[index].applied && (
                         <button
