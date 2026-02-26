@@ -11,6 +11,7 @@ import "react-phone-input-2/lib/style.css";
 import { setLoading } from "../store/step1Slice";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { validateEmail } from "../Utils/Functions";
 
 export default function ReedemCheckout() {
   const navigate = useNavigate();
@@ -40,12 +41,6 @@ export default function ReedemCheckout() {
       setNumberOnly(voucherdetail.recepient_data?.recipient_contact || "");
     }
   }, [step]);
-
-  // Validation functions
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
 
   const getFields = async () => {
     dispatch(setLoading(true));
@@ -80,11 +75,11 @@ export default function ReedemCheckout() {
 
   const confirmredeem = async () => {
     setErrorlist({});
-    if (!billdata.recipient_first_name) {
+    if (!billdata.recipient_first_name && visibleField.sgbm_field_1) {
       setErrorlist({ recipient_first_name: true });
       return;
     }
-    if (!billdata.recipient_last_name) {
+    if (!billdata.recipient_last_name && visibleField.sgbm_field_2) {
       setErrorlist({ recipient_last_name: true });
       return;
     }
@@ -92,28 +87,28 @@ export default function ReedemCheckout() {
       setErrorlist({ recipient_contact: true });
       return;
     }
-    if (!billdata.recipient_email) {
+    if (!billdata.recipient_email && visibleField.sgbm_field_3) {
       setErrorlist({ recipient_email: true });
       return;
     }
-    if (!billdata.recipient_address) {
+    if (!billdata.recipient_address && visibleField.sgbm_field_5) {
       setErrorlist({ recipient_address: true });
       return;
     }
-    if (!billdata.recipient_city) {
+    if (!billdata.recipient_city && visibleField.sgbm_field_6) {
       setErrorlist({ recipient_city: true });
       return;
     }
-    if (!billdata.recipient_state) {
+    if (!billdata.recipient_state && visibleField.sgbm_field_7) {
       setErrorlist({ recipient_state: true });
       return;
     }
-    if (!billdata.recipient_postcode) {
+    if (!billdata.recipient_postcode && visibleField.sgbm_field_9) {
       setErrorlist({ recipient_postcode: true });
       return;
     }
 
-    if (!billdata.recipient_country) {
+    if (!billdata.recipient_country && visibleField.sgbm_field_8) {
       setErrorlist({ recipient_country: true });
       return;
     }

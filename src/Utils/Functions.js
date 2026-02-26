@@ -103,3 +103,26 @@ export const darkenHex = (hex, percent) => {
     b.toString(16).padStart(2, "0")
   );
 };
+
+export const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+export const validatePhone = (phone) => {
+  return phone && phone.trim().length > 0;
+};
+
+export const validatePhoneForCountry = (phone, countryData) => {
+  if (!phone || !countryData) return false;
+  if (phone == countryData.dialCode) return true;
+
+  // Remove dial code to get the actual number
+  const number = phone.replace(countryData.dialCode, "").trim();
+  // Check if number is not empty and has reasonable length (typically 7-15 digits)
+  if (number.length < 7 || number.length > 15) return false;
+
+  // Check if it only contains digits and spaces/dashes
+  const phoneRegex = /^[0-9\s-]+$/;
+  return phoneRegex.test(number);
+};

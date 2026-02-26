@@ -8,7 +8,7 @@ export default function RedeemCommonbox({ setVisibleBottom }) {
   const step = useSelector((state) => state.step1.redeemstep);
   const voucherdetail = useSelector((state) => state.step3.voucherdetail);
   const slot = useSelector((state) => state.step3.slot);
-  console.log("voucherdetail", voucherdetail);
+  const topbar = useSelector((state) => state.step1.topbar);
   return (
     <>
       {!voucherdetail.products && !date && (

@@ -65,13 +65,13 @@
     height: 8px;
     border-right: 2px solid #344054;
     border-bottom: 2px solid #344054;
-    transform: rotate(-45deg); /* Right */
+    transform: rotate(45deg); /* Down */
     transition: transform 0.3s ease;
 }
 
 /* Toggle state for Chevron */
 .fx-top-order-details-card.fx-is-open .fx-header-row .fx-chevron {
-    transform: rotate(45deg); /* Down */
+    transform: rotate(225deg); /* Up */
 }
 
 /* Summary Row Styles */

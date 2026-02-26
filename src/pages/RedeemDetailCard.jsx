@@ -36,7 +36,6 @@ const OrderDetailsCard = () => {
           {/* Summary Section */}
           <div className="fx-summary-row">
             <div className="fx-info-group">
-              <div className="fx-gift-icon"></div>
               <span>{voucher}</span>
             </div>
           </div>
@@ -44,7 +43,7 @@ const OrderDetailsCard = () => {
         {/* Sliding Content */}
 
         <div className="fx-collapsible-content">
-          {topbar && isDesktop && <RedeemCommonbox toggleCard={toggleCard} />}
+          {topbar && <RedeemCommonbox toggleCard={toggleCard} />}
         </div>
       </div>
     </div>

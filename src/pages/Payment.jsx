@@ -13,6 +13,7 @@ import CheckoutForm from "../pages/CheckoutForm";
 import useDeviceType from "../Utils/useDeviceType";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import closeicon from "../assets/close2.svg";
 
 // const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
 // const stripePromise = loadStripe(PUBLIC_KEY);
@@ -53,7 +54,6 @@ export default function Payment() {
       };
       dispatch(setCart(updatedCart));
     }
-    console.log(couponcode);
     if (couponcode && couponcode.length > 0) {
       // apply coupons one by one
       for (let i = 0; i < couponcode.length; i++) {
@@ -78,7 +78,7 @@ export default function Payment() {
           );
         } else {
           Swal.fire({
-            iconHtml: '<img class="fx-coupon-close-icon" src="/src/assets/close2.svg">',
+            iconHtml: `<img class="fx-coupon-close-icon" src="${closeicon}">`,
             title: `${couponcode[i]} Coupon Error`,
             text:
             decodeHtml(coupondata?.data?.error) || "Failed to apply coupon",

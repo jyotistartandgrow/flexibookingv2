@@ -24,6 +24,7 @@ export default function Steps({ type = "date" }) {
   const extra = useSelector((state) => state.step3.extra);
   const checkoutkey = useSelector((state) => state.step4.checkoutkey);
   const cart = useSelector((state) => state.step2.cart);
+  const topbar = useSelector((state) => state.step1.topbar);
   const [visibleBottom, setVisibleBottom] = useState(false);
   const isDesktop = useDeviceType();
 
@@ -166,7 +167,7 @@ export default function Steps({ type = "date" }) {
           </div>
         </div>
       </div>
-      {date && (
+      {date && !topbar && (
         <div
           className={
             step != "paymentstep" && step != "checkoutstep"
@@ -233,7 +234,7 @@ export default function Steps({ type = "date" }) {
             </div>
           )}
           <h3>Order Details</h3>
-          {!isDesktop && <Commonbox setVisibleBottom={setVisibleBottom} />}
+          {!isDesktop && !topbar && <Commonbox setVisibleBottom={setVisibleBottom} />}
         </div>
       </Sidebarpanel>
     </>

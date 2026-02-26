@@ -269,49 +269,54 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
         ((step !== "paymentstep" && !paymentstring) ||
           (step === "paymentstep" && !isDesktop)) && (
           <div className="fx-bookingdatebar">
-            {fields.map((field, index) => (
-              <div className="fx-couponcontainerinputbox" key={index}>
-                <div className="fx-coupon-box">
-                  <input
-                    type="text"
-                    placeholder="Enter your coupon code"
-                    value={fields[index].code}
-                    onChange={(e) => {
-                      if (!fields[index].applied) {
-                        const newFields = [...fields];
-                        newFields[index].code = e.target.value;
-                        setFields(newFields);
-                      }
-                    }}
-                    disabled={fields[index].applied}
-                  />
-                  {!fields[index].applied && (
-                    <button
-                      className="fx-apply-btn"
-                      onClick={() => applycoupon(index)}
-                    >
-                      APPLY
-                    </button>
-                  )}
-                  {fields[index].applied && (
-                    <button className="fx-apply-btn fx-applied-btn">
-                      APPLIED <img src={iconapplied} />
-                    </button>
-                  )}
-                </div>
-                {step != "paymentstep" && (
-                  <div className="fx-delete-coupon">
-                    <i
-                      className="pi pi-trash"
-                      onClick={() => removeCoupon(index)}
-                    ></i>
+            {step == "checkoutstep" && (
+              <>
+                {fields.map((field, index) => (
+                  <div className="fx-couponcontainerinputbox" key={index}>
+                    <div className="fx-coupon-box">
+                      <input
+                        type="text"
+                        placeholder="Enter your coupon code"
+                        value={fields[index].code}
+                        onChange={(e) => {
+                          if (!fields[index].applied) {
+                            const newFields = [...fields];
+                            newFields[index].code = e.target.value;
+                            setFields(newFields);
+                          }
+                        }}
+                        disabled={fields[index].applied}
+                        className={fields[index].applied ? "fx-coupon-applied" : ""}
+                      />
+                      {!fields[index].applied && (
+                        <button
+                          className="fx-apply-btn"
+                          onClick={() => applycoupon(index)}
+                        >
+                          APPLY
+                        </button>
+                      )}
+                      {fields[index].applied && (
+                        <button className="fx-apply-btn fx-applied-btn">
+                          APPLIED <img src={iconapplied} />
+                        </button>
+                      )}
+                    </div>
+                    {step != "paymentstep" && (
+                      <div className="fx-delete-coupon">
+                        <i
+                          className="pi pi-trash"
+                          onClick={() => removeCoupon(index)}
+                        ></i>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            ))}
-            <div className="fx-element-box" onClick={() => addmoreCoupon()}>
-              <p className="fx-addmorelink">Add More</p>
-            </div>
+                ))}
+                <div className="fx-element-box" onClick={() => addmoreCoupon()}>
+                  <p className="fx-addmorelink">Add More</p>
+                </div>
+              </>
+            )}
             {!gift && (
               <div className="fx-bookingdate">
                 Date

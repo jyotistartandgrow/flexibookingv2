@@ -9,15 +9,15 @@ import useFetch from "../Utils/CustomHook";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { InputSwitch } from "primereact/inputswitch";
-import {
-  setReceiverInfo,
-  setStep,
-  setLoading,
-  setGift,
-} from "../store/step1Slice";
+import { setReceiverInfo, setStep, setLoading } from "../store/step1Slice";
 import { setCheckoutkey, setPaymentstring } from "../store/step4Slice";
 import GiftCardPreviewButton from "./Giftcardpreviewbutton";
-import { decodeHtml } from "../Utils/Functions";
+import {
+  decodeHtml,
+  validateEmail,
+  validatePhone,
+  validatePhoneForCountry,
+} from "../Utils/Functions";
 
 export default function Checkout() {
   const dispatch = useDispatch();
@@ -39,30 +39,6 @@ export default function Checkout() {
   const [errorlist, setErrorlist] = useState({});
   const [receiverErrors, setReceiverErrors] = useState({});
   const [visibleField, setVisibleField] = useState({});
-
-  // Validation functions
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePhone = (phone) => {
-    return phone && phone.trim().length > 0;
-  };
-
-  const validatePhoneForCountry = (phone, countryData) => {
-    if (!phone || !countryData) return false;
-    if (phone == countryData.dialCode) return true;
-
-    // Remove dial code to get the actual number
-    const number = phone.replace(countryData.dialCode, "").trim();
-    // Check if number is not empty and has reasonable length (typically 7-15 digits)
-    if (number.length < 7 || number.length > 15) return false;
-
-    // Check if it only contains digits and spaces/dashes
-    const phoneRegex = /^[0-9\s-]+$/;
-    return phoneRegex.test(number);
-  };
 
   useEffect(() => {
     setErrorlist({});
