@@ -114,7 +114,7 @@
   margin:0px;
   color: var(--grey);
   font-size:18px;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .fx-subtotal-discount-bar{
@@ -149,7 +149,7 @@
 
 @media screen and (max-width: 1200px) {
   .p-sidebar-bottom .p-sidebar{
-    height:90%;
+    height:auto;
   }
   .fx-mob-footer-order-details .logo{
     display: none;

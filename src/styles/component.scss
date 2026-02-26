@@ -142,11 +142,10 @@
  .fx-booking .fx-input-wrapper i {
   position: absolute;
   right: 15px;
-  top: 22%;
+  top: 26%;
   font-size: 25px;
   color: var(--input-icon-color); /* Adjust color for the icon */
   pointer-events: none; /* Prevent the icon from blocking clicks on the input */
-  background: #fff;
 }
 
 /* Example email and phone icons */
