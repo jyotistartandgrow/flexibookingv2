@@ -209,20 +209,20 @@ export default function Service() {
     addtocart();
   };
 
-  const addtocart = async () => {
+  const addtocart = async (extraIdParam = extraid, bookParam = book) => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/addtocart`, {
       service_id: service,
       date: moment(date).format("YYYY-MM-DD"),
       total_service_booking: capacity,
       time_slot: slot,
-      extra_svc_ids: extraid,
-      no_of_persons: book,
+      extra_svc_ids: extraIdParam,
+      no_of_persons: bookParam,
       gift,
     });
     if (data && data.status == 200 && data.data.booking_string) {
-      dispatch(setExtracapacity(book));
-      dispatch(setExtra(extraid));
+      dispatch(setExtracapacity(bookParam));
+      dispatch(setExtra(extraIdParam));
       dispatch(setBookingkey(data.data.booking_string));
       dispatch(setStep("checkoutstep"));
       dispatch(setLoading(false));
@@ -240,7 +240,9 @@ export default function Service() {
   };
 
   const skipextra = () => {
-    addtocart();
+    setBook(0);
+    setExtraid(null);
+    addtocart(null, 0);
     dispatch(setStep("checkoutstep"));
     dispatch(setLoading(false));
   };

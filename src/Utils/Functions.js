@@ -109,8 +109,15 @@ export const validateEmail = (email) => {
   return emailRegex.test(email);
 };
 
-export const validatePhone = (phone) => {
-  return phone && phone.trim().length > 0;
+export const validatePhoneNumber = (phone) => {
+  // Allows international formats: +, digits, spaces, hyphens, parentheses
+  // Must have 10-15 digits
+  const phoneRegex =
+    /^[+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,5}[-\s\.]?[0-9]{1,5}$/;
+  const digitsOnly = phone.replace(/\D/g, "");
+  return (
+    phoneRegex.test(phone) && digitsOnly.length >= 10 && digitsOnly.length <= 15
+  );
 };
 
 export const validatePhoneForCountry = (phone, countryData) => {

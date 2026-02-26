@@ -304,8 +304,8 @@ export default function Service() {
           <p className="price">
             from <span>{decodeHtml(product.svc_price)}</span>
           </p>
-          <div className="booknowbtn">
-            <a href="#" onClick={() => servicedetail(product.id)}>
+          <div className="booknowbtn" onClick={() => servicedetail(product.id)}>
+            <a href="#" >
               {gift ? "Select Gift" : "Book Now"}
             </a>
           </div>
@@ -649,8 +649,8 @@ export default function Service() {
                       <p className="price">
                         from <span>{decodeHtml(product.svc_price)}</span>
                       </p>
-                      <div className="booknowbtn">
-                        <a href="#" onClick={() => servicedetail(product.id)}>
+                      <div className="booknowbtn" onClick={() => servicedetail(product.id)}>
+                        <a href="#">
                           {gift ? "Select Gift" : "Book Now"}
                         </a>
                       </div>
