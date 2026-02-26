@@ -680,6 +680,9 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
     font-weight: 400;
     font-size:20px;
 }
+.fx-leftcontentbox.fx-checkoutpage{
+    margin-top: 124px;
+}
 }
 
 
@@ -758,7 +761,11 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 }
 }
 
-
 .fx-booking .fx-mobilesidebar{
     display: none;
+}
+@media screen and (max-width:768px) {
+.fx-leftcontentbox.fx-checkoutpage{
+    margin-top: 20px;
+}
 }
