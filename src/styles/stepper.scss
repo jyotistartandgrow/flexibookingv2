@@ -346,7 +346,7 @@
 
 
 // step for redeem mobile
-@media screen and (max-width: 500px) {  
+@media screen and (max-width: 768px) {  
   .step-for-redeem .codestep.active{
     width: 49%;
   }
@@ -373,7 +373,7 @@
     width: 100%;
   }
   .fx-booking .fx-redeem-container{
-    margin-top:70px;
+    margin-top:0px;
     padding: 20px 0px;
   }
   .step-for-redeem .slotstep.complete{

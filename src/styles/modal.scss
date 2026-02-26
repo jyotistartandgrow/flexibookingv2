@@ -511,5 +511,14 @@ h2 {
   .p-sidebar-bottom, .p-sidebar-to, .p-sidebar {
         height: 90%;
   }
+  .fx-booking #fx-modaltab_nav ul{
+    width:100%;
+  }
+  .fx-booking .fx-popup #fx-modaltab_nav li a{
+    width:100%;
+  }
+  .p-sidebar-bottom .p-sidebar{
+    height: auto;
+  }
 }
 
