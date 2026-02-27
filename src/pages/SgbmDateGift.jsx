@@ -15,7 +15,7 @@ export default function SgbmDateGift(props) {
   const cart = useSelector((state) => state.step2.cart);
 
   return (
-    <div className="fx-leftbar">
+    <div className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}>
       <Steps {...props} />
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
         <div className="fx-seg-loader"></div>

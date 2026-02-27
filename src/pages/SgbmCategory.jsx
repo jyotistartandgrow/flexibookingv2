@@ -11,7 +11,7 @@ export default function SgbmCategory(props) {
   const loading = useSelector((state) => state.step1.loading);
   const date = useSelector((state) => state.step1.date);
   return (
-    <div className="fx-leftbar">
+    <div className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}>
       <Steps type="category" {...props} />
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
         <div className="fx-seg-loader"></div>
