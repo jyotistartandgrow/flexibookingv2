@@ -115,9 +115,7 @@ export const validatePhoneNumber = (phone) => {
   const phoneRegex =
     /^[+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,5}[-\s\.]?[0-9]{1,5}$/;
   const digitsOnly = phone.replace(/\D/g, "");
-  return (
-    phoneRegex.test(phone) && digitsOnly.length >= 10 && digitsOnly.length <= 15
-  );
+  return phoneRegex.test(phone) && digitsOnly.length == 10;
 };
 
 export const validatePhoneForCountry = (phone, countryData) => {

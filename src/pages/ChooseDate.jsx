@@ -440,7 +440,7 @@ export default function ChooseDate() {
                   type="number"
                   placeholder="Phone Number"
                   className={
-                    errorlist.phoneNumber ? "fx-invalid" : "fx-input-number"
+                    errorlist.phoneNumber ? "fx-input-number fx-invalid" : "fx-input-number"
                   }
                   onChange={(e) =>
                     dispatch(
