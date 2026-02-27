@@ -165,7 +165,7 @@ export default function Category(props) {
 
         <div
           className={
-            isVisible == "grid" ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "grid" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
           }
         >
           <div className="fx-servicecontainer">
@@ -197,7 +197,7 @@ export default function Category(props) {
         </div>
         <div
           className={
-            isVisible == "list" ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "list" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
           }
         >
           {categories.length > 0 &&
@@ -228,7 +228,7 @@ export default function Category(props) {
         </div>
         <div
           className={
-            isVisible == "slider" ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "slider" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
           }
         >
           <div className="slider responsive">
