@@ -807,3 +807,10 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 .fx-booking .fx-leftbar.fx-leftbar-in-rightbar-show {
     right: 180px;
   }
+
+  @media screen and (max-width:768px) {
+.fx-booking .fx-leftbar.fx-leftbar-in-rightbar-show {
+    right:0px;
+  }
+
+}
