@@ -7,17 +7,17 @@ import ReedemCheckout from "./ReedemCheckout";
 import ReedemSidebar from "../components/ReedemSidebar";
 import RedeemDetailCard from "./RedeemDetailCard";
 
-export default function SgbmDateGift() {
+export default function SgbmDateGift(props) {
   const loading = useSelector((state) => state.step1.loading);
   const voucher = useSelector((state) => state.step1.voucher);
   return (
     <div className="fx-booking fx-container bgbody">
       <div className="fx-leftbar">
-        <ReedemSteps />
+        <ReedemSteps {...props} />
         <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
           <div className="fx-seg-loader"></div>
         </div>
-        {voucher && <RedeemDetailCard />}
+        {props.topbar == "true" && voucher  && <RedeemDetailCard {...props} />}
         {/* Code Tabs */}
         <Code />
         {/* End Code Tabs */}

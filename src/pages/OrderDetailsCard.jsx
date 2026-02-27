@@ -1,31 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 import Commonbox from "../components/Commonbox";
 import { setTopbar } from "../store/step1Slice";
-import useDeviceType from "../Utils/useDeviceType";
 
-const OrderDetailsCard = () => {
+const OrderDetailsCard = (props) => {
   const dispatch = useDispatch();
   const [isOpenn, setIsOpenn] = useState(false);
+  const cardRef = useRef(null);
   const date = useSelector((state) => state.step1.date);
   const cart = useSelector((state) => state.step2.cart);
   const topbar = useSelector((state) => state.step1.topbar);
   const gift = useSelector((state) => state.step1.gift);
-  const isDesktop = useDeviceType();
 
   const toggleCard = () => {
     setIsOpenn(!isOpenn);
   };
 
   useEffect(() => {
-    dispatch(setTopbar(true));
-  }, [isOpenn, dispatch]);
+    if (props.topbar == "true") {
+      dispatch(setTopbar(true));
+    }
+  }, [dispatch, props.topbar]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (isOpenn && cardRef.current && !cardRef.current.contains(e.target)) {
+        setIsOpenn(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpenn]);
 
   return (
     <div className="fx-top-order-details-box">
       <div
+        ref={cardRef}
         className={`fx-top-order-details-card ${isOpenn ? "fx-is-open" : ""}`}
       >
         {/* Header Section */}

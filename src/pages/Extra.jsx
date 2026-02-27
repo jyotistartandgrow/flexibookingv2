@@ -12,9 +12,11 @@ import { setExtracapacity, setExtra, setBookingkey } from "../store/step3Slice";
 import { setStep, setLoading } from "../store/step1Slice";
 import { setCart } from "../store/step2Slice";
 import Swal from "sweetalert2";
+import useDeviceType from "../Utils/useDeviceType";
 
-export default function Service() {
+export default function Extra(props) {
   const dispatch = useDispatch();
+  const isDesktop = useDeviceType();
 
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
@@ -209,20 +211,20 @@ export default function Service() {
     addtocart();
   };
 
-  const addtocart = async () => {
+  const addtocart = async (extraIdParam = extraid, bookParam = book) => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/addtocart`, {
       service_id: service,
       date: moment(date).format("YYYY-MM-DD"),
       total_service_booking: capacity,
       time_slot: slot,
-      extra_svc_ids: extraid,
-      no_of_persons: book,
+      extra_svc_ids: extraIdParam,
+      no_of_persons: bookParam,
       gift,
     });
     if (data && data.status == 200 && data.data.booking_string) {
-      dispatch(setExtracapacity(book));
-      dispatch(setExtra(extraid));
+      dispatch(setExtracapacity(bookParam));
+      dispatch(setExtra(extraIdParam));
       dispatch(setBookingkey(data.data.booking_string));
       dispatch(setStep("checkoutstep"));
       dispatch(setLoading(false));
@@ -240,7 +242,9 @@ export default function Service() {
   };
 
   const skipextra = () => {
-    addtocart();
+    setBook(0);
+    setExtraid(null);
+    addtocart(null, 0);
     dispatch(setStep("checkoutstep"));
     dispatch(setLoading(false));
   };
@@ -269,11 +273,22 @@ export default function Service() {
         className="fx-leftcontentbox"
         style={{ display: step === "extrastep" ? "block" : "none" }}
       >
-        <h1 className="fx-all-main-heading">
+        <h1
+          className="fx-all-main-heading"
+          style={{
+            display:
+              props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+          }}
+        >
           What experience are you looking for?
         </h1>
         <div id="fx-Icontab_nav">
-          <ul>
+          <ul
+            style={{
+              display:
+                props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+            }}
+          >
             <li className="selected">
               <a
                 href="#"

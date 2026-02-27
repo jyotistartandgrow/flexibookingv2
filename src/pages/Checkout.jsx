@@ -15,7 +15,7 @@ import GiftCardPreviewButton from "./Giftcardpreviewbutton";
 import {
   decodeHtml,
   validateEmail,
-  validatePhone,
+  validatePhoneNumber,
   validatePhoneForCountry,
 } from "../Utils/Functions";
 
@@ -91,7 +91,7 @@ export default function Checkout() {
         errors.email = true;
       }
 
-      if (!validatePhone(receiverInfo.phoneNumber)) {
+      if (!validatePhoneNumber(receiverInfo.phoneNumber)) {
         errors.phoneNumber = true;
       }
 
@@ -484,7 +484,7 @@ export default function Checkout() {
               <div className="fx-commoninput">
                 <div class="fx-inputgroup">
                   <div class="fx-element-box">
-                    <label>First Namev</label>
+                    <label>First Name</label>
                     <input
                       placeholder="First Name"
                       type="text"
@@ -565,7 +565,7 @@ export default function Checkout() {
                         )
                       }
                       onBlur={(e) => {
-                        if (!validatePhone(e.target.value)) {
+                        if (!validatePhoneNumber(e.target.value)) {
                           setReceiverErrors({
                             ...receiverErrors,
                             phoneNumber: true,

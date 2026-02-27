@@ -8,7 +8,7 @@ import logo from "../assets/logo.png";
 import RedeemCommonbox from "../components/RedeemCommonbox";
 import axiosInstance from "../Utils/Interceptor";
 
-export default function ReedemSteps() {
+export default function ReedemSteps(props) {
   const dispatch = useDispatch();
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.redeemstep);
@@ -114,6 +114,7 @@ export default function ReedemSteps() {
               : "fx-mobilesidebar fx-mobilesidebar-top"
           }
           onClick={() => setVisibleBottom(true)}
+          style={{ display: props.bottombar == "true" ? "block" : "none" }}
         >
           <div className="fx-bottombar-top-details">
             <span className="fx-order-details">Order Details </span>

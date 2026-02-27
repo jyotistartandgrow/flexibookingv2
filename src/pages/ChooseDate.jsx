@@ -13,7 +13,11 @@ import {
   setLoading,
   setGift,
 } from "../store/step1Slice";
-import { decodeHtml, validateEmail } from "../Utils/Functions";
+import {
+  decodeHtml,
+  validateEmail,
+  validatePhoneNumber,
+} from "../Utils/Functions";
 import CalendarPage from "./CalendarPage";
 
 export default function ChooseDate() {
@@ -32,19 +36,6 @@ export default function ChooseDate() {
   const [errorlist, setErrorlist] = useState({});
   const toggleDiv = (type) => {
     setIsVisible(type);
-  };
-
-  const validatePhoneNumber = (phone) => {
-    // Allows international formats: +, digits, spaces, hyphens, parentheses
-    // Must have 10-15 digits
-    const phoneRegex =
-      /^[+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,5}[-\s\.]?[0-9]{1,5}$/;
-    const digitsOnly = phone.replace(/\D/g, "");
-    return (
-      phoneRegex.test(phone) &&
-      digitsOnly.length >= 10 &&
-      digitsOnly.length <= 15
-    );
   };
 
   useEffect(() => {
@@ -449,7 +440,7 @@ export default function ChooseDate() {
                   type="number"
                   placeholder="Phone Number"
                   className={
-                    errorlist.phoneNumber ? "fx-invalid" : "fx-input-number"
+                    errorlist.phoneNumber ? "fx-input-number fx-invalid" : "fx-input-number"
                   }
                   onChange={(e) =>
                     dispatch(

@@ -161,13 +161,17 @@ export default function Thankyou() {
               </h3>
 
               <div className="fx-order-row">
-                <div>
-                  Service Date:
-                  <br />{" "}
-                  <span>
-                    {moment(bookingData?.service_date).format("MMMM Do, YYYY")}
-                  </span>
-                </div>
+                {bookingData?.service_date && moment(bookingData?.service_date).isValid() && (
+                  <div>
+                    Service Date:
+                    <br />{" "}
+                    <span>
+                      {moment(bookingData?.service_date).format(
+                        "MMMM Do, YYYY",
+                      )}
+                    </span>
+                  </div>
+                )}
                 <div>
                   Payment via: <br />
                   <span>Card</span>
