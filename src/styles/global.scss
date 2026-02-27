@@ -408,11 +408,11 @@ h1{
     border-right-color: #555555;   /* medium grey */
     animation: spin 0.8s linear infinite;
 
-    animation: spin 0.8s linear infinite;
-    -webkit-animation: spin 0.8s linear infinite;   /* IMPORTANT for iPhone */
+    // animation: spin 0.8s linear infinite;
+    // -webkit-animation: spin 0.8s linear infinite;   /* IMPORTANT for iPhone */
 
-    transform: translateZ(0);              /* Force hardware accel */
-    -webkit-transform: translateZ(0);
+    // transform: translateZ(0);              /* Force hardware accel */
+    // -webkit-transform: translateZ(0);
 }
 
 .fx-leftcontentbox h1.fx-main-page-heading{
