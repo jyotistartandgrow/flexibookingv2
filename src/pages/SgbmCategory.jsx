@@ -19,7 +19,7 @@ export default function SgbmCategory(props) {
       {props.topbar == "true" && date && <OrderDetailsCard {...props} />}
 
       {/* Category Tabs */}
-      <Category />
+      <Category {...props} />
       {/* End Category Tabs */}
       {/* Service Tabs */}
       <Service {...props} />

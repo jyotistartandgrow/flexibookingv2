@@ -13,7 +13,6 @@ export default function SgbmDateGift(props) {
   const step = useSelector((state) => state.step1.step);
   const gift = useSelector((state) => state.step1.gift);
   const cart = useSelector((state) => state.step2.cart);
-
   return (
     <div className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}>
       <Steps {...props} />

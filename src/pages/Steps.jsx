@@ -175,7 +175,7 @@ export default function Steps({ type = "date", ...props }) {
               : "fx-mobilesidebar fx-mobilesidebar-top"
           }
           onClick={() => setVisibleBottom(true)}
-          style={{ display: props.bottombar == "true" ? "block" : "none" }}
+          style={{ display: props.bottombar == "true" && !isDesktop ? "block" : "none" }}
         >
           <div className="fx-bottombar-top-details">
             <span className="fx-order-details">Order Details </span>

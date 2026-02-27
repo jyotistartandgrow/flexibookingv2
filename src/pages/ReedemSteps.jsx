@@ -7,6 +7,7 @@ import { Sidebar as Sidebarpanel } from "primereact/sidebar";
 import logo from "../assets/logo.png";
 import RedeemCommonbox from "../components/RedeemCommonbox";
 import axiosInstance from "../Utils/Interceptor";
+import useDeviceType from "../Utils/useDeviceType";
 
 export default function ReedemSteps(props) {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ export default function ReedemSteps(props) {
   const step = useSelector((state) => state.step1.redeemstep);
   const slot = useSelector((state) => state.step3.slot);
   const voucherdetail = useSelector((state) => state.step3.voucherdetail);
+  const isDesktop = useDeviceType();
   const [visibleBottom, setVisibleBottom] = useState(false);
   let codestepclass = "step codestep";
   let datestepclass = "step datestep";
@@ -114,7 +116,7 @@ export default function ReedemSteps(props) {
               : "fx-mobilesidebar fx-mobilesidebar-top"
           }
           onClick={() => setVisibleBottom(true)}
-          style={{ display: props.bottombar == "true" ? "block" : "none" }}
+          style={{ display: props.bottombar == "true" && !isDesktop ? "block" : "none" }}
         >
           <div className="fx-bottombar-top-details">
             <span className="fx-order-details">Order Details </span>

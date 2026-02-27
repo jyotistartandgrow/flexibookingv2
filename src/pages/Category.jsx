@@ -8,9 +8,11 @@ import axiosInstance from "../Utils/Interceptor";
 import { decodeHtml } from "../Utils/Functions";
 import categoryimg from "../assets/service1.jpg";
 import { setStep, setLoading, setCategory } from "../store/step1Slice";
+import useDeviceType from "../Utils/useDeviceType"; 
 
-export default function Service() {
+export default function Category(props) {
   const dispatch = useDispatch();
+  const isDesktop = useDeviceType();
   const step = useSelector((state) => state.step1.step);
   const [categories, setCategories] = useState([]);
   const [isVisible, setIsVisible] = useState("grid");
@@ -75,9 +77,15 @@ export default function Service() {
       className="fx-leftcontentbox"
       style={{ display: step === "categorystep" ? "block" : "none" }}
     >
-      <h1 className="fx-all-main-heading">What experience are you looking for?</h1>
+      <h1 className="fx-all-main-heading" style={{
+          display:
+            props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+        }}>What experience are you looking for?</h1>
       <div id="fx-Icontab_nav">
-        <ul>
+        <ul style={{
+          display:
+            props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+        }}>
           <li className="selected">
             <a
               href="#"
