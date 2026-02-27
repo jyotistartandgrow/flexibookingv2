@@ -283,7 +283,7 @@ h2 {
 .fx-booking .fx-timelistboxbar{
   overflow: auto;
   height:100%;
-  min-height: 190px;
+  min-height:216px;
 }
 .fx-booking .fx-timelistbox {
   padding: 7px 12px;
@@ -488,7 +488,7 @@ h2 {
 }
 @media (min-width: 768px) and (max-width: 1200px) {
   .fx-main-modal-box{
-    width:90%;
+    width:65%;
     height:900px;
   }
   .fx-booking .fx-popup{
