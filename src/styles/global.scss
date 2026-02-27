@@ -705,9 +705,7 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
     font-weight: 400;
     font-size:20px;
 }
-.fx-leftcontentbox.fx-checkoutpage{
-    margin-top: 124px;
-}
+
 .fx-booking .fx-commoninput .fx-checkboxcontainer input[type="checkbox"]{
     width: 32px;
     height: 32px;
@@ -721,7 +719,6 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
     width: 100%;
     margin: 0 auto;
     padding-top: 32px;
-    right: 180px;
   }
 }
 
@@ -797,4 +794,16 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 .fx-leftcontentbox.fx-checkoutpage{
     margin-top: 20px;
 }
+.fx-leftbar.fx-leftbar-in-rightbar-show .fx-leftcontentbox.fx-checkoutpage{
+        margin-top: 124px;
 }
+}
+
+
+// .fx-booking .fx-leftbar{
+//     right: 180px;
+// }
+
+.fx-booking .fx-leftbar.fx-leftbar-in-rightbar-show {
+    right: 180px;
+  }
