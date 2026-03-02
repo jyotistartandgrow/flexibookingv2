@@ -252,13 +252,19 @@ export default function ChooseDate() {
       setResponsear(dataa?.data);
       if (dataa?.data) {
         const datedarr = [];
+        let firstBookable = null;
         dataa?.data.forEach((dateItem) => {
           if (dateItem.is_bookable === false) {
             const dateObj = new Date(dateItem.date);
             datedarr.push(dateObj);
+          } else if (!firstBookable) {
+            firstBookable = new Date(dateItem.date);
           }
         });
         setDisabledDates(datedarr);
+        if (firstBookable && !gift) {
+          dispatch(setDate(firstBookable));
+        }
         dispatch(setLoading(false));
       }
     }

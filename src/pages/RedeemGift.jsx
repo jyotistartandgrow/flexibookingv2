@@ -31,7 +31,7 @@ export default function SgbmDateGift(props) {
         <ReedemCheckout />
         {/* End Checkout Tabs */}
       </div>
-      <ReedemSidebar />
+      <ReedemSidebar {...props} />
     </div>
   );
 }

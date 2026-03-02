@@ -75,7 +75,7 @@ export default function Service(props) {
     }
     if (date) {
       // Fetch products on initial mount or when date changes
-      if (isInitialMount.current || date !== prevDate.current) {
+      if (isInitialMount.current || date !== prevDate.current || category !== prevDate.currentCategory) {
         setBook(0);
         setSlot("");
         console.log("Selected date in Service component:", date);
@@ -87,8 +87,9 @@ export default function Service(props) {
         servicedetail(serviceid);
       }
       prevDate.current = date;
+      prevDate.currentCategory = category;
     }
-  }, [date, step, serviceid]);
+  }, [date, step, serviceid, category]);
 
   const fetchProductsByDate = async (selectedDate) => {
     setLoadingske(true);
@@ -512,6 +513,22 @@ export default function Service(props) {
   const slotObj = dateslot.find((s) =>
     moment(moment(date).format("YYYY-MM-DD")).isSame(s.date),
   );
+
+  // Auto-select the first tab that has available slots
+  useEffect(() => {
+    if (!slotObj) return;
+    const slots = slotObj?.slots;
+    if (slots?.single_time_slot?.slot_type) {
+      setSlotVisible("all");
+    } else if (slots?.morning && slots.morning.length > 0) {
+      setSlotVisible("morning");
+    } else if (slots?.afternoon && slots.afternoon.length > 0) {
+      setSlotVisible("afternoon");
+    } else {
+      setSlotVisible("all");
+    }
+  }, [slotObj]);
+
   const responsiveOptions = [
     {
       breakpoint: "1024px", // For screens less than 1024px

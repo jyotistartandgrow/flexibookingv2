@@ -11,7 +11,7 @@ import "react-phone-input-2/lib/style.css";
 import { setLoading } from "../store/step1Slice";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { validateEmail } from "../Utils/Functions";
+import { validateEmail,validatePhoneForCountry } from "../Utils/Functions";
 
 export default function ReedemCheckout() {
   const navigate = useNavigate();
@@ -31,6 +31,7 @@ export default function ReedemCheckout() {
   const [numberOnly, setNumberOnly] = useState("");
   const [errorlist, setErrorlist] = useState({});
   const [visibleField, setVisibleField] = useState({});
+  const [phoneValid, setPhoneValid] = useState(true);
 
   useEffect(() => {
     if (step == "checkoutstep") {
@@ -83,7 +84,7 @@ export default function ReedemCheckout() {
       setErrorlist({ recipient_last_name: true });
       return;
     }
-    if (numberOnly.trim() == "") {
+    if (numberOnly.trim() == "" || !phoneValid) {
       setErrorlist({ recipient_contact: true });
       return;
     }
@@ -233,10 +234,22 @@ export default function ReedemCheckout() {
                   // Remove dial code to check number only
                   const number = phone.replace("+" + country.dialCode, "");
                   setNumberOnly(number);
+
+                  // Validate phone for country
+                  const isValid = validatePhoneForCountry(phone, country);
+                  setPhoneValid(isValid);
+
+                  // Clear error if valid
+                  if (isValid && errorlist.recipient_contact) {
+                    setErrorlist({ ...errorlist, recipient_contact: false });
+                  }
                 }}
                 enableSearch={true} // search country
                 disableDropdown={false} // keep dropdown
                 inputStyle={{ width: "100%" }}
+                isValid={(value, country) => {
+                  return validatePhoneForCountry(value, country);
+                }}
               />
               {errorlist.recipient_contact && (
                 <span className="fx-errortext">Enter Phone number</span>
