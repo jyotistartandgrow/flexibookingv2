@@ -794,15 +794,25 @@ export default function Service(props) {
           }
         >
           <div className="slider responsive">
-            <Carousel
-              value={displayedProducts}
-              itemTemplate={productTemplate}
-              numVisible={4}
-              numScroll={3}
-              responsiveOptions={responsiveOptions}
-              circular
-              autoplayInterval={3000}
-            />
+            {!isDesktop ? (
+              <div className="fx-mobile-swipe-carousel">
+                {displayedProducts.map((product, idx) => (
+                  <div key={idx} className="fx-mobile-swipe-item">
+                    {productTemplate(product)}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <Carousel
+                value={displayedProducts}
+                itemTemplate={productTemplate}
+                numVisible={4}
+                numScroll={3}
+                responsiveOptions={responsiveOptions}
+                circular
+                autoplayInterval={3000}
+              />
+            )}
           </div>
         </div>
         <div
