@@ -23,7 +23,8 @@ function mountReactApp(id, initialRoute) {
   // 👇 Get data attributes
   const props = {
     title: el.dataset.title,
-    topbar: el.dataset.topbar,
+    // topbar: el.dataset.topbar,
+    topbar:"true",
     rightbar: el.dataset.rightbar,
     bottombar: el.dataset.bottombar,
     mobileHeading: el.dataset.mobileHeading,

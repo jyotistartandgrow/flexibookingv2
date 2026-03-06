@@ -257,9 +257,12 @@
   width:auto !important;
 }
 
- .fx-booking .fx-applied-btn{
-
- }
+.fx-extraboxlist .fx-extracontentboxlist .fx-common .btn-secondary{
+  width: 116px;
+  padding: 0px 4px 0px 4px;
+      line-height: 32px;
+    height: 36px;
+}
 
  .fx-booking .fx-apply-btn:hover {
   color: var(--grey);
@@ -447,9 +450,12 @@
     padding: 0px;
 }
  .fx-extracontentboxlist .fx-common {
-        display: flex;
+    display: flex;
     justify-content: space-between;
     margin-top: 20px;
+    position: absolute;
+    bottom: 14px;
+    right: 16px;
 }
 
  /* Radio button styles */
