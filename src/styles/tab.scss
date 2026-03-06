@@ -209,8 +209,28 @@
   display: none;
 }
 
-/* Category filter chips */
-.fx-booking .fx-category-filter {
+/* Mobile swipe carousel — CSS scroll-snap */
+.fx-booking .fx-mobile-swipe-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 12px;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.fx-booking .fx-mobile-swipe-item {
+  flex: 0 0 75%;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+/* Category filter chips */.fx-booking .fx-category-filter {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
