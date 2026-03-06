@@ -30,8 +30,7 @@ export default function ChooseDate() {
   const [isVisibleGift, setIsVisibleGift] = useState(false);
   const [disabledDates, setDisabledDates] = useState([]);
   const [responsearr, setResponsear] = useState([]);
-  const [coupon, setCoupon] = useState("");
-  const [fields, setFields] = useState([{ code: "" }]);
+  const [fields, setFields] = useState([{ code: "", applied: false }]);
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
   const [errorlist, setErrorlist] = useState({});
   const toggleDiv = (type) => {
@@ -46,21 +45,31 @@ export default function ChooseDate() {
   }, [month]);
 
   const addmoreCoupon = () => {
-    setFields([...fields, { code: "" }]);
-    setCoupon("");
+    setFields([...fields, { code: "", applied: false }]);
   };
 
   const removeCoupon = (key) => {
     const updated = fields.filter((_, i) => i !== key);
     setFields(updated);
-    console.log("Updated Coupons:", updated);
+    // compute valid coupons - only include actually applied coupons
     const validCoupons = updated
-      .map((f) => f.code.trim())
-      .filter((c) => c !== "");
+      .filter((f) => f.applied && f.code.trim() !== "")
+      .map((f) => f.code.trim());
     dispatch(setCouponlist(validCoupons));
   };
 
   const applycoupon = async (key) => {
+    if (fields[key].code.trim() === "") {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "error",
+        title: "Please enter a coupon code",
+      });
+      return;
+    }
     Swal.fire({
       toast: true,
       position: "top-end",
@@ -70,16 +79,16 @@ export default function ChooseDate() {
       title: "Once you proceed to payment, the discount will be applied.",
     });
 
+    // Mark this coupon as applied
     setFields((prev) => {
-      // update only one field
       const updated = prev.map((item, i) =>
-        i === key ? { ...item, code: coupon } : item,
+        i === key ? { ...item, applied: true } : item,
       );
 
-      // compute valid coupons using UPDATED list
+      // compute valid coupons - only include actually applied coupons
       const validCoupons = updated
-        .map((f) => f.code.trim())
-        .filter((c) => c !== "");
+        .filter((f) => f.applied && f.code.trim() !== "")
+        .map((f) => f.code.trim());
 
       // dispatch inside the setter
       dispatch(setCouponlist(validCoupons));
@@ -580,19 +589,18 @@ export default function ChooseDate() {
                       <input
                         type="text"
                         placeholder="Enter your coupon code"
-                        value={
-                          fields[index].code === ""
-                            ? coupon
-                            : fields[index].code
-                        }
+                        value={fields[index].code}
                         onChange={(e) => {
-                          if (fields[index].code === "") {
-                            setCoupon(e.target.value); // editable BEFORE apply
+                          if (!fields[index].applied) {
+                            const newFields = [...fields];
+                            newFields[index] = { ...newFields[index], code: e.target.value };
+                            setFields(newFields);
                           }
                         }}
-                        disabled={fields[index].code !== ""} // disable AFTER apply
+                        disabled={fields[index].applied}
+                        className={fields[index].applied ? "fx-coupon-applied" : ""}
                       />
-                      {fields[index].code === "" && (
+                      {!fields[index].applied && (
                         <button
                           className="fx-apply-btn"
                           onClick={() => applycoupon(index)}
@@ -600,7 +608,7 @@ export default function ChooseDate() {
                           APPLY
                         </button>
                       )}
-                      {fields[index].code !== "" && (
+                      {fields[index].applied && (
                         <button className="fx-apply-btn fx-applied-btn">
                           APPLIED <img src={iconapplied} />
                         </button>

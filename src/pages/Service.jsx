@@ -54,6 +54,8 @@ export default function Service(props) {
   const [skeloading, setLoadingske] = useState(false);
   const [currentitem, setCurrentItem] = useState({});
   const [calendarVisible, setCalendarVisible] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const prevDate = useRef(date);
   const isInitialMount = useRef(true);
   const isDesktop = useDeviceType();
@@ -61,6 +63,34 @@ export default function Service(props) {
   const toggleDiv = (type) => {
     setIsVisible(type);
   };
+
+  // Auto-set default view based on service count and device type
+  useEffect(() => {
+    if (products.length === 0) return;
+    if (isDesktop) {
+      if (products.length === 1) setIsVisible("list");
+      else if (products.length <= 8) setIsVisible("grid");
+      else if (products.length <= 12) setIsVisible("slider");
+      else setIsVisible("list");
+    } else {
+      if (products.length <= 2) setIsVisible("grid");
+      else if (products.length <= 5) setIsVisible("slider");
+      else setIsVisible("list");
+    }
+  }, [products, isDesktop]);
+
+  // Extract unique categories from products
+  useEffect(() => {
+    const cats = [
+      ...new Set(
+        products
+          .map((p) => p.category_name || p.category)
+          .filter(Boolean),
+      ),
+    ];
+    setCategories(cats);
+    setSelectedCategory("all");
+  }, [products]);
 
   // Reset service id on step change
   useEffect(() => {
@@ -510,6 +540,14 @@ export default function Service(props) {
     }
   };
 
+  const displayedProducts =
+    selectedCategory === "all"
+      ? products
+      : products.filter(
+          (p) =>
+            (p.category_name || p.category) === selectedCategory,
+        );
+
   const slotObj = dateslot.find((s) =>
     moment(moment(date).format("YYYY-MM-DD")).isSame(s.date),
   );
@@ -651,6 +689,33 @@ export default function Service(props) {
           No services found
         </div>
 
+        {/* Category filter: show only if categories >= 2 AND services >= 9 (desktop) or >= 6 (mobile) */}
+        {!skeloading &&
+          categories.length >= 2 &&
+          (isDesktop ? products.length >= 9 : products.length >= 6) && (
+          <div className="fx-category-filter">
+            <button
+              className={`fx-category-btn${
+                selectedCategory === "all" ? " fx-category-btn-active" : ""
+              }`}
+              onClick={() => setSelectedCategory("all")}
+            >
+              All
+            </button>
+            {categories.map((cat, idx) => (
+              <button
+                key={idx}
+                className={`fx-category-btn${
+                  selectedCategory === cat ? " fx-category-btn-active" : ""
+                }`}
+                onClick={() => setSelectedCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        )}
+
         <div
           className={
             isVisible == "grid" && !skeloading
@@ -659,8 +724,8 @@ export default function Service(props) {
           }
         >
           <div className="fx-servicecontainer">
-            {products.length > 0 &&
-              products.map((product, p1) => {
+            {displayedProducts.length > 0 &&
+              displayedProducts.map((product, p1) => {
                 return (
                   <div className="fx-servicebox" key={p1}>
                     <div className="fx-servicepicbox">
@@ -694,8 +759,8 @@ export default function Service(props) {
               : "fx-tabcontent"
           }
         >
-          {products.length > 0 &&
-            products.map((product, p2) => {
+          {displayedProducts.length > 0 &&
+            displayedProducts.map((product, p2) => {
               return (
                 <div className="fx-serviceboxlist" key={p2}>
                   <div className="fx-servicepicboxlist">
@@ -730,7 +795,7 @@ export default function Service(props) {
         >
           <div className="slider responsive">
             <Carousel
-              value={products}
+              value={displayedProducts}
               itemTemplate={productTemplate}
               numVisible={4}
               numScroll={3}
