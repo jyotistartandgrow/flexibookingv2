@@ -40,6 +40,19 @@ export default function Extra(props) {
   };
 
   useEffect(() => {
+    if (isDesktop) {
+      if (products.length === 1) setIsVisible("list");
+      else if (products.length <= 8) setIsVisible("grid");
+      else if (products.length <= 12) setIsVisible("slider");
+      else setIsVisible("list");
+    } else {
+      if (products.length <= 2) setIsVisible("grid");
+      else if (products.length <= 5) setIsVisible("slider");
+      else setIsVisible("list");
+    }
+  }, [products, isDesktop]);
+
+  useEffect(() => {
     if (step !== "extrastep") return;
     setBook(extracapacity ? extracapacity : 0);
     setExtraid(extraID ? extraID : null);

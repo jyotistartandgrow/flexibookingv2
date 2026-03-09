@@ -56,7 +56,6 @@ export default function Service(props) {
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [filterOpen, setFilterOpen] = useState(false);
   const prevDate = useRef(date);
   const isInitialMount = useRef(true);
   const isDesktop = useDeviceType();
