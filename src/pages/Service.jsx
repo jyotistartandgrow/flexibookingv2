@@ -56,6 +56,7 @@ export default function Service(props) {
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [filterOpen, setFilterOpen] = useState(false);
   const prevDate = useRef(date);
   const isInitialMount = useRef(true);
   const isDesktop = useDeviceType();
@@ -83,9 +84,7 @@ export default function Service(props) {
   useEffect(() => {
     const cats = [
       ...new Set(
-        products
-          .map((p) => p.category_name || p.category)
-          .filter(Boolean),
+        products.map((p) => p.category_name || p.category).filter(Boolean),
       ),
     ];
     setCategories(cats);
@@ -105,7 +104,11 @@ export default function Service(props) {
     }
     if (date) {
       // Fetch products on initial mount or when date changes
-      if (isInitialMount.current || date !== prevDate.current || category !== prevDate.currentCategory) {
+      if (
+        isInitialMount.current ||
+        date !== prevDate.current ||
+        category !== prevDate.currentCategory
+      ) {
         setBook(0);
         setSlot("");
         console.log("Selected date in Service component:", date);
@@ -544,8 +547,7 @@ export default function Service(props) {
     selectedCategory === "all"
       ? products
       : products.filter(
-          (p) =>
-            (p.category_name || p.category) === selectedCategory,
+          (p) => (p.category_name || p.category) === selectedCategory,
         );
 
   const slotObj = dateslot.find((s) =>
@@ -689,32 +691,29 @@ export default function Service(props) {
           No services found
         </div>
 
-        {/* Category filter: show only if categories >= 2 AND services >= 9 (desktop) or >= 6 (mobile) */}
+        {/* Category filter toggle button + dropdown */}
+        {/* Category filter pills */}
         {!skeloading &&
           categories.length >= 2 &&
           (isDesktop ? products.length >= 9 : products.length >= 6) && (
-          <div className="fx-category-filter">
-            <button
-              className={`fx-category-btn${
-                selectedCategory === "all" ? " fx-category-btn-active" : ""
-              }`}
-              onClick={() => setSelectedCategory("all")}
-            >
-              All
-            </button>
-            {categories.map((cat, idx) => (
+            <div className="fx-category-pills-bar">
               <button
-                key={idx}
-                className={`fx-category-btn${
-                  selectedCategory === cat ? " fx-category-btn-active" : ""
-                }`}
-                onClick={() => setSelectedCategory(cat)}
+                className={`fx-category-pill${selectedCategory === "all" ? " fx-category-pill-active" : ""}`}
+                onClick={() => setSelectedCategory("all")}
               >
-                {cat}
+                All
               </button>
-            ))}
-          </div>
-        )}
+              {categories.map((cat, idx) => (
+                <button
+                  key={idx}
+                  className={`fx-category-pill${selectedCategory === cat ? " fx-category-pill-active" : ""}`}
+                  onClick={() => setSelectedCategory(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          )}
 
         <div
           className={

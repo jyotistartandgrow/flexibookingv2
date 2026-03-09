@@ -230,40 +230,47 @@
   scroll-snap-align: start;
 }
 
-/* Category filter chips */.fx-booking .fx-category-filter {
+/* Filter row */
+/* Category filter pills - horizontal scrollable */
+.fx-booking .fx-category-pills-bar {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   gap: 8px;
   margin-bottom: 16px;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-.fx-booking .fx-category-btn {
-  display: inline-block;
+.fx-booking .fx-category-pill {
+  flex-shrink: 0;
   font-size: var(--small-descriptionsize);
-  font-weight: 400;
+  font-weight: 500;
   color: var(--grey);
   background: var(--white);
-  border: 1px solid var(--border-color);
+  border: 1.5px solid var(--border-color);
   border-radius: 20px;
   padding: 6px 16px;
   cursor: pointer;
-  line-height: 1.4;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
   white-space: nowrap;
-  box-shadow: 0px 0px 2px 0px var(--box-shadow);
+  line-height: 1.5;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
 
   &:hover {
     border-color: var(--primary-light);
     color: var(--primary-color);
-    background: var(--lightblue-secondary-active);
   }
-}
 
-.fx-booking .fx-category-btn-active {
-  border-color: var(--primary-color) !important;
-  color: var(--primary-color);
-  background: var(--lightblue-secondary);
-  font-weight: 500;
+  &.fx-category-pill-active {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: var(--lightblue-secondary);
+  }
 }
 
 @media screen and (max-width: 480px) {
