@@ -473,6 +473,9 @@
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .booknowbtn{
   position: inherit;
   margin-top: 6px;
+  float: initial;
+  margin-left: 12px;
+          display: inline-block;
 }
 .fx-booking .fx-servicebox .fx-servicepicbox img{
   height:auto;
@@ -518,6 +521,14 @@
   height: 179px;
   
 }
+
+.fx-booking .fx-tabcontent .fx-extraboxlist{
+  height: 180px;
+}
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-servicepiccontentbox{
+  display: none;
+}
+
 
 }
 
