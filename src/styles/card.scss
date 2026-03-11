@@ -533,10 +533,6 @@
 .fx-booking .fx-tabcontent .fx-extraboxlist{
   height: 180px;
 }
-.fx-booking .fx-tabcontent .fx-extraboxlist .fx-servicepiccontentbox{
-  display: none;
-}
-
 
 }
 
@@ -555,4 +551,12 @@
 
  .p-carousel-container button[type=button].p-carousel-next, .p-carousel-container button[type=button].p-carousel-prev{
   padding: 12px 0px;
+}
+
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-servicepiccontentbox{
+  display: none;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist .fx-servicepiccontentbox{
+    display: none;
 }
