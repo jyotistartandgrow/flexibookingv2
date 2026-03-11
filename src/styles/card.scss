@@ -416,6 +416,14 @@
     border-radius: 8px;
 }
 
+.fx-booking .fx-desktop-swipe-item .fx-servicebox {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+    font-size: 20px;
+}
+
 @media screen and (max-width: 580px) {
 .fx-booking .fx-servicecontainer{
   display: inline-block;
@@ -473,6 +481,7 @@
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .booknowbtn{
   position: inherit;
   margin-top: 6px;
+  padding: 0px !important;
 }
 .fx-booking .fx-servicebox .fx-servicepicbox img{
   height:auto;

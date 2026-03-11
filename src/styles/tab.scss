@@ -209,6 +209,71 @@
   display: none;
 }
 
+/* Desktop swipe carousel — CSS scroll-snap, 3.5 items visible */
+.fx-booking .fx-desktop-swipe-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.fx-booking .fx-dswipe-arrow {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-color);
+  background: var(--white);
+  color: var(--grey);
+  cursor: pointer;
+  z-index: 2;
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.10);
+
+  .pi {
+    font-size: 13px;
+  }
+
+  &:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.14);
+  }
+}
+
+.fx-booking .fx-dswipe-prev {
+  margin-right: 10px;
+}
+
+.fx-booking .fx-dswipe-next {
+  margin-left: 10px;
+}
+
+.fx-booking .fx-desktop-swipe-carousel {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.fx-booking .fx-desktop-swipe-item {
+  flex: 0 0 calc((100% - 3 * 16px) / 3.5);
+  min-width: 0;
+  scroll-snap-align: start;
+  border: 1px solid #e2e4e9;
+  border-radius: 10px;
+}
+
 /* Mobile swipe carousel — CSS scroll-snap */
 .fx-booking .fx-mobile-swipe-carousel {
   display: flex;

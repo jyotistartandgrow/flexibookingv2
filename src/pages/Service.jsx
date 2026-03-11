@@ -59,6 +59,32 @@ export default function Service(props) {
   const prevDate = useRef(date);
   const isInitialMount = useRef(true);
   const isDesktop = useDeviceType();
+  const desktopCarouselRef = useRef(null);
+
+  const scrollDesktop = (dir) => {
+    const el = desktopCarouselRef.current;
+    if (!el) return;
+    const itemWidth = el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
+    const gap = 16;
+    el.scrollBy({ left: dir === "next" ? itemWidth + gap : -(itemWidth + gap), behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (isVisible !== "slider" || !isDesktop) return;
+    const interval = setInterval(() => {
+      const el = desktopCarouselRef.current;
+      if (!el) return;
+      const itemWidth = el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
+      const gap = 16;
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      if (el.scrollLeft >= maxScroll - 1) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        el.scrollBy({ left: itemWidth + gap, behavior: "smooth" });
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isVisible, isDesktop, products, selectedCategory]);
 
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -801,15 +827,21 @@ export default function Service(props) {
                 ))}
               </div>
             ) : (
-              <Carousel
-                value={displayedProducts}
-                itemTemplate={productTemplate}
-                numVisible={4}
-                numScroll={3}
-                responsiveOptions={responsiveOptions}
-                circular
-                autoplayInterval={3000}
-              />
+              <div className="fx-desktop-swipe-wrapper">
+                <button className="fx-dswipe-arrow fx-dswipe-prev" onClick={() => scrollDesktop("prev")}>
+                  <i className="pi pi-chevron-left"></i>
+                </button>
+                <div className="fx-desktop-swipe-carousel" ref={desktopCarouselRef}>
+                  {displayedProducts.map((product, idx) => (
+                    <div key={idx} className="fx-desktop-swipe-item">
+                      {productTemplate(product)}
+                    </div>
+                  ))}
+                </div>
+                <button className="fx-dswipe-arrow fx-dswipe-next" onClick={() => scrollDesktop("next")}>
+                  <i className="pi pi-chevron-right"></i>
+                </button>
+              </div>
             )}
           </div>
         </div>
