@@ -476,18 +476,24 @@ export default function Extra(props) {
                       return (
                         <div className="fx-extraboxlist" key={p2}>
                           <div className="fx-extrapicboxlist">
+                            <div className="fx-extra-main-img">
                             <img src={extra} alt={product.extra_name} />
+                            </div>
                             <span className="fx-servicepiccontentbox">
                               {product.extra_name}
                             </span>
                           </div>
                           <div className="fx-extracontentboxlist">
-                            <h4>{product.extra_name}</h4>
-                            <p>{decodeHtml(product.extra_desc)}</p>
-                            <p className="price">
-                              {" "}
-                              <span>{decodeHtml(product.price)}</span>
-                            </p>
+                            <div className="fx-extra-main-contentbox">
+                            <div className="fx-extra-contentbox">
+                              <h4>{product.extra_name}</h4>
+                              <p>{decodeHtml(product.extra_desc)}</p>
+                            </div>
+                             <p className="price">
+                                {" "}
+                                <span>{decodeHtml(product.price)}</span>
+                              </p>
+                              </div>
                             <div className="fx-common">
                               <div className="fx-quantitybox">
                                 {extraid != product.id && (

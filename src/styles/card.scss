@@ -70,8 +70,8 @@
 }
 
 .fx-booking .fx-servicebox .fx-servicecontentbox h4 {
-  font-size: var(--card-headingsize);
-  font-weight: 300;
+  font-size: 20px;
+  font-weight: 400;
   margin: 0px;
   margin-bottom: 6px;
   height: 27px;
@@ -88,16 +88,10 @@
   overflow: hidden;
 }
 
-.fx-booking .fx-servicebox .fx-servicecontentbox .price {
-  height: 29px;
-  font-size: var(--normal-descriptionsize);
-  font-weight: 400;
-  color: var(--darkblue-color);
-  margin:0px;
-}
+
 
 .fx-booking .fx-servicebox .fx-servicecontentbox .price span {
-  font-size: var(--small-headingsize);
+  font-size: 16px;
 }
 
 .fx-booking .fx-servicebox .fx-servicecontentbox .booknowbtn {
@@ -109,7 +103,7 @@
   text-align: center;
   border-radius: 33px;
   color: var(--primary-color);
-  margin-top:16px;
+  margin-top:6px;
   background: var(--white);
   float:inherit;
 }
@@ -118,6 +112,12 @@
  text-decoration: none;
  color: var(--primary-color);
 }
+
+
+
+
+
+
 
 /* service section list view */
 
@@ -149,18 +149,18 @@
 
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist {
   width: 120px;
-  height:94px;
+  height:143px;
   position: relative;
+  overflow:hidden;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist img {
-    width: 100%;
-    height:94px;
+    height:143px;
     border-radius: 8px 0px 0px 8px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist {
     width: calc(100% - 120px);
     height: auto;
-    padding: 15px 16px;
+    padding: 12px 12px;
     background: var(--white);
     position: relative;
     border-radius: 0px 8px 8px 0px;
@@ -175,17 +175,13 @@
     font-size: var(--normal-descriptionsize);
     font-weight: 300;
     color: var(--grey);
-    margin-top: 10px;
+    margin-top: 0px;
     margin-bottom:6px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price {
     height: 29px;
     font-size: var(--normal-descriptionsize);
     color: var(--darkblue-color);
-    position: absolute;
-    top:8px;
-    right: 16px;
-    margin-top: 0px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price span {
      font-size: 22px;
@@ -212,8 +208,8 @@
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img {
   width: 100%;
   height: auto;
-  min-height: 94px;
-  max-height: 94px;
+  min-height: 100px;
+  max-height: 100px;
   border-radius: 8px 0px 0px 8px;
 }
 
@@ -227,7 +223,7 @@
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist h4 {
   font-size: 20px;
-  font-weight: 300;
+  font-weight: 400;
   margin: 0px;
 }
 
@@ -241,15 +237,7 @@
 
 }
 
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .price {
-  font-size: var(--normal-descriptionsize);
-  color: var(--darkblue-color);
-}
 
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .price span {
-  font-size: 16px;
-  font-weight: 500;
-}
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .booknowbtn {
     width: 116px;
@@ -483,9 +471,7 @@
   overflow: hidden;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price{
-  position: inherit;
-    margin-left: 16px;
-    margin-top: -8px;
+    width: 50px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist p{
     margin-top: 3px;
@@ -508,12 +494,12 @@
   margin-left: 13px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist img{
-  height: 179px;
+  height: 154px;
   
 }
 
 .fx-booking .fx-tabcontent .fx-extraboxlist{
-  height: 180px;
+  height: auto;
 }
 
 }
@@ -542,3 +528,121 @@
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist .fx-servicepiccontentbox{
     display: none;
 }
+
+
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img{
+    width: auto;
+}
+ 
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist{
+    width: auto;
+    height: auto;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist{
+  width: 100%;
+  height: auto;
+  display: flex;
+  padding: 10px 12px;
+  gap:4px;
+  border-radius: 0px 8px 8px 0px;
+}
+
+
+
+// grid view card
+
+.fx-booking .fx-servicebox .fx-servicecontentbox .price {
+  height: 29px;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  color: var(--darkblue-color);
+  margin:0px;
+  margin-top: 10px;
+}
+
+.fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-form{
+  font-size: 12px;
+  margin-right: 4px;
+  color: var(--grey);
+}
+
+.fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-one{
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-two{
+font-size: 12px;
+    font-weight: 400;
+    text-decoration: line-through;
+    color: var(--grey);
+    margin-left: 4px;
+}
+
+
+
+// list view card
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .price{
+    font-size: var(--normal-descriptionsize);
+    color: var(--darkblue-color);
+    height: auto;
+    margin:0px;
+    text-align: right;
+    width:100px;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .fx-price-form{
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--grey);
+    margin-top: 2px;
+    display: block;
+}
+
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .fx-price-one{
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--primary-color);
+    margin-top: 2px;
+    display: block;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .fx-price-two{
+    font-size: 12px;
+    font-weight: 400;
+    display: block;
+    text-decoration: line-through;
+    color: var(--grey);
+    margin-top: 2px;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .price .pi-chevron-right{
+    font-size: 12px;
+    float: right;
+    margin-top: 8px;
+    color: var(--grey);
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+
+
+
+  // Extra list view card
+
+  .fx-extraboxlist .fx-extracontentboxlist .fx-extra-main-contentbox{
+    display: flex;
+  }
+
+  .fx-extraboxlist .fx-extra-contentbox{
+    width: 100%;
+  }
+
+  .fx-extraboxlist .fx-extrapicboxlist .fx-extra-main-img{
+    width: 121px;
+    height: 128px;
+  }

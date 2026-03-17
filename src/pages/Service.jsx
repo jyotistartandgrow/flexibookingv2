@@ -361,8 +361,10 @@ export default function Service(props) {
           <h4>{product.service_name}</h4>
           <p>{decodeHtml(product.svc_short_desc)}</p>
           <p className="price">
-            from <span>{decodeHtml(product.svc_price)}</span>
-          </p>
+                        <span className="fx-price-form">from</span>
+                        <span className="fx-price-one">{decodeHtml(product.svc_price)}</span>
+                        <span className="fx-price-two">{decodeHtml(product.svc_price)}</span>
+                      </p>
           <div className="booknowbtn" onClick={() => servicedetail(product.id)}>
             <a href="#">{gift ? "Select Gift" : "Book Now"}</a>
           </div>
@@ -762,7 +764,9 @@ export default function Service(props) {
                       <h4>{product.service_name}</h4>
                       <p>{product.svc_short_desc}</p>
                       <p className="price">
-                        from <span>{decodeHtml(product.svc_price)}</span>
+                        <span className="fx-price-form">from</span>
+                        <span className="fx-price-one">{decodeHtml(product.svc_price)}</span>
+                        {/* <span className="fx-price-two">{decodeHtml(product.svc_price)}</span> */}
                       </p>
                       <div
                         className="booknowbtn"
@@ -801,7 +805,10 @@ export default function Service(props) {
                     <p>{product.svc_short_desc}</p>
                     </div>
                     <p className="price">
-                      from <span>{decodeHtml(product.svc_price)}</span>
+                      <span className="fx-price-form">from</span>
+                      <span className="fx-price-one">{decodeHtml(product.svc_price)}</span>
+                      {/* <span className="fx-price-two">{decodeHtml(product.svc_price)}</span> */}
+                      <i class="pi pi-chevron-right"></i>
                     </p>
                     {/* <span
                       className="booknowbtn"
