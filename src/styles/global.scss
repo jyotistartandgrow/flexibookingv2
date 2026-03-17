@@ -711,6 +711,43 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
     height: 32px;
 }
 
+
+.fx-list-img-box{
+    width: 80px;
+    height:90px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px 0px 0px 8px;
+  }
+
+}
+
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img{
+    width: auto;
+}
+ 
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist{
+    width: auto;
+    height: auto;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist{
+  width: 100%;
+  height: auto;
+  display: flex;
+  padding: 10px 12px;
+  gap:4px;
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .price{
+    height: auto;
+}
+
+.fx-servicecontentboxlist .list-view-text-content{
+    width: 100%;
 }
 
 
@@ -815,3 +852,5 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
   }
 
 }
+
+

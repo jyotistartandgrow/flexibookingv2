@@ -788,28 +788,33 @@ export default function Service(props) {
               return (
                 <div className="fx-serviceboxlist" key={p2}>
                   <div className="fx-servicepicboxlist">
+                    <div className="fx-list-img-box">
                     <img src={product.svc_img} alt={product.service_name} />
+                    </div>
                     <span className="fx-servicepiccontentbox">
                       {product.service_name}
                     </span>
                   </div>
                   <div className="fx-servicecontentboxlist">
+                    <div className="list-view-text-content">
                     <h4>{product.service_name}</h4>
                     <p>{product.svc_short_desc}</p>
+                    </div>
                     <p className="price">
                       from <span>{decodeHtml(product.svc_price)}</span>
                     </p>
-                    <span
+                    {/* <span
                       className="booknowbtn"
                       onClick={() => servicedetail(product.id)}
                     >
-                      {gift ? "Select Gift" : "Book Now"}
-                    </span>
+                      {gift ? "Select Gift" : "fr"}
+                    </span> */}
                   </div>
                 </div>
               );
             })}
         </div>
+        
         <div
           className={
             isVisible == "slider" && !skeloading
