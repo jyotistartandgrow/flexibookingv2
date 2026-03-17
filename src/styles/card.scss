@@ -149,9 +149,10 @@
 
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist {
   width: 120px;
-  height:143px;
+  height:133px;
   position: relative;
   overflow:hidden;
+  border-radius: 8px 0px 0px 8px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist img {
     height:143px;
@@ -175,7 +176,7 @@
     font-size: var(--normal-descriptionsize);
     font-weight: 300;
     color: var(--grey);
-    margin-top: 0px;
+    margin-top: 6px;
     margin-bottom:6px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price {
@@ -184,7 +185,7 @@
     color: var(--darkblue-color);
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price span {
-     font-size: 22px;
+     font-size: 18px;
     font-weight: 400;
 }
 
@@ -494,7 +495,7 @@
   margin-left: 13px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist img{
-  height: 154px;
+  height: 134px;
   
 }
 

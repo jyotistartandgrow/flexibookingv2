@@ -414,9 +414,11 @@
   border-color: var(--disabled-bordercolor);
 }
 
-.fx-extracontentboxlist .fx-quantitybox {
+.fx-extraboxlist .fx-extracontentboxlist .fx-quantitybox {
     width: auto;
     float: left;
+    margin-top: -9px;;
+    
 }
 
 .fx-extracontentboxlist .fx-quantitybox .decrement {
