@@ -187,7 +187,8 @@
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price span {
      font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
+    color: var(--primary-color);
 }
 
 
@@ -210,8 +211,8 @@
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img {
   width: 100%;
   height: auto;
-  min-height: 103px;
-  max-height: 100px;
+  min-height: 121px;
+  max-height: 121px;
   border-radius: 8px 0px 0px 8px;
 }
 
@@ -608,7 +609,7 @@ font-size: 12px;
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .fx-price-one{
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
     color: var(--primary-color);
     margin-top: 2px;
     display: block;
