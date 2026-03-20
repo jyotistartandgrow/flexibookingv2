@@ -129,6 +129,7 @@
   margin-bottom: 12px;
   border: 1px solid #e2e4e9;
   border-radius: 8px;
+  cursor: pointer;
 }
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist {
@@ -168,7 +169,7 @@
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist h4 {
     font-size: 20px;
-    font-weight: 300;
+    font-weight: 400;
     margin: 0px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist p {
@@ -185,7 +186,7 @@
     color: var(--darkblue-color);
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price span {
-     font-size: 18px;
+     font-size: 16px;
     font-weight: 400;
 }
 
@@ -209,7 +210,7 @@
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img {
   width: 100%;
   height: auto;
-  min-height: 100px;
+  min-height: 103px;
   max-height: 100px;
   border-radius: 8px 0px 0px 8px;
 }
@@ -467,7 +468,7 @@
   margin-bottom: 24px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist h4{
-  font-size: 22px;
+  font-size: 20px;
   height: 31px;
   overflow: hidden;
 }
@@ -571,7 +572,8 @@
 
 .fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-one{
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
+  color: var(--primary-color);
 }
 
 .fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-two{
@@ -592,7 +594,7 @@ font-size: 12px;
     height: auto;
     margin:0px;
     text-align: right;
-    width:100px;
+    width:96px;
 }
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .fx-price-form{
@@ -646,4 +648,6 @@ font-size: 12px;
   .fx-extraboxlist .fx-extrapicboxlist .fx-extra-main-img{
     width: 121px;
     height: 128px;
+    justify-content: center;
+    display: flex;
   }
