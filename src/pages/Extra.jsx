@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
@@ -17,6 +17,15 @@ import useDeviceType from "../Utils/useDeviceType";
 export default function Extra(props) {
   const dispatch = useDispatch();
   const isDesktop = useDeviceType();
+  const desktopCarouselRef = useRef(null);
+
+  const scrollDesktop = (dir) => {
+    const el = desktopCarouselRef.current;
+    if (!el) return;
+    const itemWidth = el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
+    const gap = 16;
+    el.scrollBy({ left: dir === "next" ? itemWidth + gap : -(itemWidth + gap), behavior: "smooth" });
+  };
 
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
@@ -51,6 +60,23 @@ export default function Extra(props) {
       else setIsVisible("list");
     }
   }, [products, isDesktop]);
+
+  useEffect(() => {
+    if (isVisible !== "slider" || !isDesktop) return;
+    const interval = setInterval(() => {
+      const el = desktopCarouselRef.current;
+      if (!el) return;
+      const itemWidth = el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
+      const gap = 16;
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      if (el.scrollLeft >= maxScroll - 1) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        el.scrollBy({ left: itemWidth + gap, behavior: "smooth" });
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isVisible, isDesktop, products]);
 
   useEffect(() => {
     if (step !== "extrastep") return;
@@ -564,15 +590,34 @@ export default function Extra(props) {
                 }
               >
                 <div className="slider responsive">
-                  <Carousel
-                    value={products}
-                    itemTemplate={productTemplate}
-                    numVisible={4}
-                    numScroll={3}
-                    responsiveOptions={responsiveOptions}
-                    circular
-                    autoplayInterval={3000}
-                  />
+                  {!isDesktop ? (
+                    <div className="fx-mobile-swipe-carousel">
+                      {products.filter(p => p.cap_left > 0).map((product, idx) => (
+                        <div key={idx} className="fx-mobile-swipe-item">
+                          {productTemplate(product)}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="fx-desktop-swipe-wrapper">
+                      <button className="fx-dswipe-arrow fx-dswipe-prev" onClick={() => scrollDesktop("prev")}>
+                        <i className="pi pi-chevron-left"></i>
+                      </button>
+                      <div
+                        className={`fx-desktop-swipe-carousel${products.filter(p => p.cap_left > 0).length < 4 ? " fx-dswipe-few" : ""}`}
+                        ref={desktopCarouselRef}
+                      >
+                        {products.filter(p => p.cap_left > 0).map((product, idx) => (
+                          <div key={idx} className="fx-desktop-swipe-item">
+                            {productTemplate(product)}
+                          </div>
+                        ))}
+                      </div>
+                      <button className="fx-dswipe-arrow fx-dswipe-next" onClick={() => scrollDesktop("next")}>
+                        <i className="pi pi-chevron-right"></i>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </>

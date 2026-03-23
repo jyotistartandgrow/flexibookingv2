@@ -349,6 +349,22 @@
   margin-bottom: 0px;
   border-radius: 4px 4px 0px 0px;
 }
+
+/* Ensure extrapicbox always establishes a stacking context for the price badge */
+.fx-booking .fx-extrabox .fx-extrapicbox {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+}
+
+.fx-booking .fx-extrabox .fx-extrapicbox img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
 .fx-booking .fx-extracontentbox .fx-common{
   display: flex;
   justify-content: space-between;
@@ -403,7 +419,8 @@
     border-radius: 8px;
 }
 
-.fx-booking .fx-desktop-swipe-item .fx-servicebox {
+.fx-booking .fx-desktop-swipe-item .fx-servicebox,
+.fx-booking .fx-desktop-swipe-item .fx-extrabox {
     width: 100%;
     height: 100%;
     border: none;

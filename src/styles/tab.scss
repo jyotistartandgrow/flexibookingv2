@@ -280,6 +280,16 @@
   border-radius: 10px;
 }
 
+/* Fewer than 4 items: natural card width, no forced 3.5 sizing */
+.fx-booking .fx-desktop-swipe-carousel.fx-dswipe-few {
+  overflow: hidden;
+  scroll-snap-type: none;
+}
+
+.fx-booking .fx-desktop-swipe-carousel.fx-dswipe-few .fx-desktop-swipe-item {
+  flex: 0 0 262px;
+}
+
 /* Mobile swipe carousel — CSS scroll-snap */
 .fx-booking .fx-mobile-swipe-carousel {
   display: flex;

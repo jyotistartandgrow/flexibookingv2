@@ -64,9 +64,13 @@ export default function Service(props) {
   const scrollDesktop = (dir) => {
     const el = desktopCarouselRef.current;
     if (!el) return;
-    const itemWidth = el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
+    const itemWidth =
+      el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
     const gap = 16;
-    el.scrollBy({ left: dir === "next" ? itemWidth + gap : -(itemWidth + gap), behavior: "smooth" });
+    el.scrollBy({
+      left: dir === "next" ? itemWidth + gap : -(itemWidth + gap),
+      behavior: "smooth",
+    });
   };
 
   useEffect(() => {
@@ -74,7 +78,8 @@ export default function Service(props) {
     const interval = setInterval(() => {
       const el = desktopCarouselRef.current;
       if (!el) return;
-      const itemWidth = el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
+      const itemWidth =
+        el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
       const gap = 16;
       const maxScroll = el.scrollWidth - el.clientWidth;
       if (el.scrollLeft >= maxScroll - 1) {
@@ -361,10 +366,16 @@ export default function Service(props) {
           <h4>{product.service_name}</h4>
           <p>{decodeHtml(product.svc_short_desc)}</p>
           <p className="price">
-                        <span className="fx-price-form">from</span>
-                        <span className="fx-price-one">{decodeHtml(product.svc_price)}</span>
-                        <span className="fx-price-two">{decodeHtml(product.svc_price)}</span>
-                      </p>
+            <span className="fx-price-form">from</span>
+            <span className="fx-price-one">
+              {decodeHtml(product.svc_price)}
+            </span>
+            {product.svc_default_price > product.svc_price && (
+              <span className="fx-price-two">
+                {decodeHtml(product.svc_default_price)}
+              </span>
+            )}
+          </p>
           <div className="booknowbtn" onClick={() => servicedetail(product.id)}>
             <a href="#">{gift ? "Select Gift" : "Book Now"}</a>
           </div>
@@ -765,8 +776,14 @@ export default function Service(props) {
                       <p>{product.svc_short_desc}</p>
                       <p className="price">
                         <span className="fx-price-form">from</span>
-                        <span className="fx-price-one">{decodeHtml(product.svc_price)}</span>
-                        {/* <span className="fx-price-two">{decodeHtml(product.svc_price)}</span> */}
+                        <span className="fx-price-one">
+                          {decodeHtml(product.svc_price)}
+                        </span>
+                        {product.svc_default_price > product.svc_price && (
+                          <span className="fx-price-two">
+                            {decodeHtml(product.svc_default_price)}
+                          </span>
+                        )}
                       </p>
                       <div
                         className="booknowbtn"
@@ -790,10 +807,14 @@ export default function Service(props) {
           {displayedProducts.length > 0 &&
             displayedProducts.map((product, p2) => {
               return (
-                <div className="fx-serviceboxlist" key={p2}>
+                <div
+                  className="fx-serviceboxlist"
+                  key={p2}
+                  onClick={() => servicedetail(product.id)}
+                >
                   <div className="fx-servicepicboxlist">
                     <div className="fx-list-img-box">
-                    <img src={product.svc_img} alt={product.service_name} />
+                      <img src={product.svc_img} alt={product.service_name} />
                     </div>
                     <span className="fx-servicepiccontentbox">
                       {product.service_name}
@@ -801,13 +822,19 @@ export default function Service(props) {
                   </div>
                   <div className="fx-servicecontentboxlist">
                     <div className="list-view-text-content">
-                    <h4>{product.service_name}</h4>
-                    <p>{product.svc_short_desc}</p>
+                      <h4>{product.service_name}</h4>
+                      <p>{product.svc_short_desc}</p>
                     </div>
                     <p className="price">
                       <span className="fx-price-form">from</span>
-                      <span className="fx-price-one">{decodeHtml(product.svc_price)}</span>
-                      {/* <span className="fx-price-two">{decodeHtml(product.svc_price)}</span> */}
+                      <span className="fx-price-one">
+                        {decodeHtml(product.svc_price)}
+                      </span>
+                      {product.svc_default_price > product.svc_price && (
+                        <span className="fx-price-two">
+                          {decodeHtml(product.svc_default_price)}
+                        </span>
+                      )}
                       <i class="pi pi-chevron-right"></i>
                     </p>
                     {/* <span
@@ -821,7 +848,7 @@ export default function Service(props) {
               );
             })}
         </div>
-        
+
         <div
           className={
             isVisible == "slider" && !skeloading
@@ -840,17 +867,26 @@ export default function Service(props) {
               </div>
             ) : (
               <div className="fx-desktop-swipe-wrapper">
-                <button className="fx-dswipe-arrow fx-dswipe-prev" onClick={() => scrollDesktop("prev")}>
+                <button
+                  className="fx-dswipe-arrow fx-dswipe-prev"
+                  onClick={() => scrollDesktop("prev")}
+                >
                   <i className="pi pi-chevron-left"></i>
                 </button>
-                <div className="fx-desktop-swipe-carousel" ref={desktopCarouselRef}>
+                <div
+                  className={`fx-desktop-swipe-carousel${displayedProducts.length < 4 ? " fx-dswipe-few" : ""}`}
+                  ref={desktopCarouselRef}
+                >
                   {displayedProducts.map((product, idx) => (
                     <div key={idx} className="fx-desktop-swipe-item">
                       {productTemplate(product)}
                     </div>
                   ))}
                 </div>
-                <button className="fx-dswipe-arrow fx-dswipe-next" onClick={() => scrollDesktop("next")}>
+                <button
+                  className="fx-dswipe-arrow fx-dswipe-next"
+                  onClick={() => scrollDesktop("next")}
+                >
                   <i className="pi pi-chevron-right"></i>
                 </button>
               </div>
