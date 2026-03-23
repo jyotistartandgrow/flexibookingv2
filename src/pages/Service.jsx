@@ -874,7 +874,7 @@ export default function Service(props) {
                   <i className="pi pi-chevron-left"></i>
                 </button>
                 <div
-                  className="fx-desktop-swipe-carousel"
+                  className={`fx-desktop-swipe-carousel${displayedProducts.length < 4 ? " fx-dswipe-few" : ""}`}
                   ref={desktopCarouselRef}
                 >
                   {displayedProducts.map((product, idx) => (
