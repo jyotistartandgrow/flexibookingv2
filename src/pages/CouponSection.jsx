@@ -101,12 +101,12 @@ export default function CouponSection() {
                       className="fx-apply-btn"
                       onClick={() => applycoupon(index)}
                     >
-                      APPLY
+                      Apply
                     </button>
                   )}
                   {field.applied && (
                     <button className="fx-apply-btn fx-applied-btn">
-                      APPLIED <img src={iconapplied} />
+                      Applied <img src={iconapplied} />
                     </button>
                   )}
                 </div>

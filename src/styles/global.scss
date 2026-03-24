@@ -647,7 +647,7 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 }
 .fx-tabcontent.selected h3{
     font-weight: 400;
-    font-size: 24px;
+    font-size:var(--all-sub-heading);
     margin-bottom: 12px;
     margin-top:0px;
 }
