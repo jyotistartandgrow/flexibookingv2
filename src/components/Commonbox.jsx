@@ -8,8 +8,6 @@ import { Toast } from "primereact/toast";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "../pages/CheckoutForm";
-import Swal from "sweetalert2";
-import iconapplied from "../assets/icons8-confirm.svg";
 import {
   setCheckoutkey,
   setPaymentstring,

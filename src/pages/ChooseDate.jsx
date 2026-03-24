@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
 import {
@@ -13,7 +15,7 @@ import {
 import {
   decodeHtml,
   validateEmail,
-  validatePhoneNumber,
+  validatePhoneForCountry,
 } from "../Utils/Functions";
 import CalendarPage from "./CalendarPage";
 import CouponSection from "./CouponSection";
@@ -169,7 +171,7 @@ export default function ChooseDate() {
     }
     if (
       !receiverInfo.phoneNumber ||
-      !validatePhoneNumber(receiverInfo.phoneNumber)
+      !validatePhoneForCountry(receiverInfo.phoneNumber, {})
     ) {
       setErrorlist({ phoneNumber: true });
       return;
@@ -394,35 +396,43 @@ export default function ChooseDate() {
                 )}
               </div>
               <div className="fx-input-wrapper">
-                <input
-                  type="number"
-                  placeholder="Phone Number"
-                  className={
-                    errorlist.phoneNumber ? "fx-input-number fx-invalid" : "fx-input-number"
-                  }
-                  onChange={(e) =>
-                    dispatch(
-                      setReceiverInfo({
-                        ...receiverInfo,
-                        phoneNumber: e.target.value,
-                      }),
-                    )
-                  }
-                  onBlur={(e) => {
-                    const phone = e.target.value.trim();
-                    if (phone && !validatePhoneNumber(phone)) {
-                      setErrorlist((prev) => ({ ...prev, phoneNumber: true }));
-                    } else {
-                      setErrorlist((prev) => ({ ...prev, phoneNumber: false }));
+                <div className="fx-phone-input">
+                  <PhoneInput
+                    country={"in"}
+                    value={receiverInfo.phoneNumber}
+                    className={errorlist.phoneNumber ? "fx-invalid" : ""}
+                    onChange={(phone, country) => {
+                      dispatch(
+                        setReceiverInfo({
+                          ...receiverInfo,
+                          phoneNumber: phone,
+                        }),
+                      );
+                      const isValid = validatePhoneForCountry(phone, country);
+                      if (isValid && errorlist.phoneNumber) {
+                        setErrorlist((prev) => ({ ...prev, phoneNumber: false }));
+                      }
+                    }}
+                    onBlur={() => {
+                      const isValid = validatePhoneForCountry(
+                        receiverInfo.phoneNumber,
+                        {},
+                      );
+                      setErrorlist((prev) => ({ ...prev, phoneNumber: !isValid }));
+                    }}
+                    enableSearch={true}
+                    disableDropdown={false}
+                    inputStyle={{ width: "100%" }}
+                    isValid={(value, country) =>
+                      validatePhoneForCountry(value, country)
                     }
-                  }}
-                />
-                <i className="pi pi-phone"></i>
-                {errorlist.phoneNumber && (
-                  <span class="fx-errortext">
-                    Enter valid phone number (min 10 digits)
-                  </span>
-                )}
+                  />
+                  {errorlist.phoneNumber && (
+                    <span className="fx-errortext">
+                      Enter a valid phone number for the selected country
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
             <div className="fx-inputgroup fx-hidden">
