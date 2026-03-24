@@ -20,8 +20,8 @@
 }
 
 .fx-booking .fx-servicecontainer .fx-servicebox:hover {
-  transform: translateY(-1px); /* lift */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transform:var(--translateY); /* lift */
+  box-shadow:var(--hover-shadow); /* shadow */
 }
 
 .fx-booking .fx-servicebox .fx-servicepicbox {
@@ -138,6 +138,12 @@
   border: 1px solid #e2e4e9;
   border-radius: 8px;
   cursor: pointer;
+    transition:var(--animation-transition);
+}
+
+.fx-booking .fx-tabcontent .fx-serviceboxlist:hover{
+  transform:var(--translateY); /* lift */
+  box-shadow:var(--hover-shadow); /* shadow */
 }
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist {
@@ -435,7 +441,14 @@
     border-radius: 0;
     font-size: var(--all-sub-heading);
     cursor: pointer;
+    transition: var(--animation-transition);
 }
+
+.fx-booking .fx-desktop-swipe-item .fx-servicebox:hover {
+    transform: var(--translateY);
+    box-shadow: var(--hover-shadow);
+}
+
 
 @media screen and (max-width: 580px) {
 .fx-booking .fx-servicecontainer{

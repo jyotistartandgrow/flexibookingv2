@@ -42,7 +42,16 @@
    --all-card-category-size: 16px;
 }
 
+
+:root{
+    --translateY: translateY(-2px);
+    --hover-shadow:  0 2px 6px rgba(0, 0, 0, 0.1);
+    --animation-transition:  all 0.3s ease;
+}
+
+
 // For All heading - Font Size 24px
 // For Card heading, Tab - Font Size 20px
 // For All description, Step, Price - Font Size 16px
 // small description, small font size - Font Size 14px
+
