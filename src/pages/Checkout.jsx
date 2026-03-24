@@ -18,6 +18,7 @@ import {
   validatePhoneNumber,
   validatePhoneForCountry,
 } from "../Utils/Functions";
+import CouponSection from "./CouponSection";
 
 export default function Checkout() {
   const dispatch = useDispatch();
@@ -640,7 +641,7 @@ export default function Checkout() {
               </div>
             </>
           )}
-
+          <CouponSection />
           <label htmlFor="option2">Invoice Request</label>
           <InputSwitch
             checked={invoice ? true : false}
@@ -651,11 +652,11 @@ export default function Checkout() {
         <div className="fx-inputgroup fx-checkboxcontainer">
           <input
             type="checkbox"
-            id="checkbox-checked"
+            id="terms-checkbox"
             defaultChecked={term ? "checked" : ""}
             onClick={() => setTerm(!term)}
           />
-          <label htmlFor="checkbox-checked" className="checkbox-label">
+          <label htmlFor="terms-checkbox" className="checkbox-label">
             You are making a direct booking.Please accept terms and conditions
             before proceeding
           </label>

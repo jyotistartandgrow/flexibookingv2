@@ -355,11 +355,11 @@ export default function Service(props) {
   // Template for each carousel item
   const productTemplate = (product) => {
     return (
-      <div className="fx-servicebox">
+      <div className="fx-servicebox" onClick={() => servicedetail(product.id)}>
         <div className="fx-servicepicbox">
           <img src={product.svc_img} alt={product.service_name} />
           <span className="fx-servicepiccontentbox">
-            {product.service_name}
+            {product.category_name}
           </span>
         </div>
         <div className="fx-servicecontentbox">
@@ -376,9 +376,9 @@ export default function Service(props) {
               </span>
             )}
           </p>
-          <div className="booknowbtn" onClick={() => servicedetail(product.id)}>
+          {/* <div className="booknowbtn" onClick={() => servicedetail(product.id)}>
             <a href="#">{gift ? "Select Gift" : "Book Now"}</a>
-          </div>
+          </div> */}
         </div>
       </div>
     );
@@ -764,11 +764,11 @@ export default function Service(props) {
             {displayedProducts.length > 0 &&
               displayedProducts.map((product, p1) => {
                 return (
-                  <div className="fx-servicebox" key={p1}>
+                  <div className="fx-servicebox" key={p1} onClick={() => servicedetail(product.id)}>
                     <div className="fx-servicepicbox">
                       <img src={product.svc_img} alt={product.service_name} />
                       <span className="fx-servicepiccontentbox">
-                        {product.service_name}
+                        {product.category_name}
                       </span>
                     </div>
                     <div className="fx-servicecontentbox">
@@ -785,12 +785,12 @@ export default function Service(props) {
                           </span>
                         )}
                       </p>
-                      <div
+                      {/* <div
                         className="booknowbtn"
                         onClick={() => servicedetail(product.id)}
                       >
                         <a href="#">{gift ? "Select Gift" : "Book Now"}</a>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 );
@@ -817,7 +817,7 @@ export default function Service(props) {
                       <img src={product.svc_img} alt={product.service_name} />
                     </div>
                     <span className="fx-servicepiccontentbox">
-                      {product.service_name}
+                      {product.category_name}
                     </span>
                   </div>
                   <div className="fx-servicecontentboxlist">

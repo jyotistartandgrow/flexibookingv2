@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import calendar from "../assets/calendar.png";
-import iconapplied from "../assets/icons8-confirm.svg";
 import moment from "moment";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
@@ -9,7 +8,6 @@ import {
   setDate,
   setReceiverInfo,
   setStep,
-  setCouponlist,
   setLoading,
   setGift,
 } from "../store/step1Slice";
@@ -19,6 +17,7 @@ import {
   validatePhoneNumber,
 } from "../Utils/Functions";
 import CalendarPage from "./CalendarPage";
+import CouponSection from "./CouponSection";
 
 export default function ChooseDate() {
   const dispatch = useDispatch();
@@ -27,10 +26,8 @@ export default function ChooseDate() {
   const gift = useSelector((state) => state.step1.gift);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
   const [isVisible, setIsVisible] = useState(gift ? "gift" : "booking");
-  const [isVisibleGift, setIsVisibleGift] = useState(false);
   const [disabledDates, setDisabledDates] = useState([]);
   const [responsearr, setResponsear] = useState([]);
-  const [fields, setFields] = useState([{ code: "", applied: false }]);
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
   const [errorlist, setErrorlist] = useState({});
   const toggleDiv = (type) => {
@@ -43,59 +40,6 @@ export default function ChooseDate() {
     }
     getserviceavailabilitycalendar(month);
   }, [month]);
-
-  const addmoreCoupon = () => {
-    setFields([...fields, { code: "", applied: false }]);
-  };
-
-  const removeCoupon = (key) => {
-    const updated = fields.filter((_, i) => i !== key);
-    setFields(updated);
-    // compute valid coupons - only include actually applied coupons
-    const validCoupons = updated
-      .filter((f) => f.applied && f.code.trim() !== "")
-      .map((f) => f.code.trim());
-    dispatch(setCouponlist(validCoupons));
-  };
-
-  const applycoupon = async (key) => {
-    if (fields[key].code.trim() === "") {
-      Swal.fire({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        icon: "error",
-        title: "Please enter a coupon code",
-      });
-      return;
-    }
-    Swal.fire({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-      icon: "info",
-      title: "Once you proceed to payment, the discount will be applied.",
-    });
-
-    // Mark this coupon as applied
-    setFields((prev) => {
-      const updated = prev.map((item, i) =>
-        i === key ? { ...item, applied: true } : item,
-      );
-
-      // compute valid coupons - only include actually applied coupons
-      const validCoupons = updated
-        .filter((f) => f.applied && f.code.trim() !== "")
-        .map((f) => f.code.trim());
-
-      // dispatch inside the setter
-      dispatch(setCouponlist(validCoupons));
-
-      return updated;
-    });
-  };
 
   const dateTemplate = (dateMeta) => {
     // dateMeta = { day, month, year, today, selectable, otherMonth }
@@ -568,67 +512,7 @@ export default function ChooseDate() {
           </div>
         </div>
 
-        <div className="fx-tabcontent selected">
-          <div className="fx-couponcontainer">
-            <div className="fx-element-box">
-              <input
-                type="checkbox"
-                id="checkbox-checked"
-                checked={isVisibleGift}
-                onChange={(e) => setIsVisibleGift(e.target.checked)}
-              />
-              <label htmlFor="checkbox-checked" className="checkbox-label">
-                If you have coupon
-              </label>
-            </div>
-            {isVisibleGift && (
-              <div className="fx-commoninput">
-                {fields.map((field, index) => (
-                  <div className="fx-couponcontainerinputbox" key={index}>
-                    <div className="fx-coupon-box">
-                      <input
-                        type="text"
-                        placeholder="Enter your coupon code"
-                        value={fields[index].code}
-                        onChange={(e) => {
-                          if (!fields[index].applied) {
-                            const newFields = [...fields];
-                            newFields[index] = { ...newFields[index], code: e.target.value };
-                            setFields(newFields);
-                          }
-                        }}
-                        disabled={fields[index].applied}
-                        className={fields[index].applied ? "fx-coupon-applied" : ""}
-                      />
-                      {!fields[index].applied && (
-                        <button
-                          className="fx-apply-btn"
-                          onClick={() => applycoupon(index)}
-                        >
-                          Apply
-                        </button>
-                      )}
-                      {fields[index].applied && (
-                        <button className="fx-apply-btn fx-applied-btn">
-                          Applied <img src={iconapplied} />
-                        </button>
-                      )}
-                    </div>
-                    <div className="fx-delete-coupon">
-                      <i
-                        className="pi pi-trash"
-                        onClick={() => removeCoupon(index)}
-                      ></i>
-                    </div>
-                  </div>
-                ))}
-                <div className="fx-element-box" onClick={() => addmoreCoupon()}>
-                  <p className="fx-addmorelink">Add More</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        <CouponSection />
       </div>
     </div>
   );
