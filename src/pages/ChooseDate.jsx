@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import calendar from "../assets/calendar.png";
 import moment from "moment";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
@@ -299,7 +298,7 @@ export default function ChooseDate() {
                 disabledDates={disabledDates}
                 handleMonthChange={handleMonthChange}
               />
-              <img src={calendar} className="fx-calendaricon" />
+              <i className="pi pi-calendar fx-calendaricon"></i>
             </div>
           </div>
           <div className="fx-element-box">
