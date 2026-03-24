@@ -764,7 +764,11 @@ export default function Service(props) {
             {displayedProducts.length > 0 &&
               displayedProducts.map((product, p1) => {
                 return (
-                  <div className="fx-servicebox" key={p1} onClick={() => servicedetail(product.id)}>
+                  <div
+                    className="fx-servicebox"
+                    key={p1}
+                    onClick={() => servicedetail(product.id)}
+                  >
                     <div className="fx-servicepicbox">
                       <img src={product.svc_img} alt={product.service_name} />
                       <span className="fx-servicepiccontentbox">
@@ -1026,8 +1030,8 @@ export default function Service(props) {
                           </div>
                         ))}
                       <div className="calendarbox">
-                        <img
-                          src={calendar}
+                        <i
+                          className="pi pi-calendar"
                           alt="Open Calendar"
                           id="fx-openCalendar"
                           onClick={(e) =>
@@ -1035,7 +1039,8 @@ export default function Service(props) {
                               ? op.current.toggle(e)
                               : setCalendarVisible(true)
                           }
-                        />
+                        ></i>
+
                         <div id="fx-calendarContainer">
                           {isDesktop ? (
                             <OverlayPanel ref={op}>
@@ -1160,7 +1165,7 @@ export default function Service(props) {
                                       {/* <img
                                         className="fx-offericon"
                                         src={percentage}
-                                      /> */}
+                                      /> 
                                       {(() => {
                                         let percentIcon = null;
                                         if (
@@ -1191,7 +1196,7 @@ export default function Service(props) {
                                             {item.capacity_left}
                                           </div>
                                         );
-                                      })()}
+                                      })()}*/}
                                     </div>
 
                                     <div className="fx-common">
@@ -1290,7 +1295,7 @@ export default function Service(props) {
                                       {/* <img
                                         className="fx-offericon"
                                         src={percentage}
-                                      /> */}
+                                      /> 
                                       {(() => {
                                         let percentIcon = null;
                                         if (
@@ -1321,7 +1326,7 @@ export default function Service(props) {
                                             {item.capacity_left}
                                           </div>
                                         );
-                                      })()}
+                                      })()}*/}
                                     </div>
 
                                     <div className="fx-common">
@@ -1435,7 +1440,7 @@ export default function Service(props) {
                                     {/* <img
                                       className="fx-offericon"
                                       src={percentage}
-                                    /> */}
+                                    />
                                     {(() => {
                                       let percentIcon = null;
                                       if (
@@ -1471,7 +1476,7 @@ export default function Service(props) {
                                           {singleslotItem.capacity_left}
                                         </div>
                                       );
-                                    })()}
+                                    })()}*/}
                                   </div>
 
                                   <div className="fx-common">
@@ -1529,7 +1534,7 @@ export default function Service(props) {
                                   {/* <img
                                     className="fx-offericon"
                                     src={percentage}
-                                  /> */}
+                                  />
                                   {(() => {
                                     let percentIcon = null;
                                     if (
@@ -1560,7 +1565,7 @@ export default function Service(props) {
                                         {item.capacity_left}
                                       </div>
                                     );
-                                  })()}
+                                  })()}*/}
                                 </div>
 
                                 <div className="fx-common">
