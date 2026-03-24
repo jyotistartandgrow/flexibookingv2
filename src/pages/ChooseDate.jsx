@@ -310,7 +310,7 @@ export default function ChooseDate() {
       className="fx-leftcontentbox"
       style={{ display: step === "datestep" ? "block" : "none" }}
     >
-      <h1 className="fx-all-main-heading fx-main-page-heading">
+      <h1 className="fx-all-main-heading">
         {gift ? "Book your Gift" : "Book your Services"}
       </h1>
       <div id="fx-tab_nav">
@@ -605,12 +605,12 @@ export default function ChooseDate() {
                           className="fx-apply-btn"
                           onClick={() => applycoupon(index)}
                         >
-                          APPLY
+                          Apply
                         </button>
                       )}
                       {fields[index].applied && (
                         <button className="fx-apply-btn fx-applied-btn">
-                          APPLIED <img src={iconapplied} />
+                          Applied <img src={iconapplied} />
                         </button>
                       )}
                     </div>

@@ -354,14 +354,14 @@ export default function Component() {
               <div className="fx-couponcontainerinputbox">
                 <div className="fx-coupon-box">
                   <input type="text" placeholder="Enter your coupon code" />
-                  <button className="fx-apply-btn">APPLY</button>
+                  <button className="fx-apply-btn">Apply</button>
                 </div>
               </div>
 
               <div className="fx-couponcontainerinputbox">
                 <div className="fx-coupon-box">
                   <input type="text" placeholder="Enter your coupon code" />
-                  <button className="fx-apply-btn">APPLY</button>
+                  <button className="fx-apply-btn">Apply</button>
                 </div>
                 <div>
                   <i className="fa fa-trash fx-delete-icon"></i>

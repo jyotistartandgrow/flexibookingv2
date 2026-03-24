@@ -38,7 +38,7 @@
   position: absolute;
   background: var(--white);
   padding: 4px 4px;
-  font-size: var(--small-descriptionsize);
+  font-size: var(--all-card-category-size);
   border-top-right-radius:4px;
   border-bottom-right-radius:4px;
   font-weight: 400;
@@ -70,7 +70,7 @@
 }
 
 .fx-booking .fx-servicebox .fx-servicecontentbox h4 {
-  font-size: 20px;
+  font-size: var(--all-card-heading);
   font-weight: 400;
   margin: 0px;
   margin-bottom: 6px;
@@ -168,7 +168,7 @@
     border-radius: 0px 8px 8px 0px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist h4 {
-    font-size: 20px;
+    font-size: var(--all-card-heading);
     font-weight: 400;
     margin: 0px;
 }
@@ -583,19 +583,19 @@
 }
 
 .fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-form{
-  font-size: 12px;
+  font-size:var(--small-font-size);
   margin-right: 4px;
   color: var(--grey);
 }
 
 .fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-one{
-  font-size: 16px;
+  font-size: var(--all-card-price-size);
   font-weight: 500;
   color: var(--primary-color);
 }
 
 .fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-two{
-font-size: 12px;
+    font-size:var(--small-fontsize);
     font-weight: 400;
     text-decoration: line-through;
     color: var(--grey);
@@ -616,24 +616,24 @@ font-size: 12px;
 }
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .fx-price-form{
-    font-size: 12px;
+    font-size:var(--small-font-size);
     font-weight: 400;
     color: var(--grey);
-    margin-top: 2px;
+    margin-top:0px;
     display: block;
 }
 
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .fx-price-one{
-    font-size: 16px;
+    font-size: var(--all-card-price-size);
     font-weight: 500;
     color: var(--primary-color);
-    margin-top: 2px;
+    margin-top: 0px;
     display: block;
 }
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .fx-price-two{
-    font-size: 12px;
+    font-size: var(--small-font-size);
     font-weight: 400;
     display: block;
     text-decoration: line-through;

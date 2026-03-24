@@ -55,7 +55,7 @@
 }
 
 .fx-top-order-details-card .fx-header-row .fx-title {
-    font-size: 14px;
+    font-size:var(--all-regular-size);
     font-weight: 600;
     color: #344054;
 }
@@ -80,7 +80,7 @@
     justify-content: space-between;
     align-items: center;
     color: #667085;
-    font-size: 14px;
+    font-size: var(--all-regular-size);
 }
 
 .fx-top-order-details-card .fx-summary-row .fx-info-group {

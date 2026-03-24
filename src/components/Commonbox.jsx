@@ -293,12 +293,12 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                           className="fx-apply-btn"
                           onClick={() => applycoupon(index)}
                         >
-                          APPLY
+                          Apply
                         </button>
                       )}
                       {fields[index].applied && (
                         <button className="fx-apply-btn fx-applied-btn">
-                          APPLIED <img src={iconapplied} />
+                          Applied <img src={iconapplied} />
                         </button>
                       )}
                     </div>

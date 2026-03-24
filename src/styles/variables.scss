@@ -22,13 +22,26 @@
 }
 
 :root {
-  --main-headingsize: 28px;
   --small-headingsize: 20px;
-  --card-headingsize: 22px;
+  --card-headingsize: 20px;
   --extrasmall-headingsize: 18px;
   --normal-descriptionsize: 16px;
   --big-descriptionsize: 18px;
   --small-descriptionsize: 14px;
-  --medium-subheadingsize: 24px;
   --extrasmall-timeslotsize: 10px;
+  --main-headingsize:24px;
+  --tab-fontsize: 20px;
+  --step-fontsize: 16px;
+  --all-input-fontsize: 16px;
+  --small-font-size: 14px;
+  --button-fontsize: 16px;
+  --all-regular-size: 16px;
+  --all-card-heading:20px;
+  --all-card-price-size: 16px;
+   --all-card-category-size: 16px;
 }
+
+// For All heading - Font Size 24px
+// For Card heading, Tab - Font Size 20px
+// For All description, Step, Price - Font Size 16px
+// small description, small font size - Font Size 14px

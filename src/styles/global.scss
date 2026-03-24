@@ -168,7 +168,7 @@ h3 {
 
 .fx-leftcontentbox h1.fx-all-main-heading{
     margin-top:24px;
-    font-size:28px;
+    font-size:var(--main-headingsize);
     margin-top: 20px;
     margin-bottom: 16px;
 }
@@ -416,7 +416,7 @@ h1{
 }
 
 .fx-leftcontentbox h1.fx-main-page-heading{
-    font-size: 32px;
+    font-size:var(--main-headingsize)
 }
 
 .fx-booking .fx-popup .fx-rightpopup .calendarbox.active .fx-date-progress-bar{
@@ -469,6 +469,14 @@ h1{
     padding-left: 0px;
     margin-bottom: 16px;
 }
+}
+
+.p-datepicker-calendar-container table, td, th{
+  border: none;
+}
+
+.p-datepicker .p-datepicker-header {
+    border-bottom: none;
 }
 
 .p-carousel-items-container .fx-extrabox{

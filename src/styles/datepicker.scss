@@ -1,6 +1,6 @@
 /* Date Picker */
 .fx-booking .fx-calendar {
-  width:500px;
+  width:306px;
   position: relative;
 }
 .fx-booking .fx-datepicker{
@@ -15,9 +15,9 @@
 
  .fx-calendaricon {
   position: absolute;
-  right: 20px;
-  top: 15px;
-  width: 20px;
+    right: 20px;
+    top: 17px;
+    width: 20px;
 }
 
 .fx-rightpopup .fx-element-box .fx-calendaricon{
@@ -178,6 +178,13 @@ button.p-datepicker-year.p-link,button.p-datepicker-month.p-link,button.p-datepi
 background-color: #fff;
 border-color: #fff;
 color: inherit;
+box-shadow: none;
+}
+
+.p-datepicker:not(.p-datepicker-inline){
+  background: #fff;
+    border: 0 none;
+    box-shadow: 0 2px 12px #0000001a;
 }
 @media screen and (max-width: 480px) {
 .fx-booking .fx-calendar{
