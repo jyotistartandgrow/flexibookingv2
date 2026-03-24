@@ -527,6 +527,21 @@
 }
 .fx-booking .fx-phone-input .country-list{
   margin-top:0px !important;
+  display: block !important;
+}
+
+.fx-booking .fx-phone-input .country-list li {
+  display: block !important;
+  text-align: left !important;
+  padding: 8px 10px !important;
+  margin-bottom: 0 !important;
+}
+
+.fx-booking .fx-phone-input .country-list .search {
+  display: block !important;
+  text-align: left !important;
+  padding: 6px 10px !important;
+  margin-bottom: 0 !important;
 }
 
 .fx-booking .fx-phone-input .country-list .search-box{
