@@ -52,7 +52,7 @@
  .fx-booking .fx-commoninput input[type="text"],
  .fx-booking .fx-commoninput input[type="email"] {
   width: 100%;
-  padding: 16px 16px;
+  padding: 14px 16px;
   border-radius: 4px;
   border: 1px solid var(--border-color);;
   /* box-sizing: border-box; */
@@ -137,15 +137,15 @@
  .fx-booking .fx-input-wrapper {
   position: relative;
   width: 100%;
-  margin-bottom:8px;
+  margin-bottom:16px;
 }
 
 
  .fx-booking .fx-input-wrapper i {
   position: absolute;
   right: 15px;
-  top: 26%;
-  font-size: 25px;
+  top: 16px;
+  font-size:18px;
   color: var(--input-icon-color); /* Adjust color for the icon */
   pointer-events: none; /* Prevent the icon from blocking clicks on the input */
 }
@@ -576,6 +576,10 @@
   height: 14px;
   border-radius: 2px;
   object-fit: cover;
+}
+
+.fx-booking .fx-input-wrapper .fx-phone-input input[type="tel"] {
+  height: 52px;
 }
 
 .fx-booking .fx-phone-input input {
