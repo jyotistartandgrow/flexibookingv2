@@ -22,9 +22,13 @@ export default function Extra(props) {
   const scrollDesktop = (dir) => {
     const el = desktopCarouselRef.current;
     if (!el) return;
-    const itemWidth = el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
+    const itemWidth =
+      el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
     const gap = 16;
-    el.scrollBy({ left: dir === "next" ? itemWidth + gap : -(itemWidth + gap), behavior: "smooth" });
+    el.scrollBy({
+      left: dir === "next" ? itemWidth + gap : -(itemWidth + gap),
+      behavior: "smooth",
+    });
   };
 
   const date = useSelector((state) => state.step1.date);
@@ -66,7 +70,8 @@ export default function Extra(props) {
     const interval = setInterval(() => {
       const el = desktopCarouselRef.current;
       if (!el) return;
-      const itemWidth = el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
+      const itemWidth =
+        el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
       const gap = 16;
       const maxScroll = el.scrollWidth - el.clientWidth;
       if (el.scrollLeft >= maxScroll - 1) {
@@ -116,13 +121,16 @@ export default function Extra(props) {
         <div className="fx-extrabox" key={pp}>
           <div className="fx-extrapicbox">
             <img src={extra} alt={product.extra_name} />
-            <p className="fx-extrapicpriceboxright">
+            {/* <p className="fx-extrapicpriceboxright">
               {decodeHtml(product.price)}
-            </p>
+            </p> */}
           </div>
           <div className="fx-extracontentbox">
             <h4>{product.extra_name}</h4>
             <p>{decodeHtml(product.extra_desc)}</p>
+            <p className="fx-extrapicpriceboxright">
+              {decodeHtml(product.price)}
+            </p>
             <div className="fx-common">
               <div className="fx-quantitybox">
                 {extraid != product.id && (
@@ -419,13 +427,16 @@ export default function Extra(props) {
                           <div className="fx-extrabox" key={p1}>
                             <div className="fx-extrapicbox">
                               <img src={extra} alt={product.extra_name} />
-                              <p className="fx-extrapicpriceboxright">
+                              {/* <p className="fx-extrapicpriceboxright">
                                 {decodeHtml(product.price)}
-                              </p>
+                              </p> */}
                             </div>
                             <div className="fx-extracontentbox">
                               <h4>{product.extra_name}</h4>
                               <p>{decodeHtml(product.extra_desc)}</p>
+                              <p className="fx-extrapicpriceboxright">
+                                {decodeHtml(product.price)}
+                              </p>
                               <div className="fx-common">
                                 <div className="fx-quantitybox">
                                   {extraid != product.id && (
@@ -503,7 +514,7 @@ export default function Extra(props) {
                         <div className="fx-extraboxlist" key={p2}>
                           <div className="fx-extrapicboxlist">
                             <div className="fx-extra-main-img">
-                            <img src={extra} alt={product.extra_name} />
+                              <img src={extra} alt={product.extra_name} />
                             </div>
                             <span className="fx-servicepiccontentbox">
                               {product.extra_name}
@@ -511,15 +522,15 @@ export default function Extra(props) {
                           </div>
                           <div className="fx-extracontentboxlist">
                             <div className="fx-extra-main-contentbox">
-                            <div className="fx-extra-contentbox">
-                              <h4>{product.extra_name}</h4>
-                              <p>{decodeHtml(product.extra_desc)}</p>
-                            </div>
-                             <p className="price">
+                              <div className="fx-extra-contentbox">
+                                <h4>{product.extra_name}</h4>
+                                <p>{decodeHtml(product.extra_desc)}</p>
+                              </div>
+                              <p className="price">
                                 {" "}
                                 <span>{decodeHtml(product.price)}</span>
                               </p>
-                              </div>
+                            </div>
                             <div className="fx-common">
                               <div className="fx-quantitybox">
                                 {extraid != product.id && (
@@ -592,28 +603,38 @@ export default function Extra(props) {
                 <div className="slider responsive">
                   {!isDesktop ? (
                     <div className="fx-mobile-swipe-carousel">
-                      {products.filter(p => p.cap_left > 0).map((product, idx) => (
-                        <div key={idx} className="fx-mobile-swipe-item">
-                          {productTemplate(product)}
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="fx-desktop-swipe-wrapper">
-                      <button className="fx-dswipe-arrow fx-dswipe-prev" onClick={() => scrollDesktop("prev")}>
-                        <i className="pi pi-chevron-left"></i>
-                      </button>
-                      <div
-                        className={`fx-desktop-swipe-carousel${products.filter(p => p.cap_left > 0).length < 4 ? " fx-dswipe-few" : ""}`}
-                        ref={desktopCarouselRef}
-                      >
-                        {products.filter(p => p.cap_left > 0).map((product, idx) => (
-                          <div key={idx} className="fx-desktop-swipe-item">
+                      {products
+                        .filter((p) => p.cap_left > 0)
+                        .map((product, idx) => (
+                          <div key={idx} className="fx-mobile-swipe-item">
                             {productTemplate(product)}
                           </div>
                         ))}
+                    </div>
+                  ) : (
+                    <div className="fx-desktop-swipe-wrapper">
+                      <button
+                        className="fx-dswipe-arrow fx-dswipe-prev"
+                        onClick={() => scrollDesktop("prev")}
+                      >
+                        <i className="pi pi-chevron-left"></i>
+                      </button>
+                      <div
+                        className={`fx-desktop-swipe-carousel${products.filter((p) => p.cap_left > 0).length < 4 ? " fx-dswipe-few" : ""}`}
+                        ref={desktopCarouselRef}
+                      >
+                        {products
+                          .filter((p) => p.cap_left > 0)
+                          .map((product, idx) => (
+                            <div key={idx} className="fx-desktop-swipe-item">
+                              {productTemplate(product)}
+                            </div>
+                          ))}
                       </div>
-                      <button className="fx-dswipe-arrow fx-dswipe-next" onClick={() => scrollDesktop("next")}>
+                      <button
+                        className="fx-dswipe-arrow fx-dswipe-next"
+                        onClick={() => scrollDesktop("next")}
+                      >
                         <i className="pi pi-chevron-right"></i>
                       </button>
                     </div>

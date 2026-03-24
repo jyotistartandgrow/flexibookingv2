@@ -183,81 +183,6 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
     });
   };
 
-  const addmoreCoupon = () => {
-    setFields([...fields, { code: "", applied: false }]);
-  };
-
-  const removeCoupon = async (key) => {
-    dispatch(setLoading(true));
-    let couponcode = fields[key].code;
-    const updated = fields.filter((_, i) => i !== key);
-    setFields(updated);
-    // compute valid coupons - only include actually applied coupons
-    const validCoupons = updated
-      .filter((f) => f.applied && f.code.trim() !== "")
-      .map((f) => f.code.trim());
-    dispatch(setCouponlist(validCoupons));
-    if (cart.discount && cart.discount != 0) {
-      const { data: coupondata } = await axiosInstance.post(`/coupon-removal`, {
-        booking_key: bookingkey,
-        coupon_code: couponcode,
-      });
-
-      if (
-        coupondata &&
-        coupondata.status == 200 &&
-        coupondata.data.status == true
-      ) {
-        dispatch(
-          setCart({
-            ...cart,
-            total: coupondata?.data?.original_data?.amount,
-            total_formatted: coupondata?.data?.total,
-            discount: coupondata?.data?.coupon_discount,
-          }),
-        );
-      }
-    }
-    dispatch(setLoading(false));
-  };
-
-  const applycoupon = async (key) => {
-    if (fields[key].code.trim() === "") {
-      toast.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: "Please enter a coupon code",
-        life: 3000,
-      });
-      return;
-    }
-    Swal.fire({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-      icon: "info",
-      title: "Once you proceed to payment, the discount will be applied.",
-    });
-
-    // Mark this coupon as applied
-    setFields((prev) => {
-      const updated = prev.map((item, i) =>
-        i === key ? { ...item, applied: true } : item,
-      );
-
-      // compute valid coupons - only include actually applied coupons
-      const validCoupons = updated
-        .filter((f) => f.applied && f.code.trim() !== "")
-        .map((f) => f.code.trim());
-
-      // dispatch inside the setter
-      dispatch(setCouponlist(validCoupons));
-
-      return updated;
-    });
-  };
-
   return (
     <>
       {!cart.service && !date && !gift && (
@@ -269,54 +194,6 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
         ((step !== "paymentstep" && !paymentstring) ||
           (step === "paymentstep" && !isDesktop)) && (
           <div className="fx-bookingdatebar">
-            {step == "checkoutstep" && (
-              <>
-                {fields.map((field, index) => (
-                  <div className="fx-couponcontainerinputbox" key={index}>
-                    <div className="fx-coupon-box">
-                      <input
-                        type="text"
-                        placeholder="Enter your coupon code"
-                        value={fields[index].code}
-                        onChange={(e) => {
-                          if (!fields[index].applied) {
-                            const newFields = [...fields];
-                            newFields[index].code = e.target.value;
-                            setFields(newFields);
-                          }
-                        }}
-                        disabled={fields[index].applied}
-                        className={fields[index].applied ? "fx-coupon-applied" : ""}
-                      />
-                      {!fields[index].applied && (
-                        <button
-                          className="fx-apply-btn"
-                          onClick={() => applycoupon(index)}
-                        >
-                          APPLY
-                        </button>
-                      )}
-                      {fields[index].applied && (
-                        <button className="fx-apply-btn fx-applied-btn">
-                          APPLIED <img src={iconapplied} />
-                        </button>
-                      )}
-                    </div>
-                    {step != "paymentstep" && (
-                      <div className="fx-delete-coupon">
-                        <i
-                          className="pi pi-trash"
-                          onClick={() => removeCoupon(index)}
-                        ></i>
-                      </div>
-                    )}
-                  </div>
-                ))}
-                <div className="fx-element-box" onClick={() => addmoreCoupon()}>
-                  <p className="fx-addmorelink">Add More</p>
-                </div>
-              </>
-            )}
             {!gift && (
               <div className="fx-bookingdate">
                 Date
