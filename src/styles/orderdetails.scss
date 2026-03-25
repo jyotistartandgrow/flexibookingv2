@@ -1,7 +1,7 @@
 /* Parent Container */
 
 .fx-top-order-details-box{
- height: 78px;
+ height: 82px;
  position: relative;
  margin: 20px auto;
  display: none;
@@ -150,6 +150,14 @@ font-weight: 400;
 
 .calendarboxbar .calendarbox #fx-openCalendar{
  font-size: 28px;
+}
+
+.fx-datepicker .p-datepicker{
+    border: none;
+}
+
+.p-overlaypanel{
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1019607843)
 }
 
 

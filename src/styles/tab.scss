@@ -45,7 +45,7 @@
 
 .fx-booking #fx-tab_nav li a.selected {
   border: 1px solid var(--primary-color) !important;
-  color: var(--darkblue-color);
+  color: var(--primary-color);
 }
 
 .fx-booking #fx-tab_nav div.fx-tabcontent {
@@ -73,8 +73,8 @@
 
 
 .fx-booking #fx-modaltab_nav li a.selected {
-  border: 1px solid var(--darkblue-color) !important;
-  color: var(--darkblue-color);
+  border: 1px solid var(--primary-color) !important;
+  color: var(--primary-color);
 }
 
 .fx-booking #fx-modaltab_nav div.fx-tabcontent {

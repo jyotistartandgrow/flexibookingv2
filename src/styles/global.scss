@@ -171,6 +171,7 @@ h3 {
     font-size:var(--main-headingsize);
     margin-top: 20px;
     margin-bottom: 16px;
+    color: var(--darkgrey);
 }
 .fx-booking .fx-commoninput .fx-toggleswitch{
     display: flex;
@@ -707,6 +708,16 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
     justify-content: center;
     border-radius: 8px 0px 0px 8px;
   }
+
+.fx-servicebox .fx-servicecontentbox .pi-chevron-right{
+    font-size: 12px;
+    float: right;
+    margin-top: 8px;
+    color: var(--grey);
+    position: absolute;
+    bottom: 20px;
+    right: 12px;
+}
 
 @media screen and (max-width:768px) {
     .fx-content-with-topbar .fx-paymentbox{
