@@ -375,7 +375,7 @@ export default function Service(props) {
                 {decodeHtml(product.svc_default_price)}
               </span>
             )}
-            {/* <i className="pi pi-chevron-right"></i> */}
+            <i className="pi pi-chevron-right"></i>
           </p>
           
           {/* <div className="booknowbtn" onClick={() => servicedetail(product.id)}>
@@ -790,7 +790,7 @@ export default function Service(props) {
                             {decodeHtml(product.svc_default_price)}
                           </span>
                         )}
-                        {/* <i className="pi pi-chevron-right"></i> */}
+                        <i className="pi pi-chevron-right"></i>
                       </p>
                       
                       {/* <div
@@ -843,7 +843,7 @@ export default function Service(props) {
                           {decodeHtml(product.svc_default_price)}
                         </span>
                       )}
-                      <i class="pi pi-chevron-right"></i>
+                      <i className="pi pi-chevron-right"></i>
                     </p>
                     {/* <span
                       className="booknowbtn"
