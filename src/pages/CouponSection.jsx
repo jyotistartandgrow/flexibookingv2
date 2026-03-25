@@ -65,7 +65,7 @@ export default function CouponSection() {
 
   return (
     <div className="fx-tabcontent selected">
-      <div className="fx-couponcontainer">
+      <div className="fx-couponcontainer fx-couponcontainer-checkout">
         <div className="fx-element-box">
           <input
             type="checkbox"

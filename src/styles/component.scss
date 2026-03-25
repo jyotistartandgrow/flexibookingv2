@@ -34,7 +34,7 @@
 
  .fx-booking .fx-commoninput label{
   font-size:16px;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--darkgrey);
   text-transform: capitalize;
   display: block;
@@ -268,12 +268,14 @@
   background: none;
   border: none;
   color: var(--grey);
-  font-size: var(--small-descriptionsize);
-  font-weight: bold;
+  font-size: var(--all-regular-size);
+  font-weight: 400;
   cursor: pointer;
   margin-bottom: 0px !important;
   height:inherit !important;
   width:auto !important;
+  padding: 10px 12px;
+  box-shadow: none;
 }
 
 .fx-extraboxlist .fx-extracontentboxlist .fx-common .btn-secondary{

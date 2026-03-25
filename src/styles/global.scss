@@ -578,7 +578,7 @@ h1{
 }
 
 .fx-paymentbox h1.fx-all-main-heading{
-    font-size: 28px;
+    font-size: var(--main-headingsize);
     margin-bottom: 18px;
 }
 
@@ -632,6 +632,7 @@ button.p-confirm-dialog-accept.p-button.p-component{
 .fx-paymentbox form h4{
      font-weight: 400;
      margin-top: 8px;
+     font-size: 16px;
 }
 
 div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
@@ -717,6 +718,10 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
     position: absolute;
     bottom: 20px;
     right: 12px;
+}
+
+.fx-booking .fx-couponcontainer-checkout{
+    margin-top:0px;
 }
 
 @media screen and (max-width:768px) {
