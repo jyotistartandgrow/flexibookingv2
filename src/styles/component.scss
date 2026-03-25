@@ -28,6 +28,15 @@
   margin-top: 12px;
 }
 
+.fx-booking .fx-checkoutpage .fx-commoninput .fx-element-box{
+  display: inline-block;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 12px;
+  position: relative;
+  margin-top: 0px;
+}
+
 .fx-tabcontent.selected .fx-element-box:nth-child(2){
   margin-top: 12px;
 }
@@ -545,6 +554,7 @@
 .fx-booking .fx-phone-input .react-tel-input input[type=tel]{
   padding-left: 48px;
       border: 1px solid var(--border-color);
+      border-radius: 4px;
 }
 .fx-booking .fx-phone-input .arrow{
   margin-left: inherit;
