@@ -128,10 +128,11 @@ export default function Extra(props) {
           <div className="fx-extracontentbox">
             <h4>{product.extra_name}</h4>
             <p>{decodeHtml(product.extra_desc)}</p>
-            <p className="fx-extrapicpriceboxright">
+           
+            <div className="fx-common">
+               <p className="fx-extrapicpriceboxright">
               {decodeHtml(product.price)}
             </p>
-            <div className="fx-common">
               <div className="fx-quantitybox">
                 {extraid != product.id && (
                   <input
@@ -434,10 +435,11 @@ export default function Extra(props) {
                             <div className="fx-extracontentbox">
                               <h4>{product.extra_name}</h4>
                               <p>{decodeHtml(product.extra_desc)}</p>
-                              <p className="fx-extrapicpriceboxright">
+                              
+                              <div className="fx-common">
+                                <p className="fx-extrapicpriceboxright">
                                 {decodeHtml(product.price)}
                               </p>
-                              <div className="fx-common">
                                 <div className="fx-quantitybox">
                                   {extraid != product.id && (
                                     <input

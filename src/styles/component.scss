@@ -187,8 +187,10 @@
 }
 
 
+
+
 .fx-booking .btn-secondary{
-    width: 196px;
+    width: 120px;
     font-size: var(--normal-descriptionsize);
     font-weight: 400;
     border: 1px solid var(--primary-color);
@@ -196,10 +198,20 @@
     border-radius: 33px;
     color: var(--primary-color);
     margin-top:0px;
-    padding: 14px 0px;
+    padding: 12px 0px;
     cursor: pointer;
     color: var(--primary-color);
     background:#fff;
+}
+
+.fx-extrabox .fx-extracontentbox .btn-secondary{
+      width: 116px;
+    padding: 0px 4px;
+    line-height: 32px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 

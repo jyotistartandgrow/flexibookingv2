@@ -65,6 +65,9 @@
   font-weight: 400;
   margin: 0px;
   border-radius:0px 4px 0px 0px;
+  font-size: var(--all-card-price-size);
+  font-weight: 500;
+  color: var(--primary-color);
 }
 
 
@@ -311,11 +314,8 @@
   border-radius:0px 0px 8px 8px;
 }
 
-.fx-booking .fx-extracontainer .fx-extrabox .fx-extracontentbox h4 {
-  font-size: 20px;
-  font-weight: 300;
-  margin: 0px;
-}
+
+
 .fx-booking .fx-extracontainer .fx-extrabox .fx-extracontentbox p {
   height: 42px;
   font-size: var(--normal-descriptionsize);
@@ -323,6 +323,13 @@
   color: var(--grey);
   margin-top: 4px;
   margin-bottom: 4px;
+}
+
+ .fx-booking .fx-extrabox .fx-extracontentbox p.fx-extrapicpriceboxright {
+  height: auto;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary-color);
 }
 .fx-booking .fx-extracontainer .fx-extrabox .fx-extracontentbox .price {
   height: 29px;
