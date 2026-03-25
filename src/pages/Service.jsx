@@ -1047,7 +1047,7 @@ export default function Service(props) {
 
                         <div id="fx-calendarContainer">
                           {isDesktop ? (
-                            <OverlayPanel ref={op}>
+                            <OverlayPanel ref={op} className="fx-calendar-box">
                               <CalendarPage
                                 inline
                                 value={date}
