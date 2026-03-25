@@ -31,6 +31,7 @@ export default function ChooseDate() {
   const [responsearr, setResponsear] = useState([]);
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
   const [errorlist, setErrorlist] = useState({});
+  const [selectedCountry, setSelectedCountry] = useState({ dialCode: "91" });
   const toggleDiv = (type) => {
     setIsVisible(type);
   };
@@ -171,7 +172,7 @@ export default function ChooseDate() {
     }
     if (
       !receiverInfo.phoneNumber ||
-      !validatePhoneForCountry(receiverInfo.phoneNumber, {})
+      !validatePhoneForCountry(receiverInfo.phoneNumber, selectedCountry)
     ) {
       setErrorlist({ phoneNumber: true });
       return;
@@ -402,6 +403,7 @@ export default function ChooseDate() {
                     value={receiverInfo.phoneNumber}
                     className={errorlist.phoneNumber ? "fx-invalid" : ""}
                     onChange={(phone, country) => {
+                      setSelectedCountry(country);
                       dispatch(
                         setReceiverInfo({
                           ...receiverInfo,
@@ -416,7 +418,7 @@ export default function ChooseDate() {
                     onBlur={() => {
                       const isValid = validatePhoneForCountry(
                         receiverInfo.phoneNumber,
-                        {},
+                        selectedCountry,
                       );
                       setErrorlist((prev) => ({ ...prev, phoneNumber: !isValid }));
                     }}

@@ -189,16 +189,15 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
         </p>
       )}
       {date &&
+        !gift &&
         ((step !== "paymentstep" && !paymentstring) ||
           (step === "paymentstep" && !isDesktop)) && (
           <div className="fx-bookingdatebar">
-            {!gift && (
-              <div className="fx-bookingdate">
-                Date
-                <br />
-                <span>{moment(date).format("MMMM DD YYYY")}</span>
-              </div>
-            )}
+            <div className="fx-bookingdate">
+              Date
+              <br />
+              <span>{moment(date).format("MMMM DD YYYY")}</span>
+            </div>
           </div>
         )}
       {(cart?.service?.length > 0 || cart?.extra?.length > 0) &&
@@ -206,7 +205,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
           topbar ||
           (step === "paymentstep" && !isDesktop)) && (
           <>
-            <div className="fx-servicelistbox">
+            <div className="fx-servicelistbox" style={{ borderTop: gift ? "none" : "1px solid var(--border-color)" }}>
               {cart.service.map((ct, ckey) => {
                 return (
                   <div className="fx-serviceitem" key={"ct-" + ckey}>

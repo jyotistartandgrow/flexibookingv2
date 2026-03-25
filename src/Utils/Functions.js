@@ -217,7 +217,7 @@ const COUNTRY_PHONE_LENGTHS = {
 };
 
 export const validatePhoneForCountry = (phone, countryData) => {
-  if (!phone || !countryData) return false;
+  if (!phone || !countryData || !countryData.dialCode) return false;
   if (phone == countryData.dialCode) return true;
 
   // Remove dial code to get the actual number
