@@ -19,6 +19,7 @@
   --secondary-bgcolor: #B8B8B8;
   --lightblue-secondary-active: #F7F9FF;
   --error-color: #cf2929;
+  --fx-secondary-colors:color-mix(in srgb, var(--primary-color) 80%, black);
 }
 
 :root {
