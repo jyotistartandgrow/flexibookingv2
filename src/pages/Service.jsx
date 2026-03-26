@@ -530,7 +530,7 @@ export default function Service(props) {
     const { data } = await axiosInstance(
       `/has-extra?date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&service_id=${serviceid}`,
+      )}&service_id=${serviceid}&all=${gift ? true : false}`,
       {
         method: "get",
       },
