@@ -77,8 +77,8 @@
 
 
 .fx-booking #fx-modaltab_nav li a.selected {
-  border: 1px solid var(--primary-color) !important;
   color: var(--primary-color);
+  background-color: color-mix(in srgb, var(--primary-color) 4%, white);
 }
 
 .fx-booking #fx-modaltab_nav div.fx-tabcontent {
@@ -133,11 +133,6 @@
   width: 146px;
   margin-right: 11px;
 
-}
-
-.fx-booking #fx-modaltab_nav li a.selected {
-  border: 1px solid var(--darkblue-color) !important;
-  color: var(--darkblue-color);
 }
 
 .fx-booking #fx-modaltab_nav div.fx-tabcontent {
@@ -296,6 +291,12 @@
 
 .fx-booking .fx-desktop-swipe-carousel.fx-dswipe-few .fx-desktop-swipe-item {
   flex: 0 0 262px;
+  transition:var(--animation-transition);
+}
+
+.fx-booking .fx-desktop-swipe-carousel.fx-dswipe-few .fx-desktop-swipe-item:hover {
+  transform:var(--translateY); /* lift */
+  box-shadow:var(--hover-shadow); /* shadow */
 }
 
 /* Mobile swipe carousel — CSS scroll-snap */

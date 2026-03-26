@@ -72,6 +72,7 @@
   max-width: inherit;
   height: inherit;
   margin-top: 0px;
+  height: 52px;
 }
                   
 
@@ -184,6 +185,7 @@
 }
 
 
+
 .fx-booking input.btn-primary[type="submit"],
 .fx-booking input.btn-primary[type="button"],
 .fx-booking input.btn-primary[type="button"] {
@@ -228,9 +230,18 @@
  .fx-booking .fx-element-box input[type="submit"]:hover,
  .fx-booking .fx-element-box input[type="button"]:hover,
  .fx-booking .fx-element-box button[type="button"]:hover {
-  background: var(--darkblue-color);
+  background: var(--fx-secondary-colors);
   color: var(--white);
-  border: 1px solid var(--border-color);
+}
+
+.fx-booking .btn-primary:hover{
+  background: var(--fx-secondary-colors);
+  color: var(--white);
+}
+
+.fx-booking .fx-popup .fx-rightpopup .continuebtn:hover{
+  background: var(--fx-secondary-colors);
+  color: var(--white);
 }
 
  .fx-booking .fx-element-box input[type="text"]:focus {

@@ -148,7 +148,7 @@ h3 {
 }
 
 .fx-timelistboxbar .fx-slotbox-active{
-    background: var(--lightblue-secondary-active);
+    background-color: color-mix(in srgb, var(--primary-color) 4%, white);
 }
 
 .percent-bar{
@@ -172,6 +172,7 @@ h3 {
     margin-top: 20px;
     margin-bottom: 16px;
     color: var(--darkgrey);
+    height: 34px;
 }
 .fx-booking .fx-commoninput .fx-toggleswitch{
     display: flex;
@@ -469,6 +470,7 @@ h1{
     font-size: 20px;
     padding-left: 0px;
     margin-bottom: 16px;
+    height: auto;
 }
 }
 
@@ -579,7 +581,7 @@ h1{
 
 .fx-paymentbox h1.fx-all-main-heading{
     font-size: var(--main-headingsize);
-    margin-bottom: 18px;
+    margin-bottom:0px;
 }
 
 
@@ -610,6 +612,11 @@ button.p-confirm-dialog-accept.p-button.p-component{
 
 .fx-confirmation-popup button.p-component:hover{
     color: var(--darkblue-color);
+}
+
+.p-component{
+    font-family: inherit !important;
+    font-feature-settings:inherit !important;
 }
 
 /* chrome, edge, safari */
@@ -653,6 +660,7 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
     font-size:var(--all-sub-heading);
     margin-bottom: 12px;
     margin-top:0px;
+    color: var(--darkgrey);
 }
 
 .fx-booking input.fx-input-number[type="number"]::-webkit-outer-spin-button,
@@ -760,6 +768,11 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 
 .fx-servicecontentboxlist .list-view-text-content{
     width: 100%;
+}
+
+.fx-top-order-details-box .fx-summary-row .fx-info-group span{
+    height: 22px;
+    overflow: hidden;
 }
 
 

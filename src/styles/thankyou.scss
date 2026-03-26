@@ -30,13 +30,13 @@
 .fx-booking .fx-confirm-left h1 {
     margin-top: 40px;
     margin-bottom: 0px;
-    font-size: 32px;
+    font-size: 24px;
     color: #222;
     text-align: center;
 }
 
 .fx-booking .fx-confirm-left h2 {
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 300;
     margin-top: 10px;
     color: var(--grey);
@@ -44,7 +44,7 @@
 
 .fx-booking .fx-info-text {
     margin-top: 20px;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 300;
     color:var(--grey);
     line-height: 1.8;
@@ -114,7 +114,7 @@
     padding:20px 50px;
 }
 .fx-booking .fx-order-title {
-    font-size: 15px;
+    font-size: 16px;
     color: var(--darkgrey);
     line-height: 1.5;
     margin-bottom: 20px;
@@ -169,6 +169,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+    font-size: 14px;
 }
 
 .fx-booking .fx-address-block {
@@ -207,6 +208,7 @@
     text-align: left;
     border-radius:8px;
     border: 1px solid #ffb7b7;
+    font-size: 14px;
 }
 
 .fx-billing-shipping-notification th{
