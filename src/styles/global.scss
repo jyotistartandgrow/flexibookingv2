@@ -775,6 +775,24 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
     overflow: hidden;
 }
 
+.fx-booking #fx-tab_nav .fx-tabcontent.fx-tabcontent-booking.selected{
+    margin-top: 12px;
+}
+
+.fx-booking #fx-tab_nav .fx-tabcontent.fx-tabcontent-booking.selected .fx-element-box{
+    margin-top: 4px;
+}
+
+
+.fx-booking #fx-tab_nav .fx-tabcontent.fx-tabcontent-booking.selected .fx-element-box-check-button{
+    margin-top: 8px;
+}
+
+.fx-booking #fx-tab_nav .fx-tabcontent-gift.selected .fx-viewservice-button {
+    margin-top: 4px;
+}
+
+
 
 @media screen and (min-width: 1200px) {
   .fx-booking .fx-leftbar {

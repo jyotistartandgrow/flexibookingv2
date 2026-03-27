@@ -289,7 +289,7 @@ export default function ChooseDate() {
 
         <div
           className={
-            isVisible == "booking" ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "booking" ? "fx-tabcontent fx-tabcontent-booking selected" : "fx-tabcontent"
           }
         >
           <div className="fx-element-box">
@@ -304,7 +304,7 @@ export default function ChooseDate() {
               <i className="pi pi-calendar fx-calendaricon"></i>
             </div>
           </div>
-          <div className="fx-element-box">
+          <div className="fx-element-box fx-element-box-check-button">
             <input
               type="submit"
               className={!date ? "btn-primary fx-btn-disable" : "btn-primary"}
@@ -317,7 +317,7 @@ export default function ChooseDate() {
 
         <div
           className={
-            isVisible == "gift" ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "gift" ? "fx-tabcontent fx-tabcontent-gift selected" : "fx-tabcontent"
           }
         >
           <h3>Gift receiver information</h3>
