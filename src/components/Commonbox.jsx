@@ -36,26 +36,12 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
   const gift = useSelector((state) => state.step1.gift);
   const topbar = useSelector((state) => state.step1.topbar);
   const paymentstring = useSelector((state) => state.step4.paymentstring);
-  const couponcode = useSelector((state) => state.step1.couponcode);
-  const bookingkey = useSelector((state) => state.step3.bookingkey);
   const stripe_key = useSelector((state) => state.step1.stripe_key);
   const stripePromise = useMemo(() => {
     return stripe_key ? loadStripe(stripe_key) : null;
   }, [stripe_key]);
-  const [fields, setFields] = useState([{ code: "", applied: false }]);
-  const [isInitialized, setIsInitialized] = useState(false);
   const isDesktop = useDeviceType();
-  useEffect(() => {
-    // Only initialize from Redux once on mount, don't overwrite local state later
-    if (!isInitialized && couponcode && couponcode.length > 0) {
-      let field = [];
-      couponcode.forEach((coup) => {
-        field.push({ code: coup, applied: true });
-      });
-      setFields(field);
-      setIsInitialized(true);
-    }
-  }, [couponcode, isInitialized]);
+  
 
   useEffect(() => {
     if (paymentstring) {

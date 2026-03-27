@@ -37,9 +37,11 @@ export default function Checkout() {
   const [invoice, setInvoice] = useState(false);
   const [numberOnly, setNumberOnly] = useState("");
   const [phoneValid, setPhoneValid] = useState(true);
+  const [rphoneValid, setRPhoneValid] = useState(true);
   const [errorlist, setErrorlist] = useState({});
   const [receiverErrors, setReceiverErrors] = useState({});
   const [visibleField, setVisibleField] = useState({});
+  const [selectedCountry, setSelectedCountry] = useState({ dialCode: "91" });
 
   useEffect(() => {
     setErrorlist({});
@@ -92,7 +94,7 @@ export default function Checkout() {
         errors.email = true;
       }
 
-      if (!validatePhoneNumber(receiverInfo.phoneNumber)) {
+      if (!rphoneValid) {
         errors.phoneNumber = true;
       }
 
@@ -552,38 +554,56 @@ export default function Checkout() {
                   </div>
                   <div class="fx-element-box">
                     <label>Phone Number</label>
-                    <input
-                      placeholder="Phone Number"
-                      type="text"
-                      value={receiverInfo.phoneNumber}
-                      className={receiverErrors.phoneNumber ? "fx-invalid" : ""}
-                      onChange={(e) =>
-                        dispatch(
-                          setReceiverInfo({
-                            ...receiverInfo,
-                            phoneNumber: e.target.value,
-                          }),
-                        )
-                      }
-                      onBlur={(e) => {
-                        if (!validatePhoneNumber(e.target.value)) {
-                          setReceiverErrors({
-                            ...receiverErrors,
-                            phoneNumber: true,
-                          });
-                        } else {
-                          setReceiverErrors({
-                            ...receiverErrors,
-                            phoneNumber: false,
-                          });
+                    <div className="fx-phone-input">
+                      <PhoneInput
+                        country={"in"}
+                        value={receiverInfo.phoneNumber}
+                        className={
+                          receiverErrors.phoneNumber ? "fx-invalid" : ""
                         }
-                      }}
-                    ></input>
-                    {receiverErrors.phoneNumber && (
-                      <span class="fx-errortext">
-                        Enter a valid phone number
-                      </span>
-                    )}
+                        onChange={(phone, country) => {
+                          setSelectedCountry(country);
+                          dispatch(
+                            setReceiverInfo({
+                              ...receiverInfo,
+                              phoneNumber: phone,
+                            }),
+                          );
+                          const isValid = validatePhoneForCountry(
+                            phone,
+                            country,
+                          );
+                          setRPhoneValid(isValid);
+                          if (isValid && errorlist.phoneNumber) {
+                            setErrorlist((prev) => ({
+                              ...prev,
+                              phoneNumber: false,
+                            }));
+                          }
+                        }}
+                        onBlur={() => {
+                          const isValid = validatePhoneForCountry(
+                            receiverInfo.phoneNumber,
+                            selectedCountry,
+                          );
+                          setErrorlist((prev) => ({
+                            ...prev,
+                            phoneNumber: !isValid,
+                          }));
+                        }}
+                        enableSearch={true}
+                        disableDropdown={false}
+                        inputStyle={{ width: "100%" }}
+                        isValid={(value, country) =>
+                          validatePhoneForCountry(value, country)
+                        }
+                      />
+                      {receiverErrors.phoneNumber && (
+                        <span className="fx-errortext">
+                          Enter a valid phone number for the selected country
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div class="fx-inputgroup">

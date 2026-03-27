@@ -43,10 +43,8 @@ export default function Extra(props) {
 
   const [products, setProductsArr] = useState([]);
   const [isVisible, setIsVisible] = useState("grid");
-  const [book, setBook] = useState(extracapacity ? extracapacity : 0);
-  const [extraid, setExtraid] = useState(null);
+  const [quantities, setQuantities] = useState({});
   const [skeloading, setLoadingske] = useState(true);
-  const [extradetails, setExtradetails] = useState({});
 
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -85,8 +83,21 @@ export default function Extra(props) {
 
   useEffect(() => {
     if (step !== "extrastep") return;
-    setBook(extracapacity ? extracapacity : 0);
-    setExtraid(extraID ? extraID : null);
+    const initQ = {};
+    if (extraID && extracapacity) {
+      const ids = String(extraID)
+        .split(",")
+        .map((id) => id.trim())
+        .filter(Boolean);
+      const caps = String(extracapacity)
+        .split(",")
+        .map((c) => parseInt(c.trim()))
+        .filter(Boolean);
+      ids.forEach((id, i) => {
+        if (caps[i] > 0) initQ[parseInt(id)] = caps[i];
+      });
+    }
+    setQuantities(initQ);
     if (date && service) {
       setLoadingske(true);
       fetchProductsByDate(date);
@@ -97,14 +108,14 @@ export default function Extra(props) {
     const { data } = await axiosInstance(
       `/extras?date=${moment(selectedDate).format(
         "YYYY-MM-DD",
-      )}&service_id=${service}`,
+      )}&service_id=${service}&all=${gift ? true : false}`,
       {
         method: "get",
       },
     );
     if (data && data.status == 200) {
       if (data.data.length == 0) {
-        addtocart();
+        addtocart(null, 0);
         dispatch(setStep("checkoutstep"));
         dispatch(setLoading(false));
       } else {
@@ -116,7 +127,7 @@ export default function Extra(props) {
 
   // Template for each carousel item
   const productTemplate = (product, pp) => {
-    if (product.cap_left > 0) {
+    if ((!gift && product.cap_left > 0) || gift) {
       return (
         <div className="fx-extrabox" key={pp}>
           <div className="fx-extrapicbox">
@@ -128,51 +139,35 @@ export default function Extra(props) {
           <div className="fx-extracontentbox">
             <h4>{product.extra_name}</h4>
             <p>{decodeHtml(product.extra_desc)}</p>
-           
+
             <div className="fx-common">
-               <p className="fx-extrapicpriceboxright">
-              {decodeHtml(product.price)}
-            </p>
+              <p className="fx-extrapicpriceboxright">
+                {decodeHtml(product.price)}
+              </p>
               <div className="fx-quantitybox">
-                {extraid != product.id && (
-                  <input
-                    type="submit"
-                    className="btn-secondary"
-                    value="Select"
-                    onClick={() => {
-                      setExtradetails(product);
-                      slotbook(product.id, "add", product.cap_left);
-                    }}
-                  />
-                )}
-                {extraid == product.id && book > 0 && (
-                  <>
-                    <button
-                      type="button"
-                      className="decrement"
-                      onClick={() =>
-                        slotbook(product.id, "minus", product.cap_left)
-                      }
-                    >
-                      -
-                    </button>
-                    <input
-                      type="number"
-                      value={extraid == product.id ? book : 0}
-                      defaultValue={0}
-                      min={0}
-                    />
-                    <button
-                      type="button"
-                      className="increment"
-                      onClick={() =>
-                        slotbook(product.id, "add", product.cap_left)
-                      }
-                    >
-                      +
-                    </button>
-                  </>
-                )}
+                <button
+                  type="button"
+                  className="decrement"
+                  onClick={() =>
+                    slotbook(product.id, "minus", product.cap_left)
+                  }
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  value={quantities[product.id] || 0}
+                  defaultValue={0}
+                  min={0}
+                  readOnly
+                />
+                <button
+                  type="button"
+                  className="increment"
+                  onClick={() => slotbook(product.id, "add", product.cap_left)}
+                >
+                  +
+                </button>
               </div>
             </div>
           </div>
@@ -182,48 +177,52 @@ export default function Extra(props) {
   };
 
   const slotbook = (id, type, capacity_left) => {
-    setExtraid(id);
-    let currentbook = book;
-    if (extraid != id) {
-      currentbook = 0;
-      setBook(0);
-    }
-    if (type == "add") {
-      if (currentbook >= capacity_left) {
+    const currentCount = quantities[id] || 0;
+    if (type === "add") {
+      if (!gift && currentCount >= capacity_left) {
         Swal.fire({
           toast: true,
-          position: "top-end", // or 'bottom-end', 'top-start', etc.
+          position: "top-end",
           showConfirmButton: false,
-          timer: 3000, // auto-close after 3 seconds
-          icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
+          timer: 3000,
+          icon: "warning",
           title: "Maximum capacity reached",
         });
         return;
       }
-      setBook(parseInt(currentbook) + parseInt(1));
-    } else if (type == "minus") {
-      let count = parseInt(currentbook) - parseInt(1);
-      if (count >= 0) {
-        setBook(count);
-        if (count == 0) {
-          setExtraid(null);
-        }
+      setQuantities((prev) => ({ ...prev, [id]: currentCount + 1 }));
+    } else if (type === "minus") {
+      const newCount = currentCount - 1;
+      if (newCount > 0) {
+        setQuantities((prev) => ({ ...prev, [id]: newCount }));
+      } else if (newCount === 0) {
+        setQuantities((prev) => {
+          const next = { ...prev };
+          delete next[id];
+          return next;
+        });
       }
     }
   };
 
   const bookextra = async () => {
-    if (book == 0) {
+    const selectedIds = Object.keys(quantities).filter(
+      (id) => quantities[id] > 0,
+    );
+    if (selectedIds.length === 0) {
       Swal.fire({
         toast: true,
-        position: "top-end", // or 'bottom-end', 'top-start', etc.
+        position: "top-end",
         showConfirmButton: false,
-        timer: 3000, // auto-close after 3 seconds
-        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
+        timer: 3000,
+        icon: "warning",
         title: "Please choose capacity",
       });
       return;
     }
+
+    const extraIdStr = selectedIds.join(",");
+    const capacityArr = selectedIds.map((id) => quantities[id]);
 
     dispatch(setLoading(true));
     const { data } = await axiosInstance(
@@ -231,24 +230,27 @@ export default function Extra(props) {
         cart.service[0].capacity
       }&date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraid}&extra_capacity=${book}`,
+      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}`,
       {
         method: "get",
       },
     );
-    let cartobj = {
-      id: extraid,
-      name: extradetails.extra_name,
-      price: extradetails.price,
-      total: data?.data?.price,
-      total_formatted: data?.data?.extra_total,
-      slot: "",
-      capacity: book,
-    };
+    const extraArr = selectedIds.map((id, key) => {
+      const product = products.find((p) => p.id == id);
+      return {
+        id: parseInt(id),
+        name: product?.extra_name,
+        price: product?.price,
+        total: data?.data?.price,
+        total_formatted: data?.data?.extra_total[key],
+        slot: "",
+        capacity: quantities[id],
+      };
+    });
     dispatch(
       setCart({
         service: cart.service,
-        extra: [cartobj],
+        extra: extraArr,
         total: data?.data?.total,
         total_formatted: data?.data?.total_formated,
         discount: 0,
@@ -256,10 +258,10 @@ export default function Extra(props) {
       }),
     );
 
-    addtocart();
+    addtocart(extraIdStr, capacityArr.join(","));
   };
 
-  const addtocart = async (extraIdParam = extraid, bookParam = book) => {
+  const addtocart = async (extraIdParam, bookParam) => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/addtocart`, {
       service_id: service,
@@ -290,30 +292,11 @@ export default function Extra(props) {
   };
 
   const skipextra = () => {
-    setBook(0);
-    setExtraid(null);
+    setQuantities({});
     addtocart(null, 0);
     dispatch(setStep("checkoutstep"));
     dispatch(setLoading(false));
   };
-
-  const responsiveOptions = [
-    {
-      breakpoint: "1024px", // For screens less than 1024px
-      numVisible: 3,
-      numScroll: 3,
-    },
-    {
-      breakpoint: "768px", // For screens less than 768px (tablets)
-      numVisible: 2,
-      numScroll: 2,
-    },
-    {
-      breakpoint: "560px", // For screens less than 560px (mobile phones)
-      numVisible: 1,
-      numScroll: 1,
-    },
-  ];
 
   return (
     <>
@@ -423,7 +406,7 @@ export default function Extra(props) {
                 <div className="fx-extracontainer">
                   {products.length > 0 &&
                     products.map((product, p1) => {
-                      if (product.cap_left > 0) {
+                      if ((!gift && product.cap_left > 0) || gift) {
                         return (
                           <div className="fx-extrabox" key={p1}>
                             <div className="fx-extrapicbox">
@@ -435,63 +418,45 @@ export default function Extra(props) {
                             <div className="fx-extracontentbox">
                               <h4>{product.extra_name}</h4>
                               <p>{decodeHtml(product.extra_desc)}</p>
-                              
+
                               <div className="fx-common">
                                 <p className="fx-extrapicpriceboxright">
-                                {decodeHtml(product.price)}
-                              </p>
+                                  {decodeHtml(product.price)}
+                                </p>
                                 <div className="fx-quantitybox">
-                                  {extraid != product.id && (
-                                    <input
-                                      type="submit"
-                                      className="btn-secondary"
-                                      value="Select"
-                                      onClick={() => {
-                                        setExtradetails(product);
-                                        slotbook(
-                                          product.id,
-                                          "add",
-                                          product.cap_left,
-                                        );
-                                      }}
-                                    />
-                                  )}
-                                  {extraid == product.id && book > 0 && (
-                                    <>
-                                      <button
-                                        type="button"
-                                        className="decrement"
-                                        onClick={() =>
-                                          slotbook(
-                                            product.id,
-                                            "minus",
-                                            product.cap_left,
-                                          )
-                                        }
-                                      >
-                                        -
-                                      </button>
-                                      <input
-                                        type="number"
-                                        value={extraid == product.id ? book : 0}
-                                        defaultValue={0}
-                                        min={0}
-                                      />
-                                      <button
-                                        type="button"
-                                        className="increment"
-                                        onClick={() =>
-                                          slotbook(
-                                            product.id,
-                                            "add",
-                                            product.cap_left,
-                                          )
-                                        }
-                                      >
-                                        +
-                                      </button>
-                                    </>
-                                  )}
+                                  <button
+                                    type="button"
+                                    className="decrement"
+                                    onClick={() =>
+                                      slotbook(
+                                        product.id,
+                                        "minus",
+                                        product.cap_left,
+                                      )
+                                    }
+                                  >
+                                    -
+                                  </button>
+                                  <input
+                                    type="number"
+                                    value={quantities[product.id] || 0}
+                                    defaultValue={0}
+                                    min={0}
+                                    readOnly
+                                  />
+                                  <button
+                                    type="button"
+                                    className="increment"
+                                    onClick={() =>
+                                      slotbook(
+                                        product.id,
+                                        "add",
+                                        product.cap_left,
+                                      )
+                                    }
+                                  >
+                                    +
+                                  </button>
                                 </div>
                               </div>
                             </div>
@@ -511,7 +476,7 @@ export default function Extra(props) {
               >
                 {products.length > 0 &&
                   products.map((product, p2) => {
-                    if (product.cap_left > 0) {
+                    if ((!gift && product.cap_left > 0) || gift) {
                       return (
                         <div className="fx-extraboxlist" key={p2}>
                           <div className="fx-extrapicboxlist">
@@ -535,57 +500,39 @@ export default function Extra(props) {
                             </div>
                             <div className="fx-common">
                               <div className="fx-quantitybox">
-                                {extraid != product.id && (
-                                  <input
-                                    type="submit"
-                                    className="btn-secondary"
-                                    value="Select"
-                                    onClick={() => {
-                                      setExtradetails(product);
-                                      slotbook(
-                                        product.id,
-                                        "add",
-                                        product.cap_left,
-                                      );
-                                    }}
-                                  />
-                                )}
-                                {extraid == product.id && book > 0 && (
-                                  <>
-                                    <button
-                                      type="button"
-                                      className="decrement"
-                                      onClick={() =>
-                                        slotbook(
-                                          product.id,
-                                          "minus",
-                                          product.cap_left,
-                                        )
-                                      }
-                                    >
-                                      -
-                                    </button>
-                                    <input
-                                      type="number"
-                                      value={extraid == product.id ? book : 0}
-                                      defaultValue={0}
-                                      min={0}
-                                    />
-                                    <button
-                                      type="button"
-                                      className="increment"
-                                      onClick={() =>
-                                        slotbook(
-                                          product.id,
-                                          "add",
-                                          product.cap_left,
-                                        )
-                                      }
-                                    >
-                                      +
-                                    </button>
-                                  </>
-                                )}
+                                <button
+                                  type="button"
+                                  className="decrement"
+                                  onClick={() =>
+                                    slotbook(
+                                      product.id,
+                                      "minus",
+                                      product.cap_left,
+                                    )
+                                  }
+                                >
+                                  -
+                                </button>
+                                <input
+                                  type="number"
+                                  value={quantities[product.id] || 0}
+                                  defaultValue={0}
+                                  min={0}
+                                  readOnly
+                                />
+                                <button
+                                  type="button"
+                                  className="increment"
+                                  onClick={() =>
+                                    slotbook(
+                                      product.id,
+                                      "add",
+                                      product.cap_left,
+                                    )
+                                  }
+                                >
+                                  +
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -606,7 +553,7 @@ export default function Extra(props) {
                   {!isDesktop ? (
                     <div className="fx-mobile-swipe-carousel">
                       {products
-                        .filter((p) => p.cap_left > 0)
+                        .filter((p) => (!gift && p.cap_left > 0) || gift)
                         .map((product, idx) => (
                           <div key={idx} className="fx-mobile-swipe-item">
                             {productTemplate(product)}
@@ -622,11 +569,11 @@ export default function Extra(props) {
                         <i className="pi pi-chevron-left"></i>
                       </button>
                       <div
-                        className={`fx-desktop-swipe-carousel${products.filter((p) => p.cap_left > 0).length < 4 ? " fx-dswipe-few" : ""}`}
+                        className={`fx-desktop-swipe-carousel${products.filter((p) => (!gift && p.cap_left > 0) || gift).length < 4 ? " fx-dswipe-few" : ""}`}
                         ref={desktopCarouselRef}
                       >
                         {products
-                          .filter((p) => p.cap_left > 0)
+                          .filter((p) => (!gift && p.cap_left > 0) || gift)
                           .map((product, idx) => (
                             <div key={idx} className="fx-desktop-swipe-item">
                               {productTemplate(product)}
