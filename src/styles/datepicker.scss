@@ -188,7 +188,10 @@ box-shadow: none;
   background: #fff;
     border: 0 none;
     box-shadow: 0 2px 12px #0000001a;
+    width: 307px;
+    min-width: 307px;
 }
+
 @media screen and (max-width: 480px) {
 .fx-booking .fx-calendar{
   width:100%;
