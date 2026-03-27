@@ -17,7 +17,7 @@ import closeicon from "../assets/close2.svg";
 
 // const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
 // const stripePromise = loadStripe(PUBLIC_KEY);
-export default function Payment() {
+export default function Payment(props) {
   const dispatch = useDispatch();
   const step = useSelector((state) => state.step1.step);
   const date = useSelector((state) => state.step1.date);
@@ -81,11 +81,11 @@ export default function Payment() {
             iconHtml: `<img class="fx-coupon-close-icon" src="${closeicon}">`,
             title: `${couponcode[i]} Coupon Error`,
             text:
-            decodeHtml(coupondata?.data?.error) || "Failed to apply coupon",
+              decodeHtml(coupondata?.data?.error) || "Failed to apply coupon",
             customClass: {
-            popup: "fx-coupon-box-popup",
+              popup: "fx-coupon-box-popup",
             },
-            });
+          });
         }
       }
     }
@@ -100,7 +100,11 @@ export default function Payment() {
     >
       {(!isDesktop || topbar) && (
         <div className="fx-paymentbox">
-          <h1 className="fx-all-main-heading">Payment</h1>
+          {props.stepsVisibility?.step_5_title_visible == "true" && (
+            <h1 className="fx-all-main-heading">
+              {props.stepTitles?.step_5_title || "Payment"}
+            </h1>
+          )}
           {stripePromise && (
             <Elements stripe={stripePromise}>
               <CheckoutForm />
@@ -110,7 +114,11 @@ export default function Payment() {
       )}
       {isDesktop && !topbar && (
         <>
-          <h1 className="fx-all-main-heading">Checkout</h1>
+          {props.stepsVisibility?.step_5_title_visible == "true" && (
+            <h1 className="fx-all-main-heading">
+              {props.stepTitles?.step_5_title || "Checkout"}
+            </h1>
+          )}
           <div className="fx-order-summary">
             <div className="fx-service-date">
               <strong>Service Date:</strong>

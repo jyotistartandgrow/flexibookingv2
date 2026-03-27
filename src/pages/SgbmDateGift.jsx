@@ -24,7 +24,7 @@ export default function SgbmDateGift(props) {
         <OrderDetailsCard {...props} />
       ) : null}
       {/* Booking and Gift Tabs */}
-      <ChooseDate />
+      <ChooseDate {...props}/>
       {/* End Booking and Gift Tabs */}
       {/* Service Tabs */}
       <Service {...props} />
@@ -33,10 +33,10 @@ export default function SgbmDateGift(props) {
       <Extra {...props} />
       {/* End Extra Tabs */}
       {/* Checkout Tabs */}
-      <Checkout />
+      <Checkout {...props}/>
       {/* End Checkout Tabs */}
       {/* Payment Tabs */}
-      <Payment />
+      <Payment {...props}/>
       {/* End Payment Tabs */}
     </div>
   );
