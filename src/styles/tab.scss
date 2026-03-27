@@ -50,13 +50,24 @@
 
 .fx-booking #fx-tab_nav div.fx-tabcontent {
   display: none;
-  margin-top:12px;
+  margin-top:16px;
+  color: var(--grey);
+}
+
+.fx-booking #fx-tab_nav div.selected .fx-element-box{
+      margin-top: 8px;
+}
+
+.fx-booking #fx-tab_nav div.fx-tabcontent {
+  display: none;
+  margin-top:16px;
   color: var(--grey);
 
 }
 
 .fx-booking .fx-giftbox .fx-input-wrapper input[type=text] {
     height: 52px;
+    margin: 0px;
 }
 
 .fx-booking input[type=text].fx-voucher-input{
