@@ -28,10 +28,10 @@ export default function SgbmCategory(props) {
       <Extra {...props} />
       {/* End Extra Tabs */}
       {/* Checkout Tabs */}
-      <Checkout />
+      <Checkout {...props}/>
       {/* End Checkout Tabs */}
       {/* Payment Tabs */}
-      <Payment />
+      <Payment {...props}/>
       {/* End Payment Tabs */}
     </div>
   );

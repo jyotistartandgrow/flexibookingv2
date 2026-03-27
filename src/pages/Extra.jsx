@@ -304,15 +304,18 @@ export default function Extra(props) {
         className="fx-leftcontentbox"
         style={{ display: step === "extrastep" ? "block" : "none" }}
       >
-        <h1
-          className="fx-all-main-heading"
-          style={{
-            display:
-              props.mobileHeading == "false" && !isDesktop ? "none" : "block",
-          }}
-        >
-          What experience are you looking for?
-        </h1>
+        {props.stepsVisibility?.step_3_title_visible == "true" && (
+          <h1
+            className="fx-all-main-heading"
+            style={{
+              display:
+                props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+            }}
+          >
+            {props.stepTitles?.step_3_title ||
+              "What experience are you looking for?"}{" "}
+          </h1>
+        )}
         <div id="fx-Icontab_nav">
           <ul
             style={{

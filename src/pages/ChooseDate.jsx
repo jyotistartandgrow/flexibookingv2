@@ -20,7 +20,7 @@ import {
 import CalendarPage from "./CalendarPage";
 import CouponSection from "./CouponSection";
 
-export default function ChooseDate() {
+export default function ChooseDate(props) {
   const dispatch = useDispatch();
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
@@ -52,6 +52,7 @@ export default function ChooseDate() {
     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(
       day,
     ).padStart(2, "0")}`;
+    let price = "";
     if (
       disabledDates.find(
         (d) =>
@@ -77,6 +78,7 @@ export default function ChooseDate() {
           matchedObj.price;
         tooltipText = decodeHtml(tooltipText);
         availabilityPercent = matchedObj.available_service_percentage || 0;
+        price = decodeHtml(matchedObj.price) || "";
       }
     }
 
@@ -104,10 +106,15 @@ export default function ChooseDate() {
           <div className="custom-day">{day}</div>
         </div>
 
-        <div
-          className="percent-bar"
-          style={{ width: `${availabilityPercent}%` }}
-        ></div>
+        {props.calendarInfoVisibility === "true" &&
+          (props.calendarInfo == "price" ? (
+            <div className="fx-calender-price">{price}</div>
+          ) : (
+            <div
+              className="percent-bar"
+              style={{ width: `${availabilityPercent}%` }}
+            ></div>
+          ))}
 
         <div className="fx-tooltip">{tooltipText}</div>
       </>
@@ -256,9 +263,9 @@ export default function ChooseDate() {
       className="fx-leftcontentbox"
       style={{ display: step === "datestep" ? "block" : "none" }}
     >
-      <h1 className="fx-all-main-heading">
-        {gift ? "Book your Gift" : "Book your Services"}
-      </h1>
+      {props.stepsVisibility?.step_1_title_visible == "true" && (
+        <h1 className="fx-all-main-heading">{props.stepTitles?.step_1_title}</h1>
+      )}
       <div id="fx-tab_nav">
         <ul>
           <li>
@@ -412,7 +419,10 @@ export default function ChooseDate() {
                       );
                       const isValid = validatePhoneForCountry(phone, country);
                       if (isValid && errorlist.phoneNumber) {
-                        setErrorlist((prev) => ({ ...prev, phoneNumber: false }));
+                        setErrorlist((prev) => ({
+                          ...prev,
+                          phoneNumber: false,
+                        }));
                       }
                     }}
                     onBlur={() => {
@@ -420,7 +430,10 @@ export default function ChooseDate() {
                         receiverInfo.phoneNumber,
                         selectedCountry,
                       );
-                      setErrorlist((prev) => ({ ...prev, phoneNumber: !isValid }));
+                      setErrorlist((prev) => ({
+                        ...prev,
+                        phoneNumber: !isValid,
+                      }));
                     }}
                     enableSearch={true}
                     disableDropdown={false}

@@ -4,11 +4,6 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { Sidebar as Calendarsidebar } from "primereact/sidebar";
-import { Carousel } from "primereact/carousel";
-import calendar from "../assets/simple-line-icons_calender.svg";
-import percentthirty from "../assets/icons8-clock 9.svg";
-import percentsixty from "../assets/icons8-clock 8.svg";
-import percentninty from "../assets/icons8-clock 7.svg";
 import axiosInstance from "../Utils/Interceptor";
 import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
@@ -185,6 +180,7 @@ export default function Service(props) {
 
   const servicedetail = async (id) => {
     dispatch(setLoading(true));
+    setReadmorecl(false);
     setServiceId(id);
     let allService = gift ? true : false;
     allService = all ? true : allService;
@@ -355,12 +351,21 @@ export default function Service(props) {
   // Template for each carousel item
   const productTemplate = (product) => {
     return (
-      <div className="fx-servicebox" onClick={() => servicedetail(product.id)}>
+      <div
+        className={
+          props.showBookNowButton == "true"
+            ? "fx-servicebox fx-servicebox-add-button"
+            : "fx-servicebox"
+        }
+        onClick={() => servicedetail(product.id)}
+      >
         <div className="fx-servicepicbox">
           <img src={product.svc_img} alt={product.service_name} />
-          <span className="fx-servicepiccontentbox">
-            {product.category_name}
-          </span>
+          {props.categoryLabelVisibility == "true" && (
+            <span className="fx-servicepiccontentbox">
+              {product.category_name}
+            </span>
+          )}
         </div>
         <div className="fx-servicecontentbox">
           <h4>{product.service_name}</h4>
@@ -375,12 +380,18 @@ export default function Service(props) {
                 {decodeHtml(product.svc_default_price)}
               </span>
             )}
-            <i className="pi pi-chevron-right"></i>
+            {props.showBookNowButton !== "true" && (
+              <i className="pi pi-chevron-right"></i>
+            )}
           </p>
-          
-          {/* <div className="booknowbtn" onClick={() => servicedetail(product.id)}>
-            <a href="#">{gift ? "Select Gift" : "Book Now"}</a>
-          </div> */}
+          {props.showBookNowButton == "true" && (
+            <div
+              className="booknowbtn"
+              onClick={() => servicedetail(product.id)}
+            >
+              <a href="#">{gift ? "Select Gift" : "Book Now"}</a>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -609,28 +620,12 @@ export default function Service(props) {
     }
   }, [slotObj]);
 
-  const responsiveOptions = [
-    {
-      breakpoint: "1024px", // For screens less than 1024px
-      numVisible: 3,
-      numScroll: 3,
-    },
-    {
-      breakpoint: "768px", // For screens less than 768px (tablets)
-      numVisible: 2,
-      numScroll: 2,
-    },
-    {
-      breakpoint: "560px", // For screens less than 560px (mobile phones)
-      numVisible: 1,
-      numScroll: 1,
-    },
-  ];
   return (
     <div
       className="fx-leftcontentbox"
       style={{ display: step === "servicesstep" ? "block" : "none" }}
     >
+      {props.stepsVisibility?.step_2_title_visible == "true" && (
       <h1
         className="fx-all-main-heading"
         style={{
@@ -638,7 +633,7 @@ export default function Service(props) {
             props.mobileHeading == "false" && !isDesktop ? "none" : "block",
         }}
       >
-        What experience are you looking for?{" "}
+        {props.stepTitles?.step_2_title || "What experience are you looking for?"}{" "}
         {/* <span class="fx-tooltip-container">
           <i class="pi pi-info-circle fx-info-icon"></i>
           <div class="fx-tooltip">
@@ -647,6 +642,7 @@ export default function Service(props) {
           </div>
         </span> */}
       </h1>
+      )}
       <div id="fx-Icontab_nav">
         <ul
           style={{
@@ -767,15 +763,21 @@ export default function Service(props) {
               displayedProducts.map((product, p1) => {
                 return (
                   <div
-                    className="fx-servicebox"
+                    className={
+                      props.showBookNowButton == "true"
+                        ? "fx-servicebox fx-servicebox-add-button"
+                        : "fx-servicebox"
+                    }
                     key={p1}
                     onClick={() => servicedetail(product.id)}
                   >
                     <div className="fx-servicepicbox">
                       <img src={product.svc_img} alt={product.service_name} />
-                      <span className="fx-servicepiccontentbox">
-                        {product.category_name}
-                      </span>
+                      {props.categoryLabelVisibility == "true" && (
+                        <span className="fx-servicepiccontentbox">
+                          {product.category_name}
+                        </span>
+                      )}
                     </div>
                     <div className="fx-servicecontentbox">
                       <h4>{product.service_name}</h4>
@@ -790,15 +792,19 @@ export default function Service(props) {
                             {decodeHtml(product.svc_default_price)}
                           </span>
                         )}
-                        <i className="pi pi-chevron-right"></i>
+                        {props.showBookNowButton !== "true" && (
+                          <i className="pi pi-chevron-right"></i>
+                        )}
                       </p>
-                      
-                      {/* <div
-                        className="booknowbtn"
-                        onClick={() => servicedetail(product.id)}
-                      >
-                        <a href="#">{gift ? "Select Gift" : "Book Now"}</a>
-                      </div> */}
+
+                      {props.showBookNowButton == "true" && (
+                        <div
+                          className="booknowbtn"
+                          onClick={() => servicedetail(product.id)}
+                        >
+                          <a href="#">{gift ? "Select Gift" : "Book Now"}</a>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
@@ -824,9 +830,11 @@ export default function Service(props) {
                     <div className="fx-list-img-box">
                       <img src={product.svc_img} alt={product.service_name} />
                     </div>
-                    <span className="fx-servicepiccontentbox">
-                      {product.category_name}
-                    </span>
+                    {props.categoryLabelVisibility == "true" && (
+                      <span className="fx-servicepiccontentbox">
+                        {product.category_name}
+                      </span>
+                    )}
                   </div>
                   <div className="fx-servicecontentboxlist">
                     <div className="list-view-text-content">
@@ -973,14 +981,16 @@ export default function Service(props) {
                       >
                         {decodeHtml(productDetails.svc_long_desc)}
                       </span>
-                      {productDetails.svc_long_desc != "N/A" && (
-                        <span
-                          className="readmore"
-                          onClick={() => setReadmorecl(!readmorecl)}
-                        >
-                          {readmorecl ? "Read Less" : "Read More"}
-                        </span>
-                      )}
+                      {productDetails.svc_long_desc != "N/A" &&
+                        (productDetails.svc_long_desc?.trim().split(/\s+/)
+                          .length ?? 0) > 25 && (
+                          <span
+                            className="readmore"
+                            onClick={() => setReadmorecl(!readmorecl)}
+                          >
+                            {readmorecl ? "Read Less" : "Read More"}
+                          </span>
+                        )}
                     </p>
                   </div>
                 )}
@@ -1001,14 +1011,16 @@ export default function Service(props) {
                       >
                         {decodeHtml(productDetails.svc_long_desc)}
                       </span>
-                      {productDetails.svc_long_desc != "N/A" && (
-                        <span
-                          className="readmore"
-                          onClick={() => setReadmorecl(!readmorecl)}
-                        >
-                          {readmorecl ? "Read Less" : "Read More"}
-                        </span>
-                      )}
+                      {productDetails.svc_long_desc != "N/A" &&
+                        (productDetails.svc_long_desc?.trim().split(/\s+/)
+                          .length ?? 0) > 25 && (
+                          <span
+                            className="readmore"
+                            onClick={() => setReadmorecl(!readmorecl)}
+                          >
+                            {readmorecl ? "Read Less" : "Read More"}
+                          </span>
+                        )}
                     </p>{" "}
                     <p className="datetext">
                       {moment(date).format("MMM YYYY")}

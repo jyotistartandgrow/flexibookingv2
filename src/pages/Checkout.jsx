@@ -15,12 +15,11 @@ import GiftCardPreviewButton from "./Giftcardpreviewbutton";
 import {
   decodeHtml,
   validateEmail,
-  validatePhoneNumber,
   validatePhoneForCountry,
 } from "../Utils/Functions";
 import CouponSection from "./CouponSection";
 
-export default function Checkout() {
+export default function Checkout(props) {
   const dispatch = useDispatch();
   const step = useSelector((state) => state.step1.step);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
@@ -251,7 +250,11 @@ export default function Checkout() {
       className="fx-leftcontentbox fx-checkoutpage"
       style={{ display: step === "checkoutstep" ? "block" : "none" }}
     >
-      {/* <h1 className="fx-main-heading">Checkout</h1> */}
+      {props.stepsVisibility?.step_4_title_visible == "true" && (
+        <h1 className="fx-main-heading">
+          {props.stepTitles?.step_4_title || "Checkout"}
+        </h1>
+      )}
       <div className="fx-commoninput">
         <div className="fx-inputgroup">
           <div
