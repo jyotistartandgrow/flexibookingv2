@@ -271,7 +271,7 @@ export default function Checkout(props) {
       style={{ display: step === "checkoutstep" ? "block" : "none" }}
     >
       {props.stepsVisibility?.step_4_title_visible == "true" && (
-        <h1 className="fx-main-heading">
+        <h1 className="fx-all-main-heading">
           {props.stepTitles?.step_4_title || "Checkout"}
         </h1>
       )}
