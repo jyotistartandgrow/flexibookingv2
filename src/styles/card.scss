@@ -84,7 +84,7 @@
   font-size: var(--all-card-heading);
   font-weight: 400;
   margin: 0px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   height: 27px;
   overflow: hidden;
   color: var(--darkgrey);
@@ -95,7 +95,7 @@
   font-size: var(--normal-descriptionsize);
   font-weight: 300;
   color: var(--grey);
-  margin-top: 4px;
+  margin-top: 0px;
   margin-bottom: 4px;
   overflow: hidden;
 }
@@ -186,7 +186,7 @@
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist {
     width: calc(100% - 120px);
     height: auto;
-    padding: 12px 12px;
+    padding: 16px 16px;
     background: var(--white);
     position: relative;
     border-radius: 0px 8px 8px 0px;
@@ -335,7 +335,7 @@
   font-size: var(--normal-descriptionsize);
   font-weight: 300;
   color: var(--grey);
-  padding-top: 12px;
+  padding-top:0px;
   margin-bottom: 0px;
   margin-top: 0px;
 }
@@ -404,6 +404,7 @@
 .fx-booking .fx-extracontentbox .fx-common{
   display: flex;
   justify-content: space-between;
+  margin-top: 8px;
 }
 .fx-booking .fx-extracontentbox .fx-common .fx-quantitybox {
   width: auto;
@@ -623,7 +624,7 @@
   font-weight: 400;
   color: var(--darkblue-color);
   margin:0px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-form{
