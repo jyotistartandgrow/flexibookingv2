@@ -157,6 +157,26 @@ export default function Checkout(props) {
       return;
     }
 
+    if (invoice) {
+      const invoiceErrors = {};
+      if (!billdata.invoice_company_name?.trim()) invoiceErrors.invoice_company_name = true;
+      if (!billdata.invoice_company_address?.trim()) invoiceErrors.invoice_company_address = true;
+      if (!billdata.invoice_company_country) invoiceErrors.invoice_company_country = true;
+      if (!billdata.invoice_vat_id?.trim()) invoiceErrors.invoice_vat_id = true;
+      if (Object.keys(invoiceErrors).length > 0) {
+        setErrorlist(invoiceErrors);
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          icon: "error",
+          title: "Please fill in all invoice fields",
+        });
+        return;
+      }
+    }
+
     if (!term) {
       Swal.fire({
         toast: true,
@@ -672,6 +692,82 @@ export default function Checkout(props) {
             inputId="option2"
           />
         </div>
+        {invoice && (
+          <div className="fx-commoninput fx-invoice-fields">
+            <div className="fx-inputgroup">
+              <div className="fx-element-box">
+                <label>Company Name</label>
+                <input
+                  type="text"
+                  placeholder="Company Name"
+                  value={billdata.invoice_company_name || ""}
+                  className={errorlist.invoice_company_name ? "fx-invalid" : ""}
+                  onChange={(e) =>
+                    setBilldata({ ...billdata, invoice_company_name: e.target.value })
+                  }
+                />
+                {errorlist.invoice_company_name && (
+                  <span className="fx-errortext">Enter Company Name</span>
+                )}
+              </div>
+              <div className="fx-element-box">
+                <label>VAT ID</label>
+                <input
+                  type="text"
+                  placeholder="VAT ID"
+                  value={billdata.invoice_vat_id || ""}
+                  className={errorlist.invoice_vat_id ? "fx-invalid" : ""}
+                  onChange={(e) =>
+                    setBilldata({ ...billdata, invoice_vat_id: e.target.value })
+                  }
+                />
+                {errorlist.invoice_vat_id && (
+                  <span className="fx-errortext">Enter VAT ID</span>
+                )}
+              </div>
+            </div>
+            <div className="fx-inputgroup">
+              <div className="fx-element-box">
+                <label>Company Address</label>
+                <input
+                  type="text"
+                  placeholder="Company Address"
+                  className={errorlist.invoice_company_address ? "fx-invalid bigtextbox" : "bigtextbox"}
+                  value={billdata.invoice_company_address || ""}
+                  onChange={(e) =>
+                    setBilldata({ ...billdata, invoice_company_address: e.target.value })
+                  }
+                />
+                {errorlist.invoice_company_address && (
+                  <span className="fx-errortext">Enter Company Address</span>
+                )}
+              </div>
+            </div>
+            <div className="fx-inputgroup">
+              <div className="fx-element-box fx-selectwrapper">
+                <label>Company Country</label>
+                <select
+                  value={billdata.invoice_company_country || ""}
+                  className={errorlist.invoice_company_country ? "fx-invalid" : ""}
+                  onChange={(e) =>
+                    setBilldata({ ...billdata, invoice_company_country: e.target.value })
+                  }
+                >
+                  <option value="">Select Country</option>
+                  {countries &&
+                    Object.keys(countries.data).map((code) => (
+                      <option key={code} value={code}>
+                        {countries.data[code]}
+                      </option>
+                    ))}
+                </select>
+                {errorlist.invoice_company_country && (
+                  <span className="fx-errortext">Select Company Country</span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
         <div className="fx-inputgroup fx-checkboxcontainer">
           <input
             type="checkbox"
@@ -680,7 +776,10 @@ export default function Checkout(props) {
             onClick={() => setTerm(!term)}
           />
           <label htmlFor="terms-checkbox" className="checkbox-label">
-            You are making a direct booking.Please accept terms and conditions
+            You are making a direct booking.Please accept{" "}
+            <a href={props.termsAndConditionLink} target="_blank">
+              terms and conditions
+            </a>{" "}
             before proceeding
           </label>
         </div>

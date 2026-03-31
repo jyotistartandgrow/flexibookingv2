@@ -281,6 +281,8 @@ export default function Service(props) {
     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(
       day,
     ).padStart(2, "0")}`;
+
+    let price = "";
     if (
       disabledDates.find(
         (d) =>
@@ -297,6 +299,7 @@ export default function Service(props) {
           : null;
         return itemDate === dateStr;
       });
+      price = matchedObj ? decodeHtml(matchedObj.price).split(",")[0] : "";
 
       if (matchedObj) {
         // example: set tooltip based on matched object's properties
@@ -335,10 +338,16 @@ export default function Service(props) {
         >
           <div className="custom-day">{day}</div>
         </div>
-        <div
-          className="percent-bar"
-          style={{ width: `${availabilityPercent}%` }}
-        ></div>
+
+        {props.calendarInfoVisibility === "true" &&
+          (props.calendarInfo == "price" ? (
+            <div className="fx-calender-price">{price}</div>
+          ) : (
+            <div
+              className="percent-bar"
+              style={{ width: `${availabilityPercent}%` }}
+            ></div>
+          ))}
         <div className="fx-tooltip">{tooltipText}</div>
       </>
     );
@@ -373,11 +382,11 @@ export default function Service(props) {
           <p className="price">
             <span className="fx-price-form">from</span>
             <span className="fx-price-one">
-              {decodeHtml(product.svc_price)}
+              {decodeHtml(product.svc_price).split(",")[0]}
             </span>
             {product.svc_default_price > product.svc_price && (
               <span className="fx-price-two">
-                {decodeHtml(product.svc_default_price)}
+                {decodeHtml(product.svc_default_price).split(",")[0]}
               </span>
             )}
             {props.showBookNowButton !== "true" && (
@@ -626,22 +635,23 @@ export default function Service(props) {
       style={{ display: step === "servicesstep" ? "block" : "none" }}
     >
       {props.stepsVisibility?.step_2_title_visible == "true" && (
-      <h1
-        className="fx-all-main-heading"
-        style={{
-          display:
-            props.mobileHeading == "false" && !isDesktop ? "none" : "block",
-        }}
-      >
-        {props.stepTitles?.step_2_title || "What experience are you looking for?"}{" "}
-        {/* <span class="fx-tooltip-container">
+        <h1
+          className="fx-all-main-heading"
+          style={{
+            display:
+              props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+          }}
+        >
+          {props.stepTitles?.step_2_title ||
+            "What experience are you looking for?"}{" "}
+          {/* <span class="fx-tooltip-container">
           <i class="pi pi-info-circle fx-info-icon"></i>
           <div class="fx-tooltip">
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry.
           </div>
         </span> */}
-      </h1>
+        </h1>
       )}
       <div id="fx-Icontab_nav">
         <ul
@@ -785,11 +795,15 @@ export default function Service(props) {
                       <p className="price">
                         <span className="fx-price-form">from</span>
                         <span className="fx-price-one">
-                          {decodeHtml(product.svc_price)}
+                          {decodeHtml(product.svc_price).split(",")[0]}
                         </span>
                         {product.svc_default_price > product.svc_price && (
                           <span className="fx-price-two">
-                            {decodeHtml(product.svc_default_price)}
+                            {
+                              decodeHtml(product.svc_default_price).split(
+                                ",",
+                              )[0]
+                            }
                           </span>
                         )}
                         {props.showBookNowButton !== "true" && (
@@ -844,11 +858,11 @@ export default function Service(props) {
                     <p className="price">
                       <span className="fx-price-form">from</span>
                       <span className="fx-price-one">
-                        {decodeHtml(product.svc_price)}
+                        {decodeHtml(product.svc_price).split(",")[0]}
                       </span>
                       {product.svc_default_price > product.svc_price && (
                         <span className="fx-price-two">
-                          {decodeHtml(product.svc_default_price)}
+                          {decodeHtml(product.svc_default_price).split(",")[0]}
                         </span>
                       )}
                       <i className="pi pi-chevron-right"></i>
@@ -955,7 +969,7 @@ export default function Service(props) {
                   {productDetails.service_title}
                 </span>
                 <p className="fx-pricebox">
-                  {decodeHtml(productDetails.svc_price)}
+                  {decodeHtml(productDetails.svc_price).split(",")[0]}
                 </p>
               </div>
 

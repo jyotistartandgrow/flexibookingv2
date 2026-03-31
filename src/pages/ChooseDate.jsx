@@ -78,7 +78,7 @@ export default function ChooseDate(props) {
           matchedObj.price;
         tooltipText = decodeHtml(tooltipText);
         availabilityPercent = matchedObj.available_service_percentage || 0;
-        price = decodeHtml(matchedObj.price) || "";
+        price = matchedObj ? decodeHtml(matchedObj.price).split(",")[0] : "";
       }
     }
 

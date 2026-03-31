@@ -20,6 +20,7 @@ function mountReactApp(id, initialRoute) {
 
   if (!el) return;
 
+  console.log(el.dataset);
   // 👇 Get data attributes
   const props = {
     topbar: el.dataset.topbar || "true",
