@@ -961,10 +961,12 @@ export default function Service(props) {
             <div className="fx-popup">
               <div className="fx-leftpopup">
                 {productDetails.svc_img && (
-                  <img
-                    src={productDetails.svc_img}
-                    alt={productDetails.service_title}
-                  />
+                  <div className="fix-maximiz-popup-img">
+                    <img
+                      src={productDetails.svc_img}
+                      alt={productDetails.service_title}
+                    />
+                  </div>
                 )}
                 <span className="fx-servicepiccontentbox">
                   {productDetails.service_title}

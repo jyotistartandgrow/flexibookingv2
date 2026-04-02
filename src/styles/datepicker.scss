@@ -197,3 +197,18 @@ box-shadow: none;
   width:100%;
 }
 }
+
+.fx-calendar-sidebar.p-sidebar {
+  border-radius: 16px 16px 0 0;
+
+  .p-sidebar-content {
+    padding: 0 1rem 1rem;
+
+    .p-datepicker {
+      width: 100%;
+      min-width: unset !important;
+      box-shadow: none;
+      border: none;
+    }
+  }
+}

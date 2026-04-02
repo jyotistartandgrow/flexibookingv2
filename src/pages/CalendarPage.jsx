@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Calendar } from "primereact/calendar";
+import { Sidebar } from "primereact/sidebar";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import { addLocale } from "primereact/api";
+import useDeviceType from "../Utils/useDeviceType";
 
 addLocale("en-monday", {
   firstDayOfWeek: 1, // Monday
@@ -21,6 +23,8 @@ const CalendarPage = ({
   inline = false,
   ...otherProps
 }) => {
+  const isDesktop = useDeviceType();
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [viewDate, setViewDate] = useState(() => {
     if (value) return new Date(value);
     return new Date();
@@ -107,6 +111,55 @@ const CalendarPage = ({
       setViewDate(new Date(value));
     }
   }, [value]);
+
+  const formattedValue = value
+    ? new Date(value).toLocaleDateString("en-GB").replace(/\//g, "/")
+    : "";
+
+  const sharedCalendarProps = {
+    dateTemplate,
+    minDate,
+    disabledDates,
+    onMonthChange: handleViewDateChange,
+    onViewDateChange: handleViewDateChange,
+    viewDate,
+    locale,
+    dateFormat,
+    ...otherProps,
+  };
+
+  if (!isDesktop && !inline) {
+    return (
+      <>
+        <input
+          type="text"
+          readOnly
+          value={formattedValue}
+          placeholder="dd/mm/yyyy"
+          className={className}
+          onClick={() => setSidebarVisible(true)}
+          style={{ cursor: "pointer", width: "100%" }}
+        />
+        <Sidebar
+          visible={sidebarVisible}
+          onHide={() => setSidebarVisible(false)}
+          position="bottom"
+          className="fx-calendar-sidebar"
+          style={{ height: "auto" }}
+        >
+          <Calendar
+            value={value ? new Date(value) : null}
+            onChange={(e) => {
+              onChange(e);
+              setSidebarVisible(false);
+            }}
+            inline
+            {...sharedCalendarProps}
+          />
+        </Sidebar>
+      </>
+    );
+  }
 
   return (
     <Calendar
