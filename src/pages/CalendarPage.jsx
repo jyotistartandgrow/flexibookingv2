@@ -153,6 +153,7 @@ const CalendarPage = ({
               onChange(e);
               setSidebarVisible(false);
             }}
+            className="fx-datepicker-step1"
             inline
             {...sharedCalendarProps}
           />
