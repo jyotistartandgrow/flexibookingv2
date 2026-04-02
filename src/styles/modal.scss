@@ -422,6 +422,26 @@ h2 {
         height: 90vh;
 }
 
+.p-dialog-maximized .fx-popup #fx-modaltab_nav li a{
+    width: 100%;
+}
+
+.p-dialog-maximized #fx-modaltab_nav ul{
+  width:100%;
+}
+
+.p-dialog-maximized  .fx-timelistboxbar{
+  min-height: 452px;
+}
+
+.p-dialog-maximized .fx-popup .fx-leftpopup{
+  height: 100%;
+}
+.p-dialog-maximized .p-dialog-header{
+   top: 50px;
+    right: 51px;
+}
+
 .p-dialog-maximized  .fx-popup{
   height: 90vh;
 }
