@@ -517,6 +517,10 @@ h2 {
    .fx-booking .fx-popup #fx-modaltab_nav div.fx-tabcontent {
     padding-bottom: 76px;
    }
+
+   .fx-calendar-sidebar.p-sidebar .p-sidebar-content .fx-datepicker-step1  .p-datepicker{
+      width: 100% !important;
+   }
  
 }
 @media (min-width: 768px) and (max-width: 1200px) {
