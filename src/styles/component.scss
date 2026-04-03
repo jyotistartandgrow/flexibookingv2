@@ -6,7 +6,7 @@
   width: 146px;
   height: 71px;
   padding: 10px 12px;
-  border-radius: 4px;
+  border-radius: var(--fx-border-medium-radius);
   font-size:var(--all-regular-size);
   font-weight: 400;
   cursor: pointer;
@@ -62,7 +62,7 @@
  .fx-booking .fx-commoninput input[type="email"] {
   width: 100%;
   padding: 14px 16px;
-  border-radius: 4px;
+  border-radius: var(--fx-border-medium-radius);
   border: 1px solid var(--border-color);;
   /* box-sizing: border-box; */
   font-size: var(--all-input-fontsize);
@@ -84,7 +84,7 @@
  .fx-booking .fx-commoninput select{
    width: 100%;
   padding: 16px 12px;
-  border-radius: 4px;
+  border-radius: var(--fx-border-medium-radius);
   border: 1px solid var(--border-color);;
   /* box-sizing: border-box; */
   font-size: var(--normal-descriptionsize);
@@ -122,14 +122,14 @@
   gap: 16px;
 }
 .fx-booking input[type="text"].inputbox, .fx-booking input[type="email"].inputbox{
-  border-radius: 4px;
+  border-radius: var(--fx-border-medium-radius);
 }
 
  .fx-booking input[type="text"],
  .fx-booking input[type="email"] {
   width: 100%;
   padding: 16px 16px;
-  border-radius: 4px;
+  border-radius: var(--fx-border-medium-radius);
   border: 1px solid var(--border-color);
   /* box-sizing: border-box; */
   font-size: var(--normal-descriptionsize);
@@ -141,7 +141,7 @@
 }
 
 .fx-booking input[type="text"].fx-inputbox-gift {
-  border-radius: 4px;
+  border-radius: var(--fx-border-medium-radius);
 }
 
  .fx-booking .fx-input-wrapper {
@@ -331,7 +331,7 @@
   line-height: 23px;
   color: var(--grey);
   padding: 8px;
-  border-radius: 4px;
+  border-radius: var(--fx-border-medium-radius);
   box-shadow: 0px 0px 24px 0px var(--box-shadow);
   position: absolute;
   // bottom: 130%;
@@ -365,7 +365,7 @@
   line-height: 23px;
   color: var(--grey);
   padding: 16px;
-  border-radius: 4px;
+  border-radius: var(--fx-border-medium-radius);
   box-shadow: 0px 0px 24px 0px var(--box-shadow);
   position: absolute;
   z-index:99;
@@ -425,7 +425,7 @@
   content: "";
   width: 18px;
   height: 18px;
-  border-radius: 4px;
+  border-radius: var(--fx-border-small-radius);
   border: 2px solid var(--border-color);;
   background-color: var(--white);;
   display: inline-block;
@@ -560,14 +560,14 @@
 .fx-booking .fx-phone-input {
   // display: flex;
   align-items: center;
-  border-radius: 4px;
+  border-radius: var(--fx-border-medium-radius);
   // overflow: hidden;
   width: 100%;
 }
 .fx-booking .fx-phone-input .react-tel-input input[type=tel]{
   padding-left: 48px;
       border: 1px solid var(--border-color);
-      border-radius: 4px;
+      border-radius: var(--fx-border-medium-radius);
 }
 .fx-booking .fx-phone-input .arrow{
   margin-left: inherit;

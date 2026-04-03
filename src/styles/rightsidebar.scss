@@ -193,7 +193,7 @@
  .fx-mob-footer-order-details input[type="email"] {
   width: 100%;
   padding: 16px 12px;
-  border-radius: 4px;
+  border-radius: var(--fx-border-medium-radius);
   border: 1px solid var(--border-color);
   /* box-sizing: border-box; */
   font-size: var(--normal-descriptionsize);
@@ -377,7 +377,7 @@
     .fx-mob-footer-order-details input[type=text], .fx-mob-footer-order-details input[type=email] {
         width: 100%;
         padding: 16px 12px;
-        border-radius: 4px;
+        border-radius: var(--fx-border-medium-radius);
         border: 1px solid var(--border-color);
         /* box-sizing: border-box; */
         font-size: var(--normal-descriptionsize);

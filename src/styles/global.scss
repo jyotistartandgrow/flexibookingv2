@@ -154,7 +154,7 @@ h3 {
 .percent-bar{
     height: 4px;
     background-color: #95B8FF;
-    border-radius: 4px;
+    border-radius: var(--fx-border-medium-radius);
     display: inline-block;
     margin-top:3px;
 }
@@ -432,7 +432,7 @@ h1{
 .fx-date-progress-bar{
     background-color: var(--border-color);
     height: 3px;
-    border-radius: 4px;
+    border-radius: var(--fx-border-medium-radius);
     width: 32%;
     display: block;
     margin-top: 3px;
@@ -677,7 +677,7 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 
 .fx-booking input.fx-input-number[type=text], .fx-booking input.fx-input-number[type=number], 
 .fx-booking input.fx-input-lastname-box[type=text], .fx-booking input.fx-input-email-box[type=email]{
-    border-radius: 4px;
+    border-radius: var(--fx-border-medium-radius);
     height: 52px;
     width: 100%;
     margin: 0px;
@@ -797,7 +797,7 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 }
 
 .fx-calender-price{
-    font-size: 10px;
+    font-size: 12px;
     color: var(--primary-color);
 }
 

@@ -41,7 +41,7 @@ height:2px !important;
 
 .p-datepicker table td.p-datepicker-today > span{
   background: #E1EBFF;
-  border-radius: 4px;
+  border-radius: var(--fx-border-medium-radius);
 }
 .p-datepicker table td > span{
   width: inherit;
@@ -156,7 +156,7 @@ padding: 3px;
 
 .ui-state-highlight {
   background: #E1EBFF;
-  border-radius: 4px;
+  border-radius: var(--fx-border-medium-radius);
 }
 
 .ui-state-active {
@@ -198,17 +198,17 @@ box-shadow: none;
 }
 }
 
-.fx-calendar-sidebar.p-sidebar {
-  border-radius: 16px 16px 0 0;
+// .fx-calendar-sidebar.p-sidebar {
+//   border-radius: 16px 16px 0 0;
 
-  .p-sidebar-content {
-    padding: 0 1rem 1rem;
+//   .p-sidebar-content {
+//     padding: 0 1rem 1rem;
 
-    .p-datepicker {
-      width: 100%;
-      min-width: unset !important;
-      box-shadow: none;
-      border: none;
-    }
-  }
-}
+//     .p-datepicker {
+//       width: 100%;
+//       min-width: unset !important;
+//       box-shadow: none;
+//       border: none;
+//     }
+//   }
+// }
