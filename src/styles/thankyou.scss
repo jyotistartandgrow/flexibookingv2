@@ -92,7 +92,7 @@
     background: var(--white);
     border:1px solid var(--primary-color);
     color: var(--primary-color);
-    border-radius: 4px;
+    border-radius: var(--fx-border-medium-radius);
 }
 .fx-booking .fx-btn-light i{
     margin-left:5px;
