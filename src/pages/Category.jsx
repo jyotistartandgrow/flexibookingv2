@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import { Carousel } from "primereact/carousel";
 import axiosInstance from "../Utils/Interceptor";
 import { decodeHtml } from "../Utils/Functions";
 import categoryimg from "../assets/service1.jpg";
@@ -17,6 +16,37 @@ export default function Category(props) {
   const [categories, setCategories] = useState([]);
   const [isVisible, setIsVisible] = useState("grid");
   const [skeloading, setLoadingske] = useState(false);
+  const desktopCarouselRef = useRef(null);
+
+  const scrollDesktop = (dir) => {
+    const el = desktopCarouselRef.current;
+    if (!el) return;
+    const itemWidth =
+      el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
+    const gap = 16;
+    el.scrollBy({
+      left: dir === "next" ? itemWidth + gap : -(itemWidth + gap),
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    if (isVisible !== "slider" || !isDesktop) return;
+    const interval = setInterval(() => {
+      const el = desktopCarouselRef.current;
+      if (!el) return;
+      const itemWidth =
+        el.querySelector(".fx-desktop-swipe-item")?.offsetWidth || 0;
+      const gap = 16;
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      if (el.scrollLeft >= maxScroll - 1) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        el.scrollBy({ left: itemWidth + gap, behavior: "smooth" });
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isVisible, isDesktop, categories]);
 
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -41,24 +71,58 @@ export default function Category(props) {
     }
   };
 
+  // Auto-set default view based on category count and device type
+  useEffect(() => {
+    if (categories.length === 0) return;
+    if (isDesktop) {
+      if (categories.length === 1) setIsVisible("list");
+      else if (categories.length <= 8) setIsVisible("grid");
+      else if (categories.length <= 12) setIsVisible("slider");
+      else setIsVisible("list");
+    } else {
+      if (categories.length <= 2) setIsVisible("grid");
+      else if (categories.length <= 5) setIsVisible("slider");
+      else setIsVisible("list");
+    }
+  }, [categories, isDesktop]);
+
   // Template for each carousel item
   const categoryTemplate = (category) => {
     return (
-      <div className="fx-servicebox">
+      <div
+        className={
+          props.showBookNowButton == "true"
+            ? "fx-servicebox fx-servicebox-add-button"
+            : "fx-servicebox"
+        }
+        onClick={() => getservice(category.id)}
+      >
         <div className="fx-servicepicbox">
           <img src={categoryimg} alt={category.cat_name} />
-          <span className="fx-servicepiccontentbox">{category.cat_name}</span>
+          {props.categoryLabelVisibility == "true" && (
+            <span className="fx-servicepiccontentbox">{category.cat_name}</span>
+          )}
         </div>
         <div className="fx-servicecontentbox">
           <h4>{category.cat_name}</h4>
+          <p>Category description here</p>
           <p className="price">
-            from <span>{decodeHtml(category.price)}</span>
+            <span className="fx-price-form">from</span>
+            <span className="fx-price-one">
+              {decodeHtml(category.price)}
+            </span>
+            {props.showBookNowButton !== "true" && (
+              <i className="pi pi-chevron-right"></i>
+            )}
           </p>
-          <div className="booknowbtn">
-            <a href="#" onClick={() => getservice(category.id)}>
-              Book Now
-            </a>
-          </div>
+          {props.showBookNowButton == "true" && (
+            <div
+              className="booknowbtn"
+              onClick={() => getservice(category.id)}
+            >
+              <a href="#">Book Now</a>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -172,23 +236,44 @@ export default function Category(props) {
             {categories.length > 0 &&
               categories.map((category, p1) => {
                 return (
-                  <div className="fx-servicebox" key={p1}>
+                  <div
+                    className={
+                      props.showBookNowButton == "true"
+                        ? "fx-servicebox fx-servicebox-add-button"
+                        : "fx-servicebox"
+                    }
+                    key={p1}
+                    onClick={() => getservice(category.id)}
+                  >
                     <div className="fx-servicepicbox">
                       <img src={categoryimg} alt={category.cat_name} />
-                      <span className="fx-servicepiccontentbox">
-                        {category.cat_name}
-                      </span>
+                      {props.categoryLabelVisibility == "true" && (
+                        <span className="fx-servicepiccontentbox">
+                          {category.cat_name}
+                        </span>
+                      )}
                     </div>
                     <div className="fx-servicecontentbox">
                       <h4>{category.cat_name}</h4>
+                      <p>Category description here</p>
                       <p className="price">
-                        from <span>{decodeHtml(category.price)}</span>
+                        <span className="fx-price-form">from</span>
+                        <span className="fx-price-one">
+                          {decodeHtml(category.price)}
+                        </span>
+                        {props.showBookNowButton !== "true" && (
+                          <i className="pi pi-chevron-right"></i>
+                        )}
                       </p>
-                      <div className="booknowbtn">
-                        <a href="#" onClick={() => getservice(category.id)}>
-                          Book Now
-                        </a>
-                      </div>
+
+                      {props.showBookNowButton == "true" && (
+                        <div
+                          className="booknowbtn"
+                          onClick={() => getservice(category.id)}
+                        >
+                          <a href="#">Book Now</a>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
@@ -203,24 +288,33 @@ export default function Category(props) {
           {categories.length > 0 &&
             categories.map((category, p2) => {
               return (
-                <div className="fx-serviceboxlist" key={p2}>
+                <div
+                  className="fx-serviceboxlist"
+                  key={p2}
+                  onClick={() => getservice(category.id)}
+                >
                   <div className="fx-servicepicboxlist">
-                    <img src={categoryimg} alt={category.cat_name} />
-                    <span className="fx-servicepiccontentbox">
-                      {category.cat_name}
-                    </span>
+                    <div className="fx-list-img-box">
+                      <img src={categoryimg} alt={category.cat_name} />
+                    </div>
+                    {props.categoryLabelVisibility == "true" && (
+                      <span className="fx-servicepiccontentbox">
+                        {category.cat_name}
+                      </span>
+                    )}
                   </div>
                   <div className="fx-servicecontentboxlist">
-                    <h4>{category.cat_name}</h4>
+                    <div className="list-view-text-content">
+                      <h4>{category.cat_name}</h4>
+                      <p>Category description here</p>
+                    </div>
                     <p className="price">
-                      from <span>{decodeHtml(category.price)}</span>
+                      <span className="fx-price-form">from</span>
+                      <span className="fx-price-one">
+                        {decodeHtml(category.price)}
+                      </span>
+                      <i className="pi pi-chevron-right"></i>
                     </p>
-                    <span
-                      className="booknowbtn"
-                      onClick={() => getservice(category.id)}
-                    >
-                      Book Now
-                    </span>
                   </div>
                 </div>
               );
@@ -232,14 +326,40 @@ export default function Category(props) {
           }
         >
           <div className="slider responsive">
-            <Carousel
-              value={categories}
-              itemTemplate={categoryTemplate}
-              numVisible={4}
-              numScroll={3}
-              circular
-              autoplayInterval={3000}
-            />
+            {!isDesktop ? (
+              <div className="fx-mobile-swipe-carousel">
+                {categories.map((category, idx) => (
+                  <div key={idx} className="fx-mobile-swipe-item">
+                    {categoryTemplate(category)}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="fx-desktop-swipe-wrapper">
+                <button
+                  className="fx-dswipe-arrow fx-dswipe-prev"
+                  onClick={() => scrollDesktop("prev")}
+                >
+                  <i className="pi pi-chevron-left"></i>
+                </button>
+                <div
+                  className={`fx-desktop-swipe-carousel${categories.length < 4 ? " fx-dswipe-few" : ""}`}
+                  ref={desktopCarouselRef}
+                >
+                  {categories.map((category, idx) => (
+                    <div key={idx} className="fx-desktop-swipe-item">
+                      {categoryTemplate(category)}
+                    </div>
+                  ))}
+                </div>
+                <button
+                  className="fx-dswipe-arrow fx-dswipe-next"
+                  onClick={() => scrollDesktop("next")}
+                >
+                  <i className="pi pi-chevron-right"></i>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
