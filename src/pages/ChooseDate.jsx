@@ -264,7 +264,7 @@ export default function ChooseDate(props) {
       style={{ display: step === "datestep" ? "block" : "none" }}
     >
       {props.stepsVisibility?.step_1_title_visible == "true" && (
-        <h1 className="fx-all-main-heading">{props.stepTitles?.step_1_title || "Book your Services"}</h1>
+        <h1 className="fx-all-main-heading fx-select-date-heading">{props.stepTitles?.step_1_title || "Book your Services"}</h1>
       )}
       <div id="fx-tab_nav">
         <ul>

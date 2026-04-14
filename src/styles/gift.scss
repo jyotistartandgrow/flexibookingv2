@@ -7,16 +7,15 @@
 
 /* All children scoped to .fx-booking */
 .fx-booking .fx-redeem-container {
-  max-width: 450px;
+  max-width:300px;
   padding: 20px;
   padding-left: 0px;
 }
 
 .fx-booking .fx-redeem-title {
-  color: var(--primary-color);
-  font-size: 32px;
+  color: var(--darkgrey);
+  font-size: 24px;
   font-weight: 500;
-  letter-spacing: -0.5px;
   margin-top: 0;
   margin-bottom: 12px;
 }

@@ -170,10 +170,15 @@ h3 {
     margin-top:24px;
     font-size:var(--main-headingsize);
     margin-top:0px;
-    margin-bottom: 16px;
+    margin-bottom:20px;
     color: var(--darkgrey);
     height: 34px;
 }
+
+.fx-leftcontentbox h1.fx-all-main-heading.fx-select-date-heading{
+    height:auto;
+}
+
 .fx-booking .fx-commoninput .fx-toggleswitch{
     display: flex;
     gap: 8px;
@@ -224,6 +229,7 @@ svg.p-icon.p-datepicker-prev-icon {
     padding-bottom:16px;
     overflow:auto;
     padding-bottom: 16px;
+    min-height: 550px;
 }
 .fx-booking.fx-container{
     min-height:auto;
@@ -380,7 +386,8 @@ h1{
 }
 
 .btn-primary.fx-redeem-btn-primary{
-    margin-top: 16px;
+    margin-top: 20px;
+    width: 100%;
 }
 
 
