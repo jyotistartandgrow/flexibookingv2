@@ -185,6 +185,11 @@
   cursor: pointer;
 }
 
+.fx-booking #fx-tab_nav .fx-tabcontent.fx-tabcontent-booking.selected .fx-element-box-check-button .btn-primary,
+.fx-booking #fx-tab_nav .fx-tabcontent-gift.selected .fx-viewservice-button .btn-primary{
+      width: 306px;
+}
+
 
 
 .fx-booking input.btn-primary[type="submit"],
@@ -691,6 +696,11 @@
 .fx-couponcontainerinputbox {
         display: flex;
 }
+.fx-booking #fx-tab_nav .fx-tabcontent.fx-tabcontent-booking.selected .fx-element-box-check-button .btn-primary,
+.fx-booking #fx-tab_nav .fx-tabcontent-gift.selected .fx-viewservice-button .btn-primary{
+      width:100%;
+}
+
 }
 @media (min-width: 768px) and (max-width: 1100px) {
 .fx-couponcontainerinputbox{

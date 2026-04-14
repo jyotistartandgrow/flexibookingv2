@@ -12,11 +12,12 @@
  .fx-booking .fx-servicecontainer .fx-servicebox {
     width: 271px;
     height: auto;
-    border: 1px solid #e2e4e9;
+    border: 1px solid #F3F4F6;
     border-radius:8px;
     font-size: 20px;
     cursor: pointer;
      transition: all 0.3s ease; /* smooth animation */
+     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .fx-booking .fx-servicecontainer .fx-servicebox:hover {
@@ -84,7 +85,7 @@
   font-size: var(--all-card-heading);
   font-weight: 400;
   margin: 0px;
-  margin-bottom: 4px;
+  margin-bottom: 0px;
   height: 27px;
   overflow: hidden;
   color: var(--darkgrey);
