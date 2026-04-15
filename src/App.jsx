@@ -10,6 +10,7 @@ export default function App({ initialRoute = "/", ...props }) {
   const SgbmCategory = lazy(() => import("./pages/SgbmCategory"));
   const RedeemGift = lazy(() => import("./pages/RedeemGift"));
   const RedeemThankyou = lazy(() => import("./pages/RedeemThankyou"));
+  const SgbmOpenDatePurchase = lazy(() => import("./pages/SgbmOpenDatePurchase"));
 
   return (
     <MemoryRouter initialEntries={[initialRoute]}>
@@ -24,6 +25,10 @@ export default function App({ initialRoute = "/", ...props }) {
             <Route
               path="startingcategory"
               element={<SgbmCategory {...props} />}
+            />
+            <Route
+              path="opendatepurchase"
+              element={<SgbmOpenDatePurchase {...props} />}
             />
             <Route path="component" element={<Component {...props} />} />
             <Route path="*" element={<h1>Page Not Found</h1>} />
