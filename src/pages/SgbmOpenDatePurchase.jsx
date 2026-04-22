@@ -5,7 +5,7 @@ import Checkout from "./Checkout";
 import Payment from "./Payment";
 import { useSelector, useDispatch } from "react-redux";
 import OrderDetailsCard from "./OrderDetailsCard";
-import { setGift } from "../store/step1Slice";
+import { setGift, setOpenDatePurchase } from "../store/step1Slice";
 
 export default function SgbmOpenDatePurchase(props) {
   const loading = useSelector((state) => state.step1.loading);
@@ -15,7 +15,9 @@ export default function SgbmOpenDatePurchase(props) {
   const dispatch = useDispatch();
   if (!gift) {
     dispatch(setGift(true));
+    dispatch(setOpenDatePurchase(true));
   }
+
   return (
     <div
       className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}

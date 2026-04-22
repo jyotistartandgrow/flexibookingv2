@@ -20,6 +20,7 @@ export default function CheckoutForm() {
   const sessionExpired = useSelector((state) => state.step4.session_expired);
   const loading = useSelector((state) => state.step1.loading);
   const gift = useSelector((state) => state.step1.gift);
+  const opendatepurchase = useSelector((state) => state.step1.opendatepurchase);
 
   //const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -100,7 +101,11 @@ export default function CheckoutForm() {
         if (data && data.status == 200) {
           console.log(data);
           dispatch(setLoading(false));
-          navigate(`/thankyou?pid=${bookingKey}`);
+          if (opendatepurchase) {
+            navigate(`/opendate-thankyou?pid=${bookingKey}`);
+          } else {
+            navigate(`/thankyou?pid=${bookingKey}`);
+          }
         }
       }
       dispatch(setLoading(false));

@@ -1,0 +1,374 @@
+/* Scoped Styles for Redemption Voucher Container */
+.redemption-Voucher-services-box {
+    width: 100%;
+    background-color: transparent;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.redemption-Voucher-services-box .fx-booking-container {
+    width: 100%;
+    max-width: 850px;
+    padding: 0 15px;
+}
+
+.redemption-Voucher-services-box .fx-stepper-tab {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #002d72;
+    letter-spacing: 0.5px;
+}
+
+.redemption-Voucher-services-box .fx-stepper-tab.fx-active {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #002d72;
+    border-radius: 50px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* 2. Service/Item Cards */
+.redemption-Voucher-services-box .fx-section-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    margin: 25px 0 12px 0;
+}
+
+.redemption-Voucher-services-box .fx-item-card {
+    display: flex;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.redemption-Voucher-services-box .fx-item-card img {
+    width: 140px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.redemption-Voucher-services-box .fx-card-details {
+    padding: 15px 20px;
+}
+
+.redemption-Voucher-services-box .fx-card-details h3 {
+    margin: 0 0 6px 0;
+    font-size: 17px;
+    color: #222;
+}
+
+.redemption-Voucher-services-box .fx-card-details p {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* 3. Scheduling Panel */
+.redemption-Voucher-services-box .fx-scheduling-panel {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 25px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.redemption-Voucher-services-box .fx-label {
+    display: block;
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.redemption-Voucher-services-box .fx-input-with-icon {
+    position: relative;
+    max-width: 100%;
+}
+
+.redemption-Voucher-services-box .fx-input-with-icon input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #dbe4ef;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+}
+
+.redemption-Voucher-services-box .fx-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.redemption-Voucher-services-box .fx-availability-note {
+    font-size: 14px;
+    margin: 20px 0 15px 0;
+    color: #444;
+}
+
+/* 4. Time Grid */
+.redemption-Voucher-services-box .fx-time-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 35px;
+}
+
+.redemption-Voucher-services-box .fx-time-btn {
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #dbe4ef;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.redemption-Voucher-services-box .fx-time-btn.fx-selected {
+    border: 2px solid #3b82f6;
+    background-color: #f2f7ff;
+    color: #333;
+}
+
+/* 5. Footer Buttons */
+.redemption-Voucher-services-box .fx-footer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.redemption-Voucher-services-box .fx-btn-back {
+    background: transparent;
+    border: none;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.redemption-Voucher-services-box .fx-btn-continue {
+    background-color: #002663;
+    color: #fff;
+    padding: 12px 45px;
+    border-radius: 25px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.redemption-Voucher-services-box .fx-btn-continue:hover {
+    background-color: #001a44;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .redemption-Voucher-services-box .fx-item-card {
+        flex-direction: column;
+    }
+    .redemption-Voucher-services-box .fx-item-card img {
+        width: 100%;
+        height: 160px;
+    }
+    .redemption-Voucher-services-box .fx-time-selector-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+
+ /* Base Reset */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fcfcfc;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Scoped Container */
+        .fx-voucher-purchase-success-page {
+            width: 100%;
+            max-width: 640px;
+            margin: 20px;
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+            border-radius: 16px;
+            padding: 60px 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
+            text-align: center;
+        }
+
+        /* All child classes prefixed with parent class in CSS */
+        .fx-voucher-purchase-success-page .fx-status-icon {
+            width: 64px;
+            height: 64px;
+            background-color: #e9faf0;
+            color: #27c06d;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .fx-voucher-purchase-success-page .fx-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1a202c;
+            margin: 0 0 12px 0;
+            letter-spacing: -0.02em;
+        }
+
+        .fx-voucher-purchase-success-page .fx-message {
+            font-size: 14px;
+            color: #718096;
+            line-height: 1.6;
+            max-width: 440px;
+            margin: 0 auto 40px auto;
+        }
+
+        .fx-voucher-purchase-success-page .fx-voucher-box {
+            background-color: #f4f7fa;
+            border: 1px solid #edf2f7;
+            border-radius: 12px;
+            padding: 40px 20px;
+            margin-bottom: 24px;
+        }
+
+        .fx-voucher-purchase-success-page .fx-voucher-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #4a5568;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .fx-voucher-purchase-success-page .fx-voucher-code {
+            font-size: 34px;
+            font-weight: 700;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            letter-spacing: 0.05em;
+        }
+
+        .fx-voucher-purchase-success-page .fx-copy-btn {
+            background: none;
+            border: none;
+            color: #a0aec0;
+            cursor: pointer;
+            padding: 0;
+            font-size: 20px;
+        }
+
+        .fx-voucher-purchase-success-page .fx-summary-card {
+            border: 1px solid #f1f5f9;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .fx-voucher-purchase-success-page .fx-summary-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0 0 24px 0;
+        }
+
+        .fx-voucher-purchase-success-page .fx-item-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .fx-voucher-purchase-success-page .fx-item-info p { margin: 0; }
+        .fx-voucher-purchase-success-page .fx-item-name { font-size: 14px; font-weight: 600; color: #2d3748; }
+        .fx-voucher-purchase-success-page .fx-item-meta { font-size: 12px; color: #a0aec0; margin-top: 2px !important; }
+        .fx-voucher-purchase-success-page .fx-item-price { font-size: 14px; font-weight: 600; color: #1a202c; }
+
+        .fx-voucher-purchase-success-page .fx-divider {
+            border: none;
+            border-top: 1px dashed #cbd5e0;
+            margin: 20px 0;
+        }
+
+        .fx-voucher-purchase-success-page .fx-calc-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .fx-voucher-purchase-success-page .fx-bold-value { font-weight: 600; color: #1a202c; }
+        .fx-voucher-purchase-success-page .fx-discount { color: #38a169; font-weight: 600; }
+
+        .fx-voucher-purchase-success-page .fx-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .fx-voucher-purchase-success-page .fx-total-label { font-size: 18px; font-weight: 800; color: #1a202c; }
+        .fx-voucher-purchase-success-page .fx-grand-total { font-size: 26px; font-weight: 800; color: #032060; line-height: 1; }
+        .fx-voucher-purchase-success-page .fx-payment-meta { font-size: 10px; color: #a0aec0; text-transform: uppercase; margin-top: 6px; text-align: right; }
+
+        .fx-voucher-purchase-success-page .fx-btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .fx-voucher-purchase-success-page .fx-btn {
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.2s;
+        }
+
+        .fx-voucher-purchase-success-page .fx-btn-primary { background-color: #032060; color: #ffffff; border: none; }
+        .fx-voucher-purchase-success-page .fx-btn-secondary { background-color: #ffffff; border: 1px solid #e2e8f0; color: #4a5568; }
+
+        .fx-voucher-purchase-success-page .fx-footer-separator { border: 0; border-top: 1px solid #f1f5f9; margin-bottom: 30px; }
+        
+        .fx-voucher-purchase-success-page .fx-home-link {
+            text-decoration: none;
+            color: #032060;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
