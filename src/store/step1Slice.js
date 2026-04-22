@@ -21,6 +21,7 @@ const initialState = {
   voucher: null,
   stripe_key: null,
   topbar: false,
+  opendatepurchase: false,
 };
 
 const step1Slice = createSlice({
@@ -63,6 +64,9 @@ const step1Slice = createSlice({
     setTopbar: (state, action) => {
       state.topbar = action.payload;
     },
+    setOpenDatePurchase: (state, action) => {
+      state.opendatepurchase = action.payload;
+    },
   },
 });
 
@@ -79,5 +83,6 @@ export const {
   setVoucher,
   setStripeKey,
   setTopbar,
+  setOpenDatePurchase,
 } = step1Slice.actions;
 export default step1Slice.reducer;

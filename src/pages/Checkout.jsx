@@ -26,6 +26,7 @@ export default function Checkout(props) {
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
   const gift = useSelector((state) => state.step1.gift);
   const cart = useSelector((state) => state.step2.cart);
+  const opendatepurchase = useSelector((state) => state.step1.opendatepurchase);
 
   const { data: countries } = useFetch("/countries", {
     method: "get",
@@ -86,7 +87,7 @@ export default function Checkout(props) {
 
   const checkout = async () => {
     // Validate gift receiver information if gift is enabled
-    if (gift) {
+    if (gift && !opendatepurchase) {
       const errors = {};
 
       if (!receiverInfo.email || !validateEmail(receiverInfo.email)) {
@@ -191,10 +192,10 @@ export default function Checkout(props) {
 
     dispatch(setLoading(true));
     const gift_info = {
-      recipient_first_name: gift ? (receiverInfo.firstName ?? "") : "",
-      recipient_last_name: gift ? (receiverInfo.lastName ?? "") : "",
-      recipient_email: gift ? (receiverInfo.email ?? "") : "",
-      recipient_contact: gift ? (receiverInfo.phoneNumber ?? "") : "",
+      recipient_first_name: gift && !opendatepurchase ? (receiverInfo.firstName ?? "") : "",
+      recipient_last_name: gift && !opendatepurchase ? (receiverInfo.lastName ?? "") : "",
+      recipient_email: gift && !opendatepurchase ? (receiverInfo.email ?? "") : "",
+      recipient_contact: gift && !opendatepurchase ? (receiverInfo.phoneNumber ?? "") : "",
       recipient_address: "",
       recipient_country: gift ? (receiverInfo.country ?? "") : "",
       recipient_state: "",
@@ -486,7 +487,7 @@ export default function Checkout(props) {
         </div>
 
         <div className="fx-toggleswitch">
-          {gift == true && (
+          {gift == true && !opendatepurchase && (
             <>
               {/* <label htmlFor="option1">Gift</label>
               <InputSwitch

@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   mountReactApp("react_sgbm_starting_category", "/startingcategory");
   mountReactApp("react_sgbm_starting_service", "/startingservice");
   mountReactApp("react_sgbm_redeem_gift", "/redeemgift");
+  mountReactApp("react_sgbm_open_date_purchase", "/opendatepurchase");
 });
 
 function mountReactApp(id, initialRoute) {
