@@ -189,19 +189,6 @@
 }
 
 
-
- /* Base Reset */
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #fcfcfc;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
         /* Scoped Container */
         .fx-voucher-purchase-success-page {
             width: 100%;
