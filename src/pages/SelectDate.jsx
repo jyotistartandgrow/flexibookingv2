@@ -46,7 +46,7 @@ export default function SelectDate() {
     if (step == "datestep") {
       fetchVoucher();
     }
-  }, [step]);
+  }, [step, date]);
 
   const fetchVoucher = async () => {
     dispatch(setLoading(true));
@@ -206,7 +206,7 @@ export default function SelectDate() {
               </div>
 
               <div class="fx-footer-actions">
-                <div class="fx-btn-back">← Back</div>
+                <div class="fx-btn-back" onClick={()=> dispatch(setRedeemStep("codestep"))}>← Back</div>
                 <div class="fx-btn-continue" onClick={() => getslot()}>
                   CONTINUE
                 </div>
