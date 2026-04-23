@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axiosInstance from "../Utils/Interceptor";
-import { setRedeemStep, setLoading, setVoucher } from "../store/step1Slice";
+import {
+  setRedeemStep,
+  setLoading,
+  setVoucher,
+  setDate,
+} from "../store/step1Slice";
 import Swal from "sweetalert2";
+import moment from "moment";
 
 export default function Code() {
   const dispatch = useDispatch();
@@ -32,6 +38,7 @@ export default function Code() {
     if (data.status == 200 && data?.data?.status == true) {
       dispatch(setVoucher(code));
       dispatch(setRedeemStep("datestep"));
+      dispatch(setDate(moment()));
     } else {
       Swal.fire({
         toast: true,

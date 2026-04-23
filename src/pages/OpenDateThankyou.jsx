@@ -45,7 +45,7 @@ export default function OpenDateThankyou() {
   };
 
   useEffect(() => {
-    //dispatch({ type: "app/reset" });
+    dispatch({ type: "app/reset" });
     bookingdetail();
   }, []);
   return (

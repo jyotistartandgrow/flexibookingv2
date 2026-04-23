@@ -86,24 +86,13 @@ export default function ReedemSteps(props) {
             }}
           >
             <div>
-              2 <span>SELECT DATE</span>
-            </div>
-          </div>
-          <div
-            className={slotstepclass}
-            onClick={() => {
-              voucherdetail?.products?.length > 0 &&
-                dispatch(setRedeemStep("slotstep"));
-            }}
-          >
-            <div>
-              3 <span>SELECT SLOT</span>
+              2 <span>SELECT DATE & SLOT</span>
             </div>
           </div>
 
           <div className={checkoutstepclass}>
             <div>
-              4 <span>CHECKOUT</span>
+              3 <span>CHECKOUT</span>
             </div>
           </div>
         </div>

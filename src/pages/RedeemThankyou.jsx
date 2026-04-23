@@ -18,7 +18,6 @@ export default function Thankyou() {
   const componentRef = useRef();
   const voucher = useSelector((state) => state.step1.voucher);
   const [bookingData, setBookingData] = useState(null);
-  const [email, setEmail] = useState("");
 
   const bookingdetail = async () => {
     dispatch(setLoading(true));
