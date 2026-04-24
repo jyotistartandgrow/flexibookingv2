@@ -186,10 +186,12 @@ export default function SelectDate() {
                 </div>
               </div>
 
-              <p class="fx-availability-note">
-                Available times for{" "}
-                <strong>{moment(date).format("dddd, MMM DD")}</strong>
-              </p>
+              {voucherdetail?.slots?.length > 0 && (
+                <p class="fx-availability-note">
+                  Available times for{" "}
+                  <strong>{moment(date).format("dddd, MMM DD")}</strong>
+                </p>
+              )}
 
               <div class="fx-time-selector-grid">
                 {voucherdetail?.slots?.length == 0 && (
@@ -211,7 +213,12 @@ export default function SelectDate() {
               </div>
 
               <div class="fx-footer-actions">
-                <div class="fx-btn-back" onClick={()=> dispatch(setRedeemStep("codestep"))}>← Back</div>
+                <div
+                  class="fx-btn-back"
+                  onClick={() => dispatch(setRedeemStep("codestep"))}
+                >
+                  ← Back
+                </div>
                 <div
                   className={`fx-btn-continue ${isContinueDisabled ? "fx-btn-disabled" : ""}`}
                   onClick={() => {
