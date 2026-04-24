@@ -180,7 +180,9 @@ export default function SelectDate() {
                     locale="en-monday"
                     dateFormat="dd/mm/yy"
                   />
-                  <span class="fx-icon">📅</span>
+                  <span class="fx-icon">
+                    <i class="pi pi-calendar fx-calendaricon"></i>
+                  </span>
                 </div>
               </div>
 

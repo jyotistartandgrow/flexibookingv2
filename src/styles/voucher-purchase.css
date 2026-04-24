@@ -5,13 +5,13 @@
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     display: flex;
     justify-content: center;
-    padding: 20px 0;
+    padding: 0px 0px 20px 0px;
 }
 
 .redemption-Voucher-services-box .fx-booking-container {
     width: 100%;
     max-width: 850px;
-    padding: 0 15px;
+    padding: 0 0px;
 }
 
 .redemption-Voucher-services-box .fx-stepper-tab {
@@ -39,7 +39,7 @@
     font-size: 18px;
     font-weight: 500;
     color: #333;
-    margin: 25px 0 12px 0;
+    margin: 4px 0 12px 0;
 }
 
 .redemption-Voucher-services-box .fx-item-card {
@@ -85,9 +85,10 @@
 
 .redemption-Voucher-services-box .fx-label {
     display: block;
-    font-size: 13px;
+    font-size: 18px;
     color: #333;
     margin-bottom: 8px;
+    font-weight: 500;
 }
 
 .redemption-Voucher-services-box .fx-input-with-icon {
@@ -189,19 +190,6 @@
 }
 
 
-
- /* Base Reset */
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #fcfcfc;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
         /* Scoped Container */
         .fx-voucher-purchase-success-page {
             width: 100%;
@@ -213,6 +201,7 @@
             padding: 60px 40px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
             text-align: center;
+            margin: auto;
         }
 
         /* All child classes prefixed with parent class in CSS */
@@ -234,7 +223,7 @@
             font-weight: 800;
             color: #1a202c;
             margin: 0 0 12px 0;
-            letter-spacing: -0.02em;
+            text-align: center;
         }
 
         .fx-voucher-purchase-success-page .fx-message {
@@ -280,7 +269,8 @@
             color: #a0aec0;
             cursor: pointer;
             padding: 0;
-            font-size: 20px;
+            font-size: 30px;
+            margin-top: -9px;
         }
 
         .fx-voucher-purchase-success-page .fx-summary-card {

@@ -731,13 +731,17 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
   }
 
 .fx-servicebox .fx-servicecontentbox .pi-chevron-right{
-    font-size: 12px;
+    font-size: 10px;
     float: right;
     margin-top: 8px;
     color: var(--grey);
     position: absolute;
-    bottom: 20px;
+    bottom:16px;
     right: 12px;
+    background: var(--primary-color);
+    padding:6px;
+    border-radius: 12px;
+    color:#fff;
 }
 
 .fx-booking .fx-couponcontainer-checkout{
