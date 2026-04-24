@@ -107,8 +107,8 @@
 
 .redemption-Voucher-services-box .fx-icon {
     position: absolute;
-    right: 15px;
-    top: 50%;
+    right: 0px;
+    top: -5px;
     transform: translateY(-50%);
     pointer-events: none;
 }
