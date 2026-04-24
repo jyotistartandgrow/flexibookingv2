@@ -194,8 +194,10 @@
 }
 
 .step-for-redeem .codestep{
-  width: 27%;
-  z-index: 999;
+  width: 42%;
+    z-index: 999;
+    text-align: center;
+    padding-right: 0px;
 }
 
 .step-for-redeem .complete.codestep, .step-for-redeem .complete.datestep{
@@ -203,8 +205,9 @@
 }
 
 .step-for-redeem .datestep{
-     width: 47%;
+   width: 73%;
     z-index: 99;
+    padding-right: 6%;
 }
 
 .step-for-redeem .slotstep{
@@ -213,8 +216,9 @@
 }
 
 .step-for-redeem .checkoutstep{
-    width:85%;
-    z-index:1;
+    width: 100%;
+    z-index: 1;
+    padding-right: 8%;
 }
 
 .step-for-redeem .active{
@@ -223,16 +227,16 @@
 }
 
 .step-for-redeem .datestep.active{
-        width: 46%;
-    padding-left: 240px;
-}
-
-.fx-gift-date-box{
-  margin-top:40px;
+    width: 74%;
+    padding-left: 31%;
 }
 
 .fx-gift-date-box .btn-primary{
   margin-top: 16px;
+}
+
+.step-for-redeem .codestep.complete{
+  width: 33%;
 }
 
 
@@ -345,19 +349,20 @@
 // step for redeem mobile
 @media screen and (max-width: 768px) {  
   .step-for-redeem .codestep.active{
-    width: 53%;
+    width: 68%;
   }
   .step-for-redeem .codestep{
     width: 15%;
+            padding-right: 0px;
   }
 
   .step-for-redeem .datestep.active {
-        width: 71%;
-        padding-left: 20px;
+        width: 85%;
+        padding-left:16%;
     }
 
   .step-for-redeem .datestep{
-    width: 66%;
+    width: 83%;
   }
   .step-for-redeem .slotstep{
     width:85%;
@@ -369,10 +374,7 @@
   .step-for-redeem .checkoutstep{
     width: 100%;
   }
-  .fx-booking .fx-redeem-container{
-    margin-top:0px;
-    padding: 20px 0px;
-  }
+
   .step-for-redeem .slotstep.complete{
     background: #fff;
     width: 42%;
@@ -388,15 +390,19 @@
   padding-right: 0px;
 }
 
+.step-for-redeem .codestep.complete{
+  width: 21%;
+}
+
 }
 
 
 
 // Step For Starting From Redeem
 .step-for-redeem .complete.datestep{
-      width: 47%;
+    width: 64%;
     z-index: 99;
-    padding-left: 26%;
+    padding-left: 32%;
 }
 
 .step-for-redeem .checkoutstep.active{
@@ -404,7 +410,7 @@
 }
 @media screen and (max-width:768px) {
  .step-for-redeem .complete.datestep{
-    width: 32%;
+    width: 38%;
     padding-left: 14%;
   }
 }
@@ -490,4 +496,9 @@
   width: 42%;
   left:40%;
 }
+  .fx-leftbar .fx-booking .fx-redeem-container{
+    max-width: 100%;
+    margin-top:0px;
+    padding: 20px 0px;
+  }
 }
