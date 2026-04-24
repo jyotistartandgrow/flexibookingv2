@@ -93,6 +93,9 @@ export default function SelectDate() {
     dispatch(setRedeemStep("checkoutstep"));
     dispatch(setLoading(false));
   };
+
+  const isContinueDisabled = !date || !selectedSlot;
+
   return (
     <div
       className="fx-tabcontent fx-gift-date-box"
@@ -207,7 +210,19 @@ export default function SelectDate() {
 
               <div class="fx-footer-actions">
                 <div class="fx-btn-back" onClick={()=> dispatch(setRedeemStep("codestep"))}>← Back</div>
-                <div class="fx-btn-continue" onClick={() => getslot()}>
+                <div
+                  className={`fx-btn-continue ${isContinueDisabled ? "fx-btn-disabled" : ""}`}
+                  onClick={() => {
+                    if (!isContinueDisabled) {
+                      getslot();
+                    }
+                  }}
+                  style={{
+                    opacity: isContinueDisabled ? 0.5 : 1,
+                    pointerEvents: isContinueDisabled ? "none" : "auto",
+                    cursor: isContinueDisabled ? "not-allowed" : "pointer",
+                  }}
+                >
                   CONTINUE
                 </div>
               </div>
