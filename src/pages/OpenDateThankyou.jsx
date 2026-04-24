@@ -167,22 +167,22 @@ export default function OpenDateThankyou() {
                       window.open(`https://wa.me/?text=${text}`, "_blank");
                     },
                   },
-                  {
-                    label: "Facebook",
-                    icon: "📘",
-                    onClick: () => {
-                      const url = encodeURIComponent(window.location.href);
-                      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(`Here's my voucher code: ${bookingData?.voucher || ""}`)}`, "_blank");
-                    },
-                  },
-                  {
-                    label: "X (Twitter)",
-                    icon: "🐦",
-                    onClick: () => {
-                      const text = encodeURIComponent(`Here's my voucher code: ${bookingData?.voucher || ""}`);
-                      window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
-                    },
-                  },
+                  // {
+                  //   label: "Facebook",
+                  //   icon: "📘",
+                  //   onClick: () => {
+                  //     const url = encodeURIComponent(window.location.href);
+                  //     window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(`Here's my voucher code: ${bookingData?.voucher || ""}`)}`, "_blank");
+                  //   },
+                  // },
+                  // {
+                  //   label: "X (Twitter)",
+                  //   icon: "🐦",
+                  //   onClick: () => {
+                  //     const text = encodeURIComponent(`Here's my voucher code: ${bookingData?.voucher || ""}`);
+                  //     window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
+                  //   },
+                  // },
                   {
                     label: "Email",
                     icon: "✉️",
@@ -192,22 +192,22 @@ export default function OpenDateThankyou() {
                       window.location.href = `mailto:?subject=${subject}&body=${body}`;
                     },
                   },
-                  {
-                    label: "Copy Link",
-                    icon: "📋",
-                    onClick: () => {
-                      navigator.clipboard.writeText(bookingData?.voucher || "").then(() => {
-                        Swal.fire({
-                          toast: true,
-                          position: "top-end",
-                          showConfirmButton: false,
-                          timer: 2000,
-                          icon: "success",
-                          title: "Voucher copied to clipboard!",
-                        });
-                      });
-                    },
-                  },
+                  // {
+                  //   label: "Copy Link",
+                  //   icon: "📋",
+                  //   onClick: () => {
+                  //     navigator.clipboard.writeText(bookingData?.voucher || "").then(() => {
+                  //       Swal.fire({
+                  //         toast: true,
+                  //         position: "top-end",
+                  //         showConfirmButton: false,
+                  //         timer: 2000,
+                  //         icon: "success",
+                  //         title: "Voucher copied to clipboard!",
+                  //       });
+                  //     });
+                  //   },
+                  // },
                 ].map((item) => (
                   <button
                     key={item.label}
