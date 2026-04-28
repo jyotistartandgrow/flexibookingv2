@@ -41,7 +41,7 @@
   margin-top: 12px;
 }
 
- .fx-booking .fx-commoninput label{
+.fx-booking .fx-commoninput label{
   font-size:16px;
   font-weight: 400;
   color: var(--darkgrey);
@@ -49,15 +49,17 @@
   display: block;
   margin-bottom: 4px;
 }
+
  .fx-booking .fx-commoninput .fx-inputgroup {
   width: 100%;
   display: flex;
-  gap:16px;
+  gap:8px;
 }
 
 .fx-booking .fx-commoninput .bigtextbox{
   height: 112px !important;
 }
+
  .fx-booking .fx-commoninput input[type="text"],
  .fx-booking .fx-commoninput input[type="email"] {
   width: 100%;
@@ -98,6 +100,7 @@
     background: #fff;
     height: auto;
  }
+
 .fx-selectwrapper::after {
     content: '';
     position: absolute;

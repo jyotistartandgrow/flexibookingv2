@@ -220,7 +220,7 @@ export default function SelectDate() {
                   ← Back
                 </div>
                 <div
-                  className={`fx-btn-continue ${isContinueDisabled ? "fx-btn-disabled" : ""}`}
+                  className={`btn-primary ${isContinueDisabled ? "fx-btn-disable" : ""}`}
                   onClick={() => {
                     if (!isContinueDisabled) {
                       getslot();

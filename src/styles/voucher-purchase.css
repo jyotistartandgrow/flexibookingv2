@@ -125,6 +125,8 @@
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 12px;
     margin-bottom: 35px;
+    margin-top: 12px;
+    
 }
 
 .redemption-Voucher-services-box .fx-time-btn {
@@ -148,6 +150,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-align: center;
 }
 
 .redemption-Voucher-services-box .fx-btn-back {
@@ -361,4 +364,8 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .fx-inputgroup #checkbox-checked {
+            width: 20px;
         }
