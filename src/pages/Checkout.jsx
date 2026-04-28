@@ -160,9 +160,12 @@ export default function Checkout(props) {
 
     if (invoice) {
       const invoiceErrors = {};
-      if (!billdata.invoice_company_name?.trim()) invoiceErrors.invoice_company_name = true;
-      if (!billdata.invoice_company_address?.trim()) invoiceErrors.invoice_company_address = true;
-      if (!billdata.invoice_company_country) invoiceErrors.invoice_company_country = true;
+      if (!billdata.invoice_company_name?.trim())
+        invoiceErrors.invoice_company_name = true;
+      if (!billdata.invoice_company_address?.trim())
+        invoiceErrors.invoice_company_address = true;
+      if (!billdata.invoice_company_country)
+        invoiceErrors.invoice_company_country = true;
       if (!billdata.invoice_vat_id?.trim()) invoiceErrors.invoice_vat_id = true;
       if (Object.keys(invoiceErrors).length > 0) {
         setErrorlist(invoiceErrors);
@@ -192,10 +195,14 @@ export default function Checkout(props) {
 
     dispatch(setLoading(true));
     const gift_info = {
-      recipient_first_name: gift && !opendatepurchase ? (receiverInfo.firstName ?? "") : "",
-      recipient_last_name: gift && !opendatepurchase ? (receiverInfo.lastName ?? "") : "",
-      recipient_email: gift && !opendatepurchase ? (receiverInfo.email ?? "") : "",
-      recipient_contact: gift && !opendatepurchase ? (receiverInfo.phoneNumber ?? "") : "",
+      recipient_first_name:
+        gift && !opendatepurchase ? (receiverInfo.firstName ?? "") : "",
+      recipient_last_name:
+        gift && !opendatepurchase ? (receiverInfo.lastName ?? "") : "",
+      recipient_email:
+        gift && !opendatepurchase ? (receiverInfo.email ?? "") : "",
+      recipient_contact:
+        gift && !opendatepurchase ? (receiverInfo.phoneNumber ?? "") : "",
       recipient_address: "",
       recipient_country: gift ? (receiverInfo.country ?? "") : "",
       recipient_state: "",
@@ -704,7 +711,10 @@ export default function Checkout(props) {
                   value={billdata.invoice_company_name || ""}
                   className={errorlist.invoice_company_name ? "fx-invalid" : ""}
                   onChange={(e) =>
-                    setBilldata({ ...billdata, invoice_company_name: e.target.value })
+                    setBilldata({
+                      ...billdata,
+                      invoice_company_name: e.target.value,
+                    })
                   }
                 />
                 {errorlist.invoice_company_name && (
@@ -733,10 +743,17 @@ export default function Checkout(props) {
                 <input
                   type="text"
                   placeholder="Company Address"
-                  className={errorlist.invoice_company_address ? "fx-invalid bigtextbox" : "bigtextbox"}
+                  className={
+                    errorlist.invoice_company_address
+                      ? "fx-invalid bigtextbox"
+                      : "bigtextbox"
+                  }
                   value={billdata.invoice_company_address || ""}
                   onChange={(e) =>
-                    setBilldata({ ...billdata, invoice_company_address: e.target.value })
+                    setBilldata({
+                      ...billdata,
+                      invoice_company_address: e.target.value,
+                    })
                   }
                 />
                 {errorlist.invoice_company_address && (
@@ -749,9 +766,14 @@ export default function Checkout(props) {
                 <label>Company Country</label>
                 <select
                   value={billdata.invoice_company_country || ""}
-                  className={errorlist.invoice_company_country ? "fx-invalid" : ""}
+                  className={
+                    errorlist.invoice_company_country ? "fx-invalid" : ""
+                  }
                   onChange={(e) =>
-                    setBilldata({ ...billdata, invoice_company_country: e.target.value })
+                    setBilldata({
+                      ...billdata,
+                      invoice_company_country: e.target.value,
+                    })
                   }
                 >
                   <option value="">Select Country</option>

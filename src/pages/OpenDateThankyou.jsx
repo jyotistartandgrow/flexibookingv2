@@ -18,6 +18,39 @@ export default function OpenDateThankyou() {
   const [bookingData, setBookingData] = useState(null);
   const [showShareMenu, setShowShareMenu] = useState(false);
 
+  const getShareMessage = () => {
+    const voucher = bookingData?.voucher || "N/A";
+    const total = decodeHtml(bookingData?.product_details?.total || "");
+    const productName = bookingData?.products?.[0]?.name || "Gift Voucher";
+    const quantity = bookingData?.products?.reduce(
+      (sum, product) => sum + Number(product?.quantity || 0),
+      0
+    );
+    const lineBreak = "\n";
+
+    return [
+      "*FLEXIBOOKING GIFT VOUCHER*",
+      "============================",
+      `[PRODUCT] ${productName}`,
+      quantity ? `[QTY] ${quantity}` : null,
+      total ? `[TOTAL PAID] ${total}` : null,
+      "",
+      "*VOUCHER CODE*",
+      `*${voucher}*`,
+      "",
+      "Use this code during checkout to redeem.",
+      "============================",
+      "Thank you for booking with FlexiBooking",
+    ]
+      .filter(Boolean)
+      .join(lineBreak);
+  };
+
+  const shareVoucherOnWhatsApp = async () => {
+    const text = getShareMessage();
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+  };
+
   const bookingdetail = async () => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/thankyou`, {
@@ -162,10 +195,7 @@ export default function OpenDateThankyou() {
                   {
                     label: "WhatsApp",
                     icon: "💬",
-                    onClick: () => {
-                      const text = encodeURIComponent(`Here's my voucher code: ${bookingData?.voucher || ""}`);
-                      window.open(`https://wa.me/?text=${text}`, "_blank");
-                    },
+                    onClick: shareVoucherOnWhatsApp,
                   },
                   // {
                   //   label: "Facebook",
@@ -188,7 +218,7 @@ export default function OpenDateThankyou() {
                     icon: "✉️",
                     onClick: () => {
                       const subject = encodeURIComponent("My Voucher Code");
-                      const body = encodeURIComponent(`Here's my voucher code: ${bookingData?.voucher || ""}`);
+                      const body = encodeURIComponent(getShareMessage());
                       window.location.href = `mailto:?subject=${subject}&body=${body}`;
                     },
                   },
