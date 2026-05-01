@@ -20,6 +20,7 @@ export default function Thankyou() {
   const loading = useSelector((state) => state.step1.loading);
   const [bookingData, setBookingData] = useState(null);
   const [email, setEmail] = useState("");
+  const qrCodeImage = bookingData?.qrcode ? `data:image/png;base64,${bookingData.qrcode}` : "https://placehold.co/200x200?text=QR+Code";
 
   const bookingdetail = async () => {
     dispatch(setLoading(true));
@@ -49,7 +50,12 @@ export default function Thankyou() {
 
   const downloadAsPDF = async () => {
     const element = componentRef.current;
-    const canvas = await html2canvas(element);
+    const canvas = await html2canvas(element, {
+      useCORS: true,
+      allowTaint: false,
+      scale: 2,
+      backgroundColor: "#ffffff",
+    });
     const imgData = canvas.toDataURL("image/png");
 
     const pdf = new jsPDF("p", "mm", "a4");
@@ -161,17 +167,18 @@ export default function Thankyou() {
               </h3>
 
               <div className="fx-order-row">
-                {bookingData?.service_date && moment(bookingData?.service_date).isValid() && (
-                  <div>
-                    Service Date:
-                    <br />{" "}
-                    <span>
-                      {moment(bookingData?.service_date).format(
-                        "MMMM Do, YYYY",
-                      )}
-                    </span>
-                  </div>
-                )}
+                {bookingData?.service_date &&
+                  moment(bookingData?.service_date).isValid() && (
+                    <div>
+                      Service Date:
+                      <br />{" "}
+                      <span>
+                        {moment(bookingData?.service_date).format(
+                          "MMMM Do, YYYY",
+                        )}
+                      </span>
+                    </div>
+                  )}
                 <div>
                   Payment via: <br />
                   <span>Card</span>
@@ -275,6 +282,23 @@ export default function Thankyou() {
                     </tr>
                   </tbody>
                 </table>
+              )}
+
+              {qrCodeImage && (
+                <div className="fx-qr-block">
+                  <div className="fx-qr-block-text">
+                    <h4>Booking Verification QR Code</h4>
+                    <p>Present this QR code at the time of service</p>
+                  </div>
+                  <div className="fx-qr-image-wrapper">
+                    <img
+                      src={qrCodeImage}
+                      alt="Booking verification QR code"
+                      className="fx-qr-image"
+                      crossOrigin="anonymous"
+                    />
+                  </div>
+                </div>
               )}
 
               {/* <table className="discountbox">
