@@ -39,8 +39,6 @@ export default function OpenDateThankyou() {
       `*${voucher}*`,
       "",
       "Use this code during checkout to redeem.",
-      "============================",
-      "Thank you for booking with FlexiBooking",
     ]
       .filter(Boolean)
       .join(lineBreak);
