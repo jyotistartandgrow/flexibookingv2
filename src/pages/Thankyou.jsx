@@ -37,15 +37,34 @@ export default function Thankyou() {
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
     documentTitle: "Print",
-    onBeforePrint: () => {
-      return new Promise((resolve) => {
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = "../src/styles/thankyou.css";
-        link.onload = resolve; // wait for CSS to load
-        document.head.appendChild(link);
-      });
-    },
+    pageStyle: `
+      @page { margin: 20mm; }
+      * { box-sizing: border-box; }
+      body { font-family: Arial, sans-serif; font-size: 14px; color: #222; background: #fff; }
+      .fx-confirm-innerrightbox { background: #fff; padding: 20px 40px; }
+      .fx-order-title { font-size: 16px; color: #444; line-height: 1.5; margin-bottom: 20px; }
+      .fx-order-row { display: flex; justify-content: space-between; color: #444; font-size: 13px; font-weight: 500; margin-bottom: 10px; line-height: 1.5; }
+      .fx-order-row span { color: #777; font-weight: 300; }
+      .fx-order-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
+      .fx-order-table th { font-weight: 600; padding: 10px 4px; text-align: left; border-bottom: 2px solid #ddd; }
+      .fx-order-table td { color: #777; font-weight: 300; padding: 10px 4px; text-align: left; border-bottom: 1px solid #eee; }
+      .fx-order-table th:last-child, .fx-order-table td:last-child { text-align: right; }
+      .fx-summary { border-top: 2px solid #ddd; padding-top: 15px; font-weight: 500; margin-top: 4px; }
+      .fx-summary div { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+      .fx-address-block { border-top: 1px solid #ddd; margin-top: 15px; display: flex; justify-content: space-between; gap: 20px; }
+      .fx-address-block h4 { margin-bottom: 8px; margin-top: 15px; font-size: 13px; font-weight: 600; }
+      .fx-address-block p { font-size: 13px; color: #777; margin-top: 0; line-height: 1.5; font-weight: 300; word-break: break-word; }
+      .fx-billing-shipping-notification { background: #fff7f7; width: 100%; padding: 12px; text-align: left; border-radius: 8px; border: 1px solid #ffb7b7; font-size: 14px; margin-top: 16px; border-collapse: collapse; }
+      .fx-billing-shipping-notification th { padding-bottom: 6px; font-weight: 600; }
+      .fx-coupon-des { color: #385f6a; }
+      .fx-coupon-des .postive_price_module_discount { font-weight: bold; color: #1b9b2a; }
+      .fx-qr-block { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+      .fx-qr-block-text { flex: 1; }
+      .fx-qr-block-text h4 { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: #333; }
+      .fx-qr-block-text p { margin: 0; font-size: 13px; color: #777; font-weight: 300; line-height: 1.5; }
+      .fx-qr-image-wrapper { flex-shrink: 0; width: 100px; height: 100px; border: 1px solid #ddd; border-radius: 6px; padding: 6px; background: #fff; display: flex; align-items: center; justify-content: center; }
+      .fx-qr-image { width: 100%; height: 100%; object-fit: contain; display: block; }
+    `,
   });
 
   const downloadAsPDF = async () => {
