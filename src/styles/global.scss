@@ -581,6 +581,10 @@ h1{
     background-color: #ccc;
 }
 
+.btn-primary.fx-btn-disable{
+    background-color: #ccc;
+}
+
 // .fx-element-box .btn-primary.fx-btn-disable:hover{
 //     background:#ccc !important;
 // }
@@ -731,17 +735,14 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
   }
 
 .fx-servicebox .fx-servicecontentbox .pi-chevron-right{
-    font-size: 10px;
+    font-size: 12px;
     float: right;
     margin-top: 8px;
     color: var(--grey);
     position: absolute;
     bottom:16px;
     right: 12px;
-    background: var(--primary-color);
-    padding:6px;
-    border-radius: 12px;
-    color:#fff;
+    color:var(--primary-color);
 }
 
 .fx-booking .fx-couponcontainer-checkout{
