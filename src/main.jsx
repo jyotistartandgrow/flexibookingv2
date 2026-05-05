@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   mountReactApp("react_sgbm_starting_service", "/startingservice");
   mountReactApp("react_sgbm_redeem_gift", "/redeemgift");
   mountReactApp("react_sgbm_open_date_purchase", "/opendatepurchase");
+  mountReactApp("react_sgbm_checkin", "/checkin");
 });
 
 function mountReactApp(id, initialRoute) {
@@ -35,7 +36,15 @@ function mountReactApp(id, initialRoute) {
     termsAndConditionLink: el.dataset.termsAndConditionLink || "",
     secondaryColor: el.dataset.secondaryColor,
     stepTitles: el.dataset.stepTitles ? JSON.parse(el.dataset.stepTitles) : {},
-    stepsVisibility: el.dataset.stepsVisibility ? JSON.parse(el.dataset.stepsVisibility) : {step_1_title_visible: "true", step_2_title_visible: "true", step_3_title_visible: "true", step_4_title_visible: "true", step_5_title_visible: "true"},
+    stepsVisibility: el.dataset.stepsVisibility
+      ? JSON.parse(el.dataset.stepsVisibility)
+      : {
+          step_1_title_visible: "true",
+          step_2_title_visible: "true",
+          step_3_title_visible: "true",
+          step_4_title_visible: "true",
+          step_5_title_visible: "true",
+        },
   };
 
   // Set CSS custom property for secondary color

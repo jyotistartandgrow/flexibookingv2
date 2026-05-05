@@ -12,6 +12,7 @@ export default function App({ initialRoute = "/", ...props }) {
   const RedeemThankyou = lazy(() => import("./pages/RedeemThankyou"));
   const SgbmOpenDatePurchase = lazy(() => import("./pages/SgbmOpenDatePurchase"));
   const OpenDateThankyou = lazy(() => import("./pages/OpenDateThankyou"));
+  const SgbmCheckin = lazy(() => import("./pages/SgbmCheckin"));
 
   return (
     <MemoryRouter initialEntries={[initialRoute]}>
@@ -32,12 +33,13 @@ export default function App({ initialRoute = "/", ...props }) {
               element={<SgbmOpenDatePurchase {...props} />}
             />
             <Route path="component" element={<Component {...props} />} />
-            <Route path="*" element={<h1>Page Not Found</h1>} />
+            <Route path="*" element={<h1>Page Not Foun+d</h1>} />
           </Route>
           <Route path="redeemgift" element={<RedeemGift {...props} />} />
           <Route path="thankyou" element={<Thankyou />} />
           <Route path="redeem-thankyou" element={<RedeemThankyou />} />
           <Route path="opendate-thankyou" element={<OpenDateThankyou />} />
+          <Route path="checkin" element={<SgbmCheckin {...props} />} />
         </Routes>
       </Suspense>
     </MemoryRouter>
