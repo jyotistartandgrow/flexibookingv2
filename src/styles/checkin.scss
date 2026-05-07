@@ -272,6 +272,60 @@
             line-height: 1.3;
         }
 
+        .fx-scanner-main-box .fx-api-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.4;
+
+            p { margin: 0; }
+
+            &--verifying,
+            &--checking-in {
+                background: #eff6ff;
+                color: #1d4ed8;
+                border: 1px solid #bfdbfe;
+            }
+
+            &--success {
+                background: #f0fdf4;
+                color: #15803d;
+                border: 1px solid #bbf7d0;
+            }
+
+            &--invalid,
+            &--error {
+                background: #fef2f2;
+                color: #b91c1c;
+                border: 1px solid #fecaca;
+            }
+
+            &--already-checked-in {
+                background: #fffbeb;
+                color: #b45309;
+                border: 1px solid #fde68a;
+            }
+        }
+
+        .fx-scanner-main-box .fx-api-spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #93c5fd;
+            border-top-color: #1d4ed8;
+            border-radius: 50%;
+            animation: fx-spin 0.7s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes fx-spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* Footer */
         .fx-scanner-main-box .fx-footer {
             width: 100%;

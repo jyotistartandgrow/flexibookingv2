@@ -108,24 +108,30 @@
 .redemption-Voucher-services-box .fx-icon {
     position: absolute;
     right: 0px;
-    top: -5px;
+    top: -3px;
     transform: translateY(-50%);
     pointer-events: none;
 }
 
 .redemption-Voucher-services-box .fx-availability-note {
     font-size: 14px;
-    margin: 20px 0 15px 0;
+    margin: 6px 0 15px 0;
     color: #444;
+}
+
+.redemption-Voucher-services-box .fx-input-with-icon input.p-inputtext.p-component{
+    border-radius: 6px;
 }
 
 /* 4. Time Grid */
 .redemption-Voucher-services-box .fx-time-selector-grid {
-    display: grid;
+    display: flex;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 12px;
     margin-bottom: 35px;
     margin-top: 12px;
+    flex-direction: row;
+    flex-wrap: wrap;
     
 }
 
@@ -142,7 +148,7 @@
 .redemption-Voucher-services-box .fx-time-btn.fx-selected {
     border: 2px solid #3b82f6;
     background-color: #f2f7ff;
-    color: #333;
+    color: #333;  
 }
 
 /* 5. Footer Buttons */

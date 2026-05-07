@@ -1,9 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import axiosInstance from "../Utils/Interceptor";
+import { swalError } from "../Utils/Functions";
 import Cropper from "react-easy-crop";
 import jsQR from "jsqr";
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
-import pdfWorkerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import {
+  getDocument,
+  GlobalWorkerOptions,
+} from "pdfjs-dist/legacy/build/pdf.mjs";
+import pdfWorkerSrc from "pdfjs-dist/legacy/build/pdf.worker.min.mjs?url";
 import {
   ArrowRight,
   Camera,
@@ -15,6 +20,9 @@ import {
   SlidersHorizontal,
   Square,
 } from "lucide-react";
+import { setBookingkey } from "../store/step3Slice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
 
@@ -22,7 +30,9 @@ function createImage(source) {
   return new Promise((resolve, reject) => {
     const image = new window.Image();
     image.addEventListener("load", () => resolve(image));
-    image.addEventListener("error", () => reject(new Error("Unable to load image.")));
+    image.addEventListener("error", () =>
+      reject(new Error("Unable to load image.")),
+    );
     image.src = source;
   });
 }
@@ -55,6 +65,8 @@ async function getCroppedCanvas(imageSource, cropPixels) {
 }
 
 export default function SgbmCheckin() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const loading = useSelector((state) => state.step1.loading);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -77,6 +89,8 @@ export default function SgbmCheckin() {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [isUploadProcessing, setIsUploadProcessing] = useState(false);
+  const [apiStatus, setApiStatus] = useState("idle"); // idle | verifying | checking-in | success | error | invalid | already-checked-in
+  const [apiMessage, setApiMessage] = useState("");
 
   const canUseBarcodeDetector = useMemo(
     () => typeof window !== "undefined" && "BarcodeDetector" in window,
@@ -132,11 +146,55 @@ export default function SgbmCheckin() {
     setCroppedAreaPixels(areaPixels);
   }, []);
 
+  const processScannedCode = useCallback(
+    async (value) => {
+      if (!value) return;
+
+      try {
+        setApiStatus("verifying");
+        setApiMessage("Verifying QR code...");
+
+        const { data: verifyData } = await axiosInstance.post(
+          "/qr-verification",
+          {
+            booking_key: value,
+          },
+        );
+        console.log("Verification response:", verifyData);
+        if (!verifyData?.status) {
+          setApiStatus("invalid");
+          setApiMessage(verifyData?.message || "Invalid QR code.");
+          return;
+        }
+
+        if (verifyData?.status) {
+          setApiStatus("success");
+          setApiMessage(verifyData?.message || "Check-in successful!");
+          console.log("Check-in successful for booking key:", value);
+          dispatch(setBookingkey(value));
+          navigate("/checkin-thankyou");
+          return;
+        }
+      } catch (error) {
+        console.error("QR processing error:", error);
+        setApiStatus("error");
+        setApiMessage(
+          error?.response?.data?.message ||
+            "An error occurred. Please try again.",
+        );
+        swalError(error);
+      }
+    },
+    [dispatch, navigate],
+  );
+
   const decodeFromCanvas = useCallback(
     async (canvas) => {
       if (canUseBarcodeDetector) {
         try {
-          const detector = new window.BarcodeDetector({ formats: ["qr_code", "data_matrix"] });
+          const detector = new window.BarcodeDetector({
+            formats: ["qr_code", "data_matrix"],
+          });
           const codes = await detector.detect(canvas);
           if (codes.length > 0 && codes[0]?.rawValue) {
             return codes[0].rawValue;
@@ -171,7 +229,10 @@ export default function SgbmCheckin() {
       setScannerMessage("Reading cropped area...");
       stopScanner();
 
-      const croppedCanvas = await getCroppedCanvas(cropSource, croppedAreaPixels);
+      const croppedCanvas = await getCroppedCanvas(
+        cropSource,
+        croppedAreaPixels,
+      );
       const detectedValue = await decodeFromCanvas(croppedCanvas);
 
       if (!detectedValue) {
@@ -185,9 +246,14 @@ export default function SgbmCheckin() {
       setScanResult(detectedValue);
       setLastScanAt(new Date());
       setScannerMessage(
-        cropSourceType === "pdf" ? "Scan complete from cropped PDF" : "Scan complete from cropped image",
+        cropSourceType === "pdf"
+          ? "Scan complete from cropped PDF"
+          : "Scan complete from cropped image",
       );
+      setApiStatus("idle");
+      setApiMessage("");
       closeCropModal();
+      processScannedCode(detectedValue);
     } catch (error) {
       console.error("Unable to decode cropped source:", error);
       setScannerError("Unable to read selected crop. Please try again.");
@@ -202,6 +268,7 @@ export default function SgbmCheckin() {
     cropSourceType,
     decodeFromCanvas,
     isUploadProcessing,
+    processScannedCode,
     stopScanner,
   ]);
 
@@ -241,8 +308,17 @@ export default function SgbmCheckin() {
 
   const convertPdfToImage = useCallback(async (file) => {
     const buffer = await file.arrayBuffer();
-    const documentTask = getDocument({ data: buffer });
+    const documentTask = getDocument({
+      data: buffer,
+      useWorkerFetch: false,
+      isEvalSupported: false,
+    });
     const pdf = await documentTask.promise;
+
+    if (!pdf.numPages) {
+      throw new Error("PDF has no pages.");
+    }
+
     const page = await pdf.getPage(1);
     const viewport = page.getViewport({ scale: 2.2 });
     const canvas = document.createElement("canvas");
@@ -291,6 +367,8 @@ export default function SgbmCheckin() {
       setScannerError("");
       setScanResult("");
       setScannerMessage("Starting camera...");
+      setApiStatus("idle");
+      setApiMessage("");
 
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -314,7 +392,8 @@ export default function SgbmCheckin() {
         let requestedFormats = ["qr_code", "data_matrix"];
 
         if (typeof window.BarcodeDetector.getSupportedFormats === "function") {
-          const supportedFormats = await window.BarcodeDetector.getSupportedFormats();
+          const supportedFormats =
+            await window.BarcodeDetector.getSupportedFormats();
           requestedFormats = requestedFormats.filter((format) =>
             supportedFormats.includes(format),
           );
@@ -355,7 +434,9 @@ export default function SgbmCheckin() {
               }
 
               const canvas = canvasRef.current;
-              const context = canvas.getContext("2d", { willReadFrequently: true });
+              const context = canvas.getContext("2d", {
+                willReadFrequently: true,
+              });
 
               if (context) {
                 canvas.width = width;
@@ -380,6 +461,7 @@ export default function SgbmCheckin() {
             setLastScanAt(new Date());
             setScannerMessage("Scan complete");
             stopScanner({ keepSuccessMessage: true });
+            processScannedCode(value);
             return;
           }
         } catch (err) {
@@ -397,7 +479,7 @@ export default function SgbmCheckin() {
       );
       stopScanner();
     }
-  }, [canUseBarcodeDetector, isScanning, stopScanner]);
+  }, [canUseBarcodeDetector, isScanning, processScannedCode, stopScanner]);
 
   useEffect(() => {
     return () => {
@@ -407,11 +489,14 @@ export default function SgbmCheckin() {
 
   const lastScanLabel = useMemo(() => {
     if (!lastScanAt) return "Never";
-    const elapsedSeconds = Math.floor((Date.now() - lastScanAt.getTime()) / 1000);
+    const elapsedSeconds = Math.floor(
+      (Date.now() - lastScanAt.getTime()) / 1000,
+    );
 
     if (elapsedSeconds < 60) return "just now";
     const elapsedMinutes = Math.floor(elapsedSeconds / 60);
-    if (elapsedMinutes < 60) return `${elapsedMinutes} min${elapsedMinutes > 1 ? "s" : ""} ago`;
+    if (elapsedMinutes < 60)
+      return `${elapsedMinutes} min${elapsedMinutes > 1 ? "s" : ""} ago`;
 
     const elapsedHours = Math.floor(elapsedMinutes / 60);
     return `${elapsedHours} hr${elapsedHours > 1 ? "s" : ""} ago`;
@@ -435,7 +520,9 @@ export default function SgbmCheckin() {
           <div className="fx-card">
             <div className="fx-viewport-side">
               <div className="fx-system-status">
-                <div className={`fx-status-dot ${isScanning ? "active" : "idle"}`}></div>
+                <div
+                  className={`fx-status-dot ${isScanning ? "active" : "idle"}`}
+                ></div>
                 {isScanning ? "System Active" : "System Idle"}
               </div>
 
@@ -471,7 +558,19 @@ export default function SgbmCheckin() {
                 </p>
               ) : null}
 
-              {scannerError ? <p className="fx-scanner-error">{scannerError}</p> : null}
+              {scannerError ? (
+                <p className="fx-scanner-error">{scannerError}</p>
+              ) : null}
+
+              {apiStatus !== "idle" && (
+                <div className={`fx-api-status fx-api-status--${apiStatus}`}>
+                  {(apiStatus === "verifying" ||
+                    apiStatus === "checking-in") && (
+                    <div className="fx-api-spinner"></div>
+                  )}
+                  <p>{apiMessage}</p>
+                </div>
+              )}
             </div>
 
             <aside className="fx-controls-side">
@@ -557,10 +656,18 @@ export default function SgbmCheckin() {
           </footer>
 
           {isCropModalOpen ? (
-            <div className="fx-cropper-backdrop" role="dialog" aria-modal="true">
+            <div
+              className="fx-cropper-backdrop"
+              role="dialog"
+              aria-modal="true"
+            >
               <div className="fx-cropper-modal">
                 <div className="fx-cropper-head">
-                  <h3>{cropSourceType === "pdf" ? "Crop PDF Area" : "Crop Image Area"}</h3>
+                  <h3>
+                    {cropSourceType === "pdf"
+                      ? "Crop PDF Area"
+                      : "Crop Image Area"}
+                  </h3>
                   <p>Select the code area, then click Read QR From Crop.</p>
                 </div>
 
