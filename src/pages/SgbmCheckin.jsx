@@ -579,25 +579,25 @@ export default function SgbmCheckin() {
                 <span>Controls</span>
               </div>
 
-              <button
-                className="fx-btn fx-btn-start"
-                id="fx-start-scan"
-                onClick={startScanner}
-                disabled={isScanning}
-                type="button"
-              >
-                <Play size={16} /> Start Scanner
-              </button>
-
-              <button
-                className="fx-btn fx-btn-stop"
-                id="fx-stop-scan"
-                onClick={() => stopScanner()}
-                disabled={!isScanning}
-                type="button"
-              >
-                <Square size={14} fill="currentColor" /> Stop Scanner
-              </button>
+              {isScanning ? (
+                <button
+                  className="fx-btn fx-btn-stop"
+                  id="fx-stop-scan"
+                  onClick={() => stopScanner()}
+                  type="button"
+                >
+                  <Square size={14} fill="currentColor" /> Stop Scanner
+                </button>
+              ) : (
+                <button
+                  className="fx-btn fx-btn-start"
+                  id="fx-start-scan"
+                  onClick={startScanner}
+                  type="button"
+                >
+                  <Play size={16} /> Start Scanner
+                </button>
+              )}
 
               <div className="fx-or-divider">
                 <span>OR</span>
