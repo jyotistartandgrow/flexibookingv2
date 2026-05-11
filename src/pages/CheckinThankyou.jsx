@@ -60,7 +60,7 @@ export default function CheckinThankyou() {
           Hey {bookingData?.customer_billing?.billing_first_name}{" "}! QR code scan is successfully done.
         </p>
 
-        <div className="fx-summary-card">
+        <div className="fx-summary-card fx-booking">
           <h2 className="fx-summary-title">Order Summary</h2>
           <div className="fx-order-row">
             {bookingData?.service_date &&
