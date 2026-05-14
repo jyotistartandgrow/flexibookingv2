@@ -237,7 +237,7 @@
 } */
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img {
-  width: 100%;
+  width: auto%;
   height: auto;
   min-height: 121px;
   max-height: 121px;
@@ -573,6 +573,10 @@
   height: auto;
 }
 
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img{
+    max-width: inherit;
+}
+
 }
 
 .p-carousel .p-carousel-item {
@@ -600,11 +604,6 @@
     display: none;
 }
 
-
-
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img{
-    width: auto;
-}
  
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist{
     width: auto;
