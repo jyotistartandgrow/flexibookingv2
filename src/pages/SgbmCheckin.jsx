@@ -37,12 +37,31 @@ function createImage(source) {
   });
 }
 
-async function getCroppedCanvas(imageSource, cropPixels) {
-  const image = await createImage(imageSource);
+async function getCroppedCanvas(imageSource, cropPixels, sourceImage = null) {
+  const image = sourceImage || (await createImage(imageSource));
   const canvas = document.createElement("canvas");
 
-  canvas.width = cropPixels.width;
-  canvas.height = cropPixels.height;
+  const imageWidth = image.naturalWidth || image.width;
+  const imageHeight = image.naturalHeight || image.height;
+  const safeX = Math.min(
+    Math.max(0, Math.round(cropPixels.x)),
+    Math.max(0, imageWidth - 1),
+  );
+  const safeY = Math.min(
+    Math.max(0, Math.round(cropPixels.y)),
+    Math.max(0, imageHeight - 1),
+  );
+  const safeWidth = Math.min(
+    Math.max(1, Math.round(cropPixels.width)),
+    Math.max(1, imageWidth - safeX),
+  );
+  const safeHeight = Math.min(
+    Math.max(1, Math.round(cropPixels.height)),
+    Math.max(1, imageHeight - safeY),
+  );
+
+  canvas.width = safeWidth;
+  canvas.height = safeHeight;
 
   const context = canvas.getContext("2d", { willReadFrequently: true });
   if (!context) {
@@ -51,15 +70,61 @@ async function getCroppedCanvas(imageSource, cropPixels) {
 
   context.drawImage(
     image,
-    cropPixels.x,
-    cropPixels.y,
-    cropPixels.width,
-    cropPixels.height,
+    safeX,
+    safeY,
+    safeWidth,
+    safeHeight,
     0,
     0,
-    cropPixels.width,
-    cropPixels.height,
+    safeWidth,
+    safeHeight,
   );
+
+  return canvas;
+}
+
+function getExpandedCropAreas(cropArea, sourceWidth, sourceHeight) {
+  const centerX = cropArea.x + cropArea.width / 2;
+  const centerY = cropArea.y + cropArea.height / 2;
+  const expansionRatios = [1, 1.2, 1.45];
+
+  return expansionRatios.map((ratio) => {
+    const targetWidth = Math.min(sourceWidth, cropArea.width * ratio);
+    const targetHeight = Math.min(sourceHeight, cropArea.height * ratio);
+
+    const x = Math.min(
+      Math.max(0, Math.round(centerX - targetWidth / 2)),
+      Math.max(0, sourceWidth - targetWidth),
+    );
+    const y = Math.min(
+      Math.max(0, Math.round(centerY - targetHeight / 2)),
+      Math.max(0, sourceHeight - targetHeight),
+    );
+
+    return {
+      x,
+      y,
+      width: Math.max(1, Math.round(targetWidth)),
+      height: Math.max(1, Math.round(targetHeight)),
+    };
+  });
+}
+
+async function getFullSourceCanvas(imageSource, sourceImage = null) {
+  const image = sourceImage || (await createImage(imageSource));
+  const width = image.naturalWidth || image.width;
+  const height = image.naturalHeight || image.height;
+  const canvas = document.createElement("canvas");
+
+  canvas.width = width;
+  canvas.height = height;
+
+  const context = canvas.getContext("2d", { willReadFrequently: true });
+  if (!context) {
+    throw new Error("Unable to prepare full source canvas.");
+  }
+
+  context.drawImage(image, 0, 0, width, height);
 
   return canvas;
 }
@@ -74,6 +139,7 @@ export default function SgbmCheckin() {
   const pdfInputRef = useRef(null);
   const scanRafRef = useRef(null);
   const streamRef = useRef(null);
+  const imageObjectUrlRef = useRef("");
   const detectorRef = useRef(null);
   const scanningActiveRef = useRef(false);
 
@@ -124,14 +190,24 @@ export default function SgbmCheckin() {
     }
   }, []);
 
+  const releaseImageObjectUrl = useCallback(() => {
+    if (imageObjectUrlRef.current) {
+      URL.revokeObjectURL(imageObjectUrlRef.current);
+      imageObjectUrlRef.current = "";
+    }
+  }, []);
+
   const closeCropModal = useCallback(() => {
     if (isUploadProcessing) return;
+    if (cropSourceType === "image") {
+      releaseImageObjectUrl();
+    }
     setIsCropModalOpen(false);
     setCropSource("");
     setCroppedAreaPixels(null);
     setCrop({ x: 0, y: 0 });
     setZoom(1);
-  }, [isUploadProcessing]);
+  }, [cropSourceType, isUploadProcessing, releaseImageObjectUrl]);
 
   const openCropModal = useCallback((source, sourceType) => {
     setCropSource(source);
@@ -190,31 +266,192 @@ export default function SgbmCheckin() {
 
   const decodeFromCanvas = useCallback(
     async (canvas) => {
-      if (canUseBarcodeDetector) {
+      const decodeWithBarcodeDetector = async (sourceCanvas) => {
+        if (!canUseBarcodeDetector) return "";
+
         try {
           const detector = new window.BarcodeDetector({
             formats: ["qr_code", "data_matrix"],
           });
-          const codes = await detector.detect(canvas);
+          const codes = await detector.detect(sourceCanvas);
           if (codes.length > 0 && codes[0]?.rawValue) {
             return codes[0].rawValue;
           }
         } catch (error) {
           console.error("BarcodeDetector decode failed on upload:", error);
         }
-      }
 
-      const context = canvas.getContext("2d", { willReadFrequently: true });
-      if (!context) {
         return "";
+      };
+
+      const decodeUsingJsQr = (sourceCanvas) => {
+        const context = sourceCanvas.getContext("2d", {
+          willReadFrequently: true,
+        });
+        if (!context) {
+          return "";
+        }
+
+        try {
+          const frame = context.getImageData(
+            0,
+            0,
+            sourceCanvas.width,
+            sourceCanvas.height,
+          );
+
+          const firstTry = jsQR(frame.data, sourceCanvas.width, sourceCanvas.height, {
+            inversionAttempts: "attemptBoth",
+          });
+          if (firstTry?.data) return firstTry.data;
+
+          const secondTry = jsQR(
+            frame.data,
+            sourceCanvas.width,
+            sourceCanvas.height,
+            {
+              inversionAttempts: "dontInvert",
+            },
+          );
+
+          return secondTry?.data || "";
+        } catch {
+          return "";
+        }
+      };
+
+      const scaleCanvas = (sourceCanvas, scale) => {
+        if (scale === 1) {
+          return sourceCanvas;
+        }
+
+        const maxDimension = 2400;
+        const targetWidth = Math.max(
+          1,
+          Math.min(maxDimension, Math.round(sourceCanvas.width * scale)),
+        );
+        const targetHeight = Math.max(
+          1,
+          Math.min(maxDimension, Math.round(sourceCanvas.height * scale)),
+        );
+
+        if (
+          targetWidth === sourceCanvas.width &&
+          targetHeight === sourceCanvas.height
+        ) {
+          return sourceCanvas;
+        }
+
+        const scaled = document.createElement("canvas");
+        scaled.width = targetWidth;
+        scaled.height = targetHeight;
+        const scaledContext = scaled.getContext("2d", {
+          willReadFrequently: true,
+        });
+        if (!scaledContext) {
+          return sourceCanvas;
+        }
+
+        scaledContext.drawImage(sourceCanvas, 0, 0, targetWidth, targetHeight);
+
+        return scaled;
+      };
+
+      const normalizeCanvas = (sourceCanvas) => {
+        const maxEdge = 1400;
+        const minEdge = 280;
+        const width = sourceCanvas.width;
+        const height = sourceCanvas.height;
+        const longest = Math.max(width, height);
+        const shortest = Math.min(width, height);
+
+        let scale = 1;
+        if (longest > maxEdge) {
+          scale = maxEdge / longest;
+        } else if (shortest < minEdge) {
+          scale = minEdge / shortest;
+        }
+
+        if (scale === 1) {
+          return sourceCanvas;
+        }
+
+        const normalized = document.createElement("canvas");
+        normalized.width = Math.max(1, Math.round(width * scale));
+        normalized.height = Math.max(1, Math.round(height * scale));
+        const normalizedContext = normalized.getContext("2d", {
+          willReadFrequently: true,
+        });
+
+        if (!normalizedContext) {
+          return sourceCanvas;
+        }
+
+        normalizedContext.drawImage(
+          sourceCanvas,
+          0,
+          0,
+          normalized.width,
+          normalized.height,
+        );
+
+        return normalized;
+      };
+
+      const rotateCanvas = (sourceCanvas, degrees) => {
+        const radians = (degrees * Math.PI) / 180;
+        const rotated = document.createElement("canvas");
+        const rotateBy90 = degrees % 180 !== 0;
+
+        rotated.width = rotateBy90 ? sourceCanvas.height : sourceCanvas.width;
+        rotated.height = rotateBy90 ? sourceCanvas.width : sourceCanvas.height;
+
+        const rotatedContext = rotated.getContext("2d", {
+          willReadFrequently: true,
+        });
+        if (!rotatedContext) {
+          return sourceCanvas;
+        }
+
+        rotatedContext.translate(rotated.width / 2, rotated.height / 2);
+        rotatedContext.rotate(radians);
+        rotatedContext.drawImage(
+          sourceCanvas,
+          -sourceCanvas.width / 2,
+          -sourceCanvas.height / 2,
+        );
+
+        return rotated;
+      };
+
+      const normalizedCanvas = normalizeCanvas(canvas);
+      const rotatedVariants = [
+        normalizedCanvas,
+        rotateCanvas(normalizedCanvas, 90),
+        rotateCanvas(normalizedCanvas, 180),
+        rotateCanvas(normalizedCanvas, 270),
+      ];
+
+      for (const rotated of rotatedVariants) {
+        const detectorDecoded = await decodeWithBarcodeDetector(rotated);
+        if (detectorDecoded) {
+          return detectorDecoded;
+        }
       }
 
-      const frame = context.getImageData(0, 0, canvas.width, canvas.height);
-      const qr = jsQR(frame.data, canvas.width, canvas.height, {
-        inversionAttempts: "attemptBoth",
-      });
+      const scaleVariants = [1, 1.5, 2, 0.85];
 
-      return qr?.data || "";
+      for (const rotated of rotatedVariants) {
+        for (const scale of scaleVariants) {
+          const scaledVariant = scaleCanvas(rotated, scale);
+          const decoded = decodeUsingJsQr(scaledVariant);
+          if (decoded) {
+            return decoded;
+          }
+        }
+      }
+
+      return "";
     },
     [canUseBarcodeDetector],
   );
@@ -229,15 +466,37 @@ export default function SgbmCheckin() {
       setScannerMessage("Reading cropped area...");
       stopScanner();
 
-      const croppedCanvas = await getCroppedCanvas(
-        cropSource,
+      const sourceImage = await createImage(cropSource);
+      const sourceWidth = sourceImage.naturalWidth || sourceImage.width;
+      const sourceHeight = sourceImage.naturalHeight || sourceImage.height;
+      const cropAreas = getExpandedCropAreas(
         croppedAreaPixels,
+        sourceWidth,
+        sourceHeight,
       );
-      const detectedValue = await decodeFromCanvas(croppedCanvas);
+
+      let detectedValue = "";
+
+      for (const cropArea of cropAreas) {
+        const croppedCanvas = await getCroppedCanvas(
+          cropSource,
+          cropArea,
+          sourceImage,
+        );
+        detectedValue = await decodeFromCanvas(croppedCanvas);
+        if (detectedValue) {
+          break;
+        }
+      }
+
+      if (!detectedValue) {
+        const fullCanvas = await getFullSourceCanvas(cropSource, sourceImage);
+        detectedValue = await decodeFromCanvas(fullCanvas);
+      }
 
       if (!detectedValue) {
         setScannerError(
-          "No QR/Data Matrix code found in this crop. Try selecting a tighter area around the code.",
+          "No QR/Data Matrix code found. Try selecting a tighter crop around the code, or use a clearer image.",
         );
         setScannerMessage("No code found");
         return;
@@ -290,20 +549,14 @@ export default function SgbmCheckin() {
       setScannerError("");
       setScannerMessage("Preparing image crop...");
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          openCropModal(reader.result, "image");
-          setScannerMessage("Crop image and read code");
-        }
-      };
-      reader.onerror = () => {
-        setScannerError("Unable to load image file.");
-      };
+      releaseImageObjectUrl();
 
-      reader.readAsDataURL(file);
+      const objectUrl = URL.createObjectURL(file);
+      imageObjectUrlRef.current = objectUrl;
+      openCropModal(objectUrl, "image");
+      setScannerMessage("Crop image and read code");
     },
-    [openCropModal, stopScanner],
+    [openCropModal, releaseImageObjectUrl, stopScanner],
   );
 
   const convertPdfToImage = useCallback(async (file) => {
@@ -484,8 +737,9 @@ export default function SgbmCheckin() {
   useEffect(() => {
     return () => {
       stopScanner();
+      releaseImageObjectUrl();
     };
-  }, [stopScanner]);
+  }, [releaseImageObjectUrl, stopScanner]);
 
   const lastScanLabel = useMemo(() => {
     if (!lastScanAt) return "Never";
@@ -531,6 +785,10 @@ export default function SgbmCheckin() {
                 <div className="fx-bracket fx-tr"></div>
                 <div className="fx-bracket fx-bl"></div>
                 <div className="fx-bracket fx-br"></div>
+
+                <div
+                  className={`fx-scan-line ${isScanning ? "active" : "hidden"}`}
+                ></div>
 
                 <video
                   id="fx-camera-feed"
@@ -579,25 +837,23 @@ export default function SgbmCheckin() {
                 <span>Controls</span>
               </div>
 
-              {isScanning ? (
-                <button
-                  className="fx-btn fx-btn-stop"
-                  id="fx-stop-scan"
-                  onClick={() => stopScanner()}
-                  type="button"
-                >
-                  <Square size={14} fill="currentColor" /> Stop Scanner
-                </button>
-              ) : (
-                <button
-                  className="fx-btn fx-btn-start"
-                  id="fx-start-scan"
-                  onClick={startScanner}
-                  type="button"
-                >
-                  <Play size={16} /> Start Scanner
-                </button>
-              )}
+              <button
+                className={`fx-btn fx-btn-start ${isScanning ? "fx-btn-hidden" : ""}`}
+                id="fx-start-scan"
+                onClick={startScanner}
+                type="button"
+              >
+                <Play size={16} /> Start Scanner
+              </button>
+
+              <button
+                className={`fx-btn fx-btn-stop ${isScanning ? "" : "fx-btn-hidden"}`}
+                id="fx-stop-scan"
+                onClick={() => stopScanner()}
+                type="button"
+              >
+                <Square size={14} fill="currentColor" /> Stop Scanner
+              </button>
 
               <div className="fx-or-divider">
                 <span>OR</span>

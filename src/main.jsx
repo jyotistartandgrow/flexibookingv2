@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   mountReactApp("react_sgbm_redeem_gift", "/redeemgift");
   mountReactApp("react_sgbm_open_date_purchase", "/opendatepurchase");
   mountReactApp("react_sgbm_checkin", "/checkin");
+  mountReactApp("react_sgbm_widget", "/widget");
 });
 
 function mountReactApp(id, initialRoute) {
