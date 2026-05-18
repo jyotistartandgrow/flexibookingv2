@@ -49,10 +49,15 @@ height:2px !important;
   color: var(--darkgrey);
   margin: 2px 2px;
   font-size: var(--all-regular-size);
+  height: auto;
 }
 .ui-datepicker {
   background: var(--white);
   box-shadow: 0px 0px 2px 0px var(--box-shadow);
+}
+
+.p-datepicker table th, .p-datepicker table td{
+  border: none;
 }
 
 .ui-datepicker-header {
@@ -182,6 +187,7 @@ background-color: #fff;
 border-color: #fff;
 color: inherit;
 box-shadow: none;
+padding: 10px 16px;
 }
 
 .p-datepicker:not(.p-datepicker-inline){

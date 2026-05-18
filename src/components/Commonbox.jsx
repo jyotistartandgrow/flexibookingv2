@@ -158,7 +158,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
   const deleteitem = (id, type) => {
     if (toggleCard) toggleCard();
     confirmDialog({
-      message: "Are you sure you want to delete this service?",
+      message: `Are you sure you want to delete this ${type}?`,
       header: "Delete Confirmation",
       icon: "pi pi-exclamation-triangle",
       className: "fx-confirmation-popup",
