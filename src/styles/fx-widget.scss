@@ -64,6 +64,10 @@
   min-height: calc(100vh - 61px);
 }
 
+.fx-widget-layout.fx-booking.fx-container.bgbody{
+  padding: 0px;
+}
+
 /* ── Config Panel (left) ──────────────────────────────────── */
 .fx-widget-config {
   background: #ffffff;
@@ -94,7 +98,7 @@
 
 .fx-widget-opt-btn {
   padding: 7px 13px;
-  border-radius: 8px;
+      border-radius: 16px;
   border: 1.5px solid #e2e8f0;
   background: #ffffff;
   color: #64748b;
@@ -110,10 +114,9 @@
 }
 
 .fx-widget-opt-btn.fx-widget-opt-active {
-  border-color: var(--fx-accent, #0ea5e9);
-  background: color-mix(in srgb, var(--fx-accent, #0ea5e9) 10%, #fff);
-  color: var(--fx-accent, #0ea5e9);
-  font-weight: 600;
+  background: var(--primary-color);
+  color: var(--white);
+  font-weight: 400;
 }
 
 /* ── Color Swatches ───────────────────────────────────────── */
@@ -199,6 +202,7 @@
 .fx-widget-content {
   padding: 24px 28px;
   overflow-y: auto;
+  width: 100%;
 }
 
 .fx-widget-content-topbar {
@@ -537,6 +541,10 @@
   display: grid;
   gap: 14px;
   width: 100%;
+}
+
+.fx-servicecontainer.fx-widget-cards-grid.fx-widget-cols-2{
+  display:inherit;
 }
 
 .fx-widget-cards-grid.fx-widget-cols-1 { grid-template-columns: 220px; }

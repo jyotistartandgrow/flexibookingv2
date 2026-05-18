@@ -233,7 +233,7 @@ function CardsPreview({ accentColor, cols, showCategory }) {
       style={{ "--fx-accent": accentColor }}
     >
       {visible.map((s) => (
-        <div key={s.id} className="fx-widget-card">
+        <div key={s.id} className="fx-widget-card ">
           <div className="fx-widget-card-img-wrap">
             <img
               src={s.svc_img}
@@ -321,7 +321,7 @@ export default function WidgetBuilder() {
   return (
     <div className="fx-widget-root" style={{ "--fx-accent": accentColor }}>
       {/* ── Header ── */}
-      <header className="fx-widget-header">
+      {/* <header className="fx-widget-header">
         <div className="fx-widget-header-logo">◇</div>
         <div>
           <div className="fx-widget-header-title">Spa Widget Builder</div>
@@ -329,9 +329,9 @@ export default function WidgetBuilder() {
             Corte Spa — Cadore Dolomiti
           </div>
         </div>
-      </header>
+      </header> */}
 
-      <div className="fx-widget-layout">
+      <div className="fx-widget-layout fx-booking fx-container bgbody">
         {/* ── Config Panel ── */}
         <aside className="fx-widget-config">
           <Section label="Widget type">
@@ -340,10 +340,10 @@ export default function WidgetBuilder() {
                 active={tab === "calendar"}
                 onClick={() => setTab("calendar")}
               >
-                📅 Calendar
+              Calendar
               </OptBtn>
               <OptBtn active={tab === "cards"} onClick={() => setTab("cards")}>
-                🃏 Cards
+                Cards
               </OptBtn>
             </div>
           </Section>
@@ -480,10 +480,10 @@ export default function WidgetBuilder() {
                   />
                 )}
               </div>
-              <div className="fx-widget-banner fx-widget-banner-warning">
+              {/* <div className="fx-widget-banner fx-widget-banner-warning">
                 ⚡ Simulated preview using live API data. The actual iframe
                 loads your Corte Spa page and redirects on click.
-              </div>
+              </div> */}
             </>
           )}
 
@@ -526,7 +526,7 @@ export default function WidgetBuilder() {
           )}
 
           {/* Widget type cards */}
-          <div className="fx-widget-info-grid">
+          {/* <div className="fx-widget-info-grid">
             <p className="fx-widget-info-header">Available widgets</p>
             {[
               {
@@ -546,7 +546,7 @@ export default function WidgetBuilder() {
                 <p className="fx-widget-info-card-desc">{w.desc}</p>
               </div>
             ))}
-          </div>
+          </div> */}
         </main>
       </div>
     </div>

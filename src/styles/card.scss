@@ -45,14 +45,13 @@
   width: auto;
   position: absolute;
   background: var(--white);
-  padding: 4px 4px;
+  padding: 4px 6px;
   font-size: var(--all-card-category-size);
-  border-top-right-radius:4px;
-  border-bottom-right-radius:4px;
+  border-radius: 6px;
   font-weight: 400;
   text-align: left;
-  left: 0px;
-  top: 8px;
+  left: 16px;
+  top: 12px;
   color: var(--darkgrey);
 }
 
@@ -93,7 +92,7 @@
 
 .fx-booking .fx-servicebox .fx-servicecontentbox p {
   height: 44px;
-  font-size: var(--normal-descriptionsize);
+  font-size: var(--all-card-des);
   font-weight: 300;
   color: var(--grey);
   margin-top: 0px;
@@ -101,6 +100,7 @@
   overflow: hidden;
   line-height: 22px;
 }
+
 
 
 
@@ -237,11 +237,12 @@
 } */
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img {
-  width: auto%;
+  width: auto;
   height: auto;
   min-height: 121px;
   max-height: 121px;
   border-radius: 8px 0px 0px 8px;
+  max-width: inherit;
 }
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist {
