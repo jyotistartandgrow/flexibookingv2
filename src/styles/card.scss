@@ -261,7 +261,7 @@
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist p {
   height: 24px;
-  font-size: var(--normal-descriptionsize);
+  font-size: var(--all-card-des);
   font-weight: 300;
   color: var(--grey);
   margin-top: 10px;
@@ -336,7 +336,7 @@
 
 .fx-booking .fx-extracontainer .fx-extrabox .fx-extracontentbox p {
   height: 42px;
-  font-size: var(--normal-descriptionsize);
+  font-size: var(--all-card-des);
   font-weight: 300;
   color: var(--grey);
   padding-top:0px;
@@ -346,7 +346,7 @@
 
  .fx-booking .fx-extrabox .fx-extracontentbox p.fx-extrapicpriceboxright {
   height: auto;
-  font-size: 16px;
+  font-size:var(--all-card-price-size);
   font-weight: 500;
   color: var(--primary-color);
   margin-top:6px;
@@ -512,7 +512,7 @@
   overflow: hidden;
 }
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist p{
-  font-size:14px;
+  font-size: var(--all-card-des);
   overflow: hidden;
   height: 43px;
   margin: 0px;

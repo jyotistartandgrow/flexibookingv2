@@ -201,8 +201,10 @@
 /* ── Right Content Panel ──────────────────────────────────── */
 .fx-widget-content {
   padding: 24px 28px;
-  overflow-y: auto;
-  width: 100%;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 900px;
+    margin: 0px auto;
 }
 
 .fx-widget-content-topbar {
@@ -251,8 +253,6 @@
   padding: 24px 20px;
   margin-bottom: 16px;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
   min-height: 320px;
 }
 
