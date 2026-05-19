@@ -9,14 +9,14 @@ const REDIRECT_URL =
 const SERVICE_PAGE =
   "https://wordpress-1092228-6228102.cloudwaysapps.com/v2-starting-from-service/";
 
-const ACCENT_PRESETS = [
-  "#0ea5e9",
-  "#14b8a6",
-  "#8b5cf6",
-  "#f59e0b",
-  "#ef4444",
-  "#10b981",
-];
+// const ACCENT_PRESETS = [
+//   "#215ad4",
+//   "#14b8a6",
+//   "#8b5cf6",
+//   "#f59e0b",
+//   "#ef4444",
+//   "#10b981",
+// ];
 
 const WEEKDAY_LABELS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
@@ -350,14 +350,14 @@ export default function WidgetBuilder() {
 
           <Section label="Accent color">
             <div className="fx-widget-color-row">
-              {ACCENT_PRESETS.map((c) => (
+              {/* {ACCENT_PRESETS.map((c) => (
                 <div
                   key={c}
                   className={`fx-widget-swatch${accentColor === c ? " fx-widget-swatch-active" : ""}`}
                   style={{ background: c }}
                   onClick={() => setAccentColor(c)}
                 />
-              ))}
+              ))} */}
               <input
                 type="color"
                 className="fx-widget-color-input"
@@ -447,9 +447,12 @@ export default function WidgetBuilder() {
         {/* ── Content Panel ── */}
         <main className="fx-widget-content">
           <div className="fx-widget-content-topbar">
+            <div className="fx-widget-content-header">
+            <div className="fx-widget-header-title">Widget Builder</div>
             <span className="fx-widget-panel-title">
               {mode === "preview" ? "Live Preview" : "Embed Code"}
             </span>
+            </div>
             <div className="fx-widget-tabbar">
               <button
                 className={`fx-widget-tab${mode === "preview" ? " fx-widget-tab-active" : ""}`}
