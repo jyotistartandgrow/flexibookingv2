@@ -96,34 +96,55 @@ export default function Extra(props) {
       ids.forEach((id, i) => {
         if (caps[i] > 0) initQ[parseInt(id)] = caps[i];
       });
+    } else if (Array.isArray(cart.extra) && cart.extra.length > 0) {
+      cart.extra.forEach((item) => {
+        if (item?.id && item?.capacity > 0) {
+          initQ[item.id] = item.capacity;
+        }
+      });
     }
     setQuantities(initQ);
     if (date && service) {
       setLoadingske(true);
-      fetchProductsByDate(date);
+      (async () => {
+        const { data } = await axiosInstance(
+          `/extras?date=${moment(date).format(
+            "YYYY-MM-DD",
+          )}&service_id=${service}&all=${gift ? true : false}`,
+          {
+            method: "get",
+          },
+        );
+        if (data && data.status == 200) {
+          if (data.data.length == 0) {
+            const addToCartRes = await axiosInstance.post(`/addtocart`, {
+              service_id: service,
+              date: moment(date).format("YYYY-MM-DD"),
+              total_service_booking: capacity,
+              time_slot: slot,
+              extra_svc_ids: null,
+              no_of_persons: 0,
+              gift,
+            });
+            if (
+              addToCartRes?.data &&
+              addToCartRes.data.status == 200 &&
+              addToCartRes.data.data.booking_string
+            ) {
+              dispatch(setExtracapacity(0));
+              dispatch(setExtra(null));
+              dispatch(setBookingkey(addToCartRes.data.data.booking_string));
+              dispatch(setStep("checkoutstep"));
+              dispatch(setLoading(false));
+            }
+          } else {
+            setProductsArr(data.data);
+          }
+        }
+        setLoadingske(false);
+      })();
     }
-  }, [date, service, step]);
-
-  const fetchProductsByDate = async (selectedDate) => {
-    const { data } = await axiosInstance(
-      `/extras?date=${moment(selectedDate).format(
-        "YYYY-MM-DD",
-      )}&service_id=${service}&all=${gift ? true : false}`,
-      {
-        method: "get",
-      },
-    );
-    if (data && data.status == 200) {
-      if (data.data.length == 0) {
-        addtocart(null, 0);
-        dispatch(setStep("checkoutstep"));
-        dispatch(setLoading(false));
-      } else {
-        setProductsArr(data.data);
-      }
-    }
-    setLoadingske(false);
-  };
+  }, [date, service, capacity, slot, gift, step, extraID, extracapacity, cart.extra, dispatch]);
 
   // Template for each carousel item
   const productTemplate = (product, pp) => {

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 /* ── Constants ───────────────────────────────────────────── */
 const API_BASE =
   "https://wordpress-1092228-6228102.cloudwaysapps.com/wp-json/booking/v1";
-const REDIRECT_URL =
+const DEFAULT_REDIRECT_URL =
   "https://wordpress-1092228-6228102.cloudwaysapps.com/v2-shortcode/";
 const SERVICE_PAGE =
   "https://wordpress-1092228-6228102.cloudwaysapps.com/v2-starting-from-service/";
@@ -22,8 +22,12 @@ const WEEKDAY_LABELS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
 /* ── Helpers ─────────────────────────────────────────────── */
 function parsePrice(raw = "") {
-  // HTML entity &#0128; = € symbol; strip it and commas
-  return raw.replace(/&#0128;|€|,/g, "").trim();
+  // Normalize currency text and keep only the main amount before decimal/range.
+  return raw
+    .replace(/&#0128;|&#8364;|&euro;|€/gi, "")
+    .trim()
+    .split(",")[0]
+    .trim();
 }
 
 function getMonthKey(year, month) {
@@ -41,7 +45,7 @@ function getDaysInMonth(year, month) {
 }
 
 /* ── Calendar Preview Component ──────────────────────────── */
-function CalendarPreview({ accentColor }) {
+function CalendarPreview({ accentColor, redirectUrl }) {
   const today = new Date();
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
@@ -101,6 +105,12 @@ function CalendarPreview({ accentColor }) {
       setYear((y) => y + 1);
       setMonth(0);
     } else setMonth((m) => m + 1);
+  };
+
+  const handleDateClick = (dateStr, bookable) => {
+    if (!bookable) return;
+    setSelectedDate(dateStr);
+    window.location.href = redirectUrl || DEFAULT_REDIRECT_URL;
   };
 
   return (
@@ -163,7 +173,7 @@ function CalendarPreview({ accentColor }) {
                 <div
                   key={idx}
                   className={cellClass}
-                  onClick={() => bookable && setSelectedDate(dateStr)}
+                  onClick={() => handleDateClick(dateStr, bookable)}
                 >
                   <span className="fx-widget-cal-day-num">{day}</span>
                   {bookable && price && (
@@ -180,7 +190,7 @@ function CalendarPreview({ accentColor }) {
 }
 
 /* ── Service Cards Preview Component ─────────────────────── */
-function CardsPreview({ accentColor, cols, showCategory }) {
+function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
   const today = new Date().toISOString().slice(0, 10);
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -208,6 +218,10 @@ function CardsPreview({ accentColor, cols, showCategory }) {
 
   const visible = services.slice(0, cols === 1 ? 2 : cols === 2 ? 4 : 6);
 
+  const handleCardClick = () => {
+    window.location.href = redirectUrl || DEFAULT_REDIRECT_URL;
+  };
+
   if (loading)
     return (
       <div className="fx-widget-stage-loading">
@@ -233,7 +247,19 @@ function CardsPreview({ accentColor, cols, showCategory }) {
       style={{ "--fx-accent": accentColor }}
     >
       {visible.map((s) => (
-        <div key={s.id} className="fx-widget-card ">
+        <div
+          key={s.id}
+          className="fx-widget-card "
+          role="button"
+          tabIndex={0}
+          onClick={handleCardClick}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              handleCardClick();
+            }
+          }}
+        >
           <div className="fx-widget-card-img-wrap">
             <img
               src={s.svc_img}
@@ -292,14 +318,15 @@ export default function WidgetBuilder() {
   const [showCategory, setShowCategory] = useState(true);
   const [widgetWidth, setWidgetWidth] = useState(700);
   const [widgetHeight, setWidgetHeight] = useState(520);
+  const [redirectUrl, setRedirectUrl] = useState(DEFAULT_REDIRECT_URL);
   const [mode, setMode] = useState("preview"); // "preview" | "code"
   const [copied, setCopied] = useState(false);
 
   // Rebuild iframe src based on settings
   const iframeSrc =
     tab === "calendar"
-      ? `${SERVICE_PAGE}?widget=calendar&accent=${encodeURIComponent(accentColor)}&redirect=${encodeURIComponent(REDIRECT_URL)}`
-      : `${SERVICE_PAGE}?widget=cards&cols=${cols}&accent=${encodeURIComponent(accentColor)}&showCategory=${showCategory}&redirect=${encodeURIComponent(REDIRECT_URL)}`;
+      ? `${SERVICE_PAGE}?widget=calendar&accent=${encodeURIComponent(accentColor)}&redirect=${encodeURIComponent(redirectUrl)}`
+      : `${SERVICE_PAGE}?widget=cards&cols=${cols}&accent=${encodeURIComponent(accentColor)}&showCategory=${showCategory}&redirect=${encodeURIComponent(redirectUrl)}`;
 
   const iframeCode =
     `<iframe\n` +
@@ -434,9 +461,9 @@ export default function WidgetBuilder() {
 
           <Section label="Redirect URL">
             <input
-              readOnly
-              value={REDIRECT_URL}
+              value={redirectUrl}
               className="fx-widget-url-input"
+              onChange={(e) => setRedirectUrl(e.target.value)}
             />
             <p className="fx-widget-url-hint">
               Clicks redirect to your booking shortcode page
@@ -474,12 +501,16 @@ export default function WidgetBuilder() {
             <>
               <div className="fx-widget-stage">
                 {tab === "calendar" ? (
-                  <CalendarPreview accentColor={accentColor} />
+                  <CalendarPreview
+                    accentColor={accentColor}
+                    redirectUrl={redirectUrl}
+                  />
                 ) : (
                   <CardsPreview
                     accentColor={accentColor}
                     cols={cols}
                     showCategory={showCategory}
+                    redirectUrl={redirectUrl}
                   />
                 )}
               </div>

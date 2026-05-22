@@ -41,7 +41,6 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
     return stripe_key ? loadStripe(stripe_key) : null;
   }, [stripe_key]);
   const isDesktop = useDeviceType();
-  
 
   useEffect(() => {
     if (paymentstring) {
@@ -64,6 +63,12 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
   const deleteaccept = async (id, type) => {
     dispatch(setLoading(true));
     const updatedServices = cart[type].filter((item) => item.id !== id);
+    const remainingExtras =
+      type === "extra"
+        ? updatedServices
+        : Array.isArray(cart.extra)
+          ? cart.extra
+          : [];
 
     let serviceid =
       type === "service"
@@ -71,24 +76,14 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
         : cart.service && cart.service[0]
           ? cart.service[0].id
           : "";
-    let extraid =
-      type === "extra"
-        ? ""
-        : cart.extra && cart.extra[0]
-          ? cart.extra[0].id
-          : "";
     let servicecapacity =
       type === "service"
         ? 0
         : cart.service && cart.service[0]
           ? cart.service[0].capacity
           : 0;
-    let extracapacity =
-      type === "extra"
-        ? 0
-        : cart.extra && cart.extra[0]
-          ? cart.extra[0].capacity
-          : 0;
+    let extraid = remainingExtras.map((item) => item.id).join(",");
+    let extracapacity = remainingExtras.map((item) => item.capacity).join(",");
     const { data } = await axiosInstance(
       `/price-format?service_id=${serviceid}&capacity=${servicecapacity}&date=${moment(
         date,
@@ -191,7 +186,12 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
           topbar ||
           (step === "paymentstep" && !isDesktop)) && (
           <>
-            <div className="fx-servicelistbox" style={{ borderTop: gift ? "none" : "1px solid var(--border-color)" }}>
+            <div
+              className="fx-servicelistbox"
+              style={{
+                borderTop: gift ? "none" : "1px solid var(--border-color)",
+              }}
+            >
               {cart.service.map((ct, ckey) => {
                 return (
                   <div className="fx-serviceitem" key={"ct-" + ckey}>
