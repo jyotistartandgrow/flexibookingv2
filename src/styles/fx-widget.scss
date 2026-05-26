@@ -126,7 +126,7 @@
 .fx-widget-opt-btn.fx-widget-opt-active {
   background: var(--primary-color);
   color: var(--white);
-  font-weight: 400;
+  font-size: 14px;
 }
 
 /* ── Color Swatches ───────────────────────────────────────── */
@@ -165,6 +165,11 @@
   overflow: hidden;
 }
 
+input[type=color].fx-widget-color-input{
+  width: 30px;
+  height: 30px;
+}
+
 /* ── Range Sliders ────────────────────────────────────────── */
 .fx-widget-slider-wrap {
   display: flex;
@@ -187,6 +192,9 @@
   width: 100%;
   margin-top: 5px;
   accent-color:#215ad4;
+}
+input[type=range].fx-widget-slider{
+  -webkit-appearance: inner-spin-button;
 }
 
 /* ── URL Input (readonly) ─────────────────────────────────── */
@@ -348,7 +356,14 @@
   white-space: pre-wrap;
   word-break: break-all;
   margin: 0;
+  background: none;
 }
+
+.fx-widget-card-body p.fx-widget-card-title{
+  margin-block-end: 4px;
+  height: 22px;
+}
+
 
 .fx-widget-copy-btn {
   position: absolute;
