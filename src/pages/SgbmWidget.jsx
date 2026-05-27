@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
+import axiosInstance from "../Utils/Interceptor";
+import { decodeHtml, darkenHex } from "../Utils/Functions";
 
 
 /* ── Constants ───────────────────────────────────────────── */
@@ -345,6 +347,32 @@ export default function WidgetBuilder() {
     });
   };
 
+  const getSettings = async () => {
+    try {
+      const response = await axiosInstance.get("/settings");
+      const settings = response.data;
+
+      // Set CSS custom property
+      if (settings.data.primary_color) {
+        document.documentElement.style.setProperty(
+          "--primary-color",
+          settings.data.primary_color,
+        );
+
+        document.documentElement.style.setProperty(
+          "--darkblue-color",
+          darkenHex(settings.data.primary_color, 56),
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+    }
+  };
+
+  useEffect(() => {
+    getSettings();
+  }, []);
+
   return (
     <div className="fx-widget-root" style={{ "--fx-accent": accentColor }}>
       {/* ── Header ── */}
@@ -367,7 +395,7 @@ export default function WidgetBuilder() {
                 active={tab === "calendar"}
                 onClick={() => setTab("calendar")}
               >
-              Calendar
+                Calendar
               </OptBtn>
               <OptBtn active={tab === "cards"} onClick={() => setTab("cards")}>
                 Cards
@@ -475,10 +503,10 @@ export default function WidgetBuilder() {
         <main className="fx-widget-content">
           <div className="fx-widget-content-topbar">
             <div className="fx-widget-content-header">
-            <div className="fx-widget-header-title">Widget Builder</div>
-            <span className="fx-widget-panel-title">
-              {mode === "preview" ? "Live Preview" : "Embed Code"}
-            </span>
+              <div className="fx-widget-header-title">Widget Builder</div>
+              <span className="fx-widget-panel-title">
+                {mode === "preview" ? "Live Preview" : "Embed Code"}
+              </span>
             </div>
             <div className="fx-widget-tabbar">
               <button
