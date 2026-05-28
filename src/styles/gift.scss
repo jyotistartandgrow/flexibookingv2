@@ -25,15 +25,17 @@
   height: 48px;
 }
 
-.fx-booking input.fx-voucher-input {
-  flex-grow: 1;
-  border: 1px solid #dde1ec;
-  border-radius: 4px 0 0 4px;
-  padding: 0 16px;
-  font-size: 15px;
-  outline: none;
-  color: var(--fx-dark-navy);
-  transition: border-color 0.2s ease;
+div.fx-booking input.fx-voucher-input[type="text"] {
+    flex-grow: 1;
+    border: 1px solid #dde1ec;
+    padding: 0px 16px;
+    font-size: 15px;
+    outline: none;
+    color: var(--fx-dark-navy);
+    transition: border-color .2s ease;
+    border-radius: var(--fx-border-medium-radius);
+    height: 44px;
+    background: #fff;
 }
 
 .fx-booking .fx-voucher-input:focus {

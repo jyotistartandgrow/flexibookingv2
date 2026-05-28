@@ -60,8 +60,8 @@
   height: 112px !important;
 }
 
- .fx-booking .fx-commoninput input[type="text"],
- .fx-booking .fx-commoninput input[type="email"] {
+ div.fx-booking .fx-commoninput input[type="text"],
+ div.fx-booking .fx-commoninput input[type="email"] {
   width: 100%;
   padding: 14px 16px;
   border-radius: var(--fx-border-medium-radius);
@@ -129,8 +129,9 @@
   border-radius: var(--fx-border-medium-radius);
 }
 
- .fx-booking input[type="text"],
- .fx-booking input[type="email"] {
+div.fx-booking .fx-giftbox .fx-input-wrapper input[type="text"], 
+div.fx-booking .fx-giftbox .fx-input-wrapper input[type="email"], 
+div.fx-booking .fx-commoninput input.p-inputtext.p-component[type="text"] {
   width: 100%;
   padding: 16px 16px;
   border-radius: var(--fx-border-medium-radius);
@@ -142,6 +143,7 @@
   max-width: 100%;
   height: inherit;
   margin-top: 0px;
+  background: #fff;
 }
 
 .fx-booking input[type="text"].fx-inputbox-gift {
@@ -177,6 +179,7 @@
   color: var(--primary-color);
 }
 
+div.fx-booking input.btn-primary[type="submit"], 
 .fx-booking .btn-primary {
   border: 1px solid transparent;
   padding: 12px 24px;
@@ -244,9 +247,11 @@
   color: var(--white);
 }
 
-.fx-booking .btn-primary:hover{
+div.fx-booking input.btn-primary[type="submit"]:hover,
+div.fx-booking .btn-primary:hover {
   background: var(--fx-secondary-colors);
   color: var(--white);
+      border-radius: 44px;
 }
 
 .fx-booking .fx-popup .fx-rightpopup .continuebtn:hover{
