@@ -65,7 +65,7 @@
   width: 100%;
   padding: 14px 16px;
   border-radius: var(--fx-border-medium-radius);
-  border: 1px solid var(--border-color);;
+  border: 1px solid var(--new-border-color);;
   /* box-sizing: border-box; */
   font-size: var(--all-input-fontsize);
   font-weight: 400;
@@ -88,7 +88,7 @@
    width: 100%;
   padding: 16px 12px;
   border-radius: var(--fx-border-medium-radius);
-  border: 1px solid var(--border-color);;
+  border: 1px solid var(--new-border-color);;
   /* box-sizing: border-box; */
   font-size: var(--normal-descriptionsize);
   font-weight: 400;
@@ -135,7 +135,7 @@ div.fx-booking .fx-commoninput input.p-inputtext.p-component[type="text"] {
   width: 100%;
   padding: 16px 16px;
   border-radius: var(--fx-border-medium-radius);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--new-border-color);
   /* box-sizing: border-box; */
   font-size: var(--normal-descriptionsize);
   font-weight: 400;
@@ -260,7 +260,7 @@ div.fx-booking .btn-primary:hover {
 }
 
  .fx-booking .fx-element-box input[type="text"]:focus {
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--new-border-color);
 }
 
 
@@ -277,7 +277,7 @@ div.fx-booking .btn-primary:hover {
   display: flex;
   align-items: center;
   background: var(--white);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--new-border-color);
   border-radius: 5px;
   margin-bottom: 16px;
   width: 61%;
@@ -581,8 +581,10 @@ div.fx-booking .btn-primary:hover {
 }
 .fx-booking .fx-phone-input .react-tel-input input[type=tel]{
   padding-left: 48px;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--new-border-color);
       border-radius: var(--fx-border-medium-radius);
+      background-color: #fff;
+      border: 1px solid var(--new-border-color);
 }
 .fx-booking .fx-phone-input .arrow{
   margin-left: inherit;
