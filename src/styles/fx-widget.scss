@@ -562,6 +562,36 @@ input[type=range].fx-widget-slider{
 }
 
 /* ── Service Cards Preview ────────────────────────────────── */
+.fx-widget-cards-wrap {
+  width: 100%;
+}
+
+.fx-widget-view-switch {
+  display: inline-flex;
+  gap: 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 4px;
+  margin-bottom: 12px;
+  background: #ffffff;
+}
+
+.fx-widget-view-btn {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+}
+
+.fx-widget-view-btn.active {
+  background: color-mix(in srgb, var(--fx-accent, #0ea5e9) 18%, #fff);
+  color: var(--fx-accent, #0ea5e9);
+}
+
 .fx-widget-cards-grid {
   display: grid;
   gap: 14px;
@@ -583,7 +613,7 @@ input[type=range].fx-widget-slider{
   border: 1px solid #e2e8f0;
   cursor: pointer;
   transition: box-shadow 0.18s, transform 0.18s;
-      width: 271px;
+  width: 100%;
 }
 
 .fx-widget-card:hover {
@@ -667,6 +697,47 @@ input[type=range].fx-widget-slider{
   line-height: 1;
 }
 
+.fx-widget-carousel-zone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.fx-widget-carousel-arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid #dbe1eb;
+  background: #ffffff;
+  color: #334155;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  padding: 0;
+}
+
+.fx-widget-desktop-swipe-carousel {
+  flex: 1;
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: 6px;
+}
+
+.fx-widget-desktop-swipe-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.fx-widget-desktop-swipe-item {
+  flex: 0 0 calc((100% - 2 * 14px) / 3);
+  min-width: 240px;
+  scroll-snap-align: start;
+  display: flex;
+}
+
 /* ── Error State ──────────────────────────────────────────── */
 .fx-widget-error {
   display: flex;
@@ -697,6 +768,11 @@ input[type=range].fx-widget-slider{
   .fx-widget-cards-grid.fx-widget-cols-3 {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .fx-widget-desktop-swipe-item {
+    flex: 0 0 65%;
+    min-width: 220px;
+  }
 }
 
 @media (max-width: 520px) {
@@ -708,5 +784,14 @@ input[type=range].fx-widget-slider{
   .fx-widget-cards-grid.fx-widget-cols-3 {
     grid-template-columns: 1fr;
     max-width: 100%;
+  }
+
+  .fx-widget-carousel-arrow {
+    display: none;
+  }
+
+  .fx-widget-desktop-swipe-item {
+    flex: 0 0 82%;
+    min-width: 220px;
   }
 }

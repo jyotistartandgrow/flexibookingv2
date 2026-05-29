@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import axiosInstance from "../Utils/Interceptor";
 import { darkenHex } from "../Utils/Functions";
 
@@ -203,6 +203,19 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [viewMode, setViewMode] = useState("grid"); // "grid" | "carousel"
+  const desktopCarouselRef = useRef(null);
+
+  const scrollDesktop = (dir) => {
+    const el = desktopCarouselRef.current;
+    if (!el) return;
+    const itemWidth = el.querySelector(".fx-widget-desktop-swipe-item")?.offsetWidth || 0;
+    const gap = 14;
+    el.scrollBy({
+      left: dir === "next" ? itemWidth + gap : -(itemWidth + gap),
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -224,7 +237,13 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
       .finally(() => setLoading(false));
   }, [today]);
 
-  const visible = services.slice(0, cols === 1 ? 2 : cols === 2 ? 4 : 6);
+  useEffect(() => {
+    if (services.length <= 4) {
+      setViewMode("grid");
+      return;
+    }
+    setViewMode("carousel");
+  }, [services]);
 
   const handleCardClick = () => {
     window.open(
@@ -253,50 +272,98 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
       </div>
     );
 
-  return (
+  const renderCard = (s) => (
     <div
-      className={`fx-widget-cards-grid fx-widget-cols-${cols}`}
-      style={{ "--fx-accent": accentColor }}
+      key={s.id}
+      className="fx-widget-card"
+      role="button"
+      tabIndex={0}
+      onClick={handleCardClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleCardClick();
+        }
+      }}
     >
-      {visible.map((s) => (
-        <div
-          key={s.id}
-          className="fx-widget-card "
-          role="button"
-          tabIndex={0}
-          onClick={handleCardClick}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              handleCardClick();
-            }
+      <div className="fx-widget-card-img-wrap">
+        <img
+          src={s.svc_img}
+          alt={s.service_title}
+          className="fx-widget-card-img"
+          onError={(e) => {
+            e.target.style.display = "none";
           }}
-        >
-          <div className="fx-widget-card-img-wrap">
-            <img
-              src={s.svc_img}
-              alt={s.service_title}
-              className="fx-widget-card-img"
-              onError={(e) => {
-                e.target.style.display = "none";
-              }}
-            />
-            {showCategory && (
-              <span className="fx-widget-card-badge">{s.category_name}</span>
-            )}
-          </div>
-          <div className="fx-widget-card-body">
-            <p className="fx-widget-card-title">{s.service_title}</p>
-            <p className="fx-widget-card-desc">{s.svc_short_desc}</p>
-            <div className="fx-widget-card-footer">
-              <span className="fx-widget-card-price">
-                from <strong>€{parsePrice(s.svc_price)}</strong>
-              </span>
-              <span className="fx-widget-card-arrow">›</span>
-            </div>
-          </div>
+        />
+        {showCategory && (
+          <span className="fx-widget-card-badge">{s.category_name}</span>
+        )}
+      </div>
+      <div className="fx-widget-card-body">
+        <p className="fx-widget-card-title">{s.service_title}</p>
+        <p className="fx-widget-card-desc">{s.svc_short_desc}</p>
+        <div className="fx-widget-card-footer">
+          <span className="fx-widget-card-price">
+            from <strong>€{parsePrice(s.svc_price)}</strong>
+          </span>
+          <span className="fx-widget-card-arrow">›</span>
         </div>
-      ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="fx-widget-cards-wrap" style={{ "--fx-accent": accentColor }}>
+      <div className="fx-widget-view-switch" role="tablist" aria-label="Cards view">
+        <button
+          className={`fx-widget-view-btn${viewMode === "grid" ? " active" : ""}`}
+          onClick={() => setViewMode("grid")}
+          type="button"
+        >
+          Grid
+        </button>
+        <button
+          className={`fx-widget-view-btn${viewMode === "carousel" ? " active" : ""}`}
+          onClick={() => setViewMode("carousel")}
+          type="button"
+        >
+          Carousel
+        </button>
+      </div>
+
+      {viewMode === "grid" ? (
+        <div className={`fx-widget-cards-grid fx-widget-cols-${cols}`}>
+          {services.map((s) => renderCard(s))}
+        </div>
+      ) : (
+        <div className="fx-widget-carousel-zone">
+          <button
+            className="fx-widget-carousel-arrow"
+            onClick={() => scrollDesktop("prev")}
+            type="button"
+            aria-label="Previous"
+          >
+            ‹
+          </button>
+
+          <div className="fx-widget-desktop-swipe-carousel" ref={desktopCarouselRef}>
+            {services.map((s) => (
+              <div key={s.id} className="fx-widget-desktop-swipe-item">
+                {renderCard(s)}
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="fx-widget-carousel-arrow"
+            onClick={() => scrollDesktop("next")}
+            type="button"
+            aria-label="Next"
+          >
+            ›
+          </button>
+        </div>
+      )}
     </div>
   );
 }
