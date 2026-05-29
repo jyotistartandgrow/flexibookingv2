@@ -1,15 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../Utils/Interceptor";
-import { decodeHtml, darkenHex } from "../Utils/Functions";
-
+import { darkenHex } from "../Utils/Functions";
 
 /* ── Constants ───────────────────────────────────────────── */
-const API_BASE =
-  "https://wordpress-1092228-6228102.cloudwaysapps.com/wp-json/booking/v1";
-const DEFAULT_REDIRECT_URL =
-  "https://wordpress-1092228-6228102.cloudwaysapps.com/v2-shortcode/";
-const SERVICE_PAGE =
-  "https://wordpress-1092228-6228102.cloudwaysapps.com/v2-starting-from-service/";
+const API_BASE = import.meta.env.VITE_API_URL;
 
 // const ACCENT_PRESETS = [
 //   "#215ad4",
@@ -112,7 +106,7 @@ function CalendarPreview({ accentColor, redirectUrl }) {
   const handleDateClick = (dateStr, bookable) => {
     if (!bookable) return;
     setSelectedDate(dateStr);
-    window.location.href = redirectUrl || DEFAULT_REDIRECT_URL;
+    window.open(redirectUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -221,7 +215,7 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
   const visible = services.slice(0, cols === 1 ? 2 : cols === 2 ? 4 : 6);
 
   const handleCardClick = () => {
-    window.location.href = redirectUrl || DEFAULT_REDIRECT_URL;
+    window.open(redirectUrl, "_blank", "noopener,noreferrer");
   };
 
   if (loading)
@@ -314,21 +308,36 @@ function Section({ label, children }) {
 
 /* ── Main Widget Builder Page ────────────────────────────── */
 export default function WidgetBuilder() {
-  const [tab, setTab] = useState("calendar"); // "calendar" | "cards"
-  const [accentColor, setAccentColor] = useState("#0ea5e9");
-  const [cols, setCols] = useState(3);
-  const [showCategory, setShowCategory] = useState(true);
+  const searchParams =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search)
+      : new URLSearchParams();
+
+  const isEmbedMode = searchParams.get("embed") === "1";
+  const initialWidget =
+    searchParams.get("widget") === "cards" ? "cards" : "calendar";
+  const initialAccent = searchParams.get("accent") || "#0ea5e9";
+  const initialCols = Number(searchParams.get("cols")) || 3;
+  const initialShowCategory = searchParams.get("showCategory") !== "false";
+  const initialRedirect = searchParams.get("redirect");
+
+  const [tab, setTab] = useState(initialWidget); // "calendar" | "cards"
+  const [accentColor, setAccentColor] = useState(initialAccent);
+  const [cols, setCols] = useState(initialCols);
+  const [showCategory, setShowCategory] = useState(initialShowCategory);
   const [widgetWidth, setWidgetWidth] = useState(700);
   const [widgetHeight, setWidgetHeight] = useState(520);
-  const [redirectUrl, setRedirectUrl] = useState(DEFAULT_REDIRECT_URL);
+  const [redirectUrl, setRedirectUrl] = useState(initialRedirect);
   const [mode, setMode] = useState("preview"); // "preview" | "code"
   const [copied, setCopied] = useState(false);
+
+  const widgetPageUrl = `${window.location.origin}${window.location.pathname}`;
 
   // Rebuild iframe src based on settings
   const iframeSrc =
     tab === "calendar"
-      ? `${SERVICE_PAGE}?widget=calendar&accent=${encodeURIComponent(accentColor)}&redirect=${encodeURIComponent(redirectUrl)}`
-      : `${SERVICE_PAGE}?widget=cards&cols=${cols}&accent=${encodeURIComponent(accentColor)}&showCategory=${showCategory}&redirect=${encodeURIComponent(redirectUrl)}`;
+      ? `${widgetPageUrl}?embed=1&widget=calendar&accent=${encodeURIComponent(accentColor)}&redirect=${encodeURIComponent(redirectUrl)}`
+      : `${widgetPageUrl}?embed=1&widget=cards&cols=${cols}&accent=${encodeURIComponent(accentColor)}&showCategory=${showCategory}&redirect=${encodeURIComponent(redirectUrl)}`;
 
   const iframeCode =
     `<iframe\n` +
@@ -372,6 +381,28 @@ export default function WidgetBuilder() {
   useEffect(() => {
     getSettings();
   }, []);
+
+  if (isEmbedMode) {
+    return (
+      <div className="fx-widget-root" style={{ "--fx-accent": accentColor }}>
+        <div className="fx-widget-stage">
+          {tab === "calendar" ? (
+            <CalendarPreview
+              accentColor={accentColor}
+              redirectUrl={redirectUrl}
+            />
+          ) : (
+            <CardsPreview
+              accentColor={accentColor}
+              cols={cols}
+              showCategory={showCategory}
+              redirectUrl={redirectUrl}
+            />
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fx-widget-root" style={{ "--fx-accent": accentColor }}>
