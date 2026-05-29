@@ -4,6 +4,8 @@ import { darkenHex } from "../Utils/Functions";
 
 /* ── Constants ───────────────────────────────────────────── */
 const API_BASE = import.meta.env.VITE_API_URL;
+const DEFAULT_REDIRECT_URL =
+  "https://tenutamontauto.com/v2-shortcode/";
 
 // const ACCENT_PRESETS = [
 //   "#215ad4",
@@ -40,6 +42,12 @@ function getDaysInMonth(year, month) {
   return new Date(year, month + 1, 0).getDate();
 }
 
+function buildApiUrl(path) {
+  const normalizedBase = String(API_BASE || "").replace(/\/+$/, "");
+  const normalizedPath = String(path || "").replace(/^\/+/, "");
+  return `${normalizedBase}/${normalizedPath}`;
+}
+
 /* ── Calendar Preview Component ──────────────────────────── */
 function CalendarPreview({ accentColor, redirectUrl }) {
   const today = new Date();
@@ -56,7 +64,7 @@ function CalendarPreview({ accentColor, redirectUrl }) {
     try {
       const key = getMonthKey(y, m);
       const res = await fetch(
-        `${API_BASE}/service-availability-calendar?month=${key}`,
+        buildApiUrl(`service-availability-calendar?month=${key}`),
       );
       const json = await res.json();
       if (json.status === 200 && Array.isArray(json.data)) {
@@ -106,7 +114,11 @@ function CalendarPreview({ accentColor, redirectUrl }) {
   const handleDateClick = (dateStr, bookable) => {
     if (!bookable) return;
     setSelectedDate(dateStr);
-    window.open(redirectUrl, "_blank", "noopener,noreferrer");
+    window.open(
+      redirectUrl || DEFAULT_REDIRECT_URL,
+      "_blank",
+      "noopener,noreferrer",
+    );
   };
 
   return (
@@ -195,7 +207,7 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    fetch(`${API_BASE}/services?date=${today}&category=&all=true`)
+    fetch(buildApiUrl(`services?date=${today}&category=&all=true`))
       .then((r) => r.json())
       .then((json) => {
         if (json.status === 200 && Array.isArray(json.data)) {
@@ -215,7 +227,11 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
   const visible = services.slice(0, cols === 1 ? 2 : cols === 2 ? 4 : 6);
 
   const handleCardClick = () => {
-    window.open(redirectUrl, "_blank", "noopener,noreferrer");
+    window.open(
+      redirectUrl || DEFAULT_REDIRECT_URL,
+      "_blank",
+      "noopener,noreferrer",
+    );
   };
 
   if (loading)
@@ -319,7 +335,11 @@ export default function WidgetBuilder() {
   const initialAccent = searchParams.get("accent") || "#0ea5e9";
   const initialCols = Number(searchParams.get("cols")) || 3;
   const initialShowCategory = searchParams.get("showCategory") !== "false";
-  const initialRedirect = searchParams.get("redirect");
+  const redirectParam = searchParams.get("redirect");
+  const initialRedirect =
+    redirectParam && redirectParam !== "null" && redirectParam !== "undefined"
+      ? redirectParam
+      : DEFAULT_REDIRECT_URL;
 
   const [tab, setTab] = useState(initialWidget); // "calendar" | "cards"
   const [accentColor, setAccentColor] = useState(initialAccent);
@@ -331,13 +351,16 @@ export default function WidgetBuilder() {
   const [mode, setMode] = useState("preview"); // "preview" | "code"
   const [copied, setCopied] = useState(false);
 
-  const widgetPageUrl = `${window.location.origin}${window.location.pathname}`;
+  const widgetPageUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}${window.location.pathname}`
+      : "";
 
   // Rebuild iframe src based on settings
   const iframeSrc =
     tab === "calendar"
-      ? `${widgetPageUrl}?embed=1&widget=calendar&accent=${encodeURIComponent(accentColor)}&redirect=${encodeURIComponent(redirectUrl)}`
-      : `${widgetPageUrl}?embed=1&widget=cards&cols=${cols}&accent=${encodeURIComponent(accentColor)}&showCategory=${showCategory}&redirect=${encodeURIComponent(redirectUrl)}`;
+      ? `${widgetPageUrl}?embed=1&widget=calendar&accent=${encodeURIComponent(accentColor)}&redirect=${encodeURIComponent(redirectUrl || DEFAULT_REDIRECT_URL)}`
+      : `${widgetPageUrl}?embed=1&widget=cards&cols=${cols}&accent=${encodeURIComponent(accentColor)}&showCategory=${showCategory}&redirect=${encodeURIComponent(redirectUrl || DEFAULT_REDIRECT_URL)}`;
 
   const iframeCode =
     `<iframe\n` +
@@ -520,7 +543,7 @@ export default function WidgetBuilder() {
 
           <Section label="Redirect URL">
             <input
-              value={redirectUrl}
+              value={redirectUrl || ""}
               className="fx-widget-url-input"
               onChange={(e) => setRedirectUrl(e.target.value)}
             />
