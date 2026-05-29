@@ -579,7 +579,8 @@ h1{
         box-shadow: 0 0 0 0.2rem var(--primary-color);
 }
 
-.fx-element-box .btn-primary.fx-btn-disable{
+div.fx-booking .fx-element-box .btn-primary.fx-btn-disable,
+div.fx-booking .btn-primary.fx-btn-disable {
     background-color: #ccc;
 }
 
