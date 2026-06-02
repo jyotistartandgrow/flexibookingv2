@@ -74,11 +74,13 @@ h2 {
   height:580px;
   float: left;
   position: relative;
+  overflow: hidden;
 }
 
 .fx-booking .fx-popup .fx-leftpopup img {
-  width: 100%;
-  height: 580px;
+      width: auto;
+    height: 580px;
+    max-width: none;
 }
 
 .fx-booking .fx-popup .fx-pricebox {

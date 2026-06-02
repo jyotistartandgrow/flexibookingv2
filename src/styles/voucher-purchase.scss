@@ -380,4 +380,16 @@
     .fx-voucher-purchase-success-page{
         border-radius: 16px;
     }
+    .fx-voucher-purchase-success-page .fx-voucher-code{
+        font-size: 18px;
+    }
+    .fx-voucher-purchase-success-page{
+        padding: 22px 22px;
+    }
+    .fx-voucher-purchase-success-page .fx-summary-card{
+        padding: 16px;  
+    }
+    .fx-voucher-purchase-success-page .fx-btn-group{
+        flex-direction: column;
+    }
 }
