@@ -587,6 +587,20 @@ input[type=range].fx-widget-slider{
   cursor: pointer;
 }
 
+.fx-widget-view-switch button.fx-widget-view-btn:hover{
+  border-radius: 20px;
+}
+
+.fx-widget-view-switch button.fx-widget-view-btn:hover,
+.fx-widget-view-switch button.fx-widget-view-btn:focus {
+  border-radius: 20px;
+}
+
+.fx-widget-opt-group button.fx-widget-opt-btn:hover,
+.fx-widget-opt-group button.fx-widget-opt-btn:focus {
+    border-radius: 20px;
+}
+
 .fx-widget-view-btn.active {
   background: color-mix(in srgb, var(--fx-accent, #0ea5e9) 18%, #fff);
   color: var(--fx-accent, #0ea5e9);
@@ -704,7 +718,7 @@ input[type=range].fx-widget-slider{
   width: 100%;
 }
 
-button.fx-widget-carousel-arrow {
+.fx-widget-carousel-zone button.fx-widget-carousel-arrow {
   width: 34px;
   height: 34px;
   border-radius: 999px;

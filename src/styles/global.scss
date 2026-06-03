@@ -637,6 +637,12 @@ button.p-confirm-dialog-accept.p-button.p-component{
     gap: 20px;
 }
 
+.fx-leftpopup .fix-maximiz-popup-img{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
 .fx-confirmation-popup button.p-component:hover{
     color: var(--darkblue-color);
 }
