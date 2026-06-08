@@ -98,7 +98,7 @@ export default function Payment(props) {
       className={`fx-leftcontentbox ${topbar ? "fx-content-with-topbar" : ""}`}
       style={{ display: step === "paymentstep" ? "block" : "none" }}
     >
-      {(!isDesktop || topbar) && (
+      {step === "paymentstep" && (!isDesktop || topbar) && (
         <div className="fx-paymentbox">
           {props.stepsVisibility?.step_5_title_visible == "true" && (
             <h1 className="fx-all-main-heading">

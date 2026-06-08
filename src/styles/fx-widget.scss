@@ -106,7 +106,7 @@
   gap: 7px;
 }
 
-.fx-widget-opt-btn {
+.fx-widget-opt-group button.fx-widget-opt-btn {
   padding: 7px 13px;
       border-radius: 16px;
   border: 1.5px solid #e2e8f0;
@@ -247,7 +247,7 @@ input[type=range].fx-widget-slider{
   padding: 3px;
 }
 
-.fx-widget-tab {
+.fx-widget-tabbar button.fx-widget-tab.fx-widget-tab{
   padding: 7px 16px;
   border-radius: 16px;
   border: none;
@@ -576,7 +576,7 @@ input[type=range].fx-widget-slider{
   background: #ffffff;
 }
 
-.fx-widget-view-btn {
+.fx-widget-view-switch button.fx-widget-view-btn {
   border: none;
   background: transparent;
   color: #64748b;
@@ -585,6 +585,20 @@ input[type=range].fx-widget-slider{
   border-radius: 999px;
   padding: 7px 14px;
   cursor: pointer;
+}
+
+.fx-widget-view-switch button.fx-widget-view-btn:hover{
+  border-radius: 20px;
+}
+
+.fx-widget-view-switch button.fx-widget-view-btn:hover,
+.fx-widget-view-switch button.fx-widget-view-btn:focus {
+  border-radius: 20px;
+}
+
+.fx-widget-opt-group button.fx-widget-opt-btn:hover,
+.fx-widget-opt-group button.fx-widget-opt-btn:focus {
+    border-radius: 20px;
 }
 
 .fx-widget-view-btn.active {
@@ -704,7 +718,7 @@ input[type=range].fx-widget-slider{
   width: 100%;
 }
 
-.fx-widget-carousel-arrow {
+.fx-widget-carousel-zone button.fx-widget-carousel-arrow {
   width: 34px;
   height: 34px;
   border-radius: 999px;

@@ -10,7 +10,11 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { InputSwitch } from "primereact/inputswitch";
 import { setReceiverInfo, setStep, setLoading } from "../store/step1Slice";
-import { setCheckoutkey, setPaymentstring } from "../store/step4Slice";
+import {
+  setCheckoutkey,
+  setPaymentstring,
+  setSessionExpired,
+} from "../store/step4Slice";
 import GiftCardPreviewButton from "./Giftcardpreviewbutton";
 import {
   decodeHtml,
@@ -251,6 +255,7 @@ export default function Checkout(props) {
     if (data && data.status == 200 && data.data.status == "success") {
       dispatch(setCheckoutkey(data.data.checkout));
       dispatch(setPaymentstring(data.data.data));
+      dispatch(setSessionExpired(false));
       dispatch(setStep("paymentstep"));
     } else {
       Swal.fire({

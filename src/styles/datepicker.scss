@@ -198,6 +198,14 @@ padding: 10px 16px;
     min-width:400px !important;
 }
 
+.p-datepicker-header button.p-datepicker-prev{
+  border: none;
+}
+
+.p-datepicker-header button.p-datepicker-next {
+    border: none;
+}
+
 @media screen and (max-width: 480px) {
 .fx-booking .fx-calendar{
   width:100%;

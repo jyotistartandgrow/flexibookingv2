@@ -5,7 +5,11 @@ import { decodeHtml } from "../Utils/Functions";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
 import { setStep, setLoading } from "../store/step1Slice";
-import { setCheckoutkey, setPaymentstring } from "../store/step4Slice";
+import {
+  setCheckoutkey,
+  setPaymentstring,
+  setSessionExpired,
+} from "../store/step4Slice";
 import CountdownTimer from "./CountdownTimer";
 import { useNavigate } from "react-router-dom";
 
@@ -45,8 +49,9 @@ export default function CheckoutForm() {
         });
         dispatch(setPaymentstring(null));
         dispatch(setCheckoutkey(null));
+        dispatch(setSessionExpired(false));
         dispatch(setStep("checkoutstep"));
-        dispatch(setLoading(true));
+        dispatch(setLoading(false));
         return;
       }
     }
