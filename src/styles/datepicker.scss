@@ -182,7 +182,10 @@ padding: 3px;
   font-size: 20px;
 }
 
-button.p-datepicker-year.p-link,button.p-datepicker-month.p-link,button.p-datepicker-next,button.p-datepicker-prev {
+div.p-datepicker-title button.p-datepicker-year.p-link,
+div.p-datepicker-title button.p-datepicker-month.p-link,
+button.p-datepicker-next,
+button.p-datepicker-prev {
 background-color: #fff;
 border-color: #fff;
 color: inherit;

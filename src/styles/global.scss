@@ -835,6 +835,15 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
     margin-bottom: 20px;
 }
 
+div.fx-booking input.btn-primary[type="button"]:focus,
+div.fx-booking input.btn-primary[type="button"]:focus-visible,
+div.fx-booking input.btn-primary[type="submit"]:focus,
+div.fx-booking input.btn-primary[type="submit"]:focus-visible {
+    outline: none;
+    background:var(--primary-color);
+    color: #fff;
+}
+
 
 
 @media screen and (min-width: 1200px) {
