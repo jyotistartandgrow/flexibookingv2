@@ -93,7 +93,7 @@ export default function Category(props) {
         className={
           props.showBookNowButton == "true"
             ? "fx-servicebox fx-servicebox-add-button"
-            : "fx-servicebox"
+            : "fx-serviceboxad"
         }
         onClick={() => getservice(category.id)}
       >

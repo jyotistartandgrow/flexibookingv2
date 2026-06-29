@@ -722,3 +722,70 @@
     justify-content: center;
     display: flex;
   }
+
+  
+.fx-booking .fx-servicecontainer .fx-bundle-content{
+    border: 2px solid var(--primary-color);
+    position: relative;}
+
+    .fx-desktop-swipe-item .fx-bundle-content{
+      border: 2px solid var(--primary-color);
+      position: relative;
+    }
+
+.fx-bundle-content .fx-tooltip-wrapper{
+ position: absolute;
+    right: -2px;
+    top: -2px;
+    z-index: 1;
+}
+
+.fx-bundle-content .fx-tooltip-wrapper .fx-top-icon{
+      width: 58px;
+    height: 46px;
+    background:var(--primary-color);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 14px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+
+.fx-bundle-content .fx-tooltip-wrapper .fx-tooltip-box::after{
+      content: "";
+    position: absolute;
+    right: 134px;
+    bottom: -12px;
+    border-width: 12px 12px 0 12px;
+    border-style: solid;
+    border-color: #fff transparent transparent transparent;
+}
+
+.fx-bundle-content .fx-tooltip-wrapper .fx-tooltip-box{
+    position: absolute;
+        right: -119px;
+    bottom: 65px;
+    width: 340px;
+    background: #fff;
+    color: #596273;
+    padding: 20px 24px;
+    border-radius: 10px;
+    font-size: 16px;
+    line-height: 1.7;
+    box-shadow: 0 15px 35px rgba(0,0,0,.15);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all .3s ease;
+    z-index: 999;
+}
+
+.fx-bundle-content .fx-tooltip-wrapper:hover .fx-tooltip-box{
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}

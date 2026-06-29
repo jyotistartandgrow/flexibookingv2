@@ -364,10 +364,16 @@ export default function Service(props) {
         className={
           props.showBookNowButton == "true"
             ? "fx-servicebox fx-servicebox-add-button"
-            : "fx-servicebox"
+            : "fx-servicebox fx-bundle-content"
         }
         onClick={() => servicedetail(product.id)}
       >
+        <div className="fx-tooltip-wrapper">
+          <div className="fx-top-icon">d</div>
+          <div className="fx-tooltip-box">
+            dewfwef
+          </div>
+        </div>
         <div className="fx-servicepicbox">
           <img src={product.svc_img} alt={product.service_name} />
           {props.categoryLabelVisibility == "true" && (
@@ -776,11 +782,17 @@ export default function Service(props) {
                     className={
                       props.showBookNowButton == "true"
                         ? "fx-servicebox fx-servicebox-add-button"
-                        : "fx-servicebox"
+                        : "fx-servicebox fx-bundle-content"
                     }
                     key={p1}
                     onClick={() => servicedetail(product.id)}
                   >
+                     <div className="fx-tooltip-wrapper">
+                      <div className="fx-top-icon">d</div>
+                      <div className="fx-tooltip-box">
+                        dewfwef
+                      </div>
+                    </div>
                     <div className="fx-servicepicbox">
                       <img src={product.svc_img} alt={product.service_name} />
                       {props.categoryLabelVisibility == "true" && (
