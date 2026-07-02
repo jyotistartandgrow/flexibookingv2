@@ -7,7 +7,7 @@ import axiosInstance from "../Utils/Interceptor";
 import { decodeHtml } from "../Utils/Functions";
 import categoryimg from "../assets/service1.jpg";
 import { setStep, setLoading, setCategory } from "../store/step1Slice";
-import useDeviceType from "../Utils/useDeviceType"; 
+import useDeviceType from "../Utils/useDeviceType";
 
 export default function Category(props) {
   const dispatch = useDispatch();
@@ -108,18 +108,13 @@ export default function Category(props) {
           <p>Category description here</p>
           <p className="price">
             <span className="fx-price-form">from</span>
-            <span className="fx-price-one">
-              {decodeHtml(category.price)}
-            </span>
+            <span className="fx-price-one">{decodeHtml(category.price)}</span>
             {props.showBookNowButton !== "true" && (
               <i className="pi pi-chevron-right"></i>
             )}
           </p>
           {props.showBookNowButton == "true" && (
-            <div
-              className="booknowbtn"
-              onClick={() => getservice(category.id)}
-            >
+            <div className="booknowbtn" onClick={() => getservice(category.id)}>
               <a href="#">Book Now</a>
             </div>
           )}
@@ -141,15 +136,22 @@ export default function Category(props) {
       className="fx-leftcontentbox"
       style={{ display: step === "categorystep" ? "block" : "none" }}
     >
-      <h1 className="fx-all-main-heading" style={{
+      <h1
+        className="fx-all-main-heading"
+        style={{
           display:
             props.mobileHeading == "false" && !isDesktop ? "none" : "block",
-        }}>What experience are you looking for?</h1>
+        }}
+      >
+        {/* What experience are you looking for? */}
+      </h1>
       <div id="fx-Icontab_nav">
-        <ul style={{
-          display:
-            props.mobileHeading == "false" && !isDesktop ? "none" : "block",
-        }}>
+        <ul
+          style={{
+            display:
+              props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+          }}
+        >
           <li className="selected">
             <a
               href="#"
@@ -229,7 +231,9 @@ export default function Category(props) {
 
         <div
           className={
-            isVisible == "grid" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "grid" && !skeloading
+              ? "fx-tabcontent selected"
+              : "fx-tabcontent"
           }
         >
           <div className="fx-servicecontainer">
@@ -282,7 +286,9 @@ export default function Category(props) {
         </div>
         <div
           className={
-            isVisible == "list" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "list" && !skeloading
+              ? "fx-tabcontent selected"
+              : "fx-tabcontent"
           }
         >
           {categories.length > 0 &&
@@ -322,7 +328,9 @@ export default function Category(props) {
         </div>
         <div
           className={
-            isVisible == "slider" && !skeloading ? "fx-tabcontent selected" : "fx-tabcontent"
+            isVisible == "slider" && !skeloading
+              ? "fx-tabcontent selected"
+              : "fx-tabcontent"
           }
         >
           <div className="slider responsive">

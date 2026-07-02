@@ -347,7 +347,7 @@ export default function Component() {
             <div className="fx-element-box">
               <input type="checkbox" id="checkbox-checked" defaultChecked />
               <label htmlFor="checkbox-checked" className="checkbox-label">
-                If you have coupon
+                Do you have a promo code?
               </label>
             </div>
             <div className="fx-commoninput">
