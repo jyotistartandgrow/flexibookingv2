@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RedeemCommonbox from "../components/RedeemCommonbox";
 import { setTopbar } from "../store/step1Slice";
@@ -6,6 +6,7 @@ import { setTopbar } from "../store/step1Slice";
 const RedeemDetailCard = (props) => {
   const dispatch = useDispatch();
   const [isOpenn, setIsOpenn] = useState(false);
+  const cardRef = useRef(null);
   const topbar = useSelector((state) => state.step1.topbar);
   const voucher = useSelector((state) => state.step1.voucher);
 
@@ -19,8 +20,24 @@ const RedeemDetailCard = (props) => {
     }
   }, [props.topbar, dispatch]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isOpenn && cardRef.current && !cardRef.current.contains(event.target)) {
+        setIsOpenn(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isOpenn]);
+
   return (
-    <div className="fx-top-order-details-box">
+    <div className="fx-top-order-details-box" ref={cardRef}>
       <div
         className={`fx-top-order-details-card ${isOpenn ? "fx-is-open" : ""}`}
       >

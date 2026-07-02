@@ -20,7 +20,9 @@ export default function Thankyou() {
   const loading = useSelector((state) => state.step1.loading);
   const [bookingData, setBookingData] = useState(null);
   const [email, setEmail] = useState("");
-  const qrCodeImage = bookingData?.qrcode ? `data:image/png;base64,${bookingData.qrcode}` : "https://placehold.co/200x200?text=QR+Code";
+  const qrCodeImage = bookingData?.qrcode
+    ? `data:image/png;base64,${bookingData.qrcode}`
+    : "https://placehold.co/200x200?text=QR+Code";
 
   const bookingdetail = async () => {
     dispatch(setLoading(true));
@@ -251,6 +253,15 @@ export default function Thankyou() {
 
               <div className="fx-address-block">
                 <div>
+                  <h4>Customer Details</h4>
+                  <p>
+                    {bookingData?.customer_billing?.billing_first_name}{" "}
+                    {bookingData?.customer_billing?.billing_last_name} <br />
+                    {bookingData?.customer_billing?.billing_email} <br/>
+                    {bookingData?.customer_billing?.billing_contact}
+                  </p>
+                </div>
+                {/* <div>
                   <h4>Billing Address</h4>
                   <p>
                     {bookingData?.customer_billing?.billing_first_name}{" "}
@@ -259,9 +270,9 @@ export default function Thankyou() {
                     {bookingData?.customer_billing?.billing_city} <br />
                     {bookingData?.customer_billing?.billing_email}
                   </p>
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   <h4>Shipping Address</h4>
                   <p>
                     {bookingData?.customer_shipping?.shipping_first_name}{" "}
@@ -270,7 +281,7 @@ export default function Thankyou() {
                     {bookingData?.customer_shipping?.shipping_city} <br />
                     {bookingData?.customer_shipping?.shipping_email}
                   </p>
-                </div>
+                </div> */}
               </div>
 
               {bookingData?.coupon != "N/A" && (

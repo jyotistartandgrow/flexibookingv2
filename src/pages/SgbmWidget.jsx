@@ -4,8 +4,8 @@ import { darkenHex } from "../Utils/Functions";
 
 /* ── Constants ───────────────────────────────────────────── */
 const API_BASE = import.meta.env.VITE_API_URL;
-const DEFAULT_REDIRECT_URL =
-  "https://tenutamontauto.com/v2-shortcode/";
+const WIDGET_SCRIPT_PATH = import.meta.env.VITE_WIDGET_SCRIPT_URL;
+const DEFAULT_REDIRECT_URL = "";
 
 // const ACCENT_PRESETS = [
 //   "#215ad4",
@@ -46,6 +46,13 @@ function buildApiUrl(path) {
   const normalizedBase = String(API_BASE || "").replace(/\/+$/, "");
   const normalizedPath = String(path || "").replace(/^\/+/, "");
   return `${normalizedBase}/${normalizedPath}`;
+}
+
+function resolveWidgetScriptUrl(origin) {
+  const configuredPath = String(WIDGET_SCRIPT_PATH || "").trim();
+
+  // Fallback for standard WordPress plugin directory path.
+  return `${origin}/wp-content/plugins/${configuredPath}/react-frontend-v2/widget-embed.js`;
 }
 
 /* ── Calendar Preview Component ──────────────────────────── */
@@ -209,7 +216,8 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
   const scrollDesktop = (dir) => {
     const el = desktopCarouselRef.current;
     if (!el) return;
-    const itemWidth = el.querySelector(".fx-widget-desktop-swipe-item")?.offsetWidth || 0;
+    const itemWidth =
+      el.querySelector(".fx-widget-desktop-swipe-item")?.offsetWidth || 0;
     const gap = 14;
     el.scrollBy({
       left: dir === "next" ? itemWidth + gap : -(itemWidth + gap),
@@ -313,8 +321,15 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
   );
 
   return (
-    <div className="fx-widget-cards-wrap" style={{ "--fx-accent": accentColor }}>
-      <div className="fx-widget-view-switch" role="tablist" aria-label="Cards view">
+    <div
+      className="fx-widget-cards-wrap"
+      style={{ "--fx-accent": accentColor }}
+    >
+      <div
+        className="fx-widget-view-switch"
+        role="tablist"
+        aria-label="Cards view"
+      >
         <button
           className={`fx-widget-view-btn${viewMode === "grid" ? " active" : ""}`}
           onClick={() => setViewMode("grid")}
@@ -346,7 +361,10 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
             ‹
           </button>
 
-          <div className="fx-widget-desktop-swipe-carousel" ref={desktopCarouselRef}>
+          <div
+            className="fx-widget-desktop-swipe-carousel"
+            ref={desktopCarouselRef}
+          >
             {services.map((s) => (
               <div key={s.id} className="fx-widget-desktop-swipe-item">
                 {renderCard(s)}
@@ -418,29 +436,27 @@ export default function WidgetBuilder() {
   const [mode, setMode] = useState("preview"); // "preview" | "code"
   const [copied, setCopied] = useState(false);
 
-  const widgetPageUrl =
-    typeof window !== "undefined"
-      ? `${window.location.origin}${window.location.pathname}`
-      : "";
+  const widgetOrigin =
+    typeof window !== "undefined" ? window.location.origin : "";
 
-  // Rebuild iframe src based on settings
-  const iframeSrc =
-    tab === "calendar"
-      ? `${widgetPageUrl}?embed=1&widget=calendar&accent=${encodeURIComponent(accentColor)}&redirect=${encodeURIComponent(redirectUrl || DEFAULT_REDIRECT_URL)}`
-      : `${widgetPageUrl}?embed=1&widget=cards&cols=${cols}&accent=${encodeURIComponent(accentColor)}&showCategory=${showCategory}&redirect=${encodeURIComponent(redirectUrl || DEFAULT_REDIRECT_URL)}`;
+  const widgetScriptUrl = resolveWidgetScriptUrl(widgetOrigin);
 
-  const iframeCode =
-    `<iframe\n` +
-    `  src="${iframeSrc}"\n` +
-    `  width="${widgetWidth}"\n` +
-    `  height="${widgetHeight}"\n` +
-    `  frameborder="0"\n` +
-    `  style="border-radius:16px;border:none;"\n` +
-    `  title="Corte Spa Widget">\n` +
-    `</iframe>`;
+  const embedCode =
+    `<div\n` +
+    `  data-fx-widget="1"\n` +
+    `  data-widget="${tab}"\n` +
+    `  data-api-base="${API_BASE || ""}"\n` +
+    `  data-accent="${accentColor}"\n` +
+    `  data-redirect="${redirectUrl || DEFAULT_REDIRECT_URL}"\n` +
+    `  data-cols="${cols}"\n` +
+    `  data-show-category="${showCategory}"\n` +
+    `  data-width="${widgetWidth}"\n` +
+    `  data-height="${widgetHeight}">\n` +
+    `</div>\n` +
+    `<script src="${widgetScriptUrl}" defer></script>`;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(iframeCode).then(() => {
+    navigator.clipboard.writeText(embedCode).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
     });
@@ -680,7 +696,7 @@ export default function WidgetBuilder() {
                 >
                   {copied ? "✓ Copied!" : "Copy"}
                 </button>
-                <pre className="fx-widget-code-block">{iframeCode}</pre>
+                <pre className="fx-widget-code-block">{embedCode}</pre>
               </div>
 
               <div className="fx-widget-banner fx-widget-banner-success">
@@ -689,21 +705,17 @@ export default function WidgetBuilder() {
                 </p>
                 <ol>
                   <li>Copy the embed code above</li>
+                  <li>Paste into a Custom HTML block on your site</li>
                   <li>
-                    Paste into WordPress "Custom HTML" block, Elementor HTML
-                    widget, or any embed block
-                  </li>
-                  <li>
-                    Visitors see your widget inline — clicks redirect to your
-                    booking page
+                    The script renders the widget directly on your page (no
+                    iframe)
                   </li>
                 </ol>
               </div>
 
               <div className="fx-widget-banner fx-widget-banner-info">
-                <strong>WordPress tip:</strong> Use a "Custom HTML" Gutenberg
-                block and paste the code. Works with Elementor, Divi, and any
-                page builder that supports HTML embeds.
+                <strong>Tip:</strong> You can paste this snippet multiple times
+                on one page. Load <strong>widget-embed.js</strong> only once.
               </div>
             </>
           )}

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useMemo } from "react";
+import React, { useRef, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
@@ -50,7 +50,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
         dispatch(setSessionExpired(false));
       }
     }
-  }, [step]);
+  }, [step, paymentstring, dispatch]);
 
   const editaccept = (id, type) => {
     if (type === "service") {
@@ -272,7 +272,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
           Please select the service you want to gift to your friend.
         </p>
       )}
-      {paymentstring && isDesktop && !topbar && (
+      {step === "paymentstep" && paymentstring && isDesktop && !topbar && (
         <div className="fx-paymentbox">
           <h1 className="fx-all-main-heading">Payment</h1>
           <Elements stripe={stripePromise}>

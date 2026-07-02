@@ -357,6 +357,25 @@ export default function Service(props) {
     dispatch(setDate(date));
   };
 
+  const parsePriceToNumber = (priceValue) => {
+    const decoded = decodeHtml(priceValue || "").toString().trim();
+    let normalized = decoded.replace(/[^\d,.-]/g, "");
+
+    // Support both comma and dot decimal formats in API price strings.
+    if (normalized.includes(",") && normalized.includes(".")) {
+      if (normalized.lastIndexOf(",") > normalized.lastIndexOf(".")) {
+        normalized = normalized.replace(/\./g, "").replace(",", ".");
+      } else {
+        normalized = normalized.replace(/,/g, "");
+      }
+    } else if (normalized.includes(",")) {
+      normalized = normalized.replace(",", ".");
+    }
+
+    const numericValue = Number(normalized);
+    return Number.isNaN(numericValue) ? 0 : numericValue;
+  };
+
   // Template for each carousel item
   const productTemplate = (product) => {
     return (
@@ -390,7 +409,8 @@ export default function Service(props) {
             <span className="fx-price-one">
               {decodeHtml(product.svc_price).split(",")[0]}
             </span>
-            {product.svc_default_price > product.svc_price && (
+            {parsePriceToNumber(product.svc_default_price) >
+              parsePriceToNumber(product.svc_price) && (
               <span className="fx-price-two">
                 {decodeHtml(product.svc_default_price).split(",")[0]}
               </span>
@@ -648,15 +668,8 @@ export default function Service(props) {
               props.mobileHeading == "false" && !isDesktop ? "none" : "block",
           }}
         >
-          {props.stepTitles?.step_2_title ||
-            "What experience are you looking for?"}{" "}
-          {/* <span class="fx-tooltip-container">
-          <i class="pi pi-info-circle fx-info-icon"></i>
-          <div class="fx-tooltip">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
-          </div>
-        </span> */}
+          {/* {props.stepTitles?.step_2_title ||
+            "What experience are you looking for?"}{" "} */}
         </h1>
       )}
       <div id="fx-Icontab_nav">
@@ -809,7 +822,8 @@ export default function Service(props) {
                         <span className="fx-price-one">
                           {decodeHtml(product.svc_price).split(",")[0]}
                         </span>
-                        {product.svc_default_price > product.svc_price && (
+                        {parsePriceToNumber(product.svc_default_price) >
+                          parsePriceToNumber(product.svc_price) && (
                           <span className="fx-price-two">
                             {
                               decodeHtml(product.svc_default_price).split(
@@ -872,7 +886,8 @@ export default function Service(props) {
                       <span className="fx-price-one">
                         {decodeHtml(product.svc_price).split(",")[0]}
                       </span>
-                      {product.svc_default_price > product.svc_price && (
+                      {parsePriceToNumber(product.svc_default_price) >
+                        parsePriceToNumber(product.svc_price) && (
                         <span className="fx-price-two">
                           {decodeHtml(product.svc_default_price).split(",")[0]}
                         </span>

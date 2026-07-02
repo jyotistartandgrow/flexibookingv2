@@ -16,15 +16,18 @@ export default function CountdownTimer({ startSeconds = 180 }) {
   const [time, setTime] = useState(startSeconds);
   const [running, setRunning] = useState(true);
 
-  // Reset timer when entering payment step
+  // Always reset timer and expired flag when entering payment step.
+  // This prevents stale persisted/session state from showing an immediate expired screen.
   useEffect(() => {
-    if (step === "paymentstep" && !sessionExpired) {
+    if (step === "paymentstep") {
+      dispatch(setSessionExpired(false));
       setTime(startSeconds);
       setRunning(true);
     }
-  }, [step, sessionExpired, startSeconds]);
+  }, [step, startSeconds, dispatch]);
 
   const reinitiate = () => {
+    dispatch(setSessionExpired(false));
     dispatch(setStep("checkoutstep"));
   };
 
@@ -45,7 +48,7 @@ export default function CountdownTimer({ startSeconds = 180 }) {
 
       return () => clearInterval(interval);
     }
-  }, [running, time, step]);
+  }, [running, time, step, sessionExpired, dispatch]);
   return (
     <div>
       <h4>
