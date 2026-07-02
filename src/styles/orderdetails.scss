@@ -69,6 +69,8 @@
     transition: transform 0.3s ease;
 }
 
+
+
 /* Toggle state for Chevron */
 .fx-top-order-details-card.fx-is-open .fx-header-row .fx-chevron {
     transform: rotate(225deg); /* Up */
@@ -124,12 +126,22 @@
 
 /* Active Slide-down State */
 .fx-top-order-details-card.fx-is-open .fx-collapsible-content {
-    max-height: 300px;
+    max-height: fit-content;
     margin-top: 16px;
     padding-top: 12px;
     border-top: 1px solid #f2f4f7;
     opacity: 1;
-    overflow: auto;
+}
+
+@media screen and (max-width: 768px) {
+        .fx-top-order-details-card.fx-is-open .fx-collapsible-content {
+            max-height:330px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #f2f4f7;
+            opacity: 1;
+            overflow: auto;
+        }
 }
 
 .fx-top-order-details-card .fx-detail-line {

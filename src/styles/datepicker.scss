@@ -182,6 +182,22 @@ padding: 3px;
   font-size: 20px;
 }
 
+div.p-datepicker-title button.p-datepicker-year.p-link:hover,
+div.p-datepicker-title button.p-datepicker-month.p-link:hover,
+button.p-datepicker-next:hover,
+button.p-datepicker-prev:hover {
+    background:none;
+}
+
+button.p-datepicker-month.p-link, button.p-datepicker-year.p-link {
+    color: var(--primary-color);
+    border-color:none;
+}
+
+div.fx-booking div.fx-commoninput div.fx-inputgroup.fx-checkboxcontainer label.checkbox-label a{
+  color: var(--primary-color);
+}
+
 div.p-datepicker-title button.p-datepicker-year.p-link,
 div.p-datepicker-title button.p-datepicker-month.p-link,
 button.p-datepicker-next,

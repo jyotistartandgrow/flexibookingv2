@@ -146,11 +146,8 @@ export default function Thankyou() {
             <h2>Thanks for Your Order.</h2>
 
             <p className="fx-info-text">
-              You will receive an email with the ticket, show it when you arrive
-              at the Spa. If you book with a voucher, you must present your QC
-              Pass, Esselunga voucher or company welfare vouchers in the
-              purchase format at the reception in order to take advantage of the
-              services included.
+              You will receive an email with your ticket. 
+              Please show it upon arrival to access your booked service.
             </p>
 
             <div className="fx-email-box">
@@ -181,8 +178,7 @@ export default function Thankyou() {
           <div className="fx-confirm-right" ref={componentRef}>
             <div className="fx-confirm-innerrightbox">
               <h3 className="fx-order-title">
-                Your order is Confirmed. You will receive a confirmation mail in
-                your billing email.
+                Your order is Confirmed. You will receive a confirmation mail.
               </h3>
 
               <div className="fx-order-row">
@@ -215,7 +211,7 @@ export default function Thankyou() {
               <table className="fx-order-table">
                 <thead>
                   <tr>
-                    <th>#</th>
+                    {/* <th>#</th> */}
                     <th>Product</th>
                     <th>Price</th>
                     <th>Qty</th>
@@ -226,7 +222,7 @@ export default function Thankyou() {
                 <tbody>
                   {bookingData?.products?.map((product, pkey) => (
                     <tr key={"product-" + pkey}>
-                      <td>{product.product_heading}</td>
+                      {/* <td>{product.product_heading}</td> */}
                       <td>{product.name}</td>
                       <td>{decodeHtml(product.price)}</td>
                       <td>{product.quantity}</td>

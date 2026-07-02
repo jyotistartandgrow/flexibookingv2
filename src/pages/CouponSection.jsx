@@ -74,7 +74,7 @@ export default function CouponSection() {
             onChange={(e) => setIsVisibleGift(e.target.checked)}
           />
           <label htmlFor={uid} className="checkbox-label">
-            If you have coupon
+            Do you have a promo code?
           </label>
         </div>
         {isVisibleGift && (
