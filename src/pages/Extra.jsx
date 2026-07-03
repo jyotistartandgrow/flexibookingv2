@@ -333,8 +333,8 @@ export default function Extra(props) {
                 props.mobileHeading == "false" && !isDesktop ? "none" : "block",
             }}
           >
-            {/* {props.stepTitles?.step_3_title ||
-              "What experience are you looking for?"}{" "} */}
+            {props.stepTitles?.step_3_title ||
+              "What experience are you looking for?"}{" "}
           </h1>
         )}
         <div id="fx-Icontab_nav">
