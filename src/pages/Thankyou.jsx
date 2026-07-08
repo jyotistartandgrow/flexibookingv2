@@ -18,6 +18,7 @@ export default function Thankyou() {
   const componentRef = useRef();
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const loading = useSelector((state) => state.step1.loading);
+  const gift = useSelector((state) => state.step1.gift);
   const [bookingData, setBookingData] = useState(null);
   const [email, setEmail] = useState("");
   const qrCodeImage = bookingData?.qrcode
@@ -241,10 +242,12 @@ export default function Thankyou() {
                     {decodeHtml(bookingData?.product_details?.subtotal)}
                   </span>
                 </div>
-                <div>
-                  Discount
-                  <span>{decodeHtml(bookingData?.coupon_discount)}</span>
-                </div>
+                {bookingData?.product_details?.discount > 0 && (
+                  <div>
+                    Discount
+                    <span>{decodeHtml(bookingData?.coupon_discount)}</span>
+                  </div>
+                )}
                 <div>
                   Total
                   <span>{decodeHtml(bookingData?.product_details?.total)}</span>
@@ -257,7 +260,7 @@ export default function Thankyou() {
                   <p>
                     {bookingData?.customer_billing?.billing_first_name}{" "}
                     {bookingData?.customer_billing?.billing_last_name} <br />
-                    {bookingData?.customer_billing?.billing_email} <br/>
+                    {bookingData?.customer_billing?.billing_email} <br />
                     {bookingData?.customer_billing?.billing_contact}
                   </p>
                 </div>
@@ -310,7 +313,7 @@ export default function Thankyou() {
                 </table>
               )}
 
-              {qrCodeImage && (
+              {!gift && qrCodeImage && (
                 <div className="fx-qr-block">
                   <div className="fx-qr-block-text">
                     <h4>Booking Verification QR Code</h4>

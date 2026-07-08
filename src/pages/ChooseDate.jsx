@@ -12,6 +12,7 @@ import {
   setLoading,
   setGift,
 } from "../store/step1Slice";
+import { persistor } from "../store/store";
 import {
   decodeHtml,
   validateEmail,
@@ -32,7 +33,17 @@ export default function ChooseDate(props) {
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
   const [errorlist, setErrorlist] = useState({});
   const [selectedCountry, setSelectedCountry] = useState({ dialCode: "91" });
-  const toggleDiv = (type) => {
+
+  const handleFlowSwitch = (type) => {
+    if (isVisible === type) return;
+
+    const isGiftFlow = type === "gift";
+
+    // Clear current booking session so flow changes always start clean.
+    dispatch({ type: "app/reset" });
+    persistor.purge();
+
+    dispatch(setGift(isGiftFlow));
     setIsVisible(type);
   };
 
@@ -104,17 +115,16 @@ export default function ChooseDate(props) {
           }}
         >
           <div className="custom-day">{day}</div>
+          {props.calendarInfoVisibility === "true" &&
+            (props.calendarInfo == "price" ? (
+              <div className="fx-calender-price">{price}</div>
+            ) : (
+              <div
+                className="percent-bar"
+                style={{ width: `${availabilityPercent}%` }}
+              ></div>
+            ))}
         </div>
-
-        {props.calendarInfoVisibility === "true" &&
-          (props.calendarInfo == "price" ? (
-            <div className="fx-calender-price">{price}</div>
-          ) : (
-            <div
-              className="percent-bar"
-              style={{ width: `${availabilityPercent}%` }}
-            ></div>
-          ))}
 
         <div className="fx-tooltip">{tooltipText}</div>
       </>
@@ -264,7 +274,9 @@ export default function ChooseDate(props) {
       style={{ display: step === "datestep" ? "block" : "none" }}
     >
       {props.stepsVisibility?.step_1_title_visible == "true" && (
-        <h1 className="fx-all-main-heading fx-select-date-heading">{props.stepTitles?.step_1_title || "Book your Services"}</h1>
+        <h1 className="fx-all-main-heading fx-select-date-heading">
+          {props.stepTitles?.step_1_title || "Book your Services"}
+        </h1>
       )}
       <div id="fx-tab_nav">
         <ul>
@@ -272,10 +284,7 @@ export default function ChooseDate(props) {
             <a
               href="#/"
               className={isVisible == "booking" ? "selected" : ""}
-              onClick={() => {
-                toggleDiv("booking");
-                dispatch(setGift(false));
-              }}
+              onClick={() => handleFlowSwitch("booking")}
             >
               Booking
             </a>
@@ -284,10 +293,7 @@ export default function ChooseDate(props) {
             <a
               href="#/"
               className={isVisible == "gift" ? "selected" : ""}
-              onClick={() => {
-                dispatch(setGift(true));
-                toggleDiv("gift");
-              }}
+              onClick={() => handleFlowSwitch("gift")}
             >
               Gift
             </a>
@@ -296,7 +302,9 @@ export default function ChooseDate(props) {
 
         <div
           className={
-            isVisible == "booking" ? "fx-tabcontent fx-tabcontent-booking selected" : "fx-tabcontent"
+            isVisible == "booking"
+              ? "fx-tabcontent fx-tabcontent-booking selected"
+              : "fx-tabcontent"
           }
         >
           <div className="fx-element-box">
@@ -324,7 +332,9 @@ export default function ChooseDate(props) {
 
         <div
           className={
-            isVisible == "gift" ? "fx-tabcontent fx-tabcontent-gift selected" : "fx-tabcontent"
+            isVisible == "gift"
+              ? "fx-tabcontent fx-tabcontent-gift selected"
+              : "fx-tabcontent"
           }
         >
           <h3>Gift receiver information</h3>

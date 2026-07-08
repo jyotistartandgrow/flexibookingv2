@@ -243,11 +243,13 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                     Sub Total <span> {decodeHtml(cart.subtotal)}</span>
                   </p>
                 </div>
-                <div className="fx-discountbar">
-                  <p>
-                    Discount <span> {decodeHtml(cart.discount)}</span>
-                  </p>
-                </div>
+                {cart.discount > 0 && (
+                  <div className="fx-discountbar">
+                    <p>
+                      Discount <span> {decodeHtml(cart.discount)}</span>
+                    </p>
+                  </div>
+                )}
               </div>
               <div className="fx-totalbar">
                 <p>

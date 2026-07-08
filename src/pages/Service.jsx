@@ -21,6 +21,43 @@ import Swal from "sweetalert2";
 import useDeviceType from "../Utils/useDeviceType";
 import CalendarPage from "./CalendarPage";
 
+function LazyServiceImage({ src, alt, className, wrapperClassName, style }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <div
+      className={wrapperClassName}
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "block",
+        position: "relative",
+        overflow: "hidden",
+        backgroundColor: "#f3f4f6",
+        ...style,
+      }}
+    >
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        className={className}
+        onLoad={() => setIsLoaded(true)}
+        style={{
+          display: "block",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          opacity: isLoaded ? 1 : 0,
+          transform: isLoaded ? "scale(1)" : "scale(1.03)",
+          transition: "opacity 0.35s ease, transform 0.35s ease",
+        }}
+      />
+    </div>
+  );
+}
+
 export default function Service(props) {
   const dispatch = useDispatch();
   const op = useRef(null);
@@ -44,6 +81,7 @@ export default function Service(props) {
   const [calendarslots, setCalendarslots] = useState([]);
   const [serviceid, setServiceId] = useState(null);
   const [book, setBook] = useState(0);
+  const [giftQuantity, setGiftQuantity] = useState(1);
   const [slot, setSlot] = useState("");
   const [readmorecl, setReadmorecl] = useState(false);
   const [skeloading, setLoadingske] = useState(false);
@@ -55,6 +93,8 @@ export default function Service(props) {
   const isInitialMount = useRef(true);
   const isDesktop = useDeviceType();
   const desktopCarouselRef = useRef(null);
+  const [isDesktopCarouselHovered, setIsDesktopCarouselHovered] =
+    useState(false);
 
   const scrollDesktop = (dir) => {
     const el = desktopCarouselRef.current;
@@ -69,7 +109,8 @@ export default function Service(props) {
   };
 
   useEffect(() => {
-    if (isVisible !== "slider" || !isDesktop) return;
+    if (isVisible !== "slider" || !isDesktop || isDesktopCarouselHovered)
+      return;
     const interval = setInterval(() => {
       const el = desktopCarouselRef.current;
       if (!el) return;
@@ -82,9 +123,15 @@ export default function Service(props) {
       } else {
         el.scrollBy({ left: itemWidth + gap, behavior: "smooth" });
       }
-    }, 3000);
+    }, 5000);
     return () => clearInterval(interval);
-  }, [isVisible, isDesktop, products, selectedCategory]);
+  }, [
+    isVisible,
+    isDesktop,
+    products,
+    selectedCategory,
+    isDesktopCarouselHovered,
+  ]);
 
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -181,6 +228,7 @@ export default function Service(props) {
   const servicedetail = async (id) => {
     dispatch(setLoading(true));
     setReadmorecl(false);
+    setGiftQuantity(1);
     setServiceId(id);
     let allService = gift ? true : false;
     allService = all ? true : allService;
@@ -210,7 +258,16 @@ export default function Service(props) {
       setVisible(true);
 
       if (data?.data?.date_slots) {
-        setDateslot(data?.data?.date_slots);
+        const serviceDateSlots = data?.data?.date_slots || [];
+        setDateslot(serviceDateSlots);
+
+        const selectedDateExists = serviceDateSlots.some((slotItem) =>
+          moment(slotItem?.date).isSame(moment(date).format("YYYY-MM-DD"), "day"),
+        );
+
+        if (!selectedDateExists && serviceDateSlots[0]?.date) {
+          dispatch(setDate(serviceDateSlots[0].date));
+        }
       }
 
       if (!gift) {
@@ -390,7 +447,7 @@ export default function Service(props) {
         onClick={() => servicedetail(product.id)}
       >
         <div className="fx-servicepicbox">
-          <img src={product.svc_img} alt={product.service_name} />
+          <LazyServiceImage src={product.svc_img} alt={product.service_name} />
           {props.categoryLabelVisibility == "true" && (
             <span className="fx-servicepiccontentbox">
               {product.category_name}
@@ -401,7 +458,12 @@ export default function Service(props) {
           <h4>{product.service_name}</h4>
           <p>{decodeHtml(product.svc_short_desc)}</p>
           <p className="price">
-            <span className="fx-price-form">from</span>
+            <span
+              className="fx-price-form"
+              style={{ display: gift ? "none" : "inline" }}
+            >
+              from
+            </span>
             <span className="fx-price-one">
               {decodeHtml(product.svc_price).split(",")[0]}
             </span>
@@ -525,9 +587,21 @@ export default function Service(props) {
   };
 
   const giftbookservice = async () => {
+    if (giftQuantity < 1) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "warning",
+        title: "Please choose at least 1 quantity",
+      });
+      return;
+    }
+
     dispatch(setLoading(true));
     const { data } = await axiosInstance(
-      `/price-format?service_id=${productDetails.id}&capacity=1&date=${moment(
+      `/price-format?service_id=${productDetails.id}&capacity=${giftQuantity}&date=${moment(
         date,
       ).format(
         "YYYY-MM-DD",
@@ -543,7 +617,7 @@ export default function Service(props) {
       total: data?.data?.service_total,
       total_formatted: data?.data?.service_total,
       slot: "",
-      capacity: 1,
+      capacity: giftQuantity,
     };
     let extraobj = cart.extra ? cart.extra : [];
     if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
@@ -561,7 +635,7 @@ export default function Service(props) {
       }),
     );
     dispatch(setTimeslot(""));
-    dispatch(setCapacity(1));
+    dispatch(setCapacity(giftQuantity));
     dispatch(setService(serviceid));
     setVisible(false);
     hasExtra();
@@ -602,7 +676,7 @@ export default function Service(props) {
     const { data } = await axiosInstance.post(`/addtocart`, {
       service_id: serviceid,
       date: moment(date).format("YYYY-MM-DD"),
-      total_service_booking: gift ? 1 : book,
+      total_service_booking: gift ? giftQuantity : book,
       time_slot: slot,
       extra_svc_ids: [],
       no_of_persons: 0,
@@ -635,6 +709,16 @@ export default function Service(props) {
   const slotObj = dateslot.find((s) =>
     moment(moment(date).format("YYYY-MM-DD")).isSame(s.date),
   );
+
+  const updateGiftQuantity = (type) => {
+    setGiftQuantity((prev) => {
+      const current = Number(prev) || 1;
+      if (type === "minus") {
+        return Math.max(1, current - 1);
+      }
+      return current + 1;
+    });
+  };
 
   // Auto-select the first tab that has available slots
   useEffect(() => {
@@ -798,7 +882,10 @@ export default function Service(props) {
                     onClick={() => servicedetail(product.id)}
                   >
                     <div className="fx-servicepicbox">
-                      <img src={product.svc_img} alt={product.service_name} />
+                      <LazyServiceImage
+                        src={product.svc_img}
+                        alt={product.service_name}
+                      />
                       {props.categoryLabelVisibility == "true" && (
                         <span className="fx-servicepiccontentbox">
                           {product.category_name}
@@ -809,7 +896,12 @@ export default function Service(props) {
                       <h4>{product.service_name}</h4>
                       <p>{product.svc_short_desc}</p>
                       <p className="price">
-                        <span className="fx-price-form">from</span>
+                        <span
+                          className="fx-price-form"
+                          style={{ display: gift ? "none" : "block" }}
+                        >
+                          from
+                        </span>
                         <span className="fx-price-one">
                           {decodeHtml(product.svc_price).split(",")[0]}
                         </span>
@@ -859,7 +951,10 @@ export default function Service(props) {
                 >
                   <div className="fx-servicepicboxlist">
                     <div className="fx-list-img-box">
-                      <img src={product.svc_img} alt={product.service_name} />
+                        <LazyServiceImage
+                          src={product.svc_img}
+                          alt={product.service_name}
+                        />
                     </div>
                     {props.categoryLabelVisibility == "true" && (
                       <span className="fx-servicepiccontentbox">
@@ -873,7 +968,12 @@ export default function Service(props) {
                       <p>{product.svc_short_desc}</p>
                     </div>
                     <p className="price">
-                      <span className="fx-price-form">from</span>
+                      <span
+                        className="fx-price-form"
+                        style={{ display: gift ? "none" : "block" }}
+                      >
+                        from
+                      </span>
                       <span className="fx-price-one">
                         {decodeHtml(product.svc_price).split(",")[0]}
                       </span>
@@ -924,6 +1024,8 @@ export default function Service(props) {
                 <div
                   className={`fx-desktop-swipe-carousel${displayedProducts.length < 4 ? " fx-dswipe-few" : ""}`}
                   ref={desktopCarouselRef}
+                  onMouseEnter={() => setIsDesktopCarouselHovered(true)}
+                  onMouseLeave={() => setIsDesktopCarouselHovered(false)}
                 >
                   {displayedProducts.map((product, idx) => (
                     <div key={idx} className="fx-desktop-swipe-item">
@@ -980,7 +1082,7 @@ export default function Service(props) {
               <div className="fx-leftpopup">
                 {productDetails.svc_img && (
                   <div className="fix-maximiz-popup-img">
-                    <img
+                    <LazyServiceImage
                       src={productDetails.svc_img}
                       alt={productDetails.service_title}
                     />
@@ -1014,14 +1116,14 @@ export default function Service(props) {
                       <p>
                         <span
                           className={
-                            readmorecl ? "fx-expand-readmore" : "fx-des"
+                            readmorecl || gift ? "fx-expand-readmore" : "fx-des"
                           }
                         >
                           {decodeHtml(productDetails.svc_long_desc)}
                         </span>
                         {productDetails.svc_long_desc != "N/A" &&
                           (productDetails.svc_long_desc?.trim().split(/\s+/)
-                            .length ?? 0) > 25 && (
+                            .length ?? 0) > 25 && !gift && (
                             <span
                               className="readmore"
                               onClick={() => setReadmorecl(!readmorecl)}
@@ -1030,6 +1132,32 @@ export default function Service(props) {
                             </span>
                           )}
                       </p>
+
+                      <div className="fx-common">
+                        <h5>Quantity</h5>
+                        <div className="fx-quantitybox">
+                          <button
+                            type="button"
+                            className="decrement"
+                            onClick={() => updateGiftQuantity("minus")}
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            min={1}
+                            value={giftQuantity}
+                            readOnly
+                          />
+                          <button
+                            type="button"
+                            className="increment"
+                            onClick={() => updateGiftQuantity("add")}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   )}
 
@@ -1046,7 +1174,7 @@ export default function Service(props) {
                       <p>
                         <span
                           className={
-                            readmorecl ? "fx-expand-readmore" : "fx-des"
+                            readmorecl || gift ? "fx-expand-readmore" : "fx-des"
                           }
                         >
                           {decodeHtml(productDetails.svc_long_desc)}
@@ -1652,7 +1780,8 @@ export default function Service(props) {
                 <div
                   className="fx-popup-rightslot-continuebtn"
                   style={{
-                    display: slotVisible == "morning" ? "block" : "none",
+                    display:
+                      slotVisible == "morning" && !gift ? "block" : "none",
                   }}
                 >
                   <div
@@ -1671,7 +1800,8 @@ export default function Service(props) {
                 <div
                   className="fx-popup-rightslot-continuebtn"
                   style={{
-                    display: slotVisible == "afternoon" ? "block" : "none",
+                    display:
+                      slotVisible == "afternoon" && !gift ? "block" : "none",
                   }}
                 >
                   <div
@@ -1693,12 +1823,13 @@ export default function Service(props) {
                   className="fx-popup-rightslot-continuebtn"
                   style={{
                     display:
-                      slotVisible == "all" ||
-                      dateslot.find((s) =>
-                        moment(moment(date).format("YYYY-MM-DD")).isSame(
-                          s.date,
-                        ),
-                      )?.slots.single_time_slot.slot_type
+                      (slotVisible == "all" ||
+                        dateslot.find((s) =>
+                          moment(moment(date).format("YYYY-MM-DD")).isSame(
+                            s.date,
+                          ),
+                        )?.slots.single_time_slot.slot_type) &&
+                      !gift
                         ? "block"
                         : "none",
                   }}
