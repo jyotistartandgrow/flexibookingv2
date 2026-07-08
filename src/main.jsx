@@ -5,6 +5,25 @@ import App from "./App.jsx";
 import { Provider } from "react-redux";
 import { store, persistor } from "./store/store";
 import { PersistGate } from "redux-persist/integration/react";
+import { setGift } from "./store/step1Slice";
+
+const FLOW_STORAGE_KEY = "fx-active-flow";
+
+function resetBookingSession() {
+  store.dispatch({ type: "app/reset" });
+  persistor.purge();
+}
+
+function ensureCleanSessionForFlow(flowId) {
+  const previousFlow = sessionStorage.getItem(FLOW_STORAGE_KEY);
+
+  // Always start with a clean booking session on first load and whenever flow changes.
+  if (!previousFlow || previousFlow !== flowId) {
+    resetBookingSession();
+  }
+
+  sessionStorage.setItem(FLOW_STORAGE_KEY, flowId);
+}
 
 // Mount React only when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
@@ -22,6 +41,9 @@ function mountReactApp(id, initialRoute) {
   const el = document.getElementById(id);
 
   if (!el) return;
+
+  ensureCleanSessionForFlow(id);
+  store.dispatch(setGift(id === "react_sgbm_starting_gift"));
 
   console.log(el.dataset);
   // 👇 Get data attributes

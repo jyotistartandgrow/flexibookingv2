@@ -54,37 +54,33 @@ export default function Thankyou() {
                   {product.quantity} x {product.product_heading}
                 </p>
               </div>
-              <div className="fx-item-price">{decodeHtml(product.total)}</div>
+              {/* <div className="fx-item-price">{decodeHtml(product.total)}</div> */}
             </div>
           ))}
 
           <hr className="fx-divider"></hr>
 
           <div className="fx-calc-row">
-            <span>Subtotal</span>
+            <span>Booking Date</span>
             <span className="fx-bold-value">
-              {decodeHtml(bookingData?.subtotal)}
+              {bookingData?.service_date}
             </span>
           </div>
-          {/* <div className="fx-calc-row">
-                <span>Taxes (20%)</span>
-                <span className="fx-bold-value">€22.00</span>
-              </div> */}
           <div className="fx-calc-row">
-            <span className="fx-discount">Discount applied</span>
+            <span className="fx-discount">Slot</span>
             <span className="fx-discount">
-              -{decodeHtml(bookingData?.discount)}
+              {bookingData?.booking_slots?.from} - {bookingData?.booking_slots?.to}
             </span>
           </div>
 
-          <div className="fx-total-row">
+          {/* <div className="fx-total-row">
             <span className="fx-total-label">Total Paid</span>
             <div>
               <div className="fx-grand-total">
                 {decodeHtml(bookingData?.total)}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <hr className="fx-footer-separator"></hr>
