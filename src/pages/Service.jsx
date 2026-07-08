@@ -765,6 +765,7 @@ export default function Service(props) {
           categories.length >= 2 &&
           (isDesktop ? products.length >= 9 : products.length >= 6) && (
             <div className="fx-category-pills-bar">
+              <i class="pi pi-chevron-left fx-tag-arrow"></i>
               <button
                 className={`fx-category-pill${selectedCategory === "all" ? " fx-category-pill-active" : ""}`}
                 onClick={() => setSelectedCategory("all")}
@@ -780,6 +781,7 @@ export default function Service(props) {
                   {cat}
                 </button>
               ))}
+              <i class="pi pi-chevron-right fx-tag-arrow"></i>
             </div>
           )}
       </div>

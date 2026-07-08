@@ -953,5 +953,17 @@ div.fx-booking input.btn-primary[type="submit"]:focus-visible {
     max-width: inherit;
 }
 
+.fx-right-box-detsila{
+    height: 498px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.fx-category-pills-bar .fx-tag-arrow{
+    margin-top: 9px;
+    font-size: 12px;
+    color: var(--primary-color);
+}
+
 
 

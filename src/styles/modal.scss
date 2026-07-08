@@ -42,7 +42,7 @@ overflow-y: inherit !important;
     border-top-left-radius: 3px;
     position: absolute;
     z-index: 999;
-    right: 0px;
+    right:6px;
 }
 
 h2 {
@@ -286,7 +286,6 @@ h2 {
 .fx-booking .fx-timelistboxbar{
   overflow: auto;
   height:100%;
-  min-height:270px;
 }
 .fx-booking .fx-timelistbox {
   padding: 7px 12px;
