@@ -89,6 +89,11 @@ export default function Service(props) {
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const categoryPillsRef = useRef(null);
+  const [showCategoryScrollControls, setShowCategoryScrollControls] =
+    useState(false);
+  const [canScrollCategoryLeft, setCanScrollCategoryLeft] = useState(false);
+  const [canScrollCategoryRight, setCanScrollCategoryRight] = useState(false);
   const prevDate = useRef(date);
   const isInitialMount = useRef(true);
   const isDesktop = useDeviceType();
@@ -137,6 +142,34 @@ export default function Service(props) {
     setIsVisible(type);
   };
 
+  const updateCategoryScrollState = () => {
+    const el = categoryPillsRef.current;
+    if (!el) {
+      setShowCategoryScrollControls(false);
+      setCanScrollCategoryLeft(false);
+      setCanScrollCategoryRight(false);
+      return;
+    }
+
+    const hasOverflow = el.scrollWidth > el.clientWidth + 1;
+    setShowCategoryScrollControls(hasOverflow);
+    setCanScrollCategoryLeft(hasOverflow && el.scrollLeft > 1);
+    setCanScrollCategoryRight(
+      hasOverflow && el.scrollLeft + el.clientWidth < el.scrollWidth - 1,
+    );
+  };
+
+  const scrollCategoryPills = (direction) => {
+    const el = categoryPillsRef.current;
+    if (!el) return;
+
+    const scrollAmount = Math.max(180, Math.floor(el.clientWidth * 0.5));
+    el.scrollBy({
+      left: direction === "right" ? scrollAmount : -scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
   // Auto-set default view based on service count and device type
   useEffect(() => {
     if (products.length === 0) return;
@@ -162,6 +195,33 @@ export default function Service(props) {
     setCategories(cats);
     setSelectedCategory("all");
   }, [products]);
+
+  useEffect(() => {
+    const el = categoryPillsRef.current;
+    if (!el) return;
+
+    const onScroll = () => updateCategoryScrollState();
+    const onResize = () => updateCategoryScrollState();
+
+    updateCategoryScrollState();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [categories, isDesktop, products.length, skeloading]);
+
+  useEffect(() => {
+    const el = categoryPillsRef.current;
+    if (!el) return;
+
+    const activePill = el.querySelector(".fx-category-pill-active");
+    if (activePill) {
+      activePill.scrollIntoView({ behavior: "smooth", inline: "nearest" });
+    }
+  }, [selectedCategory]);
 
   // Reset service id on step change
   useEffect(() => {
@@ -716,6 +776,11 @@ export default function Service(props) {
     moment(moment(date).format("YYYY-MM-DD")).isSame(s.date),
   );
 
+  const shouldShowCategoryFilter =
+    !skeloading &&
+    categories.length >= 2 &&
+    (isDesktop ? products.length >= 9 : products.length >= 6);
+
   const updateGiftQuantity = (type) => {
     setGiftQuantity((prev) => {
       const current = Number(prev) || 1;
@@ -761,11 +826,21 @@ export default function Service(props) {
         )}
         {/* Category filter toggle button + dropdown */}
         {/* Category filter pills */}
-        {!skeloading &&
-          categories.length >= 2 &&
-          (isDesktop ? products.length >= 9 : products.length >= 6) && (
-            <div className="fx-category-pills-bar">
-              <i class="pi pi-chevron-left fx-tag-arrow"></i>
+        {shouldShowCategoryFilter && (
+          <div className="fx-category-pills-row">
+            {showCategoryScrollControls && (
+              <button
+                type="button"
+                className="fx-category-scroll-arrow"
+                onClick={() => scrollCategoryPills("left")}
+                disabled={!canScrollCategoryLeft}
+                aria-label="Scroll categories left"
+              >
+                <i className="pi pi-chevron-left"></i>
+              </button>
+            )}
+
+            <div className="fx-category-pills-bar" ref={categoryPillsRef}>
               <button
                 className={`fx-category-pill${selectedCategory === "all" ? " fx-category-pill-active" : ""}`}
                 onClick={() => setSelectedCategory("all")}
@@ -781,9 +856,21 @@ export default function Service(props) {
                   {cat}
                 </button>
               ))}
-              <i class="pi pi-chevron-right fx-tag-arrow"></i>
             </div>
-          )}
+
+            {showCategoryScrollControls && (
+              <button
+                type="button"
+                className="fx-category-scroll-arrow"
+                onClick={() => scrollCategoryPills("right")}
+                disabled={!canScrollCategoryRight}
+                aria-label="Scroll categories right"
+              >
+                <i className="pi pi-chevron-right"></i>
+              </button>
+            )}
+          </div>
+        )}
       </div>
       <div id="fx-Icontab_nav">
         <ul

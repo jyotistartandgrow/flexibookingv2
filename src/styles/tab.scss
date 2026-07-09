@@ -335,13 +335,48 @@
 }
 
 /* Filter row */
+.fx-booking .fx-category-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.fx-booking .fx-category-scroll-arrow {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--primary-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, opacity 0.2s;
+
+  .pi {
+    font-size: 11px;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--primary-color);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
 /* Category filter pills - horizontal scrollable */
 .fx-booking .fx-category-pills-bar {
-  display: flex;
+  flex: 1;
+  display: inline-flex;
   flex-wrap: nowrap;
   overflow-x: auto;
   gap: 8px;
-  margin-bottom: 16px;
   padding-bottom: 2px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -374,6 +409,18 @@
     border-color: var(--primary-color);
     color: var(--primary-color);
     background: var(--lightblue-secondary);
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .fx-booking .fx-category-pills-row {
+    max-width: calc(100% - 140px);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .fx-booking .fx-category-pills-row {
+    max-width: 100%;
   }
 }
 
