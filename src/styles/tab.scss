@@ -346,7 +346,7 @@
   flex: 0 0 auto;
   width: 28px;
   height: 28px;
-  border: 1.5px solid var(--border-color);
+  border: none;
   border-radius: 50%;
   background: var(--white);
   color: var(--primary-color);
@@ -355,6 +355,10 @@
   justify-content: center;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s, opacity 0.2s;
+  box-shadow: none;
+  background: none;
+  font-size: 18px;
+  padding: 0px;
 
   .pi {
     font-size: 11px;

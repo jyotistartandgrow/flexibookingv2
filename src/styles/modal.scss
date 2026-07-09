@@ -42,7 +42,8 @@ overflow-y: inherit !important;
     border-top-left-radius: 3px;
     position: absolute;
     z-index: 999;
-    right:6px;
+    right: 0px;
+    top: -3px;
 }
 
 h2 {
@@ -96,6 +97,7 @@ h2 {
 }
 .p-dialog-header-icons button[type=button]{
   padding:5px;
+  box-shadow: none;
 }
 .p-dialog-header-icons button[type=button]{
   background: var(--white);
@@ -146,6 +148,10 @@ h2 {
   color: var(--primary-color);
   text-decoration: none;
   cursor: pointer;
+}
+
+.fx-booking .fx-popup .fx-rightpopup p span.readmore:hover {
+  color: var(--fx-secondary-colors);
 }
 
 .fx-booking .fx-popup .fx-rightpopup .datetext {
@@ -351,13 +357,14 @@ h2 {
 }
 
 .fx-booking .fx-popup .fx-quantitybox button {
-  width: 28px;
+  width: 27px;
   height: 27px;
   font-size: var(--normal-descriptionsize);
   border: 0.76px solid var(--border-color);
   background: none;
   cursor: pointer;
   outline: none;
+  padding: 0px;
 }
 
 .fx-booking .fx-popup .fx-quantitybox input[type="number"] {
@@ -449,6 +456,10 @@ h2 {
 
 .p-dialog-maximized  .fx-popup{
   height: 90vh;
+}
+
+.bm-booking-cart-toggle{
+  display: none;
 }
 
 @media screen and (max-width: 480px) {
