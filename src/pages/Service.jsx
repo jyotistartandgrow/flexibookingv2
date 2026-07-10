@@ -49,6 +49,7 @@ export default function Service(props) {
   const [readmorecl, setReadmorecl] = useState(false);
   const [skeloading, setLoadingske] = useState(false);
   const [currentitem, setCurrentItem] = useState({});
+  const [loadedServiceImages, setLoadedServiceImages] = useState({});
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -285,7 +286,10 @@ export default function Service(props) {
         setDateslot(serviceDateSlots);
 
         const selectedDateExists = serviceDateSlots.some((slotItem) =>
-          moment(slotItem?.date).isSame(moment(date).format("YYYY-MM-DD"), "day"),
+          moment(slotItem?.date).isSame(
+            moment(date).format("YYYY-MM-DD"),
+            "day",
+          ),
         );
 
         if (!selectedDateExists && serviceDateSlots[0]?.date) {
@@ -471,12 +475,18 @@ export default function Service(props) {
       >
         <div className="fx-tooltip-wrapper">
           <div className="fx-top-icon">d</div>
-          <div className="fx-tooltip-box">
-            dewfwef
-          </div>
+          <div className="fx-tooltip-box">dewfwef</div>
         </div>
         <div className="fx-servicepicbox">
-          <img src={product.svc_img} alt={product.service_name} />
+          {!loadedServiceImages[product.id] && (
+            <div className="fx-image-loader"></div>
+          )}
+          <img
+            src={product.svc_img}
+            alt={product.service_name}
+            onLoad={() => markServiceImageLoaded(product.id)}
+            onError={() => markServiceImageLoaded(product.id)}
+          />
           {props.categoryLabelVisibility == "true" && (
             <span className="fx-servicepiccontentbox">
               {product.category_name}
@@ -754,6 +764,13 @@ export default function Service(props) {
     });
   };
 
+  const markServiceImageLoaded = (id) => {
+    setLoadedServiceImages((prev) => {
+      if (prev[id]) return prev;
+      return { ...prev, [id]: true };
+    });
+  };
+
   // Auto-select the first tab that has available slots
   useEffect(() => {
     if (!slotObj) return;
@@ -939,14 +956,20 @@ export default function Service(props) {
                     key={p1}
                     onClick={() => servicedetail(product.id)}
                   >
-                     <div className="fx-tooltip-wrapper">
+                    <div className="fx-tooltip-wrapper">
                       <div className="fx-top-icon">d</div>
-                      <div className="fx-tooltip-box">
-                        dewfwef
-                      </div>
+                      <div className="fx-tooltip-box">dewfwef</div>
                     </div>
                     <div className="fx-servicepicbox">
-                      <img src={product.svc_img} alt={product.service_name} />
+                      {!loadedServiceImages[product.id] && (
+                        <div className="fx-image-loader"></div>
+                      )}
+                      <img
+                        src={product.svc_img}
+                        alt={product.service_name}
+                        onLoad={() => markServiceImageLoaded(product.id)}
+                        onError={() => markServiceImageLoaded(product.id)}
+                      />
                       {props.categoryLabelVisibility == "true" && (
                         <span className="fx-servicepiccontentbox">
                           {product.category_name}
@@ -1012,7 +1035,15 @@ export default function Service(props) {
                 >
                   <div className="fx-servicepicboxlist">
                     <div className="fx-list-img-box">
-                      <img src={product.svc_img} alt={product.service_name} />
+                      {!loadedServiceImages[product.id] && (
+                        <div className="fx-image-loader"></div>
+                      )}
+                      <img
+                        src={product.svc_img}
+                        alt={product.service_name}
+                        onLoad={() => markServiceImageLoaded(product.id)}
+                        onError={() => markServiceImageLoaded(product.id)}
+                      />
                     </div>
                     {props.categoryLabelVisibility == "true" && (
                       <span className="fx-servicepiccontentbox">
@@ -1181,7 +1212,8 @@ export default function Service(props) {
                         </span>
                         {productDetails.svc_long_desc != "N/A" &&
                           (productDetails.svc_long_desc?.trim().split(/\s+/)
-                            .length ?? 0) > 25 && !gift && (
+                            .length ?? 0) > 25 &&
+                          !gift && (
                             <span
                               className="readmore"
                               onClick={() => setReadmorecl(!readmorecl)}

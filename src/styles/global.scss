@@ -966,5 +966,19 @@ div.fx-booking input.btn-primary[type="submit"]:focus-visible {
     color: var(--primary-color);
 }
 
+.fx-image-loader {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        #f1f1f1 25%,
+        #e4e4e4 37%,
+        #f1f1f1 63%
+    );
+    background-size: 100% 100%;
+    animation: shimmer 1.4s infinite;
+}
+
+
 
 

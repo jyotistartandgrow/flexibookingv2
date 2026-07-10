@@ -71,12 +71,15 @@ const GiftCardPreview = ({
         <div className="fx-gift-card-footer">
           <p className="fx-gift-card-brand-text">FLEXI BOOKING</p>
         </div>
+
+         <p className="fx-gift-card-info-text">
+        The recipient will receive this gift card via email
+      </p>
+      
       </div>
 
       {/* Info text below card */}
-      <p className="fx-gift-card-info-text">
-        The recipient will receive this gift card via email
-      </p>
+      
     </div>
   );
 };
