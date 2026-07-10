@@ -21,43 +21,6 @@ import Swal from "sweetalert2";
 import useDeviceType from "../Utils/useDeviceType";
 import CalendarPage from "./CalendarPage";
 
-function LazyServiceImage({ src, alt, className, wrapperClassName, style }) {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  return (
-    <div
-      className={wrapperClassName}
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "block",
-        position: "relative",
-        overflow: "hidden",
-        backgroundColor: "#f3f4f6",
-        ...style,
-      }}
-    >
-      <img
-        src={src}
-        alt={alt}
-        loading="lazy"
-        decoding="async"
-        className={className}
-        onLoad={() => setIsLoaded(true)}
-        style={{
-          display: "block",
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          opacity: isLoaded ? 1 : 0,
-          transform: isLoaded ? "scale(1)" : "scale(1.03)",
-          transition: "opacity 0.35s ease, transform 0.35s ease",
-        }}
-      />
-    </div>
-  );
-}
-
 export default function Service(props) {
   const dispatch = useDispatch();
   const op = useRef(null);
@@ -513,7 +476,7 @@ export default function Service(props) {
           </div>
         </div>
         <div className="fx-servicepicbox">
-          <LazyServiceImage src={product.svc_img} alt={product.service_name} />
+          <img src={product.svc_img} alt={product.service_name} />
           {props.categoryLabelVisibility == "true" && (
             <span className="fx-servicepiccontentbox">
               {product.category_name}
@@ -983,10 +946,8 @@ export default function Service(props) {
                       </div>
                     </div>
                     <div className="fx-servicepicbox">
-                      <LazyServiceImage
-                        src={product.svc_img}
-                        alt={product.service_name}
-                      />
+                      <div class="fx-image-loader"></div>
+                      <img src={product.svc_img} alt={product.service_name} />
                       {props.categoryLabelVisibility == "true" && (
                         <span className="fx-servicepiccontentbox">
                           {product.category_name}
@@ -1052,10 +1013,7 @@ export default function Service(props) {
                 >
                   <div className="fx-servicepicboxlist">
                     <div className="fx-list-img-box">
-                        <LazyServiceImage
-                          src={product.svc_img}
-                          alt={product.service_name}
-                        />
+                      <img src={product.svc_img} alt={product.service_name} />
                     </div>
                     {props.categoryLabelVisibility == "true" && (
                       <span className="fx-servicepiccontentbox">
@@ -1183,7 +1141,7 @@ export default function Service(props) {
               <div className="fx-leftpopup">
                 {productDetails.svc_img && (
                   <div className="fix-maximiz-popup-img">
-                    <LazyServiceImage
+                    <img
                       src={productDetails.svc_img}
                       alt={productDetails.service_title}
                     />
