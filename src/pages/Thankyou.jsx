@@ -313,7 +313,7 @@ export default function Thankyou() {
                 </table>
               )}
 
-              {!gift && qrCodeImage && (
+              {!bookingData?.voucher && qrCodeImage && (
                 <div className="fx-qr-block">
                   <div className="fx-qr-block-text">
                     <h4>Booking Verification QR Code</h4>
