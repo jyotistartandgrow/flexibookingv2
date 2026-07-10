@@ -27,20 +27,32 @@ function ensureCleanSessionForFlow(flowId) {
 
 // Mount React only when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
-  mountReactApp("react_sgbm_starting_date", "/");
-  mountReactApp("react_sgbm_starting_gift", "/?type=gift");
-  mountReactApp("react_sgbm_starting_category", "/startingcategory");
-  mountReactApp("react_sgbm_starting_service", "/startingservice");
-  mountReactApp("react_sgbm_redeem_gift", "/redeemgift");
-  mountReactApp("react_sgbm_open_date_purchase", "/opendatepurchase");
-  mountReactApp("react_sgbm_checkin", "/checkin");
-  mountReactApp("react_sgbm_widget", "/widget");
+  const helpCenterRoute = "/help-center";
+
+  mountReactApp("react_sgbm_starting_date", helpCenterRoute);
+  mountReactApp("react_sgbm_starting_gift", helpCenterRoute);
+  mountReactApp("react_sgbm_starting_category", "/help-center");
+  mountReactApp("react_sgbm_starting_service", helpCenterRoute);
+  mountReactApp("react_sgbm_redeem_gift", helpCenterRoute);
+  mountReactApp("react_sgbm_open_date_purchase", helpCenterRoute);
+  mountReactApp("react_sgbm_checkin", helpCenterRoute);
+  mountReactApp("react_sgbm_widget", helpCenterRoute);
+  mountReactApp("react_sgbm_help_center", helpCenterRoute);
 });
 
 function mountReactApp(id, initialRoute) {
   const el = document.getElementById(id);
 
   if (!el) return;
+
+  const isLocalhost =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+  const localBrowserRoute = `${window.location.pathname}${window.location.search}`;
+
+  const resolvedInitialRoute =
+    el.dataset.initialRoute ||
+    (isLocalhost && window.location.pathname !== "/" ? localBrowserRoute : initialRoute);
 
   ensureCleanSessionForFlow(id);
   store.dispatch(setGift(id === "react_sgbm_starting_gift"));
@@ -86,7 +98,7 @@ function mountReactApp(id, initialRoute) {
     <StrictMode>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <App initialRoute={initialRoute} {...props} />
+          <App initialRoute={resolvedInitialRoute} {...props} />
         </PersistGate>
       </Provider>
     </StrictMode>,
