@@ -733,6 +733,7 @@ div:where(.swal2-container).swal2-center>.swal2-popup label.swal2-checkbox{
 .fx-booking .fx-commoninput .fx-checkboxcontainer input[type="checkbox"]{
     width: 22px;
     height: 22px;
+    accent-color:var(--primary-color);
 }
 
 .fx-coupon-box .fx-applied-btn{
@@ -979,6 +980,107 @@ div.fx-booking input.btn-primary[type="submit"]:focus-visible {
     animation: shimmer 1.4s infinite;
 }
 
+.p-inputswitch.p-highlight .p-inputswitch-slider{
+        background:var(--primary-color);
+}
+
+
+.fx-booking-skeleton {
+    width: 100%;
+}
+
+.fx-booking-skeleton * {
+    position: relative;
+    overflow: hidden;
+    background: #edf2f7;
+    border-radius: 8px;
+}
+
+.fx-booking-skeleton *::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.65),
+        transparent
+    );
+    animation: fx-shimmer 1.4s infinite;
+}
+
+@keyframes fx-shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Tabs */
+
+.fx-booking-skeleton .fx-sk-tabs {
+    display: flex;
+    gap: 12px;
+    background: transparent;
+}
+
+.fx-booking-skeleton .fx-sk-tab {
+    width: 110px;
+    height: 42px;
+}
+
+.fx-booking-skeleton .fx-sk-tab-active {
+    width: 110px;
+}
+
+/* Title */
+
+.fx-booking-skeleton .fx-sk-title {
+    width: 180px;
+    height: 18px;
+    margin: 24px 0 16px;
+}
+
+/* Input Fields */
+
+.fx-booking-skeleton .fx-sk-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    background: transparent;
+}
+
+.fx-booking-skeleton .fx-sk-input {
+    height: 42px;
+}
+
+/* Button */
+
+.fx-booking-skeleton .fx-sk-button {
+    width: 230px;
+    height: 42px;
+    margin: 18px 0 28px;
+    border-radius: 24px;
+}
+
+/* Checkbox */
+
+.fx-booking-skeleton .fx-sk-checkbox {
+    width: 320px;
+    height: 18px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+    .fx-booking-skeleton .fx-sk-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .fx-booking-skeleton .fx-sk-button {
+        width: 100%;
+    }
+}
 
 
 

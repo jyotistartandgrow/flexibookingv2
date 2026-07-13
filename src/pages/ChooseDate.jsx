@@ -273,6 +273,29 @@ export default function ChooseDate(props) {
       className="fx-leftcontentbox"
       style={{ display: step === "datestep" ? "block" : "none" }}
     >
+
+  <div className="fx-booking-skeleton">
+
+        <div className="fx-sk-tabs">
+            <div className="fx-sk-tab"></div>
+            <div className="fx-sk-tab"></div>
+        </div>
+
+        <div className="fx-sk-title"></div>
+
+        <div className="fx-sk-grid">
+            <div className="fx-sk-input"></div>
+            <div className="fx-sk-input"></div>
+            <div className="fx-sk-input"></div>
+            <div className="fx-sk-input"></div>
+        </div>
+
+        <div className="fx-sk-button"></div>
+
+        <div className="fx-sk-checkbox"></div>
+
+    </div>     
+
       {props.stepsVisibility?.step_1_title_visible == "true" && (
         <h1 className="fx-all-main-heading fx-select-date-heading">
           {props.stepTitles?.step_1_title || "Book your Services"}
