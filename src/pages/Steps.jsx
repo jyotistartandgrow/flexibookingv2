@@ -25,6 +25,7 @@ export default function Steps({ type = "date", ...props }) {
   const checkoutkey = useSelector((state) => state.step4.checkoutkey);
   const cart = useSelector((state) => state.step2.cart);
   const topbar = useSelector((state) => state.step1.topbar);
+  const loading = useSelector((state) => state.step1.loading);
   const [visibleBottom, setVisibleBottom] = useState(false);
   const isDesktop = useDeviceType();
 
@@ -103,6 +104,7 @@ export default function Steps({ type = "date", ...props }) {
             ? ""
             : "fx-step-top-fixed-box"
         }
+        style={{ display: !loading ? "block" : "none" }}
       >
         <div className={`fx-stepper-tabstyle fx-${type}-step`}>
           {type == "date" && (

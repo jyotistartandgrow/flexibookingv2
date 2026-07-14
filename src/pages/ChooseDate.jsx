@@ -26,6 +26,7 @@ export default function ChooseDate(props) {
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
   const gift = useSelector((state) => state.step1.gift);
+  const loading = useSelector((state) => state.step1.loading);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
   const [isVisible, setIsVisible] = useState(gift ? "gift" : "booking");
   const [disabledDates, setDisabledDates] = useState([]);
@@ -271,31 +272,8 @@ export default function ChooseDate(props) {
   return (
     <div
       className="fx-leftcontentbox"
-      style={{ display: step === "datestep" ? "block" : "none" }}
+      style={{ display: step === "datestep" && !loading ? "block" : "none" }}
     >
-
-  <div className="fx-booking-skeleton">
-
-        <div className="fx-sk-tabs">
-            <div className="fx-sk-tab"></div>
-            <div className="fx-sk-tab"></div>
-        </div>
-
-        <div className="fx-sk-title"></div>
-
-        <div className="fx-sk-grid">
-            <div className="fx-sk-input"></div>
-            <div className="fx-sk-input"></div>
-            <div className="fx-sk-input"></div>
-            <div className="fx-sk-input"></div>
-        </div>
-
-        <div className="fx-sk-button"></div>
-
-        <div className="fx-sk-checkbox"></div>
-
-    </div>     
-
       {props.stepsVisibility?.step_1_title_visible == "true" && (
         <h1 className="fx-all-main-heading fx-select-date-heading">
           {props.stepTitles?.step_1_title || "Book your Services"}
