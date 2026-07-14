@@ -28,7 +28,6 @@ export default function Thankyou() {
   };
 
   useEffect(() => {
-    dispatch({ type: "app/reset" });
     dispatch(setLoading(false));
     bookingdetail();
   }, []);

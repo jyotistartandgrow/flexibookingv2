@@ -9,14 +9,17 @@ import { setLoading } from "../store/step1Slice";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Swal from "sweetalert2";
+import { useLocation } from "react-router-dom";
 
 export default function OpenDateThankyou() {
   const dispatch = useDispatch();
   const componentRef = useRef();
+  const location = useLocation();
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const loading = useSelector((state) => state.step1.loading);
   const [bookingData, setBookingData] = useState(null);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const routeBookingKey = new URLSearchParams(location.search).get("pid");
 
   const getShareMessage = () => {
     const voucher = bookingData?.voucher || "N/A";
@@ -49,14 +52,24 @@ export default function OpenDateThankyou() {
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
   };
 
-  const bookingdetail = async () => {
+  const bookingdetail = async (resolvedBookingKey) => {
+    if (!resolvedBookingKey) {
+      dispatch(setLoading(false));
+      return;
+    }
+
     dispatch(setLoading(true));
-    const { data } = await axiosInstance.post(`/thankyou`, {
-      booking_key: bookingkey,
-    });
-    if (data && data.status == 200) {
-      console.log(data);
-      setBookingData(data?.data);
+
+    try {
+      const { data } = await axiosInstance.post(`/thankyou`, {
+        booking_key: resolvedBookingKey,
+      });
+
+      if (data && data.status == 200) {
+        console.log(data);
+        setBookingData(data?.data);
+      }
+    } finally {
       dispatch(setLoading(false));
     }
   };
@@ -76,9 +89,8 @@ export default function OpenDateThankyou() {
   };
 
   useEffect(() => {
-    dispatch({ type: "app/reset" });
-    bookingdetail();
-  }, []);
+    bookingdetail(routeBookingKey || bookingkey);
+  }, [routeBookingKey, bookingkey]);
   return (
     <>
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>

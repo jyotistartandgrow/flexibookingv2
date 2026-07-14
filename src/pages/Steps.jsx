@@ -104,7 +104,7 @@ export default function Steps({ type = "date", ...props }) {
             ? ""
             : "fx-step-top-fixed-box"
         }
-        style={{ display: !loading && step == "datestep" ? "block" : "none" }}
+        style={{ display: !loading ? "block" : "none" }}
       >
         <div className={`fx-stepper-tabstyle fx-${type}-step`}>
           {type == "date" && (

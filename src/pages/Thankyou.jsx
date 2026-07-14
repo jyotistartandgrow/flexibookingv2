@@ -12,29 +12,45 @@ import { setLoading } from "../store/step1Slice";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Swal from "sweetalert2";
+import { useLocation } from "react-router-dom";
 
 export default function Thankyou() {
   const dispatch = useDispatch();
   const componentRef = useRef();
+  const location = useLocation();
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const loading = useSelector((state) => state.step1.loading);
   const gift = useSelector((state) => state.step1.gift);
   const [bookingData, setBookingData] = useState(null);
   const [email, setEmail] = useState("");
+  const routeBookingKey = new URLSearchParams(location.search).get("pid");
+  const resolvedBookingKey = routeBookingKey || bookingkey;
   const qrCodeImage = bookingData?.qrcode
     ? `data:image/png;base64,${bookingData.qrcode}`
-    : "https://placehold.co/200x200?text=QR+Code";
+    : null;
 
-  const bookingdetail = async () => {
+  const bookingdetail = async (activeBookingKey) => {
+    if (!activeBookingKey) {
+      dispatch(setLoading(false));
+      return null;
+    }
+
     dispatch(setLoading(true));
-    const { data } = await axiosInstance.post(`/thankyou`, {
-      booking_key: bookingkey,
-    });
-    if (data && data.status == 200) {
-      console.log(data);
-      setBookingData(data?.data);
+
+    try {
+      const { data } = await axiosInstance.post(`/thankyou`, {
+        booking_key: activeBookingKey,
+      });
+
+      if (data && data.status == 200) {
+        console.log(data);
+        return data?.data ?? null;
+      }
+    } finally {
       dispatch(setLoading(false));
     }
+
+    return null;
   };
 
   const handlePrint = useReactToPrint({
@@ -99,9 +115,15 @@ export default function Thankyou() {
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
         title: "Please provide email",
       });
+      return;
     }
+
+    if (!resolvedBookingKey) {
+      return;
+    }
+
     const { data } = await axiosInstance.post(`/send-email`, {
-      booking_key: bookingkey,
+      booking_key: resolvedBookingKey,
       email,
     });
     if (data && data.status == 200) {
@@ -121,9 +143,22 @@ export default function Thankyou() {
   };
 
   useEffect(() => {
-    dispatch({ type: "app/reset" });
-    bookingdetail();
-  }, []);
+    let isActive = true;
+
+    const loadBooking = async () => {
+      const nextBookingData = await bookingdetail(resolvedBookingKey);
+
+      if (isActive && nextBookingData) {
+        setBookingData(nextBookingData);
+      }
+    };
+
+    loadBooking();
+
+    return () => {
+      isActive = false;
+    };
+  }, [resolvedBookingKey, dispatch]);
   return (
     <>
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
@@ -143,8 +178,8 @@ export default function Thankyou() {
             </div>
 
             <h1>
-              Hey {bookingData?.customer_billing?.billing_first_name}{" "}
-              {bookingData?.customer_billing?.billing_last_name}!
+              Hey {bookingData?.customer_billing?.billing_first_name || "there"}{" "}
+              {bookingData?.customer_billing?.billing_last_name || ""}!
             </h1>
             <h2>Thanks for Your Order.</h2>
 
@@ -289,7 +324,7 @@ export default function Thankyou() {
                 </div> */}
               </div>
 
-              {bookingData?.coupon != "N/A" && (
+              {bookingData?.coupon && bookingData.coupon !== "N/A" && (
                 <table className="fx-billing-shipping-notification noborder">
                   <tbody>
                     <tr>
