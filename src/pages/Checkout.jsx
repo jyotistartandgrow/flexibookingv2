@@ -797,6 +797,7 @@ export default function Checkout(props) {
           </div>
         )}
         <div className="fx-inputgroup fx-checkboxcontainer">
+          <input type="checkbox" id="checkbox-checked" defaultChecked />
           <input
             type="checkbox"
             id="terms-checkbox"
