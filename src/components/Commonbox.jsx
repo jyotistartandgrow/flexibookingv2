@@ -27,6 +27,8 @@ import useDeviceType from "../Utils/useDeviceType";
 // const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
 // const stripePromise = loadStripe(PUBLIC_KEY);
 
+const stripePromiseCache = {};
+
 export default function Commonbox({ setVisibleBottom, toggleCard }) {
   const dispatch = useDispatch();
   const toast = useRef(null);
@@ -38,7 +40,11 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
   const paymentstring = useSelector((state) => state.step4.paymentstring);
   const stripe_key = useSelector((state) => state.step1.stripe_key);
   const stripePromise = useMemo(() => {
-    return stripe_key ? loadStripe(stripe_key) : null;
+    if (!stripe_key) return null;
+    if (!stripePromiseCache[stripe_key]) {
+      stripePromiseCache[stripe_key] = loadStripe(stripe_key);
+    }
+    return stripePromiseCache[stripe_key];
   }, [stripe_key]);
   const isDesktop = useDeviceType();
 
@@ -274,7 +280,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
           Please select the service you want to gift to your friend.
         </p>
       )}
-      {step === "paymentstep" && paymentstring && isDesktop && !topbar && (
+      {step === "paymentstep" && paymentstring && stripePromise && isDesktop && !topbar && (
         <div className="fx-paymentbox">
           <h1 className="fx-all-main-heading">Payment</h1>
           <Elements stripe={stripePromise}>

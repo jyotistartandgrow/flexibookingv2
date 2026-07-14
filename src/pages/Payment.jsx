@@ -15,6 +15,8 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import closeicon from "../assets/close2.svg";
 
+const stripePromiseCache = {};
+
 // const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
 // const stripePromise = loadStripe(PUBLIC_KEY);
 export default function Payment(props) {
@@ -28,7 +30,11 @@ export default function Payment(props) {
   const stripe_key = useSelector((state) => state.step1.stripe_key);
   const topbar = useSelector((state) => state.step1.topbar);
   const stripePromise = useMemo(() => {
-    return stripe_key ? loadStripe(stripe_key) : null;
+    if (!stripe_key) return null;
+    if (!stripePromiseCache[stripe_key]) {
+      stripePromiseCache[stripe_key] = loadStripe(stripe_key);
+    }
+    return stripePromiseCache[stripe_key];
   }, [stripe_key]);
 
   useEffect(() => {
