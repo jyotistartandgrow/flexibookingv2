@@ -149,8 +149,8 @@ export default function Thankyou() {
             <h2>Thanks for Your Order.</h2>
 
             <p className="fx-info-text">
-              You will receive an email with your ticket. 
-              Please show it upon arrival to access your booked service.
+              You will receive an email with your ticket. Please show it upon
+              arrival to access your booked service.
             </p>
 
             <div className="fx-email-box">
@@ -236,17 +236,19 @@ export default function Thankyou() {
               </table>
 
               <div className="fx-summary">
-                <div>
-                  Subtotal{" "}
-                  <span>
-                    {decodeHtml(bookingData?.product_details?.subtotal)}
-                  </span>
-                </div>
                 {bookingData?.product_details?.discount > 0 && (
-                  <div>
-                    Discount
-                    <span>{decodeHtml(bookingData?.coupon_discount)}</span>
-                  </div>
+                  <>
+                    <div>
+                      Subtotal{" "}
+                      <span>
+                        {decodeHtml(bookingData?.product_details?.subtotal)}
+                      </span>
+                    </div>
+                    <div>
+                      Discount
+                      <span>{decodeHtml(bookingData?.coupon_discount)}</span>
+                    </div>
+                  </>
                 )}
                 <div>
                   Total
