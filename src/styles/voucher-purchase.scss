@@ -103,15 +103,17 @@
     border-radius: 8px;
     font-size: 14px;
     outline: none;
+    max-width: 100%;
 }
 
 .redemption-Voucher-services-box .fx-icon {
     position: absolute;
     right: 0px;
-    top: -3px;
+    top:2px;
     transform: translateY(-50%);
     pointer-events: none;
 }
+
 
 .redemption-Voucher-services-box .fx-availability-note {
     font-size: 14px;
