@@ -12,45 +12,28 @@ import { setLoading } from "../store/step1Slice";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Swal from "sweetalert2";
-import { useLocation } from "react-router-dom";
 
 export default function Thankyou() {
   const dispatch = useDispatch();
   const componentRef = useRef();
-  const location = useLocation();
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const loading = useSelector((state) => state.step1.loading);
-  const gift = useSelector((state) => state.step1.gift);
   const [bookingData, setBookingData] = useState(null);
   const [email, setEmail] = useState("");
-  const routeBookingKey = new URLSearchParams(location.search).get("pid");
-  const resolvedBookingKey = routeBookingKey || bookingkey;
   const qrCodeImage = bookingData?.qrcode
     ? `data:image/png;base64,${bookingData.qrcode}`
-    : null;
+    : "https://placehold.co/200x200?text=QR+Code";
 
-  const bookingdetail = async (activeBookingKey) => {
-    if (!activeBookingKey) {
-      dispatch(setLoading(false));
-      return null;
-    }
-
+  const bookingdetail = async () => {
     dispatch(setLoading(true));
-
-    try {
-      const { data } = await axiosInstance.post(`/thankyou`, {
-        booking_key: activeBookingKey,
-      });
-
-      if (data && data.status == 200) {
-        console.log(data);
-        return data?.data ?? null;
-      }
-    } finally {
+    const { data } = await axiosInstance.post(`/thankyou`, {
+      booking_key: bookingkey,
+    });
+    if (data && data.status == 200) {
+      console.log(data);
+      setBookingData(data?.data);
       dispatch(setLoading(false));
     }
-
-    return null;
   };
 
   const handlePrint = useReactToPrint({
@@ -115,15 +98,9 @@ export default function Thankyou() {
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
         title: "Please provide email",
       });
-      return;
     }
-
-    if (!resolvedBookingKey) {
-      return;
-    }
-
     const { data } = await axiosInstance.post(`/send-email`, {
-      booking_key: resolvedBookingKey,
+      booking_key: bookingkey,
       email,
     });
     if (data && data.status == 200) {
@@ -143,22 +120,9 @@ export default function Thankyou() {
   };
 
   useEffect(() => {
-    let isActive = true;
-
-    const loadBooking = async () => {
-      const nextBookingData = await bookingdetail(resolvedBookingKey);
-
-      if (isActive && nextBookingData) {
-        setBookingData(nextBookingData);
-      }
-    };
-
-    loadBooking();
-
-    return () => {
-      isActive = false;
-    };
-  }, [resolvedBookingKey, dispatch]);
+    dispatch({ type: "app/reset" });
+    bookingdetail();
+  }, []);
   return (
     <>
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
@@ -178,8 +142,8 @@ export default function Thankyou() {
             </div>
 
             <h1>
-              Hey {bookingData?.customer_billing?.billing_first_name || "there"}{" "}
-              {bookingData?.customer_billing?.billing_last_name || ""}!
+              Hey {bookingData?.customer_billing?.billing_first_name}{" "}
+              {bookingData?.customer_billing?.billing_last_name}!
             </h1>
             <h2>Thanks for Your Order.</h2>
 
@@ -213,7 +177,7 @@ export default function Thankyou() {
               </button>
             </div>
           </div>
-          <div className="fx-confirm-right" ref={componentRef}>
+          <div className="fx-confirm-right notranslate" ref={componentRef} translate="no">
             <div className="fx-confirm-innerrightbox">
               <h3 className="fx-order-title">
                 Your order is Confirmed. You will receive a confirmation mail.
@@ -324,7 +288,7 @@ export default function Thankyou() {
                 </div> */}
               </div>
 
-              {bookingData?.coupon && bookingData.coupon !== "N/A" && (
+              {bookingData?.coupon != "N/A" && (
                 <table className="fx-billing-shipping-notification noborder">
                   <tbody>
                     <tr>

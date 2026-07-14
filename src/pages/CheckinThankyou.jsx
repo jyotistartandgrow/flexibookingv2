@@ -45,6 +45,7 @@ export default function CheckinThankyou() {
   };
 
   useEffect(() => {
+    dispatch({ type: "app/reset" });
     bookingdetail();
   }, []);
   return (
