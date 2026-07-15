@@ -36,12 +36,6 @@ export default function SelectDate() {
     dispatch(setSlot(slot));
   };
 
-  const calendarDate = date
-    ? moment(date).isValid()
-      ? moment(date).toDate()
-      : null
-    : null;
-
   useEffect(() => {
     if (step == "datestep") {
       fetchVoucher();
@@ -57,6 +51,7 @@ export default function SelectDate() {
     if (data && data.status == 200 && data?.data?.status == true) {
       setVoucherdetail(data.data);
       dispatch(setVoucherDetail(data.data));
+      dispatch(setDate(data.data.date));
     }
     dispatch(setLoading(false));
   };
@@ -89,7 +84,6 @@ export default function SelectDate() {
       dispatch(setLoading(false));
       return;
     }
-
     dispatch(setRedeemStep("checkoutstep"));
     dispatch(setLoading(false));
   };
@@ -164,7 +158,7 @@ export default function SelectDate() {
                 <label class="fx-label">Select date</label>
                 <div class="fx-input-with-icon">
                   <Calendar
-                    value={calendarDate}
+                    value={moment(voucherdetail?.date).isValid() ? moment(voucherdetail?.date).toDate() : null}
                     onChange={(e) => {
                       setSelectedSlot(null);
                       dispatch(setSlot(null));
@@ -189,7 +183,7 @@ export default function SelectDate() {
               {voucherdetail?.slots?.length > 0 && (
                 <p class="fx-availability-note">
                   Available times for{" "}
-                  <strong>{moment(date).format("dddd, MMM DD")}</strong>
+                  <strong>{moment(voucherdetail?.date).format("dddd, MMM DD")}</strong>
                 </p>
               )}
 

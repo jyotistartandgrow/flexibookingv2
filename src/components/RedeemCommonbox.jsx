@@ -41,13 +41,13 @@ export default function RedeemCommonbox({ setVisibleBottom }) {
                   <div className="itemname">
                     {ct.name} {`X ${ct.quantity}`}
                   </div>
-                  <div className="price">{decodeHtml(ct.total)}</div>
+                  {/* <div className="price">{decodeHtml(ct.total)}</div> */}
                 </div>
               );
             })}
           </div>
           <div className="fx-right-bottom-bar">
-            {voucherdetail.discount > 0 && (
+            {/* {voucherdetail.discount > 0 && (
               <div className="fx-subtotal-discount-bar">
                 <div className="fx-subtotalbar">
                   <p>
@@ -65,7 +65,7 @@ export default function RedeemCommonbox({ setVisibleBottom }) {
               <p>
                 Total <span> {decodeHtml(voucherdetail.total)}</span>
               </p>
-            </div>
+            </div> */}
             {step == "checkoutstep" && (
               <div
                 className="fx-down-icon-botttom"
