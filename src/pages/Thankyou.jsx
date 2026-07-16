@@ -18,7 +18,6 @@ export default function Thankyou() {
   const componentRef = useRef();
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const loading = useSelector((state) => state.step1.loading);
-  const gift = useSelector((state) => state.step1.gift);
   const [bookingData, setBookingData] = useState(null);
   const [email, setEmail] = useState("");
   const qrCodeImage = bookingData?.qrcode
@@ -178,7 +177,11 @@ export default function Thankyou() {
               </button>
             </div>
           </div>
-          <div className="fx-confirm-right" ref={componentRef}>
+          <div
+            className="fx-confirm-right notranslate"
+            ref={componentRef}
+            translate="no"
+          >
             <div className="fx-confirm-innerrightbox">
               <h3 className="fx-order-title">
                 Your order is Confirmed. You will receive a confirmation mail.
@@ -266,27 +269,6 @@ export default function Thankyou() {
                     {bookingData?.customer_billing?.billing_contact}
                   </p>
                 </div>
-                {/* <div>
-                  <h4>Billing Address</h4>
-                  <p>
-                    {bookingData?.customer_billing?.billing_first_name}{" "}
-                    {bookingData?.customer_billing?.billing_last_name} <br />
-                    {bookingData?.customer_billing?.billing_address} <br />
-                    {bookingData?.customer_billing?.billing_city} <br />
-                    {bookingData?.customer_billing?.billing_email}
-                  </p>
-                </div> */}
-
-                {/* <div>
-                  <h4>Shipping Address</h4>
-                  <p>
-                    {bookingData?.customer_shipping?.shipping_first_name}{" "}
-                    {bookingData?.customer_shipping?.shipping_last_name} <br />
-                    {bookingData?.customer_shipping?.shipping_address} <br />
-                    {bookingData?.customer_shipping?.shipping_city} <br />
-                    {bookingData?.customer_shipping?.shipping_email}
-                  </p>
-                </div> */}
               </div>
 
               {bookingData?.coupon != "N/A" && (
@@ -331,37 +313,6 @@ export default function Thankyou() {
                   </div>
                 </div>
               )}
-
-              {/* <table className="discountbox">
-              <tbody>
-                <tr>
-                  <td>
-                    <div className="discount">
-                      <div
-                        className="shopnowbtn"
-                        id="booking_home"
-                        onClick={() => (window.location.href = "/")}
-                      >
-                        {" "}
-                        Home
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <table className="fx-footer-thankyou">
-              <tbody>
-                <tr>
-                  <td colspan="2" className="copyright">
-                    <img decoding="async" src={logo} />
-                    <br />
-                    Copyrights Reserved © {moment().format("YYYY")}
-                  </td>
-                </tr>
-              </tbody>
-            </table> */}
             </div>
           </div>
         </div>
