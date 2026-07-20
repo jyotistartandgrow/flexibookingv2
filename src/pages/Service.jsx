@@ -1224,7 +1224,7 @@ export default function Service(props) {
                       </p>
 
                       <div className="fx-common">
-                        <h5>Quantity</h5>
+                        {/* <h5>Quantity</h5> */}
                         <div className="fx-quantitybox">
                           <button
                             type="button"
