@@ -1071,6 +1071,39 @@ div.fx-booking input.btn-primary[type="submit"]:focus-visible {
     height: 18px;
 }
 
+.fx-voucher-box span.fx-voucher-label{
+    display: block;
+    font-weight: 500;
+}
+
+.fx-voucher-code{
+    flex: 1;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    padding: 0px 2px;
+    font-size: 14px;
+    font-weight:300;
+    letter-spacing: 1.5px;
+    color: var(--grey);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.fx-copy-btn {
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px;
+    height: 48px;
+    border: 0;
+    background: none;
+    color: #000000;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: 600;
+    transition: 0.25s;
+}
 
 /* Responsive */
 
