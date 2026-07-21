@@ -145,7 +145,7 @@ export default function Service(props) {
     } else {
       if (products.length <= 2) setIsVisible("grid");
       else if (products.length <= 5) setIsVisible("slider");
-      else setIsVisible("list");
+      else setIsVisible("slider");
     }
   }, [products, isDesktop]);
 
@@ -462,21 +462,78 @@ export default function Service(props) {
     return Number.isNaN(numericValue) ? 0 : numericValue;
   };
 
+  const getBundleIncludedCount = (product) => {
+    const rawCount =
+      product?.bundle_services_count ??
+      product?.services_included_count ??
+      product?.included_services_count ??
+      product?.services_included ??
+      product?.included_services;
+    const count = Number(rawCount);
+    return Number.isFinite(count) && count > 0 ? Math.floor(count) : 0;
+  };
+
+  const getServiceCardClassName = (product) => {
+    const includedCount = getBundleIncludedCount(product);
+    const classes = [
+      props.showBookNowButton == "true"
+        ? "fx-servicebox fx-servicebox-add-button"
+        : "fx-servicebox fx-bundle-content",
+    ];
+
+    if (serviceid === product.id) {
+      classes.push("fx-servicebox-selected");
+    }
+    classes.push("fx-servicebox-has-tooltip");
+    if (includedCount > 0) {
+      classes.push("fx-servicebox-bundle-highlight");
+    }
+
+    return classes.join(" ");
+  };
+
+  const getListCardClassName = (product) => {
+    const includedCount = getBundleIncludedCount(product);
+    const classes = ["fx-serviceboxlist", "fx-servicebox-has-tooltip"];
+
+    if (includedCount > 0) {
+      classes.push("fx-servicebox-bundle-highlight");
+    }
+
+    return classes.join(" ");
+  };
+
+  const renderBundleTooltip = (product) => {
+    const includedCount = getBundleIncludedCount(product);
+    const tooltipText =
+      product?.bundle_tooltip ||
+      product?.bundle_description ||
+      "Open this experience to view all included details, options, and pricing information.";
+    const badgeText = `${includedCount} ${includedCount > 1 ? "SERVICES" : "SERVICE"} INCLUDED`;
+
+    return (
+      <div className="fx-tooltip-wrapper">
+        <div className="fx-top-icon" aria-hidden="true">
+          <i className="pi pi-info-circle"></i>
+        </div>
+        <div className="fx-tooltip-box" role="tooltip">
+          {tooltipText}
+        </div>
+        {includedCount > 0 && (
+          <span className="fx-bundle-chip">{badgeText}</span>
+        )}
+      </div>
+    );
+  };
+
   // Template for each carousel item
   const productTemplate = (product) => {
     return (
       <div
-        className={
-          props.showBookNowButton == "true"
-            ? "fx-servicebox fx-servicebox-add-button"
-            : "fx-servicebox fx-bundle-content"
-        }
+        className={getServiceCardClassName(product)}
         onClick={() => servicedetail(product.id)}
       >
-        <div className="fx-tooltip-wrapper">
-          <div className="fx-top-icon">d</div>
-          <div className="fx-tooltip-box">dewfwef</div>
-        </div>
+        {renderBundleTooltip(product)}
         <div className="fx-servicepicbox">
           {!loadedServiceImages[product.id] && (
             <div className="fx-image-loader"></div>
@@ -948,18 +1005,11 @@ export default function Service(props) {
               displayedProducts.map((product, p1) => {
                 return (
                   <div
-                    className={
-                      props.showBookNowButton == "true"
-                        ? "fx-servicebox fx-servicebox-add-button"
-                        : "fx-servicebox fx-bundle-content"
-                    }
+                    className={getServiceCardClassName(product)}
                     key={p1}
                     onClick={() => servicedetail(product.id)}
                   >
-                    <div className="fx-tooltip-wrapper">
-                      <div className="fx-top-icon">d</div>
-                      <div className="fx-tooltip-box">dewfwef</div>
-                    </div>
+                    {renderBundleTooltip(product)}
                     <div className="fx-servicepicbox">
                       {!loadedServiceImages[product.id] && (
                         <div className="fx-image-loader"></div>
@@ -1029,7 +1079,7 @@ export default function Service(props) {
             displayedProducts.map((product, p2) => {
               return (
                 <div
-                  className="fx-serviceboxlist"
+                  className={getListCardClassName(product)}
                   key={p2}
                   onClick={() => servicedetail(product.id)}
                 >
@@ -1045,6 +1095,7 @@ export default function Service(props) {
                         onError={() => markServiceImageLoaded(product.id)}
                       />
                     </div>
+                    {renderBundleTooltip(product)}
                     {props.categoryLabelVisibility == "true" && (
                       <span className="fx-servicepiccontentbox">
                         {product.category_name}

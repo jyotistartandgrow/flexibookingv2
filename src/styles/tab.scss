@@ -275,6 +275,7 @@
   flex: 1;
   display: flex;
   overflow-x: auto;
+  overflow-y: visible;
   scroll-snap-type: x mandatory;
   gap: 16px;
   padding-bottom: 8px;
@@ -289,10 +290,16 @@
   flex: 0 0 calc((100% - 3 * 16px) / 3.5);
   min-width: 0;
   scroll-snap-align: start;
+  position: relative;
+  z-index: 1;
   border: 1px solid #e2e4e9;
   border-radius: 10px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   border: 1px solid #F3F4F6;
+}
+
+.fx-booking .fx-desktop-swipe-item:hover {
+  z-index: 10;
 }
 
 /* Fewer than 4 items: natural card width, no forced 3.5 sizing */
@@ -315,6 +322,7 @@
 .fx-booking .fx-mobile-swipe-carousel {
   display: flex;
   overflow-x: auto;
+  overflow-y: visible;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   gap: 12px;
@@ -330,8 +338,68 @@
   flex: 0 0 75%;
   min-width: 0;
   scroll-snap-align: start;
+  position: relative;
+  z-index: 1;
   border: 1px solid #e2e4e9;
   border-radius: 10px;
+}
+
+.fx-booking .fx-mobile-swipe-item:hover {
+  z-index: 10;
+}
+
+/* Slider-specific tooltip: keep fully visible inside each slide */
+.fx-booking .fx-desktop-swipe-item .fx-tooltip-box,
+.fx-booking .fx-mobile-swipe-item .fx-tooltip-box {
+  top: 0;
+  bottom: auto;
+  left: calc(100% + 10px);
+  right: auto;
+  width: 260px;
+  max-width: 260px;
+  transform: translateX(-6px);
+}
+
+.fx-booking .fx-desktop-swipe-item .fx-tooltip-box::after,
+.fx-booking .fx-mobile-swipe-item .fx-tooltip-box::after {
+  top: 8px;
+  bottom: auto;
+  right: auto;
+  left: -7px;
+}
+
+.fx-booking .fx-desktop-swipe-item:last-child .fx-tooltip-box,
+.fx-booking .fx-mobile-swipe-item:last-child .fx-tooltip-box {
+  left: auto;
+  right: calc(100% + 10px);
+  transform: translateX(6px);
+}
+
+.fx-booking .fx-desktop-swipe-item:last-child .fx-tooltip-box::after,
+.fx-booking .fx-mobile-swipe-item:last-child .fx-tooltip-box::after {
+  left: auto;
+  right: -7px;
+}
+
+@media screen and (max-width: 767px) {
+  .fx-booking .fx-mobile-swipe-item .fx-tooltip-box,
+  .fx-booking .fx-mobile-swipe-item:last-child .fx-tooltip-box {
+    top: 36px;
+    right: 0;
+    bottom: auto;
+    left: auto;
+    width: min(220px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+    transform: translateY(-6px);
+  }
+
+  .fx-booking .fx-mobile-swipe-item .fx-tooltip-box::after,
+  .fx-booking .fx-mobile-swipe-item:last-child .fx-tooltip-box::after {
+    top: -7px;
+    right: 10px;
+    bottom: auto;
+    left: auto;
+  }
 }
 
 /* Filter row */
