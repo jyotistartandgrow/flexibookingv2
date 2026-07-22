@@ -735,13 +735,17 @@
     display: flex;
   }
 
+.fx-tooltip-wrapper i.pi.pi-gift{
+  font-size: 12px;
+}
+
 
 // bundle-content css
 .fx-booking .fx-bundle-content {
   position: relative;
 }
 
-.fx-booking .fx-servicebox-has-tooltip {
+.fx-booking .fx-tabcontent .fx-servicebox-has-tooltip {
   overflow: visible;
   border: 2px solid var(--primary-color);;
 }
@@ -764,7 +768,7 @@
 .fx-servicebox-has-tooltip .fx-top-icon {
       width: 24px;
     height: 24px;
-    border-radius: 0px 0px 0px 12px;
+    border-radius: 0px 0px 0px 8px;
     background: var(--primary-color);
     color: #fff;
     display: inline-flex;

@@ -514,7 +514,7 @@ export default function Service(props) {
     return (
       <div className="fx-tooltip-wrapper">
         <div className="fx-top-icon" aria-hidden="true">
-          <i className="pi pi-info-circle"></i>
+          <i class="pi pi-gift"></i>
         </div>
         <div className="fx-tooltip-box" role="tooltip">
           {tooltipText}
