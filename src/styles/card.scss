@@ -12,7 +12,6 @@
  .fx-booking .fx-servicecontainer .fx-servicebox {
     width: 271px;
     height: auto;
-    border: 1px solid #F3F4F6;
     border-radius:8px;
     font-size: 20px;
     cursor: pointer;
@@ -744,6 +743,7 @@
 
 .fx-booking .fx-servicebox-has-tooltip {
   overflow: visible;
+  border: 2px solid var(--primary-color);;
 }
 
 .fx-booking .fx-servicebox-has-tooltip:hover {
@@ -753,8 +753,8 @@
 
 .fx-servicebox-has-tooltip .fx-tooltip-wrapper {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 0%;
+  right: 0%;
   z-index: 3;
   display: inline-flex;
   align-items: center;
@@ -762,17 +762,15 @@
 }
 
 .fx-servicebox-has-tooltip .fx-top-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 999px;
-  background: rgba(8, 63, 180, 0.95);
-  color: #fff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  box-shadow: 0 8px 18px rgba(8, 63, 180, 0.35);
-  cursor: help;
+      width: 24px;
+    height: 24px;
+    border-radius: 0px 0px 0px 12px;
+    background: var(--primary-color);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
 }
 
 .fx-servicebox-has-tooltip .fx-bundle-chip {
@@ -828,6 +826,10 @@
 
 .fx-servicebox-selected.fx-servicebox-has-tooltip .fx-top-icon {
   background: #0c2f80;
+}
+
+.fx-tooltip-wrapper i.pi.pi-info-circle{
+ font-size: 12px;
 }
 
 @media screen and (max-width: 767px) {
