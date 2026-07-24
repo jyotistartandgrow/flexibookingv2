@@ -144,7 +144,18 @@ export default function Extra(props) {
         setLoadingske(false);
       })();
     }
-  }, [date, service, capacity, slot, gift, step, extraID, extracapacity, cart.extra, dispatch]);
+  }, [
+    date,
+    service,
+    capacity,
+    slot,
+    gift,
+    step,
+    extraID,
+    extracapacity,
+    cart.extra,
+    dispatch,
+  ]);
 
   // Template for each carousel item
   const productTemplate = (product, pp) => {
@@ -322,62 +333,60 @@ export default function Extra(props) {
 
   return (
     <>
-    
-    <div class="fx-service-option-box">
-    <div class="fx-card">
-
-        <div class="fx-card-header">
+      <div className="fx-service-option-box" style={{ display: step === "extrastep" ? "block" : "none" }}>
+        <div className="fx-card">
+          <div className="fx-card-header">
             <h3>Choose service options</h3>
-            <i class="pi pi-angle-up"></i>
-        </div>
+            <i className="pi pi-angle-up"></i>
+          </div>
 
-        <div class="fx-info-box">
+          <div className="fx-info-box">
             <span>ℹ️</span>
             <span>Selected options will be included in checkout pricing.</span>
-        </div>
+          </div>
 
-        <div class="fx-options">
+          <div className="fx-options">
+            <div className="fx-option-card">
+              <label>
+                Light <span>*</span>
+              </label>
+              <div className="fx-description">testing</div>
 
-            <div class="fx-option-card">
-                <label>Light <span>*</span></label>
-                <div class="fx-description">testing</div>
+              <div className="fx-select-row">
+                <select className="fx-select">
+                  <option>Value 1</option>
+                  <option>Value 2</option>
+                  <option>Value 3</option>
+                </select>
 
-                <div class="fx-select-row">
-                    <select class="fx-select">
-                        <option>Value 1</option>
-                        <option>Value 2</option>
-                        <option>Value 3</option>
-                    </select>
-
-                    <div class="fx-price">€26,89</div>
-                </div>
+                <div className="fx-price">€26,89</div>
+              </div>
             </div>
 
-            <div class="fx-option-card">
-                <label>Light <span>*</span></label>
-                <div class="fx-description">testing</div>
+            <div className="fx-option-card">
+              <label>
+                Light <span>*</span>
+              </label>
+              <div className="fx-description">testing</div>
 
-                <div class="fx-select-row">
-                    <select class="fx-select">
-                        <option>Value 1</option>
-                        <option>Value 2</option>
-                        <option>Value 3</option>
-                    </select>
+              <div className="fx-select-row">
+                <select className="fx-select">
+                  <option>Value 1</option>
+                  <option>Value 2</option>
+                  <option>Value 3</option>
+                </select>
 
-                    <div class="fx-price">€26,89</div>
-                </div>
+                <div className="fx-price">€26,89</div>
+              </div>
             </div>
-
+          </div>
         </div>
-
-    </div>
-    </div>
+      </div>
 
       <div
         className="fx-leftcontentbox"
         style={{ display: step === "extrastep" ? "block" : "none" }}
       >
-        
         {props.stepsVisibility?.step_3_title_visible == "true" && (
           <h1
             className="fx-all-main-heading"
@@ -551,7 +560,6 @@ export default function Extra(props) {
                     : "fx-tabcontent"
                 }
               >
-              
                 {products.length > 0 &&
                   products.map((product, p2) => {
                     if ((!gift && product.cap_left > 0) || gift) {
