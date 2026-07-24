@@ -829,7 +829,7 @@
 }
 
 .fx-servicebox-selected.fx-servicebox-has-tooltip .fx-top-icon {
-  background: #0c2f80;
+  background:var(--primary-color);
 }
 
 .fx-tooltip-wrapper i.pi.pi-info-circle{

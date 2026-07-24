@@ -1118,4 +1118,108 @@ div.fx-booking input.btn-primary[type="submit"]:focus-visible {
 }
 
 
+.fx-service-option-box * {
+    box-sizing: border-box;
+}
+
+.fx-service-option-box .fx-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 16px;
+    max-width: 1000px;
+    margin: auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e0e4e8;
+    margin-bottom:24px;
+}
+
+.fx-service-option-box .fx-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.fx-service-option-box .fx-card-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #222;
+    margin: 0px;
+}
+
+.fx-service-option-box .fx-info-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f8f9fb;
+    border: 1px solid #e4e7eb;
+    color: #6b7280;
+    padding: 12px 14px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.fx-service-option-box .fx-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.fx-service-option-box .fx-option-card {
+    border: 1px solid #e3e3e3;
+    border-radius: 6px;
+    padding: 16px;
+    background: #fff;
+}
+
+.fx-service-option-box .fx-option-card label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #222;
+}
+
+.fx-service-option-box .fx-option-card label span {
+    color: #dc3545;
+}
+
+.fx-service-option-box .fx-description {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 12px;
+}
+
+.fx-service-option-box .fx-select-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.fx-service-option-box .fx-select {
+    flex: 1;
+    height: 40px;
+    border: 1px solid #cfd3d7;
+    border-radius: 4px;
+    padding: 0 12px;
+    background: #fff;
+    font-size: 14px;
+}
+
+.fx-service-option-box .fx-price {
+    font-size: var(--all-card-price-size);
+    font-weight: 600;
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .fx-service-option-box .fx-options {
+        grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+    }
+}
+
+
 
