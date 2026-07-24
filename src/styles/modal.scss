@@ -305,6 +305,18 @@ h2 {
   align-items: center;
 }
 
+.fx-booking .fx-timelistbox.fx-bundle-slot-selectable {
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.fx-booking .fx-timelistbox.fx-bundle-slot-selectable:hover {
+  background-color: color-mix(in srgb, var(--primary-color) 8%, white);
+  border-color: color-mix(in srgb, var(--primary-color) 32%, white);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary-color) 22%, white);
+}
+
 .fx-booking .time {
   font-weight: 400;
   font-size: var(--normal-descriptionsize);
@@ -403,6 +415,18 @@ h2 {
   background: #fff;
   
   
+}
+
+.fx-bundle-fixed-note {
+  background: color-mix(in srgb, var(--primary-color) 12%, white);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 45%, white);
+  color: var(--darkgrey);
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
 }
 .fx-booking .fx-popup .fx-rightpopup .continuebtn {
   width: 100%;

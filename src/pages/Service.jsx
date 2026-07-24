@@ -64,6 +64,16 @@ export default function Service(props) {
   const desktopCarouselRef = useRef(null);
   const [isDesktopCarouselHovered, setIsDesktopCarouselHovered] =
     useState(false);
+  const [bundleId, setBundleId] = useState(0);
+  const [selectedSlotContext, setSelectedSlotContext] = useState({
+    serviceId: null,
+    bundleId: 0,
+  });
+
+  const normalizeBundleId = (value) => {
+    const numericBundleId = Number(value);
+    return numericBundleId > 0 ? numericBundleId : 0;
+  };
 
   const scrollDesktop = (dir) => {
     const el = desktopCarouselRef.current;
@@ -209,16 +219,17 @@ export default function Service(props) {
         setSlot("");
         console.log("Selected date in Service component:", date);
         fetchProductsByDate(date);
+        if (serviceid) {
+          dispatch(setLoading(true));
+          servicedetail(serviceid, bundleId);
+        }
         isInitialMount.current = false;
-      }
-      if (serviceid) {
-        dispatch(setLoading(true));
-        servicedetail(serviceid);
       }
       prevDate.current = date;
       prevDate.currentCategory = category;
     }
-  }, [date, step, serviceid, category]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date, step, serviceid, category, bundleId]);
 
   const fetchProductsByDate = async (selectedDate) => {
     setLoadingske(true);
@@ -249,17 +260,29 @@ export default function Service(props) {
     }
   };
 
-  const servicedetail = async (id) => {
+  const servicedetail = async (id, selectedBundleId = 0) => {
+    const normalizedBundleId = normalizeBundleId(selectedBundleId);
+    const isSameDetailContext =
+      serviceid === id && normalizeBundleId(bundleId) === normalizedBundleId;
+
+    if (!isSameDetailContext) {
+      setSlot("");
+      setBook(0);
+      setCurrentItem({});
+      setSelectedSlotContext({ serviceId: null, bundleId: 0 });
+    }
+
     dispatch(setLoading(true));
     setReadmorecl(false);
     setGiftQuantity(1);
     setServiceId(id);
+    setBundleId(normalizedBundleId);
     let allService = gift ? true : false;
     allService = all ? true : allService;
     const { data } = await axiosInstance(
       `/service-details?date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&service_id=${id}&all=${allService}`,
+      )}&service_id=${id}&all=${allService}&is_bundle=${normalizedBundleId > 0 ? true : false}&bundle_id=${normalizedBundleId}`,
       {
         method: "get",
       },
@@ -299,17 +322,22 @@ export default function Service(props) {
 
       if (!gift) {
         const monthYear = moment().format("YYYY-MM");
-        getslotavailabilitycalendar(monthYear, id);
+        getslotavailabilitycalendar(monthYear, id, normalizedBundleId);
       } else {
         dispatch(setLoading(false));
       }
     }
   };
 
-  const getslotavailabilitycalendar = async (monthYear, id) => {
+  const getslotavailabilitycalendar = async (
+    monthYear,
+    id,
+    selectedBundleId = bundleId,
+  ) => {
+    const normalizedBundleId = normalizeBundleId(selectedBundleId);
     /* Slot availability calendar */
     const { data: dataa } = await axiosInstance(
-      `/slot-availability-calendar?month=${monthYear}&service_id=${id}`,
+      `/slot-availability-calendar?month=${monthYear}&service_id=${id}&is_bundle=${normalizedBundleId > 0 ? true : false}&bundle_id=${normalizedBundleId}`,
       {
         method: "get",
       },
@@ -463,40 +491,42 @@ export default function Service(props) {
   };
 
   const getBundleIncludedCount = (product) => {
-    const rawCount =
-      product?.bundle_services_count ??
-      product?.services_included_count ??
-      product?.included_services_count ??
-      product?.services_included ??
-      product?.included_services;
+    const rawCount = product?.is_bundle;
     const count = Number(rawCount);
-    return Number.isFinite(count) && count > 0 ? Math.floor(count) : 0;
+    return count > 0 ? count : 0;
   };
 
   const getServiceCardClassName = (product) => {
     const includedCount = getBundleIncludedCount(product);
+    console.log(`Bundle count for product ${product?.id}:`, includedCount);
+    const productBundleId = normalizeBundleId(product?.bundle_id);
+
     const classes = [
       props.showBookNowButton == "true"
         ? "fx-servicebox fx-servicebox-add-button"
         : "fx-servicebox fx-bundle-content",
     ];
 
-    if (serviceid === product.id) {
+    if (
+      serviceid === product.id &&
+      normalizeBundleId(bundleId) === productBundleId
+    ) {
       classes.push("fx-servicebox-selected");
     }
-    classes.push("fx-servicebox-has-tooltip");
     if (includedCount > 0) {
+      classes.push("fx-servicebox-has-tooltip");
       classes.push("fx-servicebox-bundle-highlight");
     }
-
+    console.log(`Classes for product ${product?.id}:`, classes);
     return classes.join(" ");
   };
 
   const getListCardClassName = (product) => {
     const includedCount = getBundleIncludedCount(product);
-    const classes = ["fx-serviceboxlist", "fx-servicebox-has-tooltip"];
+    const classes = ["fx-serviceboxlist"];
 
     if (includedCount > 0) {
+      classes.push("fx-servicebox-has-tooltip");
       classes.push("fx-servicebox-bundle-highlight");
     }
 
@@ -505,23 +535,21 @@ export default function Service(props) {
 
   const renderBundleTooltip = (product) => {
     const includedCount = getBundleIncludedCount(product);
+    if (includedCount <= 0) return null;
+
     const tooltipText =
       product?.bundle_tooltip ||
-      product?.bundle_description ||
+      product?.svc_long_desc ||
       "Open this experience to view all included details, options, and pricing information.";
-    const badgeText = `${includedCount} ${includedCount > 1 ? "SERVICES" : "SERVICE"} INCLUDED`;
 
     return (
       <div className="fx-tooltip-wrapper">
         <div className="fx-top-icon" aria-hidden="true">
-          <i class="pi pi-gift"></i>
+          <i className="pi pi-gift"></i>
         </div>
         <div className="fx-tooltip-box" role="tooltip">
           {tooltipText}
-        </div>
-        {includedCount > 0 && (
-          <span className="fx-bundle-chip">{badgeText}</span>
-        )}
+        </div>{" "}
       </div>
     );
   };
@@ -531,7 +559,7 @@ export default function Service(props) {
     return (
       <div
         className={getServiceCardClassName(product)}
-        onClick={() => servicedetail(product.id)}
+        onClick={() => servicedetail(product.id, product.bundle_id ?? 0)}
       >
         {renderBundleTooltip(product)}
         <div className="fx-servicepicbox">
@@ -576,9 +604,15 @@ export default function Service(props) {
           {props.showBookNowButton == "true" && (
             <div
               className="booknowbtn"
-              onClick={() => servicedetail(product.id)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                servicedetail(product.id, product.bundle_id ?? 0);
+              }}
             >
-              <a href="#">{gift ? "Select Gift" : "Book Now"}</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>
+                {gift ? "Select Gift" : "Book Now"}
+              </a>
             </div>
           )}
         </div>
@@ -591,6 +625,10 @@ export default function Service(props) {
     const currentslot = slot;
     let currentbook = book;
     setSlot(itemm.time_slot);
+    setSelectedSlotContext({
+      serviceId: serviceid,
+      bundleId: normalizeBundleId(bundleId),
+    });
     if (currentslot != itemm.time_slot) {
       currentbook = 0;
       setBook(0);
@@ -617,8 +655,28 @@ export default function Service(props) {
     }
   };
 
+  const getBundleFixedQuantity = (slotItem) => {
+    const minCap = Number(slotItem?.min_capacity);
+    return minCap > 0 ? minCap : 1;
+  };
+
+  const selectBundleSlot = (slotItem) => {
+    if (slotItem?.slot_type !== "active") return;
+    setCurrentItem(slotItem);
+    setSlot(slotItem.time_slot);
+    setBook(getBundleFixedQuantity(slotItem));
+    setSelectedSlotContext({
+      serviceId: serviceid,
+      bundleId: normalizeBundleId(bundleId),
+    });
+  };
+
   const bookservice = async () => {
-    if (book == 0 || !slot) {
+    const hasMatchingSlotContext =
+      selectedSlotContext.serviceId === serviceid &&
+      selectedSlotContext.bundleId === normalizeBundleId(bundleId);
+
+    if (book == 0 || !slot || !hasMatchingSlotContext) {
       Swal.fire({
         toast: true,
         position: "top-end", // or 'bottom-end', 'top-start', etc.
@@ -646,7 +704,7 @@ export default function Service(props) {
     const { data } = await axiosInstance(
       `/price-format?service_id=${
         productDetails.id
-      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&extra_id=${extraid}&extra_capacity=${extracapacity}`,
+      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&extra_id=${extraid}&extra_capacity=${extracapacity}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}`,
       {
         method: "get",
       },
@@ -659,6 +717,7 @@ export default function Service(props) {
       total_formatted: data?.data?.service_total,
       slot: slot,
       capacity: data?.data?.service_capacity,
+      bundle_id: bundleId > 0 ? bundleId : null,
     };
     let extraobj = cart.extra ? cart.extra : [];
     if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
@@ -701,7 +760,7 @@ export default function Service(props) {
         date,
       ).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraid}&extra_capacity=${extracapacity}`,
+      )}&extra_id=${extraid}&extra_capacity=${extracapacity}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}`,
       {
         method: "get",
       },
@@ -714,6 +773,7 @@ export default function Service(props) {
       total_formatted: data?.data?.service_total,
       slot: "",
       capacity: giftQuantity,
+      bundle_id: bundleId > 0 ? bundleId : null,
     };
     let extraobj = cart.extra ? cart.extra : [];
     if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
@@ -742,7 +802,7 @@ export default function Service(props) {
     const { data } = await axiosInstance(
       `/has-extra?date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&service_id=${serviceid}&all=${gift ? true : false}`,
+      )}&service_id=${serviceid}&all=${gift ? true : false}&bundle_id=${bundleId}`,
       {
         method: "get",
       },
@@ -777,6 +837,7 @@ export default function Service(props) {
       extra_svc_ids: [],
       no_of_persons: 0,
       gift,
+      selected_bundle_id: bundleId > 0 ? bundleId : null,
     });
     if (data && data.status == 200 && data.data.booking_string) {
       dispatch(setBookingkey(data.data.booking_string));
@@ -810,6 +871,27 @@ export default function Service(props) {
     !skeloading &&
     categories.length >= 2 &&
     (isDesktop ? products.length >= 9 : products.length >= 6);
+
+  const isBundleSelection = normalizeBundleId(bundleId) > 0;
+  const hasSlotSelectionForCurrentContext =
+    selectedSlotContext.serviceId === serviceid &&
+    selectedSlotContext.bundleId === normalizeBundleId(bundleId) &&
+    Boolean(slot) &&
+    book > 0;
+
+  const getSlotRowClassName = (slotItem) => {
+    const classes = ["fx-timelistbox"];
+
+    if (hasSlotSelectionForCurrentContext && slot == slotItem?.time_slot) {
+      classes.push("fx-slotbox-active");
+    }
+
+    if (isBundleSelection && slotItem?.slot_type === "active") {
+      classes.push("fx-bundle-slot-selectable");
+    }
+
+    return classes.join(" ");
+  };
 
   const updateGiftQuantity = (type) => {
     setGiftQuantity((prev) => {
@@ -1007,7 +1089,9 @@ export default function Service(props) {
                   <div
                     className={getServiceCardClassName(product)}
                     key={p1}
-                    onClick={() => servicedetail(product.id)}
+                    onClick={() =>
+                      servicedetail(product.id, product.bundle_id ?? 0)
+                    }
                   >
                     {renderBundleTooltip(product)}
                     <div className="fx-servicepicbox">
@@ -1057,9 +1141,15 @@ export default function Service(props) {
                       {props.showBookNowButton == "true" && (
                         <div
                           className="booknowbtn"
-                          onClick={() => servicedetail(product.id)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            servicedetail(product.id, product.bundle_id ?? 0);
+                          }}
                         >
-                          <a href="#">{gift ? "Select Gift" : "Book Now"}</a>
+                          <a href="#" onClick={(e) => e.preventDefault()}>
+                            {gift ? "Select Gift" : "Book Now"}
+                          </a>
                         </div>
                       )}
                     </div>
@@ -1081,7 +1171,9 @@ export default function Service(props) {
                 <div
                   className={getListCardClassName(product)}
                   key={p2}
-                  onClick={() => servicedetail(product.id)}
+                  onClick={() =>
+                    servicedetail(product.id, product.bundle_id ?? 0)
+                  }
                 >
                   <div className="fx-servicepicboxlist">
                     <div className="fx-list-img-box">
@@ -1482,12 +1574,13 @@ export default function Service(props) {
 
                                   return slotItems.map((item, idx) => (
                                     <div
-                                      className={
-                                        slot == item.time_slot && book > 0
-                                          ? "fx-timelistbox fx-slotbox-active"
-                                          : "fx-timelistbox"
-                                      }
+                                      className={getSlotRowClassName(item)}
                                       key={idx}
+                                      onClick={() =>
+                                        isBundleSelection
+                                          ? selectBundleSlot(item)
+                                          : undefined
+                                      }
                                     >
                                       <div className="fx-timeslotsection">
                                         <div className="time">
@@ -1531,41 +1624,43 @@ export default function Service(props) {
                                       </div>
 
                                       <div className="fx-common">
-                                        <div className="fx-quantitybox">
-                                          {item.slot_type == "active" && (
-                                            <>
-                                              <button
-                                                type="button"
-                                                className="decrement"
-                                                onClick={() =>
-                                                  slotbook("minus", item)
-                                                }
-                                              >
-                                                -
-                                              </button>
-                                              <input
-                                                type="number"
-                                                value={
-                                                  slot == item.time_slot
-                                                    ? book
-                                                    : 0
-                                                }
-                                                defaultValue={0}
-                                                min={0}
-                                                max={item.capacity_left}
-                                              />
-                                              <button
-                                                type="button"
-                                                className="increment"
-                                                onClick={() =>
-                                                  slotbook("add", item)
-                                                }
-                                              >
-                                                +
-                                              </button>
-                                            </>
-                                          )}
-                                        </div>
+                                        {!isBundleSelection && (
+                                          <div className="fx-quantitybox">
+                                            {item.slot_type == "active" && (
+                                              <>
+                                                <button
+                                                  type="button"
+                                                  className="decrement"
+                                                  onClick={() =>
+                                                    slotbook("minus", item)
+                                                  }
+                                                >
+                                                  -
+                                                </button>
+                                                <input
+                                                  type="number"
+                                                  value={
+                                                    slot == item.time_slot
+                                                      ? book
+                                                      : 0
+                                                  }
+                                                  defaultValue={0}
+                                                  min={0}
+                                                  max={item.capacity_left}
+                                                />
+                                                <button
+                                                  type="button"
+                                                  className="increment"
+                                                  onClick={() =>
+                                                    slotbook("add", item)
+                                                  }
+                                                >
+                                                  +
+                                                </button>
+                                              </>
+                                            )}
+                                          </div>
+                                        )}
                                       </div>
                                     </div>
                                   ));
@@ -1596,12 +1691,13 @@ export default function Service(props) {
 
                                   return slotAfItems.map((item, idx) => (
                                     <div
-                                      className={
-                                        slot == item.time_slot && book > 0
-                                          ? "fx-timelistbox fx-slotbox-active"
-                                          : "fx-timelistbox"
-                                      }
+                                      className={getSlotRowClassName(item)}
                                       key={"af=" + idx}
+                                      onClick={() =>
+                                        isBundleSelection
+                                          ? selectBundleSlot(item)
+                                          : undefined
+                                      }
                                     >
                                       <div className="fx-timeslotsection">
                                         <div className="time">
@@ -1645,42 +1741,44 @@ export default function Service(props) {
                                       </div>
 
                                       <div className="fx-common">
-                                        <div className="fx-quantitybox">
-                                          {item.slot_type == "active" && (
-                                            <>
-                                              <button
-                                                type="button"
-                                                className="decrement"
-                                                onClick={() =>
-                                                  slotbook("minus", item)
-                                                }
-                                              >
-                                                -
-                                              </button>
+                                        {!isBundleSelection && (
+                                          <div className="fx-quantitybox">
+                                            {item.slot_type == "active" && (
+                                              <>
+                                                <button
+                                                  type="button"
+                                                  className="decrement"
+                                                  onClick={() =>
+                                                    slotbook("minus", item)
+                                                  }
+                                                >
+                                                  -
+                                                </button>
 
-                                              <input
-                                                type="number"
-                                                min={0}
-                                                max={item.capacity_left}
-                                                value={
-                                                  slot === item.time_slot
-                                                    ? book
-                                                    : 0
-                                                }
-                                              />
+                                                <input
+                                                  type="number"
+                                                  min={0}
+                                                  max={item.capacity_left}
+                                                  value={
+                                                    slot === item.time_slot
+                                                      ? book
+                                                      : 0
+                                                  }
+                                                />
 
-                                              <button
-                                                type="button"
-                                                className="increment"
-                                                onClick={() =>
-                                                  slotbook("add", item)
-                                                }
-                                              >
-                                                +
-                                              </button>
-                                            </>
-                                          )}
-                                        </div>
+                                                <button
+                                                  type="button"
+                                                  className="increment"
+                                                  onClick={() =>
+                                                    slotbook("add", item)
+                                                  }
+                                                >
+                                                  +
+                                                </button>
+                                              </>
+                                            )}
+                                          </div>
+                                        )}
                                       </div>
                                     </div>
                                   ));
@@ -1727,11 +1825,13 @@ export default function Service(props) {
                               if (singleslotItem && singleslotItem.time_slot) {
                                 return (
                                   <div
-                                    className={
-                                      slot == singleslotItem.time_slot &&
-                                      book > 0
-                                        ? "fx-timelistbox fx-slotbox-active"
-                                        : "fx-timelistbox"
+                                    className={getSlotRowClassName(
+                                      singleslotItem,
+                                    )}
+                                    onClick={() =>
+                                      isBundleSelection
+                                        ? selectBundleSlot(singleslotItem)
+                                        : undefined
                                     }
                                   >
                                     <div className="fx-timeslotsection">
@@ -1781,45 +1881,53 @@ export default function Service(props) {
                                     </div>
 
                                     <div className="fx-common">
-                                      <div className="fx-quantitybox">
-                                        {singleslotItem.slot_type ==
-                                          "active" && (
-                                          <>
-                                            <button
-                                              type="button"
-                                              className="decrement"
-                                              onClick={() =>
-                                                slotbook(
-                                                  "minus",
-                                                  singleslotItem,
-                                                )
-                                              }
-                                            >
-                                              -
-                                            </button>
-                                            <input
-                                              type="number"
-                                              value={
-                                                slot == singleslotItem.time_slot
-                                                  ? book
-                                                  : 0
-                                              }
-                                              defaultValue={0}
-                                              min={0}
-                                              max={singleslotItem.capacity_left}
-                                            />
-                                            <button
-                                              type="button"
-                                              className="increment"
-                                              onClick={() =>
-                                                slotbook("add", singleslotItem)
-                                              }
-                                            >
-                                              +
-                                            </button>
-                                          </>
-                                        )}
-                                      </div>
+                                      {!isBundleSelection && (
+                                        <div className="fx-quantitybox">
+                                          {singleslotItem.slot_type ==
+                                            "active" && (
+                                            <>
+                                              <button
+                                                type="button"
+                                                className="decrement"
+                                                onClick={() =>
+                                                  slotbook(
+                                                    "minus",
+                                                    singleslotItem,
+                                                  )
+                                                }
+                                              >
+                                                -
+                                              </button>
+                                              <input
+                                                type="number"
+                                                value={
+                                                  slot ==
+                                                  singleslotItem.time_slot
+                                                    ? book
+                                                    : 0
+                                                }
+                                                defaultValue={0}
+                                                min={0}
+                                                max={
+                                                  singleslotItem.capacity_left
+                                                }
+                                              />
+                                              <button
+                                                type="button"
+                                                className="increment"
+                                                onClick={() =>
+                                                  slotbook(
+                                                    "add",
+                                                    singleslotItem,
+                                                  )
+                                                }
+                                              >
+                                                +
+                                              </button>
+                                            </>
+                                          )}
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
                                 );
@@ -1827,12 +1935,13 @@ export default function Service(props) {
 
                               return slotItems.map((item, idx) => (
                                 <div
-                                  className={
-                                    slot == item.time_slot && book > 0
-                                      ? "fx-timelistbox fx-slotbox-active"
-                                      : "fx-timelistbox"
-                                  }
+                                  className={getSlotRowClassName(item)}
                                   key={idx}
+                                  onClick={() =>
+                                    isBundleSelection
+                                      ? selectBundleSlot(item)
+                                      : undefined
+                                  }
                                 >
                                   <div className="fx-timeslotsection">
                                     <div className="time">{item.time_slot}</div>
@@ -1874,39 +1983,43 @@ export default function Service(props) {
                                   </div>
 
                                   <div className="fx-common">
-                                    <div className="fx-quantitybox">
-                                      {item.slot_type == "active" && (
-                                        <>
-                                          <button
-                                            type="button"
-                                            className="decrement"
-                                            onClick={() =>
-                                              slotbook("minus", item)
-                                            }
-                                          >
-                                            -
-                                          </button>
-                                          <input
-                                            type="number"
-                                            value={
-                                              slot == item.time_slot ? book : 0
-                                            }
-                                            defaultValue={0}
-                                            min={0}
-                                            max={item.capacity_left}
-                                          />
-                                          <button
-                                            type="button"
-                                            className="increment"
-                                            onClick={() =>
-                                              slotbook("add", item)
-                                            }
-                                          >
-                                            +
-                                          </button>
-                                        </>
-                                      )}
-                                    </div>
+                                    {!isBundleSelection && (
+                                      <div className="fx-quantitybox">
+                                        {item.slot_type == "active" && (
+                                          <>
+                                            <button
+                                              type="button"
+                                              className="decrement"
+                                              onClick={() =>
+                                                slotbook("minus", item)
+                                              }
+                                            >
+                                              -
+                                            </button>
+                                            <input
+                                              type="number"
+                                              value={
+                                                slot == item.time_slot
+                                                  ? book
+                                                  : 0
+                                              }
+                                              defaultValue={0}
+                                              min={0}
+                                              max={item.capacity_left}
+                                            />
+                                            <button
+                                              type="button"
+                                              className="increment"
+                                              onClick={() =>
+                                                slotbook("add", item)
+                                              }
+                                            >
+                                              +
+                                            </button>
+                                          </>
+                                        )}
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                               ));
@@ -1925,14 +2038,23 @@ export default function Service(props) {
                       slotVisible == "morning" && !gift ? "block" : "none",
                   }}
                 >
+                  {isBundleSelection && hasSlotSelectionForCurrentContext && (
+                    <div className="fx-bundle-fixed-note">
+                      Bundle quantity is fixed by the included services.
+                    </div>
+                  )}
                   <div
                     className={
-                      slotVisible == "morning" && book > 0
+                      slotVisible == "morning" &&
+                      hasSlotSelectionForCurrentContext
                         ? "continuebtn"
                         : "continuebtn fx-disable-button"
                     }
                     onClick={() =>
-                      slotVisible == "morning" && book > 0 ? bookservice() : ""
+                      slotVisible == "morning" &&
+                      hasSlotSelectionForCurrentContext
+                        ? bookservice()
+                        : ""
                     }
                   >
                     Continue
@@ -1945,14 +2067,21 @@ export default function Service(props) {
                       slotVisible == "afternoon" && !gift ? "block" : "none",
                   }}
                 >
+                  {isBundleSelection && hasSlotSelectionForCurrentContext && (
+                    <div className="fx-bundle-fixed-note">
+                      Bundle quantity is fixed by the included services.
+                    </div>
+                  )}
                   <div
                     className={
-                      slotVisible == "afternoon" && book > 0
+                      slotVisible == "afternoon" &&
+                      hasSlotSelectionForCurrentContext
                         ? "continuebtn"
                         : "continuebtn fx-disable-button"
                     }
                     onClick={() =>
-                      slotVisible == "afternoon" && book > 0
+                      slotVisible == "afternoon" &&
+                      hasSlotSelectionForCurrentContext
                         ? bookservice()
                         : ""
                     }
@@ -1975,6 +2104,11 @@ export default function Service(props) {
                         : "none",
                   }}
                 >
+                  {isBundleSelection && hasSlotSelectionForCurrentContext && (
+                    <div className="fx-bundle-fixed-note">
+                      Bundle quantity is fixed by the included services.
+                    </div>
+                  )}
                   <div
                     className={
                       (slotVisible == "all" ||
@@ -1983,7 +2117,7 @@ export default function Service(props) {
                             s.date,
                           ),
                         )?.slots.single_time_slot.slot_type) &&
-                      book > 0
+                      hasSlotSelectionForCurrentContext
                         ? "continuebtn"
                         : "continuebtn fx-disable-button"
                     }
@@ -1994,7 +2128,7 @@ export default function Service(props) {
                             s.date,
                           ),
                         )?.slots.single_time_slot.slot_type) &&
-                      book > 0
+                      hasSlotSelectionForCurrentContext
                         ? bookservice()
                         : ""
                     }

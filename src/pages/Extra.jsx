@@ -110,7 +110,7 @@ export default function Extra(props) {
         const { data } = await axiosInstance(
           `/extras?date=${moment(date).format(
             "YYYY-MM-DD",
-          )}&service_id=${service}&all=${gift ? true : false}`,
+          )}&service_id=${service}&all=${gift ? true : false}&bundle_id=${cart.service[0]?.bundle_id || 0}`,
           {
             method: "get",
           },
@@ -251,7 +251,7 @@ export default function Extra(props) {
         cart.service[0].capacity
       }&date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}`,
+      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&bundle_id=${cart.service[0]?.bundle_id || 0}`,
       {
         method: "get",
       },
@@ -292,6 +292,7 @@ export default function Extra(props) {
       extra_svc_ids: extraIdParam,
       no_of_persons: bookParam,
       gift,
+      bundle_id: cart.service[0]?.bundle_id || 0,
     });
     if (data && data.status == 200 && data.data.booking_string) {
       dispatch(setExtracapacity(bookParam));
