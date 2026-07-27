@@ -1172,6 +1172,21 @@ div.fx-booking input.btn-primary[type="submit"]:focus-visible {
     border-radius: 6px;
     padding: 16px;
     background: #fff;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.fx-service-option-box button.fx-option-card {
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.fx-service-option-box .fx-option-card.is-selected {
+    border-color: var(--primary-color);
+    background: #f8fbff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.02), 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .fx-service-option-box .fx-option-card label {
@@ -1194,7 +1209,8 @@ div.fx-booking input.btn-primary[type="submit"]:focus-visible {
 
 .fx-service-option-box .fx-select-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: space-between;
     gap: 10px;
 }
 
@@ -1213,6 +1229,11 @@ div.fx-booking input.btn-primary[type="submit"]:focus-visible {
     font-weight: 600;
     color: var(--primary-color);
     white-space: nowrap;
+}
+
+.fx-service-option-box .fx-option-price-preview {
+    margin-top: 16px;
+    margin-bottom: 0;
 }
 
 @media (max-width: 768px) {
