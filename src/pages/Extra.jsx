@@ -42,29 +42,17 @@ export default function Extra(props) {
   const extraID = useSelector((state) => state.step3.extra);
 
   const [products, setProductsArr] = useState([]);
-  const [serviceOptionChoices, setServiceOptionChoices] = useState(null);
-  const [selectedServiceOptionId, setSelectedServiceOptionId] = useState(0);
   const [isVisible, setIsVisible] = useState("grid");
   const [quantities, setQuantities] = useState({});
   const [skeloading, setLoadingske] = useState(true);
 
+  const selectedServiceOptionId = cart?.service_option
+    ? Number(cart.service_option.id) || 0
+    : Number(cart.service?.[0]?.bundle_id) || 0;
+
   const toggleDiv = (type) => {
     setIsVisible(type);
   };
-
-  const selectedServiceOptionIdNum = Number(selectedServiceOptionId);
-  const activeServiceOptionId = Number.isNaN(selectedServiceOptionIdNum)
-    ? Number(cart.service?.[0]?.bundle_id) || 0
-    : selectedServiceOptionIdNum;
-
-  const serviceOptionList = serviceOptionChoices
-    ? [
-        serviceOptionChoices.base_option,
-        ...(Array.isArray(serviceOptionChoices.options)
-          ? serviceOptionChoices.options
-          : []),
-      ].filter(Boolean)
-    : [];
 
   useEffect(() => {
     if (isDesktop) {
@@ -98,10 +86,6 @@ export default function Extra(props) {
   }, [isVisible, isDesktop, products]);
 
   useEffect(() => {
-    setSelectedServiceOptionId(Number(cart.service?.[0]?.bundle_id) || 0);
-  }, [cart.service]);
-
-  useEffect(() => {
     if (step !== "extrastep") return;
     const initQ = {};
     if (extraID && extracapacity) {
@@ -130,35 +114,12 @@ export default function Extra(props) {
         const { data } = await axiosInstance(
           `/extras?date=${moment(date).format(
             "YYYY-MM-DD",
-          )}&service_id=${service}&all=${gift ? true : false}&bundle_id=${cart.service?.[0]?.bundle_id || 0}`,
+          )}&service_id=${service}&all=${gift ? true : false}&bundle_id=${selectedServiceOptionId}`,
           {
             method: "get",
           },
         );
         if (data && data.status == 200) {
-          const choices =
-            data?.service_option_choices || data?.data?.service_option_choices;
-          setServiceOptionChoices(choices?.mode === "choice" ? choices : null);
-
-          if (choices?.mode === "choice") {
-            const allOptions = [
-              choices.base_option,
-              ...(Array.isArray(choices.options) ? choices.options : []),
-            ].filter(Boolean);
-            const hasSelected = allOptions.some(
-              (opt) => Number(opt?.id) === activeServiceOptionId,
-            );
-            if (!hasSelected) {
-              const defaultOption =
-                allOptions.find((opt) => opt?.is_default) ||
-                choices.base_option ||
-                allOptions[0];
-              if (defaultOption) {
-                setSelectedServiceOptionId(Number(defaultOption.id) || 0);
-              }
-            }
-          }
-
           const extraList = Array.isArray(data.data)
             ? data.data
             : Array.isArray(data?.data?.extras)
@@ -176,7 +137,7 @@ export default function Extra(props) {
               extra_svc_ids: null,
               no_of_persons: 0,
               gift,
-              selected_bundle_id: cart.service?.[0]?.bundle_id || null,
+              selected_bundle_id: selectedServiceOptionId || null,
             });
             if (
               addToCartRes?.data &&
@@ -204,6 +165,7 @@ export default function Extra(props) {
     extraID,
     extracapacity,
     cart,
+    selectedServiceOptionId,
     dispatch,
   ]);
 
@@ -312,7 +274,7 @@ export default function Extra(props) {
         cart.service[0].capacity
       }&date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&bundle_id=${cart.service?.[0]?.bundle_id || 0}`,
+      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&bundle_id=${selectedServiceOptionId}`,
       {
         method: "get",
       },
@@ -344,15 +306,6 @@ export default function Extra(props) {
   };
 
   const addtocart = async (extraIdParam, bookParam) => {
-    // const selectedServiceOptionIdFromFallback = Number.isNaN(
-    //   Number(selectedServiceOptionId),
-    // )
-    //   ? Number(cart.service?.[0]?.bundle_id) || 0
-    //   : Number(selectedServiceOptionId);
-    // const currentServiceOptionId =
-    //   typeof selectedBundleIdParam === "number"
-    //     ? selectedBundleIdParam
-    //     : selectedServiceOptionIdFromFallback;
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/addtocart`, {
       service_id: service,
@@ -362,7 +315,7 @@ export default function Extra(props) {
       extra_svc_ids: extraIdParam,
       no_of_persons: bookParam,
       gift,
-      selected_bundle_id: cart.service?.[0]?.bundle_id || 0,
+      selected_bundle_id: selectedServiceOptionId,
     });
     if (data && data.status == 200 && data.data.booking_string) {
       dispatch(setExtracapacity(bookParam));
@@ -392,66 +345,6 @@ export default function Extra(props) {
 
   return (
     <>
-      {serviceOptionList.length > 0 && (
-        <div
-          className="fx-service-option-box"
-          style={{ display: step === "extrastep" ? "block" : "none" }}
-        >
-          <div className="fx-card">
-            <div className="fx-card-header">
-              <h3>{serviceOptionChoices?.title || "Choose service options"}</h3>
-              <i className="pi pi-angle-up"></i>
-            </div>
-
-            {serviceOptionChoices?.description && (
-              <div className="fx-info-box">
-                <span>ℹ️</span>
-                <span>{serviceOptionChoices.description}</span>
-              </div>
-            )}
-
-            <div className="fx-options">
-              {serviceOptionList.map((option) => {
-                const optionId = Number(option?.id) || 0;
-                const isSelected = optionId === activeServiceOptionId;
-                return (
-                  <button
-                    key={optionId}
-                    type="button"
-                    className={`fx-option-card${isSelected ? " is-selected" : ""}`}
-                    onClick={() => setSelectedServiceOptionId(optionId)}
-                  >
-                    <div className="fx-select-row">
-                      <div>
-                        <label>
-                          {decodeHtml(option?.name || "Option")}
-                          {option?.is_default ? <span>*</span> : null}
-                        </label>
-                        {option?.description ? (
-                          <div className="fx-description">
-                            {decodeHtml(option.description)}
-                          </div>
-                        ) : null}
-                      </div>
-                      <div className="fx-price">
-                        {option?.effective_price_display ||
-                          decodeHtml(String(option?.effective_price ?? ""))}
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {serviceOptionChoices?.price_preview_text && (
-              <div className="fx-info-box fx-option-price-preview">
-                <span>{serviceOptionChoices.price_preview_text}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
       <div
         className="fx-leftcontentbox"
         style={{ display: step === "extrastep" ? "block" : "none" }}
