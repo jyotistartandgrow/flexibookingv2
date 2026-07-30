@@ -1413,9 +1413,11 @@ export default function Service(props) {
                             {decodeHtml(option?.name || "Option")}
                           </h3>
                           {option?.description && (
+                            <div className="fx-service-description-box">
                             <p className="fx-service-description">
                               {decodeHtml(option.description)}
                             </p>
+                            </div>
                           )}
                           <div className="fx-service-price">
                             {option?.effective_price_display ||
@@ -1448,6 +1450,7 @@ export default function Service(props) {
                   )}
                   <div className="fx-service-details-popup">
                   <div className="fx-leftpopup">
+                    
                     {productDetails.svc_img && (
                       <div className="fix-maximiz-popup-img">
                         <img

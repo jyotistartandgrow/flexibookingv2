@@ -45,6 +45,11 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 16px;
+    height:380px;
+}
+
+.fx-service-card .fx-service-description-box{
+    height: 44px;
 }
 
 /* Card */
@@ -58,6 +63,7 @@
     background: #FFFFFF;
     cursor: pointer;
     transition: all .25s ease;
+    height: fit-content;
 }
 
 .fx-service-details-content-box .fx-service-card:hover {
@@ -76,10 +82,10 @@
 /* Title */
 
 .fx-service-details-content-box .fx-service-title {
-    margin: 0 0 10px;
+    margin: 0 0 4px;
     color: #111827;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: var(--all-card-heading);
+    font-weight: 400;
     line-height: 1.4;
 }
 
@@ -88,8 +94,14 @@
 .fx-service-details-content-box .fx-service-description {
     margin: 0;
     color: #6B7280;
-    font-size: 13px;
+    font-size: var(--all-card-des);
     line-height: 1.6;
+}
+
+.fx-service-details-content-box h1{
+        font-size: var(--all-sub-heading);
+    font-weight: 600;
+    margin: 16px 0px;
 }
 
 /* Price */
@@ -97,9 +109,9 @@
 .fx-service-details-content-box .fx-service-price {
     margin-top: auto;
     padding-top: 18px;
-    color: #111827;
-    font-size: 20px;
-    font-weight: 700;
+    font-size: var(--all-card-price-size);
+    font-weight: 500;
+    color: var(--primary-color);
 }
 
 .fx-service-details-content-box .fx-service-option-continue {
@@ -156,6 +168,10 @@
 
     .fx-service-details-content-box .fx-service-option-continue {
         max-width: none;
+    }
+
+    .fx-service-details-content-box{
+        padding: 0px;
     }
 }
 
