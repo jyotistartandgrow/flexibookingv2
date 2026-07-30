@@ -1389,6 +1389,7 @@ export default function Service(props) {
             <div className="fx-popup">
               {serviceOptionList.length > 0 && !serviceOptionsConfirmed && (
                 <div className="fx-service-details-content-box">
+                  <h1>Service Variant</h1>
                   {serviceOptionChoices?.description && (
                     <div className="fx-info-box">
                       <span className="fx-info-icon">i</span>
