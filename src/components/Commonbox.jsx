@@ -35,6 +35,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
   const cart = useSelector((state) => state.step2.cart);
+  console.log("cart in commonbox", cart);
   const gift = useSelector((state) => state.step1.gift);
   const topbar = useSelector((state) => state.step1.topbar);
   const paymentstring = useSelector((state) => state.step4.paymentstring);
@@ -203,6 +204,11 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                   <div className="fx-serviceitem" key={"ct-" + ckey}>
                     <div className="itemname">
                       {ct.name} {!gift && `X ${ct.capacity}`}
+                      {cart?.service_option_details?.name && (
+                        <>
+                            ( {cart.service_option_details.name} )
+                        </>
+                      )}
                       <br />
                       <div className="time">{ct.slot}</div>
                       <span onClick={() => edititem(ct.id, "service")}>
@@ -280,14 +286,18 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
           Please select the service you want to gift to your friend.
         </p>
       )}
-      {step === "paymentstep" && paymentstring && stripePromise && isDesktop && !topbar && (
-        <div className="fx-paymentbox">
-          <h1 className="fx-all-main-heading">Payment</h1>
-          <Elements stripe={stripePromise}>
-            <CheckoutForm />
-          </Elements>
-        </div>
-      )}
+      {step === "paymentstep" &&
+        paymentstring &&
+        stripePromise &&
+        isDesktop &&
+        !topbar && (
+          <div className="fx-paymentbox">
+            <h1 className="fx-all-main-heading">Payment</h1>
+            <Elements stripe={stripePromise}>
+              <CheckoutForm />
+            </Elements>
+          </div>
+        )}
       <Toast ref={toast} />
       <ConfirmDialog className="fx-confirmation-popup" />
     </>

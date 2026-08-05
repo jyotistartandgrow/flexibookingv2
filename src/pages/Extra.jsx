@@ -47,8 +47,10 @@ export default function Extra(props) {
   const [skeloading, setLoadingske] = useState(true);
 
   const selectedServiceOptionId = cart?.service_option
-    ? Number(cart.service_option.id) || 0
-    : Number(cart.service?.[0]?.bundle_id) || 0;
+    ? Number(cart.service_option)
+    : 0;
+  const selectedServiceOptionDetails = cart?.service_option_details;
+  const selectedBundleId = Number(cart.service?.[0]?.bundle_id) || 0;
 
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -137,7 +139,9 @@ export default function Extra(props) {
               extra_svc_ids: null,
               no_of_persons: 0,
               gift,
-              selected_bundle_id: selectedServiceOptionId || null,
+              selected_bundle_id: selectedBundleId,
+              option_value_ids:
+                selectedServiceOptionId > 0 ? selectedServiceOptionId : null,
             });
             if (
               addToCartRes?.data &&
@@ -274,7 +278,7 @@ export default function Extra(props) {
         cart.service[0].capacity
       }&date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&bundle_id=${selectedServiceOptionId}`,
+      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&bundle_id=${selectedBundleId}&service_option_id=${selectedServiceOptionId > 0 ? selectedServiceOptionId : null}`,
       {
         method: "get",
       },
@@ -299,6 +303,8 @@ export default function Extra(props) {
         total_formatted: data?.data?.total_formated,
         discount: 0,
         subtotal: data?.data?.total_formated,
+        service_option: selectedServiceOptionId > 0 ? selectedServiceOptionId : null,
+        service_option_details: selectedServiceOptionDetails || null,
       }),
     );
 
@@ -315,7 +321,9 @@ export default function Extra(props) {
       extra_svc_ids: extraIdParam,
       no_of_persons: bookParam,
       gift,
-      selected_bundle_id: selectedServiceOptionId,
+      selected_bundle_id: selectedBundleId,
+      option_value_ids:
+        selectedServiceOptionId > 0 ? selectedServiceOptionId : null,
     });
     if (data && data.status == 200 && data.data.booking_string) {
       dispatch(setExtracapacity(bookParam));
