@@ -1447,7 +1447,7 @@ export default function Service(props) {
                             className="pi pi-arrow-left"
                             aria-hidden="true"
                           ></i>
-                          Back to service options
+                          Back
                         </button>
                       )}
                       {productDetails.svc_img && (
