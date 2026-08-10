@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setStep, setAll, setGift, setStripeKey } from "../store/step1Slice";
+import {
+  setStep,
+  setAll,
+  setGift,
+  setRedeemStep,
+  setStripeKey,
+} from "../store/step1Slice";
 import moment from "moment";
 import { decodeHtml, darkenHex } from "../Utils/Functions";
 import Commonbox from "../components/Commonbox";
@@ -28,6 +34,7 @@ export default function Steps({ type = "date", ...props }) {
   const loading = useSelector((state) => state.step1.loading);
   const [visibleBottom, setVisibleBottom] = useState(false);
   const isDesktop = useDeviceType();
+  const isRedeemBooking = props.redeemBooking === true;
 
   const getSettings = async () => {
     try {
@@ -106,17 +113,39 @@ export default function Steps({ type = "date", ...props }) {
         }
         style={{ display: !loading ? "block" : "none" }}
       >
-        <div className={`fx-stepper-tabstyle fx-${type}-step`}>
+        <div
+          className={`fx-stepper-tabstyle fx-${type}-step ${
+            isRedeemBooking ? "fx-redeem-booking-step" : ""
+          }`}
+        >
+          {isRedeemBooking && (
+            <div
+              className="step codestep complete"
+              onClick={() => {
+                dispatch(setStep("datestep"));
+                dispatch(setRedeemStep("codestep"));
+              }}
+            >
+              <div>
+                1 <span>CODE</span>
+              </div>
+            </div>
+          )}
           {type == "date" && (
             <div
               className={datestepclass}
               onClick={() => {
-                if (date || receiverInfo.firstName)
+                if (isRedeemBooking) {
                   dispatch(setStep("datestep"));
+                  dispatch(setRedeemStep("datestep"));
+                } else if (date || receiverInfo.firstName) {
+                  dispatch(setStep("datestep"));
+                }
               }}
             >
               <div>
-                1 <span>{gift ? "INFORMATION" : "DATE"}</span>
+                {isRedeemBooking ? 2 : 1}{" "}
+                <span>{isRedeemBooking ? "DATE & SLOT" : gift ? "INFORMATION" : "DATE"}</span>
               </div>
             </div>
           )}
@@ -139,7 +168,7 @@ export default function Steps({ type = "date", ...props }) {
             }}
           >
             <div>
-              {type == "service" ? 1 : 2} <span>SERVICES</span>
+              {isRedeemBooking ? 3 : type == "service" ? 1 : 2} <span>SERVICES</span>
             </div>
           </div>
           <div
@@ -149,7 +178,7 @@ export default function Steps({ type = "date", ...props }) {
             }}
           >
             <div>
-              {type == "service" ? 2 : 3} <span>EXTRA</span>
+              {isRedeemBooking ? 4 : type == "service" ? 2 : 3} <span>EXTRA</span>
             </div>
           </div>
           <div
@@ -159,12 +188,12 @@ export default function Steps({ type = "date", ...props }) {
             }}
           >
             <div>
-              {type == "service" ? 3 : 4} <span>CHECKOUT</span>
+              {isRedeemBooking ? 5 : type == "service" ? 3 : 4} <span>CHECKOUT</span>
             </div>
           </div>
           <div className={paymentstepclass}>
             <div>
-              {type == "service" ? 4 : 5} <span>PAYMENT</span>
+              {isRedeemBooking ? 6 : type == "service" ? 4 : 5} <span>PAYMENT</span>
             </div>
           </div>
         </div>

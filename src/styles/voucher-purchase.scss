@@ -161,6 +161,22 @@
     text-align: center;
 }
 
+.redemption-Voucher-services-box .fx-footer-primary-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.redemption-Voucher-services-box .fx-btn-secondary {
+    border: 1px solid var(--primary-color);
+    border-radius: 24px;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px 20px;
+}
+
 .redemption-Voucher-services-box .fx-btn-back {
     background: transparent;
     border: none;

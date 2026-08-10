@@ -17,9 +17,9 @@ export default function ReedemSteps(props) {
   const voucherdetail = useSelector((state) => state.step3.voucherdetail);
   const isDesktop = useDeviceType();
   const [visibleBottom, setVisibleBottom] = useState(false);
+  const isRedeemBooking = props.redeemBooking === true;
   let codestepclass = "step codestep";
   let datestepclass = "step datestep";
-  let slotstepclass = "step slotstep";
   let checkoutstepclass = "step checkoutstep";
 
   if (step == "codestep") {
@@ -27,14 +27,9 @@ export default function ReedemSteps(props) {
   } else if (step == "datestep") {
     datestepclass = datestepclass + " active";
     codestepclass = codestepclass + " complete";
-  } else if (step == "slotstep") {
-    slotstepclass = slotstepclass + " active";
-    codestepclass = codestepclass + " complete";
-    datestepclass = datestepclass + " complete";
   } else if (step == "checkoutstep") {
     checkoutstepclass = checkoutstepclass + " active";
     codestepclass = codestepclass + " complete";
-    slotstepclass = slotstepclass + " complete";
     datestepclass = datestepclass + " complete";
   }
 
@@ -67,7 +62,11 @@ export default function ReedemSteps(props) {
   return (
     <>
       <div className="fx-step-top-fixed-box">
-        <div className={`fx-stepper-tabstyle step-for-redeem`}>
+        <div
+          className={`fx-stepper-tabstyle step-for-redeem ${
+            isRedeemBooking ? "fx-redeem-booking-step" : ""
+          }`}
+        >
           <div
             className={codestepclass}
             onClick={() => {
@@ -75,7 +74,7 @@ export default function ReedemSteps(props) {
             }}
           >
             <div>
-              1 <span>ENTER YOUR CODE</span>
+              1 <span>{isRedeemBooking ? "CODE" : "ENTER YOUR CODE"}</span>
             </div>
           </div>
           <div
@@ -86,15 +85,32 @@ export default function ReedemSteps(props) {
             }}
           >
             <div>
-              2 <span>SELECT DATE & SLOT</span>
+              2 <span>{isRedeemBooking ? "DATE & SLOT" : "SELECT DATE & SLOT"}</span>
             </div>
           </div>
 
-          <div className={checkoutstepclass}>
-            <div>
-              3 <span>CHECKOUT</span>
+          {isRedeemBooking ? (
+            <>
+              <div className="step servicesstep">
+                <div>3 <span>SERVICES</span></div>
+              </div>
+              <div className="step extrastep">
+                <div>4 <span>EXTRA</span></div>
+              </div>
+              <div className="step checkoutstep">
+                <div>5 <span>CHECKOUT</span></div>
+              </div>
+              <div className="step paymentstep">
+                <div>6 <span>PAYMENT</span></div>
+              </div>
+            </>
+          ) : (
+            <div className={checkoutstepclass}>
+              <div>
+                3 <span>CHECKOUT</span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
       {date && (

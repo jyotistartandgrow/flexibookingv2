@@ -6,12 +6,14 @@ import Extra from "./Extra";
 import Checkout from "./Checkout";
 import Payment from "./Payment";
 import OrderDetailsCard from "./OrderDetailsCard";
+import CombinedDetailsCard from "./CombinedDetailsCard";
 
 export default function SgbmDateGift(props) {
   const loading = useSelector((state) => state.step1.loading);
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
   const gift = useSelector((state) => state.step1.gift);
+  const voucher = useSelector((state) => state.step1.voucher);
   const cart = useSelector((state) => state.step2.cart);
   return (
     <div
@@ -39,7 +41,9 @@ export default function SgbmDateGift(props) {
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
         <div className="fx-seg-loader"></div>
       </div>
-      {props.topbar == "true" &&
+      {props.redeemBooking && props.topbar == "true" && !loading && voucher ? (
+        <CombinedDetailsCard {...props} />
+      ) : props.topbar == "true" &&
       !loading &&
       ((gift && cart?.service?.length > 0) ||
         (!gift && date && step !== "datestep")) ? (
