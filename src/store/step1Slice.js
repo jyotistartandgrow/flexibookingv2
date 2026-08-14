@@ -22,6 +22,7 @@ const initialState = {
   stripe_key: null,
   topbar: false,
   opendatepurchase: false,
+  redeemBooking: false,
 };
 
 const step1Slice = createSlice({
@@ -67,6 +68,9 @@ const step1Slice = createSlice({
     setOpenDatePurchase: (state, action) => {
       state.opendatepurchase = action.payload;
     },
+    setRedeemBooking: (state, action) => {
+      state.redeemBooking = action.payload;
+    },
   },
 });
 
@@ -84,5 +88,6 @@ export const {
   setStripeKey,
   setTopbar,
   setOpenDatePurchase,
+  setRedeemBooking,
 } = step1Slice.actions;
 export default step1Slice.reducer;

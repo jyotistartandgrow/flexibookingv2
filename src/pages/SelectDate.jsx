@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState } from "react";
-import calendar from "../assets/calendar.png";
 import { useSelector, useDispatch } from "react-redux";
 import { Calendar } from "primereact/calendar";
 import { addLocale } from "primereact/api";
@@ -9,8 +8,14 @@ import "primeicons/primeicons.css";
 import { setDate } from "../store/step1Slice";
 import moment from "moment";
 import Swal from "sweetalert2";
-import { setRedeemStep, setLoading } from "../store/step1Slice";
+import {
+  setRedeemStep,
+  setLoading,
+  setRedeemBooking,
+  setStep,
+} from "../store/step1Slice";
 import { setSlot, setVoucherDetail } from "../store/step3Slice";
+import { setTimeslot } from "../store/step2Slice";
 import axiosInstance from "../Utils/Interceptor";
 import { decodeEntities } from "../Utils/Functions";
 
@@ -84,8 +89,17 @@ export default function SelectDate() {
       dispatch(setLoading(false));
       return;
     }
+    dispatch(setRedeemBooking(false));
     dispatch(setRedeemStep("checkoutstep"));
     dispatch(setLoading(false));
+  };
+
+  const bookNewServices = () => {
+    if (isContinueDisabled) return;
+
+    dispatch(setTimeslot(selectedSlot));
+    dispatch(setStep("servicesstep"));
+    dispatch(setRedeemBooking(true));
   };
 
   const isContinueDisabled = !date || !selectedSlot;
@@ -213,20 +227,33 @@ export default function SelectDate() {
                 >
                   ← Back
                 </div>
-                <div
-                  className={`btn-primary ${isContinueDisabled ? "fx-btn-disable" : ""}`}
-                  onClick={() => {
-                    if (!isContinueDisabled) {
-                      getslot();
-                    }
-                  }}
-                  style={{
-                    opacity: isContinueDisabled ? 0.5 : 1,
-                    pointerEvents: isContinueDisabled ? "none" : "auto",
-                    cursor: isContinueDisabled ? "not-allowed" : "pointer",
-                  }}
-                >
-                  CONTINUE
+                <div className="fx-footer-primary-actions">
+                  <div
+                    className={`fx-btn-secondary ${isContinueDisabled ? "fx-btn-disable" : ""}`}
+                    onClick={bookNewServices}
+                    style={{
+                      opacity: isContinueDisabled ? 0.5 : 1,
+                      pointerEvents: isContinueDisabled ? "none" : "auto",
+                      cursor: isContinueDisabled ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    BOOK NEW SERVICES
+                  </div>
+                  <div
+                    className={`btn-primary ${isContinueDisabled ? "fx-btn-disable" : ""}`}
+                    onClick={() => {
+                      if (!isContinueDisabled) {
+                        getslot();
+                      }
+                    }}
+                    style={{
+                      opacity: isContinueDisabled ? 0.5 : 1,
+                      pointerEvents: isContinueDisabled ? "none" : "auto",
+                      cursor: isContinueDisabled ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    CONTINUE WITH CHECKOUT
+                  </div>
                 </div>
               </div>
             </div>

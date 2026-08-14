@@ -31,6 +31,7 @@ export default function Checkout(props) {
   const gift = useSelector((state) => state.step1.gift);
   const cart = useSelector((state) => state.step2.cart);
   const opendatepurchase = useSelector((state) => state.step1.opendatepurchase);
+  const voucherDetail = useSelector((state) => state.step3.voucherdetail);
 
   const { data: countries } = useFetch("/countries", {
     method: "get",
@@ -57,6 +58,31 @@ export default function Checkout(props) {
     }
     getFields();
   }, [step]);
+
+  useEffect(() => {
+    if (step !== "checkoutstep" || !props.redeemBooking) return;
+
+    const recipient = voucherDetail?.recepient_data;
+    if (!recipient) return;
+
+    setBilldata((current) => ({
+      ...current,
+      sgbm_field_1: recipient.recipient_first_name || "",
+      sgbm_field_2: recipient.recipient_last_name || "",
+      sgbm_field_3: recipient.recipient_email || "",
+      sgbm_field_4: recipient.recipient_contact || "",
+      sgbm_field_5: recipient.recipient_address || "",
+      sgbm_field_6: recipient.recipient_city || "",
+      sgbm_field_7: recipient.recipient_state || "",
+      sgbm_field_8: recipient.recipient_country || "",
+      sgbm_field_9: recipient.recipient_postcode || "",
+    }));
+    setNumberOnly(recipient.recipient_contact || "");
+
+    if (recipient.recipient_country) {
+      getState(recipient.recipient_country);
+    }
+  }, [step, props.redeemBooking, voucherDetail]);
 
   const getFields = async () => {
     dispatch(setLoading(true));
@@ -297,6 +323,7 @@ export default function Checkout(props) {
             <input
               type="text"
               placeholder="First Name"
+              value={billdata.sgbm_field_1 || ""}
               className={errorlist.sgbm_field_1 ? "fx-invalid" : ""}
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_1: e.target.value })
@@ -313,6 +340,7 @@ export default function Checkout(props) {
             <input
               type="text"
               placeholder="Last Name"
+              value={billdata.sgbm_field_2 || ""}
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_2: e.target.value })
               }
@@ -327,6 +355,7 @@ export default function Checkout(props) {
             <input
               type="email"
               placeholder="Email"
+              value={billdata.sgbm_field_3 || ""}
               className={errorlist.sgbm_field_3 ? "fx-invalid" : ""}
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_3: e.target.value })
@@ -349,7 +378,7 @@ export default function Checkout(props) {
             <label className="fx-mobile-input">Mobile</label>
             <div className="fx-phone-input">
               <PhoneInput
-                country={"in"}
+                country={billdata.sgbm_field_8?.toLowerCase() || "in"}
                 value={billdata.sgbm_field_4}
                 className={errorlist.sgbm_field_4 ? "fx-invalid" : ""}
                 onChange={(phone, country) => {
@@ -390,6 +419,7 @@ export default function Checkout(props) {
             <input
               type="text"
               placeholder="Address"
+              value={billdata.sgbm_field_5 || ""}
               className={
                 errorlist.sgbm_field_5 ? "fx-invalid bigtextbox" : "bigtextbox"
               }
@@ -408,6 +438,7 @@ export default function Checkout(props) {
           >
             <label>Country</label>
             <select
+              value={billdata.sgbm_field_8 || ""}
               onChange={(e) => {
                 setBilldata({ ...billdata, sgbm_field_8: e.target.value });
                 visibleField.sgbm_field_8 && getState(e.target.value);
@@ -428,6 +459,7 @@ export default function Checkout(props) {
           >
             <label>State</label>
             <select
+              value={billdata.sgbm_field_7 || ""}
               onChange={(e) => {
                 setBilldata({ ...billdata, sgbm_field_7: e.target.value });
               }}
@@ -451,6 +483,7 @@ export default function Checkout(props) {
             <input
               type="text"
               placeholder="City"
+              value={billdata.sgbm_field_6 || ""}
               className={errorlist.sgbm_field_6 ? "fx-invalid" : ""}
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_6: e.target.value })
@@ -467,6 +500,7 @@ export default function Checkout(props) {
             <input
               type="text"
               placeholder="State"
+              value={billdata.sgbm_field_9 || ""}
               className={errorlist.sgbm_field_9 ? "fx-invalid" : ""}
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_9: e.target.value })
@@ -485,6 +519,7 @@ export default function Checkout(props) {
             <input
               type="text"
               placeholder="Note"
+              value={billdata.sgbm_field_10 || ""}
               className={
                 errorlist.sgbm_field_10 ? "bigtextbox fx-invalid" : "bigtextbox"
               }

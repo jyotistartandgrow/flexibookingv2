@@ -1,20 +1,18 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import { decodeHtml } from "../Utils/Functions";
 
-export default function RedeemCommonbox({ setVisibleBottom }) {
+export default function RedeemCommonbox({ setVisibleBottom, hideSchedule = false }) {
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.redeemstep);
   const voucherdetail = useSelector((state) => state.step3.voucherdetail);
   const slot = useSelector((state) => state.step3.slot);
-  const topbar = useSelector((state) => state.step1.topbar);
   return (
     <>
       {!voucherdetail.products && !date && (
         <p className="giftmessagebox">Redeem your gift on a specific date</p>
       )}
-      {date && (
+      {date && !hideSchedule && (
         <div className="fx-bookingdatebar">
           <div className="fx-bookingdate">
             Date
@@ -23,7 +21,7 @@ export default function RedeemCommonbox({ setVisibleBottom }) {
           </div>
         </div>
       )}
-      {slot && (
+      {slot && !hideSchedule && (
         <div className="fx-bookingdatebar">
           <div className="fx-bookingdate">
             Time

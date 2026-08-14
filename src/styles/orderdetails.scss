@@ -133,6 +133,59 @@
     opacity: 1;
 }
 
+.fx-combined-details-toggle {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #344054;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font: inherit;
+    font-size: var(--all-regular-size);
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+.fx-combined-details-toggle .fx-chevron {
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #344054;
+    border-bottom: 2px solid #344054;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+}
+
+.fx-top-order-details-card.fx-is-open .fx-combined-details-toggle .fx-chevron {
+    transform: rotate(225deg);
+}
+
+.fx-combined-details-box .fx-collapsible-content {
+    margin-left: -16px;
+    margin-right: -16px;
+}
+
+.fx-combined-details-box .fx-top-order-details-card.fx-is-open .fx-collapsible-content {
+    padding-top: 0;
+}
+
+.fx-combined-details-section {
+    padding: 20px 16px;
+}
+
+.fx-combined-details-section + .fx-combined-details-section {
+    border-top: 1px solid #f2f4f7;
+}
+
+.fx-combined-details-section h3 {
+    margin: 0 0 16px;
+    color: #344054;
+    font-size: var(--all-regular-size);
+    font-weight: 600;
+}
+
 @media screen and (max-width: 768px) {
         .fx-top-order-details-card.fx-is-open .fx-collapsible-content {
             max-height:330px;
@@ -171,7 +224,6 @@ font-weight: 400;
 .fx-calendar-box.p-overlaypanel{
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1019607843)
 }
-
 
 
 
