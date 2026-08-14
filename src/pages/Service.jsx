@@ -898,7 +898,8 @@ export default function Service(props) {
       no_of_persons: 0,
       gift,
       selected_bundle_id: bundleId > 0 ? bundleId : null,
-      option_value_ids: selectedServiceOptionId > 0 ? selectedServiceOptionId: null,
+      option_value_ids:
+        selectedServiceOptionId > 0 ? selectedServiceOptionId : null,
     });
     if (data && data.status == 200 && data.data.booking_string) {
       dispatch(setBookingkey(data.data.booking_string));
@@ -1647,6 +1648,33 @@ export default function Service(props) {
                                 </div>
                               </div>
                             </div>
+                            <div className="fx-bundle-box">
+                            <div className="fx-bundle-title">
+                              <svg
+                                className="fx-bundle-icon"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                              >
+                                <path d="M20 7h-3.17l-1.41-1.41A1.98 1.98 0 0 0 14 5h-4c-.7 0-1.3.3-1.42.59L7.17 7H4a2 2 0 0 0-2 2v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2Zm-8 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+                              </svg>
+
+                              <span>What's included in this bundle</span>
+                            </div>
+
+                            <div className="fx-bundle-item">
+                              <h3 className="fx-bundle-item-title">Deep Tissue Massage</h3>
+                              <p className="fx-bundle-item-description">
+                                Apple M3 Max, 64GB RAM, 2TB SSD
+                              </p>
+                            </div>
+
+                            <div className="fx-bundle-item">
+                              <h3 className="fx-bundle-item-title">Swedish Ritual and Body</h3>
+                              <p className="fx-bundle-item-description">
+                                Dynamic lumbar support system
+                              </p>
+                            </div>
+                          </div>
                             <div id="fx-modaltab_nav">
                               {!slotObj?.slots.single_time_slot.slot_type && (
                                 <>
