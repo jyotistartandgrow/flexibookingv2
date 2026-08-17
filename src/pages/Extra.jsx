@@ -116,7 +116,7 @@ export default function Extra(props) {
         const { data } = await axiosInstance(
           `/extras?date=${moment(date).format(
             "YYYY-MM-DD",
-          )}&service_id=${service}&all=${gift ? true : false}&bundle_id=${selectedServiceOptionId}`,
+          )}&service_id=${service}&all=${gift ? true : false}&bundle_id=${selectedBundleId}`,
           {
             method: "get",
           },
@@ -140,6 +140,8 @@ export default function Extra(props) {
               no_of_persons: 0,
               gift,
               selected_bundle_id: selectedBundleId,
+              selected_component_slots:
+                cart.service?.[0]?.selected_component_slots || [],
               option_value_ids:
                 selectedServiceOptionId > 0 ? selectedServiceOptionId : null,
             });
@@ -170,6 +172,7 @@ export default function Extra(props) {
     extracapacity,
     cart,
     selectedServiceOptionId,
+    selectedBundleId,
     dispatch,
   ]);
 
@@ -271,6 +274,11 @@ export default function Extra(props) {
 
     const extraIdStr = selectedIds.join(",");
     const capacityArr = selectedIds.map((id) => quantities[id]);
+    const selectedComponentSlots =
+      cart.service?.[0]?.selected_component_slots || [];
+    const encodedComponentSlots = encodeURIComponent(
+      JSON.stringify(selectedComponentSlots),
+    );
 
     dispatch(setLoading(true));
     const { data } = await axiosInstance(
@@ -278,7 +286,7 @@ export default function Extra(props) {
         cart.service[0].capacity
       }&date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&bundle_id=${selectedBundleId}&service_option_id=${selectedServiceOptionId > 0 ? selectedServiceOptionId : null}`,
+      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&bundle_id=${selectedBundleId}&service_option_id=${selectedServiceOptionId > 0 ? selectedServiceOptionId : null}&selected_component_slots=${encodedComponentSlots}`,
       {
         method: "get",
       },
@@ -322,6 +330,8 @@ export default function Extra(props) {
       no_of_persons: bookParam,
       gift,
       selected_bundle_id: selectedBundleId,
+      selected_component_slots:
+        cart.service?.[0]?.selected_component_slots || [],
       option_value_ids:
         selectedServiceOptionId > 0 ? selectedServiceOptionId : null,
     });

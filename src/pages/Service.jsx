@@ -68,6 +68,12 @@ export default function Service(props) {
   const [serviceOptionChoices, setServiceOptionChoices] = useState(null);
   const [selectedServiceOptionId, setSelectedServiceOptionId] = useState(0);
   const [serviceOptionsConfirmed, setServiceOptionsConfirmed] = useState(false);
+  const [showBundleSlots, setShowBundleSlots] = useState(false);
+  const [bundleSchedule, setBundleSchedule] = useState(null);
+  const [bundleSelectedSlots, setBundleSelectedSlots] = useState([]);
+  const [bundleSlotTabs, setBundleSlotTabs] = useState({});
+  const [bundleQuantity, setBundleQuantity] = useState(1);
+  const [bundleScheduleLoading, setBundleScheduleLoading] = useState(false);
   const [selectedSlotContext, setSelectedSlotContext] = useState({
     serviceId: null,
     bundleId: 0,
@@ -274,6 +280,11 @@ export default function Service(props) {
 
   const servicedetail = async (id, selectedBundleId = 0) => {
     const normalizedBundleId = normalizeBundleId(selectedBundleId);
+    setShowBundleSlots(false);
+    setBundleSchedule(null);
+    setBundleSelectedSlots([]);
+    setBundleSlotTabs({});
+    setBundleQuantity(1);
     if (!visible) {
       setServiceOptionsConfirmed(false);
     }
@@ -731,6 +742,211 @@ export default function Service(props) {
     });
   };
 
+  const getBundleScheduleFromResponse = (responseData) => {
+    const candidates = [
+      responseData?.bundle_slots,
+      responseData?.data?.bundle_slots,
+      responseData?.bundle_time_slots,
+      responseData?.data?.bundle_time_slots,
+      responseData?.slots?.bundle_time_slots,
+      responseData?.data?.slots?.bundle_time_slots,
+      responseData?.data,
+      responseData,
+    ];
+
+    const directSchedule = candidates.find(
+      (candidate) =>
+        candidate &&
+        Array.isArray(candidate.components) &&
+        Object.prototype.hasOwnProperty.call(candidate, "bookable"),
+    );
+    if (directSchedule) {
+      return {
+        ...directSchedule,
+        bundle_capacity_left:
+          responseData?.data?.bundle_capacity_left ??
+          responseData?.bundle_capacity_left ??
+          directSchedule.bundle_capacity_left,
+      };
+    }
+
+    const dateSlotCollections = [
+      responseData?.date_slots,
+      responseData?.data?.date_slots,
+    ];
+    for (const collection of dateSlotCollections) {
+      const matchingDateSlot = collection?.find(
+        (dateSlot) => dateSlot?.date === moment(date).format("YYYY-MM-DD"),
+      );
+      if (matchingDateSlot?.slots?.bundle_time_slots) {
+        return matchingDateSlot.slots.bundle_time_slots;
+      }
+    }
+
+    return null;
+  };
+
+  const getDefaultBundleTab = (component) => {
+    if (component?.available_slots?.morning?.length) return "morning";
+    if (component?.available_slots?.afternoon?.length) return "afternoon";
+    return "all";
+  };
+
+  const selectBundleComponentSlot = async (component, slotItem) => {
+    if (component?.state === "waiting" || bundleScheduleLoading) return;
+
+    const componentPosition = Number(component?.component_position);
+    const selectedSlot = {
+      bundle_item_id: component?.bundle_item_id,
+      service_id: component?.service_id,
+      component_position: componentPosition,
+      slot_label: slotItem?.slot_label,
+      from: slotItem?.from,
+      to: slotItem?.to,
+    };
+    const nextSelectedSlots = [
+      ...selectedBundleComponentSlots.filter(
+        (item) => Number(item?.component_position) < componentPosition,
+      ),
+      selectedSlot,
+    ];
+
+    setBundleScheduleLoading(true);
+    dispatch(setLoading(true));
+    try {
+      const { data: responseData } = await axiosInstance.post(
+        "/bundle-component-schedule",
+        {
+          service_id: productDetails.id,
+          bundle_id: bundleId,
+          date: moment(date).format("YYYY-MM-DD"),
+          total_service_booking: bundleQuantity,
+          time_slot: slotItem?.slot_label,
+          selected_component_slots: nextSelectedSlots,
+        },
+      );
+      const nextSchedule = getBundleScheduleFromResponse(responseData);
+
+      if (!nextSchedule) {
+        throw new Error(
+          responseData?.message || "Unable to load the next bundle component",
+        );
+      }
+
+      setBundleSelectedSlots(
+        Array.isArray(nextSchedule.selected_component_slots) &&
+          nextSchedule.selected_component_slots.length > 0
+          ? nextSchedule.selected_component_slots
+          : nextSelectedSlots,
+      );
+      setBundleSchedule({
+        ...nextSchedule,
+        components: nextSchedule.components.map((nextComponent) => {
+          if (nextComponent?.state !== "selected") return nextComponent;
+
+          const previousComponent = bundleComponents.find(
+            (currentComponent) =>
+              Number(currentComponent?.component_position) ===
+              Number(nextComponent?.component_position),
+          );
+          return previousComponent
+            ? {
+                ...nextComponent,
+                available_slots: previousComponent.available_slots,
+              }
+            : nextComponent;
+        }),
+      });
+    } catch (error) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "error",
+        title:
+          error?.response?.data?.message ||
+          error?.message ||
+          "Unable to load the next bundle component",
+      });
+    } finally {
+      setBundleScheduleLoading(false);
+      dispatch(setLoading(false));
+    }
+  };
+
+  const bookBundleService = async () => {
+    if (!bundleAllSelected || selectedBundleComponentSlots.length === 0) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "warning",
+        title:
+          bundleTimeSlots?.blocker_message ||
+          "Please choose every bundle component slot",
+      });
+      return;
+    }
+
+    dispatch(setLoading(true));
+    try {
+      const encodedComponentSlots = encodeURIComponent(
+        JSON.stringify(selectedBundleComponentSlots),
+      );
+      const { data } = await axiosInstance(
+        `/price-format?service_id=${productDetails.id}&capacity=${bundleQuantity}&date=${moment(
+          date,
+        ).format("YYYY-MM-DD")}&extra_id=${extraid}&extra_capacity=${extracapacity}&is_bundle=true&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_component_slots=${encodedComponentSlots}`,
+        { method: "get" },
+      );
+      const cartobj = {
+        id: data?.data?.service_id || productDetails.id,
+        name: productDetails.service_title,
+        price: productDetails.svc_price,
+        total: data?.data?.service_total,
+        total_formatted: data?.data?.service_total,
+        slot: "",
+        capacity: data?.data?.service_capacity || bundleQuantity,
+        bundle_id: bundleId,
+        selected_component_slots: selectedBundleComponentSlots,
+      };
+      let extraobj = cart.extra ? cart.extra : [];
+      if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
+        extraobj = [];
+      }
+      dispatch(
+        setCart({
+          ...cart,
+          service: [cartobj],
+          extra: extraobj,
+          total: data?.data?.total,
+          total_formatted: data?.data?.total_formated,
+          discount: 0,
+          subtotal: data?.data?.total_formated,
+        }),
+      );
+      dispatch(setTimeslot(""));
+      dispatch(setCapacity(bundleQuantity));
+      dispatch(setService(serviceid));
+      setVisible(false);
+      hasExtra();
+    } catch (error) {
+      dispatch(setLoading(false));
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "error",
+        title:
+          error?.response?.data?.message ||
+          "Unable to calculate the bundle price",
+      });
+    }
+  };
+
   const bookservice = async () => {
     const hasMatchingSlotContext =
       selectedSlotContext.serviceId === serviceid &&
@@ -898,6 +1114,8 @@ export default function Service(props) {
       no_of_persons: 0,
       gift,
       selected_bundle_id: bundleId > 0 ? bundleId : null,
+      selected_component_slots:
+        bundleId > 0 ? selectedBundleComponentSlots : [],
       option_value_ids:
         selectedServiceOptionId > 0 ? selectedServiceOptionId : null,
     });
@@ -925,8 +1143,29 @@ export default function Service(props) {
           (p) => (p.category_name || p.category) === selectedCategory,
         );
 
-  const slotObj = dateslot.find((s) =>
-    moment(moment(date).format("YYYY-MM-DD")).isSame(s.date),
+  const selectedDate = moment(date).format("YYYY-MM-DD");
+  const slotObj = dateslot.find((s) => s?.date === selectedDate);
+  const bundleTimeSlots =
+    bundleSchedule || slotObj?.slots?.bundle_time_slots || null;
+  const bundleComponents = Array.isArray(
+    bundleTimeSlots?.components,
+  )
+    ? bundleTimeSlots.components
+    : [];
+  const selectedBundleComponentSlots =
+    Array.isArray(bundleTimeSlots?.selected_component_slots) &&
+    bundleTimeSlots.selected_component_slots.length > 0
+      ? bundleTimeSlots.selected_component_slots
+      : bundleSelectedSlots;
+  const bundleAllSelected = Boolean(
+    bundleTimeSlots?.bookable ||
+      (Number(bundleTimeSlots?.total_count) > 0 &&
+        selectedBundleComponentSlots.length >=
+          Number(bundleTimeSlots?.total_count)),
+  );
+  const maxBundleQuantity = Math.max(
+    1,
+    Number(bundleTimeSlots?.bundle_capacity_left) || 1,
   );
 
   const shouldShowCategoryFilter =
@@ -935,21 +1174,12 @@ export default function Service(props) {
     (isDesktop ? products.length >= 9 : products.length >= 6);
 
   const isBundleSelection = normalizeBundleId(bundleId) > 0;
-  const hasSlotSelectionForCurrentContext =
-    selectedSlotContext.serviceId === serviceid &&
-    selectedSlotContext.bundleId === normalizeBundleId(bundleId) &&
-    Boolean(slot) &&
-    book > 0;
 
   const getSlotRowClassName = (slotItem) => {
     const classes = ["fx-timelistbox"];
 
-    if (hasSlotSelectionForCurrentContext && slot == slotItem?.time_slot) {
+    if (slot == slotItem?.time_slot) {
       classes.push("fx-slotbox-active");
-    }
-
-    if (isBundleSelection && slotItem?.slot_type === "active") {
-      classes.push("fx-bundle-slot-selectable");
     }
 
     return classes.join(" ");
@@ -998,6 +1228,12 @@ export default function Service(props) {
       setSlotVisible("all");
     }
   }, [slotObj]);
+
+  useEffect(() => {
+    setBundleQuantity((quantity) =>
+      Math.min(Math.max(1, quantity), maxBundleQuantity),
+    );
+  }, [maxBundleQuantity]);
 
   return (
     <div
@@ -1369,6 +1605,7 @@ export default function Service(props) {
           visible={visible}
           onHide={() => {
             if (!visible) return;
+            setShowBundleSlots(false);
             setVisible(false);
           }}
           maximizable
@@ -1436,7 +1673,15 @@ export default function Service(props) {
               )}
               {(serviceOptionList.length === 0 || serviceOptionsConfirmed) && (
                 <>
-                  <div className="fx-service-details-popup">
+                  <div
+                    className="fx-service-details-popup"
+                    style={{
+                      display:
+                        isBundleSelection && showBundleSlots
+                          ? "none"
+                          : undefined,
+                    }}
+                  >
                     <div className="fx-leftpopup">
                       {serviceOptionList.length > 0 && (
                         <button
@@ -1648,138 +1893,157 @@ export default function Service(props) {
                                 </div>
                               </div>
                             </div>
-                            <div className="fx-bundle-box">
-                            <div className="fx-bundle-title">
-                              <svg
-                                className="fx-bundle-icon"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                              >
-                                <path d="M20 7h-3.17l-1.41-1.41A1.98 1.98 0 0 0 14 5h-4c-.7 0-1.3.3-1.42.59L7.17 7H4a2 2 0 0 0-2 2v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2Zm-8 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
-                              </svg>
+                            {bundleId > 0 && (
+                              <div className="fx-bundle-box">
+                                <div className="fx-bundle-title">
+                                  <svg
+                                    className="fx-bundle-icon"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                  >
+                                    <path d="M20 7h-3.17l-1.41-1.41A1.98 1.98 0 0 0 14 5h-4c-.7 0-1.3.3-1.42.59L7.17 7H4a2 2 0 0 0-2 2v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2Zm-8 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+                                  </svg>
 
-                              <span>What's included in this bundle</span>
-                            </div>
+                                  <span>What's included in this bundle</span>
+                                </div>
 
-                            <div className="fx-bundle-item">
-                              <h3 className="fx-bundle-item-title">Deep Tissue Massage</h3>
-                              <p className="fx-bundle-item-description">
-                                Apple M3 Max, 64GB RAM, 2TB SSD
-                              </p>
-                            </div>
-
-                            <div className="fx-bundle-item">
-                              <h3 className="fx-bundle-item-title">Swedish Ritual and Body</h3>
-                              <p className="fx-bundle-item-description">
-                                Dynamic lumbar support system
-                              </p>
-                            </div>
-                          </div>
-                            <div id="fx-modaltab_nav">
-                              {!slotObj?.slots.single_time_slot.slot_type && (
-                                <>
-                                  <ul>
-                                    <li
-                                      className={
-                                        slotVisible == "morning"
-                                          ? "selected"
-                                          : ""
-                                      }
-                                    >
-                                      <a
-                                        href="#"
+                                {bundleComponents.map((component, index) => (
+                                  <div
+                                    className="fx-bundle-item"
+                                    key={
+                                      component?.bundle_item_id ??
+                                      `${component?.service_id ?? "component"}-${index}`
+                                    }
+                                  >
+                                    <h3 className="fx-bundle-item-title">
+                                      {decodeHtml(
+                                        component?.component_label || "",
+                                      )}
+                                    </h3>
+                                    <p className="fx-bundle-item-description">
+                                      <span>
+                                        {decodeHtml(
+                                          component?.service_name || "",
+                                        )}
+                                      </span>
+                                      <span>
+                                        {decodeHtml(
+                                          component?.quantity_label || "",
+                                        )}
+                                      </span>
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            {bundleId == 0 && (
+                              <div id="fx-modaltab_nav">
+                                {!slotObj?.slots.single_time_slot.slot_type && (
+                                  <>
+                                    <ul>
+                                      <li
                                         className={
                                           slotVisible == "morning"
                                             ? "selected"
                                             : ""
                                         }
-                                        onClick={() =>
-                                          setSlotVisible("morning")
-                                        }
                                       >
-                                        Morning
-                                      </a>
-                                    </li>
-                                    <li
-                                      className={
-                                        slotVisible == "afternoon"
-                                          ? "selected"
-                                          : ""
-                                      }
-                                    >
-                                      <a
-                                        href="#"
+                                        <a
+                                          href="#"
+                                          className={
+                                            slotVisible == "morning"
+                                              ? "selected"
+                                              : ""
+                                          }
+                                          onClick={() =>
+                                            setSlotVisible("morning")
+                                          }
+                                        >
+                                          Morning
+                                        </a>
+                                      </li>
+                                      <li
                                         className={
                                           slotVisible == "afternoon"
                                             ? "selected"
                                             : ""
                                         }
-                                        onClick={() =>
-                                          setSlotVisible("afternoon")
-                                        }
                                       >
-                                        Afternoon
-                                      </a>
-                                    </li>
-                                    <li
-                                      className={
-                                        slotVisible == "all" ? "selected" : ""
-                                      }
-                                    >
-                                      <a
-                                        href="#"
+                                        <a
+                                          href="#"
+                                          className={
+                                            slotVisible == "afternoon"
+                                              ? "selected"
+                                              : ""
+                                          }
+                                          onClick={() =>
+                                            setSlotVisible("afternoon")
+                                          }
+                                        >
+                                          Afternoon
+                                        </a>
+                                      </li>
+                                      <li
                                         className={
                                           slotVisible == "all" ? "selected" : ""
                                         }
-                                        onClick={() => setSlotVisible("all")}
                                       >
-                                        All
-                                      </a>
-                                    </li>
-                                  </ul>
+                                        <a
+                                          href="#"
+                                          className={
+                                            slotVisible == "all"
+                                              ? "selected"
+                                              : ""
+                                          }
+                                          onClick={() => setSlotVisible("all")}
+                                        >
+                                          All
+                                        </a>
+                                      </li>
+                                    </ul>
 
-                                  <div
-                                    className={
-                                      slotVisible == "morning"
-                                        ? "fx-tabcontent selected"
-                                        : "fx-tabcontent"
-                                    }
-                                  >
-                                    <h5>Choose the time</h5>
-                                    <div className="fx-timelistboxbar">
-                                      {(() => {
-                                        const slotItems =
-                                          slotObj?.slots?.morning || [];
+                                    <div
+                                      className={
+                                        slotVisible == "morning"
+                                          ? "fx-tabcontent selected"
+                                          : "fx-tabcontent"
+                                      }
+                                    >
+                                      <h5>Choose the time</h5>
+                                      <div className="fx-timelistboxbar">
+                                        {(() => {
+                                          const slotItems =
+                                            slotObj?.slots?.morning || [];
 
-                                        if (
-                                          !slotObj ||
-                                          slotItems.length === 0
-                                        ) {
-                                          return (
-                                            <p className="fx-noslots">
-                                              {" "}
-                                              No slots available
-                                            </p>
-                                          );
-                                        }
+                                          if (
+                                            !slotObj ||
+                                            slotItems.length === 0
+                                          ) {
+                                            return (
+                                              <p className="fx-noslots">
+                                                {" "}
+                                                No slots available
+                                              </p>
+                                            );
+                                          }
 
-                                        return slotItems.map((item, idx) => (
-                                          <div
-                                            className={getSlotRowClassName(
-                                              item,
-                                            )}
-                                            key={idx}
-                                            onClick={() =>
-                                              isBundleSelection
-                                                ? selectBundleSlot(item)
-                                                : undefined
-                                            }
-                                          >
-                                            <div className="fx-timeslotsection">
-                                              <div className="time">
-                                                {item.time_slot}
-                                              </div>
-                                              {/* <img
+                                          return slotItems.map((item, idx) => (
+                                            <div
+                                              className={getSlotRowClassName(
+                                                item,
+                                              )}
+                                              key={idx}
+                                              onClick={() =>
+                                                isBundleSelection
+                                                  ? selectBundleSlot(item)
+                                                  : undefined
+                                              }
+                                            >
+                                              <div className="fx-timeslotsection">
+                                                <div className="time">
+                                                  {item.time_slot}
+                                                </div>
+                                                {/* <img
                                         className="fx-offericon"
                                         src={percentage}
                                       /> 
@@ -1814,10 +2078,9 @@ export default function Service(props) {
                                           </div>
                                         );
                                       })()}*/}
-                                            </div>
+                                              </div>
 
-                                            <div className="fx-common">
-                                              {!isBundleSelection && (
+                                              <div className="fx-common">
                                                 <div className="fx-quantitybox">
                                                   {item.slot_type ==
                                                     "active" && (
@@ -1857,55 +2120,55 @@ export default function Service(props) {
                                                     </>
                                                   )}
                                                 </div>
-                                              )}
-                                            </div>
-                                          </div>
-                                        ));
-                                      })()}
-                                    </div>
-                                  </div>
-                                  <div
-                                    className={
-                                      slotVisible == "afternoon"
-                                        ? "fx-tabcontent selected"
-                                        : "fx-tabcontent"
-                                    }
-                                  >
-                                    <h5>Choose the time</h5>
-                                    <div className="fx-timelistboxbar">
-                                      {(() => {
-                                        const slotAfItems =
-                                          slotObj?.slots?.afternoon || [];
-
-                                        if (
-                                          !slotObj ||
-                                          slotAfItems.length === 0
-                                        ) {
-                                          return (
-                                            <p className="fx-noslots">
-                                              {" "}
-                                              No slots available
-                                            </p>
-                                          );
-                                        }
-
-                                        return slotAfItems.map((item, idx) => (
-                                          <div
-                                            className={getSlotRowClassName(
-                                              item,
-                                            )}
-                                            key={"af=" + idx}
-                                            onClick={() =>
-                                              isBundleSelection
-                                                ? selectBundleSlot(item)
-                                                : undefined
-                                            }
-                                          >
-                                            <div className="fx-timeslotsection">
-                                              <div className="time">
-                                                {item.time_slot}
                                               </div>
-                                              {/* <img
+                                            </div>
+                                          ));
+                                        })()}
+                                      </div>
+                                    </div>
+                                    <div
+                                      className={
+                                        slotVisible == "afternoon"
+                                          ? "fx-tabcontent selected"
+                                          : "fx-tabcontent"
+                                      }
+                                    >
+                                      <h5>Choose the time</h5>
+                                      <div className="fx-timelistboxbar">
+                                        {(() => {
+                                          const slotAfItems =
+                                            slotObj?.slots?.afternoon || [];
+
+                                          if (
+                                            !slotObj ||
+                                            slotAfItems.length === 0
+                                          ) {
+                                            return (
+                                              <p className="fx-noslots">
+                                                {" "}
+                                                No slots available
+                                              </p>
+                                            );
+                                          }
+
+                                          return slotAfItems.map(
+                                            (item, idx) => (
+                                              <div
+                                                className={getSlotRowClassName(
+                                                  item,
+                                                )}
+                                                key={"af=" + idx}
+                                                onClick={() =>
+                                                  isBundleSelection
+                                                    ? selectBundleSlot(item)
+                                                    : undefined
+                                                }
+                                              >
+                                                <div className="fx-timeslotsection">
+                                                  <div className="time">
+                                                    {item.time_slot}
+                                                  </div>
+                                                  {/* <img
                                         className="fx-offericon"
                                         src={percentage}
                                       /> 
@@ -1940,115 +2203,121 @@ export default function Service(props) {
                                           </div>
                                         );
                                       })()}*/}
-                                            </div>
-
-                                            <div className="fx-common">
-                                              {!isBundleSelection && (
-                                                <div className="fx-quantitybox">
-                                                  {item.slot_type ==
-                                                    "active" && (
-                                                    <>
-                                                      <button
-                                                        type="button"
-                                                        className="decrement"
-                                                        onClick={() =>
-                                                          slotbook(
-                                                            "minus",
-                                                            item,
-                                                          )
-                                                        }
-                                                      >
-                                                        -
-                                                      </button>
-
-                                                      <input
-                                                        type="number"
-                                                        min={0}
-                                                        max={item.capacity_left}
-                                                        value={
-                                                          slot ===
-                                                          item.time_slot
-                                                            ? book
-                                                            : 0
-                                                        }
-                                                      />
-
-                                                      <button
-                                                        type="button"
-                                                        className="increment"
-                                                        onClick={() =>
-                                                          slotbook("add", item)
-                                                        }
-                                                      >
-                                                        +
-                                                      </button>
-                                                    </>
-                                                  )}
                                                 </div>
-                                              )}
-                                            </div>
-                                          </div>
-                                        ));
-                                      })()}
+
+                                                <div className="fx-common">
+                                                  <div className="fx-quantitybox">
+                                                    {item.slot_type ==
+                                                      "active" && (
+                                                      <>
+                                                        <button
+                                                          type="button"
+                                                          className="decrement"
+                                                          onClick={() =>
+                                                            slotbook(
+                                                              "minus",
+                                                              item,
+                                                            )
+                                                          }
+                                                        >
+                                                          -
+                                                        </button>
+
+                                                        <input
+                                                          type="number"
+                                                          min={0}
+                                                          max={
+                                                            item.capacity_left
+                                                          }
+                                                          value={
+                                                            slot ===
+                                                            item.time_slot
+                                                              ? book
+                                                              : 0
+                                                          }
+                                                        />
+
+                                                        <button
+                                                          type="button"
+                                                          className="increment"
+                                                          onClick={() =>
+                                                            slotbook(
+                                                              "add",
+                                                              item,
+                                                            )
+                                                          }
+                                                        >
+                                                          +
+                                                        </button>
+                                                      </>
+                                                    )}
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            ),
+                                          );
+                                        })()}
+                                      </div>
                                     </div>
-                                  </div>
-                                </>
-                              )}
-                              <div
-                                className={
-                                  slotVisible == "all" ||
-                                  dateslot.find((s) =>
-                                    moment(
-                                      moment(date).format("YYYY-MM-DD"),
-                                    ).isSame(s.date),
-                                  )?.slots.single_time_slot.slot_type
-                                    ? "fx-tabcontent selected"
-                                    : "fx-tabcontent"
-                                }
-                              >
-                                <h5>Choose the time</h5>
-                                <div className="fx-timelistboxbar">
-                                  {(() => {
-                                    const slotItems =
-                                      slotObj?.slots?.time_slots || [];
-                                    const singleslotItem =
-                                      slotObj?.slots?.single_time_slot || {};
+                                  </>
+                                )}
+                                <div
+                                  className={
+                                    slotVisible == "all" ||
+                                    dateslot.find((s) =>
+                                      moment(
+                                        moment(date).format("YYYY-MM-DD"),
+                                      ).isSame(s.date),
+                                    )?.slots.single_time_slot.slot_type
+                                      ? "fx-tabcontent selected"
+                                      : "fx-tabcontent"
+                                  }
+                                >
+                                  <h5>Choose the time</h5>
+                                  <div className="fx-timelistboxbar">
+                                    {(() => {
+                                      const slotItems =
+                                        slotObj?.slots?.time_slots || [];
+                                      const singleslotItem =
+                                        slotObj?.slots?.single_time_slot || {};
 
-                                    if (
-                                      (!slotObj || slotItems.length === 0) &&
-                                      (!singleslotItem ||
-                                        singleslotItem.length === 0 ||
-                                        singleslotItem.time_slot == "" ||
-                                        singleslotItem.time_slot <= 0)
-                                    ) {
-                                      return (
-                                        <p className="fx-noslots">
-                                          {" "}
-                                          No slots available
-                                        </p>
-                                      );
-                                    }
+                                      if (
+                                        (!slotObj || slotItems.length === 0) &&
+                                        (!singleslotItem ||
+                                          singleslotItem.length === 0 ||
+                                          singleslotItem.time_slot == "" ||
+                                          singleslotItem.time_slot <= 0)
+                                      ) {
+                                        return (
+                                          <p className="fx-noslots">
+                                            {" "}
+                                            No slots available
+                                          </p>
+                                        );
+                                      }
 
-                                    if (
-                                      singleslotItem &&
-                                      singleslotItem.time_slot
-                                    ) {
-                                      return (
-                                        <div
-                                          className={getSlotRowClassName(
-                                            singleslotItem,
-                                          )}
-                                          onClick={() =>
-                                            isBundleSelection
-                                              ? selectBundleSlot(singleslotItem)
-                                              : undefined
-                                          }
-                                        >
-                                          <div className="fx-timeslotsection">
-                                            <div className="time">
-                                              {singleslotItem.time_slot}
-                                            </div>
-                                            {/* <img
+                                      if (
+                                        singleslotItem &&
+                                        singleslotItem.time_slot
+                                      ) {
+                                        return (
+                                          <div
+                                            className={getSlotRowClassName(
+                                              singleslotItem,
+                                            )}
+                                            onClick={() =>
+                                              isBundleSelection
+                                                ? selectBundleSlot(
+                                                    singleslotItem,
+                                                  )
+                                                : undefined
+                                            }
+                                          >
+                                            <div className="fx-timeslotsection">
+                                              <div className="time">
+                                                {singleslotItem.time_slot}
+                                              </div>
+                                              {/* <img
                                       className="fx-offericon"
                                       src={percentage}
                                     />
@@ -2088,10 +2357,9 @@ export default function Service(props) {
                                         </div>
                                       );
                                     })()}*/}
-                                          </div>
+                                            </div>
 
-                                          <div className="fx-common">
-                                            {!isBundleSelection && (
+                                            <div className="fx-common">
                                               <div className="fx-quantitybox">
                                                 {singleslotItem.slot_type ==
                                                   "active" && (
@@ -2137,27 +2405,26 @@ export default function Service(props) {
                                                   </>
                                                 )}
                                               </div>
-                                            )}
+                                            </div>
                                           </div>
-                                        </div>
-                                      );
-                                    }
+                                        );
+                                      }
 
-                                    return slotItems.map((item, idx) => (
-                                      <div
-                                        className={getSlotRowClassName(item)}
-                                        key={idx}
-                                        onClick={() =>
-                                          isBundleSelection
-                                            ? selectBundleSlot(item)
-                                            : undefined
-                                        }
-                                      >
-                                        <div className="fx-timeslotsection">
-                                          <div className="time">
-                                            {item.time_slot}
-                                          </div>
-                                          {/* <img
+                                      return slotItems.map((item, idx) => (
+                                        <div
+                                          className={getSlotRowClassName(item)}
+                                          key={idx}
+                                          onClick={() =>
+                                            isBundleSelection
+                                              ? selectBundleSlot(item)
+                                              : undefined
+                                          }
+                                        >
+                                          <div className="fx-timeslotsection">
+                                            <div className="time">
+                                              {item.time_slot}
+                                            </div>
+                                            {/* <img
                                     className="fx-offericon"
                                     src={percentage}
                                   />
@@ -2192,10 +2459,9 @@ export default function Service(props) {
                                       </div>
                                     );
                                   })()}*/}
-                                        </div>
+                                          </div>
 
-                                        <div className="fx-common">
-                                          {!isBundleSelection && (
+                                          <div className="fx-common">
                                             <div className="fx-quantitybox">
                                               {item.slot_type == "active" && (
                                                 <>
@@ -2231,130 +2497,116 @@ export default function Service(props) {
                                                 </>
                                               )}
                                             </div>
-                                          )}
+                                          </div>
                                         </div>
-                                      </div>
-                                    ));
-                                  })()}
+                                      ));
+                                    })()}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
+                            )}
                           </>
                         )}
                       </div>
 
-                      <div
-                        className="fx-popup-rightslot-continuebtn"
-                        style={{
-                          display:
-                            slotVisible == "morning" && !gift
-                              ? "block"
-                              : "none",
-                        }}
-                      >
-                        {isBundleSelection &&
-                          hasSlotSelectionForCurrentContext && (
-                            <div className="fx-bundle-fixed-note">
-                              Bundle quantity is fixed by the included services.
-                            </div>
-                          )}
-                        <div
-                          className={
-                            slotVisible == "morning" &&
-                            hasSlotSelectionForCurrentContext
-                              ? "continuebtn"
-                              : "continuebtn fx-disable-button"
-                          }
-                          onClick={() =>
-                            slotVisible == "morning" &&
-                            hasSlotSelectionForCurrentContext
-                              ? bookservice()
-                              : ""
-                          }
-                        >
-                          Continue
+                      {bundleId > 0 && (
+                        <div className="fx-popup-rightslot-continuebtn">
+                          <div
+                            className="continuebtn fx-bundle-cnt"
+                            onClick={() => setShowBundleSlots(true)}
+                          >
+                            Continue
+                          </div>
                         </div>
-                      </div>
-                      <div
-                        className="fx-popup-rightslot-continuebtn"
-                        style={{
-                          display:
-                            slotVisible == "afternoon" && !gift
-                              ? "block"
-                              : "none",
-                        }}
-                      >
-                        {isBundleSelection &&
-                          hasSlotSelectionForCurrentContext && (
-                            <div className="fx-bundle-fixed-note">
-                              Bundle quantity is fixed by the included services.
+                      )}
+                      {bundleId == 0 && (
+                        <>
+                          <div
+                            className="fx-popup-rightslot-continuebtn"
+                            style={{
+                              display:
+                                slotVisible == "morning" && !gift
+                                  ? "block"
+                                  : "none",
+                            }}
+                          >
+                            <div
+                              className={
+                                slotVisible == "morning"
+                                  ? "continuebtn"
+                                  : "continuebtn fx-disable-button"
+                              }
+                              onClick={() =>
+                                slotVisible == "morning" ? bookservice() : ""
+                              }
+                            >
+                              Continue
                             </div>
-                          )}
-                        <div
-                          className={
-                            slotVisible == "afternoon" &&
-                            hasSlotSelectionForCurrentContext
-                              ? "continuebtn"
-                              : "continuebtn fx-disable-button"
-                          }
-                          onClick={() =>
-                            slotVisible == "afternoon" &&
-                            hasSlotSelectionForCurrentContext
-                              ? bookservice()
-                              : ""
-                          }
-                        >
-                          Continue
-                        </div>
-                      </div>
-                      <div
-                        className="fx-popup-rightslot-continuebtn"
-                        style={{
-                          display:
-                            (slotVisible == "all" ||
-                              dateslot.find((s) =>
-                                moment(
-                                  moment(date).format("YYYY-MM-DD"),
-                                ).isSame(s.date),
-                              )?.slots.single_time_slot.slot_type) &&
-                            !gift
-                              ? "block"
-                              : "none",
-                        }}
-                      >
-                        {isBundleSelection &&
-                          hasSlotSelectionForCurrentContext && (
-                            <div className="fx-bundle-fixed-note">
-                              Bundle quantity is fixed by the included services.
+                          </div>
+                          <div
+                            className="fx-popup-rightslot-continuebtn"
+                            style={{
+                              display:
+                                slotVisible == "afternoon" && !gift
+                                  ? "block"
+                                  : "none",
+                            }}
+                          >
+                            <div
+                              className={
+                                slotVisible == "afternoon"
+                                  ? "continuebtn"
+                                  : "continuebtn fx-disable-button"
+                              }
+                              onClick={() =>
+                                slotVisible == "afternoon" ? bookservice() : ""
+                              }
+                            >
+                              Continue
                             </div>
-                          )}
-                        <div
-                          className={
-                            (slotVisible == "all" ||
-                              dateslot.find((s) =>
-                                moment(
-                                  moment(date).format("YYYY-MM-DD"),
-                                ).isSame(s.date),
-                              )?.slots.single_time_slot.slot_type) &&
-                            hasSlotSelectionForCurrentContext
-                              ? "continuebtn"
-                              : "continuebtn fx-disable-button"
-                          }
-                          onClick={() =>
-                            (slotVisible == "all" ||
-                              dateslot.find((s) =>
-                                moment(
-                                  moment(date).format("YYYY-MM-DD"),
-                                ).isSame(s.date),
-                              )?.slots.single_time_slot.slot_type) &&
-                            hasSlotSelectionForCurrentContext
-                              ? bookservice()
-                              : ""
-                          }
-                        >
-                          Continue
-                        </div>
-                      </div>
+                          </div>
+                          <div
+                            className="fx-popup-rightslot-continuebtn"
+                            style={{
+                              display:
+                                (slotVisible == "all" ||
+                                  dateslot.find((s) =>
+                                    moment(
+                                      moment(date).format("YYYY-MM-DD"),
+                                    ).isSame(s.date),
+                                  )?.slots.single_time_slot.slot_type) &&
+                                !gift
+                                  ? "block"
+                                  : "none",
+                            }}
+                          >
+                            <div
+                              className={
+                                slotVisible == "all" ||
+                                dateslot.find((s) =>
+                                  moment(
+                                    moment(date).format("YYYY-MM-DD"),
+                                  ).isSame(s.date),
+                                )?.slots.single_time_slot.slot_type
+                                  ? "continuebtn"
+                                  : "continuebtn fx-disable-button"
+                              }
+                              onClick={() =>
+                                slotVisible == "all" ||
+                                dateslot.find((s) =>
+                                  moment(
+                                    moment(date).format("YYYY-MM-DD"),
+                                  ).isSame(s.date),
+                                )?.slots.single_time_slot.slot_type
+                                  ? bookservice()
+                                  : ""
+                              }
+                            >
+                              Continue
+                            </div>
+                          </div>
+                        </>
+                      )}
                       {gift && (
                         <div
                           className="continuebtn"
@@ -2367,6 +2619,224 @@ export default function Service(props) {
                   </div>
                 </>
               )}
+              <div
+                className="fx-slot-bundle-modal-box"
+                style={{
+                  display:
+                    isBundleSelection && showBundleSlots ? undefined : "none",
+                }}
+              >
+                <div className="fx-booking-modal-header">
+                  <div className="fx-bundle-modal-heading">
+                    <h2 className="fx-booking-modal-title">
+                      {decodeHtml(bundleTimeSlots?.title || "Bundle slots")}
+                    </h2>
+                    <p>{decodeHtml(bundleTimeSlots?.description || "")}</p>
+                  </div>
+                  <span className="fx-bundle-progress">
+                    {decodeHtml(bundleTimeSlots?.progress || "")}
+                  </span>
+                </div>
+
+                <div className="fx-booking-modal-content">
+                  {bundleComponents.map((component, index) => {
+                    const position = Number(component?.component_position);
+                    const componentQuantity = Number(component?.quantity);
+                    const componentQuantityLabel = Number.isFinite(
+                      componentQuantity,
+                    )
+                      ? `Qty ${componentQuantity * bundleQuantity}`
+                      : component?.quantity_label || "";
+                    const selectedComponentSlot =
+                      selectedBundleComponentSlots.find(
+                        (item) =>
+                          Number(item?.component_position) === position,
+                      );
+                    const selectedSlotLabel =
+                      component?.selected_slot?.slot_label ||
+                      component?.selected_slot?.time_slot ||
+                      (component?.selected_slot?.from &&
+                      component?.selected_slot?.to
+                        ? `${component.selected_slot.from} - ${component.selected_slot.to}`
+                        : "") ||
+                      (typeof component?.selected_slot === "string"
+                        ? component.selected_slot
+                        : "") ||
+                      selectedComponentSlot?.slot_label;
+                    const isSelected =
+                      component?.state === "selected" ||
+                      Boolean(selectedSlotLabel);
+                    const isWaiting = component?.state === "waiting";
+                    const isExpanded =
+                      component?.state === "active" || isSelected;
+                    const activeTab =
+                      bundleSlotTabs[position] ||
+                      getDefaultBundleTab(component);
+                    const componentSlots = Array.isArray(
+                      component?.available_slots?.[activeTab],
+                    )
+                      ? component.available_slots[activeTab]
+                      : [];
+
+                    return (
+                      <div
+                        className={`fx-massage-card${isExpanded ? " fx-expanded" : ""}${isWaiting ? " fx-waiting" : ""}${isSelected ? " fx-component-selected" : ""}`}
+                        key={
+                          component?.bundle_item_id ??
+                          `${component?.service_id}-${index}`
+                        }
+                      >
+                        <div className="fx-massage-card-header">
+                          <div className="fx-massage-card-info">
+                            <div className="fx-component-label-row">
+                              <span>{decodeHtml(component?.component_label || "")}</span>
+                              <span className={`fx-component-status fx-status-${component?.state || "waiting"}`}>
+                                {decodeHtml(component?.status_label || "")}
+                              </span>
+                            </div>
+                            <h3 className="fx-massage-title">
+                              {decodeHtml(component?.service_name || "")}
+                            </h3>
+                            <p className="fx-massage-description">
+                              {decodeHtml(componentQuantityLabel)}
+                            </p>
+                          </div>
+                          {!isWaiting && (
+                            <span className="fx-massage-accordion-icon"></span>
+                          )}
+                        </div>
+
+                        {isWaiting && (
+                          <p className="fx-component-waiting-message">
+                            This service opens after the previous package
+                            component slot is selected.
+                          </p>
+                        )}
+
+                        {isExpanded && (
+                          <div className="fx-massage-card-content">
+                            <div className="fx-bundle-slot-tabs">
+                              {[
+                                ["morning", "Morning"],
+                                ["afternoon", "Afternoon"],
+                                ["all", "All"],
+                              ].map(([tabKey, tabLabel]) => (
+                                <button
+                                  className={
+                                    activeTab === tabKey ? "fx-active" : ""
+                                  }
+                                  key={tabKey}
+                                  type="button"
+                                  onClick={() =>
+                                    setBundleSlotTabs((previousTabs) => ({
+                                      ...previousTabs,
+                                      [position]: tabKey,
+                                    }))
+                                  }
+                                >
+                                  {tabLabel}
+                                </button>
+                              ))}
+                            </div>
+
+                            {componentSlots.length > 0 ? (
+                              <div className="fx-time-slots">
+                                {componentSlots.map((slotItem, slotIndex) => (
+                                  <button
+                                    className={`fx-time-slot${selectedSlotLabel === slotItem?.slot_label ? " fx-selected" : ""}`}
+                                    disabled={bundleScheduleLoading}
+                                    key={`${slotItem?.slot_label}-${slotIndex}`}
+                                    type="button"
+                                    onClick={() =>
+                                      selectBundleComponentSlot(
+                                        component,
+                                        slotItem,
+                                      )
+                                    }
+                                  >
+                                    <span>{slotItem?.slot_label}</span>
+                                    {slotItem?.capacity_label && (
+                                      <small>{slotItem.capacity_label}</small>
+                                    )}
+                                  </button>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="fx-no-bundle-slots">
+                                No {activeTab} slots available
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  <p
+                    className={`fx-bundle-selection-message${bundleAllSelected ? " fx-complete" : ""}`}
+                  >
+                    {bundleAllSelected
+                      ? "All component slots are selected. Choose quantity to continue."
+                      : bundleTimeSlots?.blocker_message ||
+                        "Choose every bundle component slot."}
+                  </p>
+
+                  {bundleAllSelected && (
+                    <div className="fx-bundle-quantity">
+                      <span className="fx-quantity-label">
+                        Bundle Quantity
+                      </span>
+                      <div className="fx-quantity-control">
+                        <button
+                          className="fx-quantity-btn"
+                          disabled={bundleQuantity <= 1}
+                          type="button"
+                          onClick={() =>
+                            setBundleQuantity((quantity) =>
+                              Math.max(1, quantity - 1),
+                            )
+                          }
+                        >
+                          −
+                        </button>
+                        <span className="fx-quantity-value">
+                          {bundleQuantity}
+                        </span>
+                        <button
+                          className="fx-quantity-btn"
+                          disabled={bundleQuantity >= maxBundleQuantity}
+                          type="button"
+                          onClick={() =>
+                            setBundleQuantity((quantity) =>
+                              Math.min(maxBundleQuantity, quantity + 1),
+                            )
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="fx-booking-modal-footer">
+                  <button
+                    className="fx-back-btn"
+                    type="button"
+                    onClick={() => setShowBundleSlots(false)}
+                  >
+                    ‹ Back
+                  </button>
+
+                  <button
+                    className="fx-continue-btn"
+                    disabled={!bundleAllSelected || bundleScheduleLoading}
+                    type="button"
+                    onClick={bookBundleService}
+                  >
+                    CONTINUE
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </Dialog>
