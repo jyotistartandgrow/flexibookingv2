@@ -2639,6 +2639,7 @@ export default function Service(props) {
                 </div>
 
                 <div className="fx-booking-modal-content">
+                  <div className="fx-service-slots-details">
                   {bundleComponents.map((component, index) => {
                     const position = Number(component?.component_position);
                     const componentQuantity = Number(component?.quantity);
@@ -2771,7 +2772,7 @@ export default function Service(props) {
                       </div>
                     );
                   })}
-
+                </div>
                   <p
                     className={`fx-bundle-selection-message${bundleAllSelected ? " fx-complete" : ""}`}
                   >
