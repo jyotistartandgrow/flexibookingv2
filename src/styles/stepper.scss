@@ -166,6 +166,14 @@
   text-align:center;
 }
 
+.fx-stepper-tabstyle .codestep.complete {
+  background: #fff;
+  width: 20%;
+  z-index: 5;
+  padding: 10px 0px;
+  text-align:center;
+}
+
 
 .fx-stepper-tabstyle .servicesstep.complete {
   background: #fff;
@@ -238,6 +246,7 @@
 
 .step-for-redeem .codestep.complete{
   width: 33%;
+      z-index: 999;
 }
 
 // Combined redeem + new-service flow uses six equal, navigable steps.
@@ -245,29 +254,42 @@
 .fx-stepper-tabstyle.fx-redeem-booking-step .step:first-child {
   margin-left: 0;
 }
-
+.fx-stepper-tabstyle.fx-redeem-booking-step .step.codestep{
+    width: 14%;
+    left: 0px;
+    padding-left: 3%;
+    padding-right: 3%;
+    z-index: 9;
+}
 .fx-stepper-tabstyle.fx-redeem-booking-step .step.datestep{
-      width: 24%;
-    left: 15%;
-    padding-left: 2%;
+    width: 23%;
+    left: 11%;
+    padding-left: 4%;
     padding-right: 3%;
 }
 .fx-stepper-tabstyle.fx-redeem-booking-step .step.servicesstep{
-     width: 40%;
-    left: 15%;
-    padding-left: 2%;
+    width: 23%;
+    left: 29%;
+    padding-left: 4%;
     padding-right: 3%;
 }
 .fx-stepper-tabstyle.fx-redeem-booking-step .step.extrastep{
-     width: 40%;
-    left: 28%;
+    width: 40%;
+    left: 25%;
     padding-left: 2%;
     padding-right: 3%;
 }
 .fx-stepper-tabstyle.fx-redeem-booking-step .step.checkoutstep{
-     width: 40%;
-    left: 28%;
+   width: 40%;
+    left: 43%;
     padding-left: 2%;
+    padding-right: 3%;
+}
+
+.fx-stepper-tabstyle.fx-redeem-booking-step .checkoutstep.active{
+      width: 42%;
+    left: 43%;
+    padding-left: 23%;
     padding-right: 3%;
 }
 .fx-stepper-tabstyle.fx-redeem-booking-step .step.paymentstep{
@@ -275,17 +297,30 @@
     left: 74%;
     padding-left: 2%;
     padding-right: 3%;
-}
+    z-index: 0;
+  }
 .fx-stepper-tabstyle.fx-redeem-booking-step .codestep.active {
- width: 20%;
+ width: 14%;
+    z-index: 999;
 }
 
-.fx-stepper-tabstyle.fx-redeem-booking-step .step.complete {
-  left: auto;
-  width: auto;
-  padding: 10px 4px;
-  background: #fff;
+.fx-stepper-tabstyle.fx-redeem-booking-step .extrastep.active {
+    width: 42%;
+
+    padding-left: 28%;
 }
+
+.fx-stepper-tabstyle.fx-redeem-booking-step .codestep.complete{
+  z-index: 999;
+}
+
+
+// .fx-stepper-tabstyle.fx-redeem-booking-step .step.complete {
+//   left: auto;
+//   width: auto;
+//   padding: 10px 4px;
+//   background: #fff;
+// }
 
 @media screen and (max-width: 768px) {
   .fx-stepper-tabstyle.fx-redeem-booking-step .step {

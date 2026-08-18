@@ -240,7 +240,7 @@ export default function SelectDate() {
                     BOOK NEW SERVICES
                   </div>
                   <div
-                    className={`btn-primary ${isContinueDisabled ? "fx-btn-disable" : ""}`}
+                    className={`btn-primary btn-primary-countinu ${isContinueDisabled ? "fx-btn-disable" : ""}`}
                     onClick={() => {
                       if (!isContinueDisabled) {
                         getslot();
