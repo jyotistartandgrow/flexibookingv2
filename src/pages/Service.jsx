@@ -2643,17 +2643,7 @@ export default function Service(props) {
                     <span className="fx-bundle-progress">
                       {decodeHtml(bundleTimeSlots?.progress || "")}
                     </span>
-                    <button
-                      className="fx-booking-modal-close"
-                      type="button"
-                      aria-label="Close bundle slots"
-                      onClick={() => {
-                        setShowBundleSlots(false);
-                        setVisible(false);
-                      }}
-                    >
-                      &times;
-                    </button>
+                   
                   </div>
                 </div>
 
@@ -2718,7 +2708,7 @@ export default function Service(props) {
                         >
                           <div className="fx-massage-card-info">
                             <div className="fx-component-label-row">
-                              <span>{decodeHtml(component?.component_label || "")}</span>
+                             
                               <span className={`fx-component-status fx-status-${component?.state || "waiting"}`}>
                                 <i
                                   className={
@@ -2775,10 +2765,7 @@ export default function Service(props) {
                                     }))
                                   }
                                 >
-                                  <i
-                                    className={tabIcon}
-                                    aria-hidden="true"
-                                  ></i>
+                                 
                                   {tabLabel}
                                 </button>
                               ))}
@@ -2821,25 +2808,7 @@ export default function Service(props) {
                               </p>
                             )}
 
-                            {isSelected && selectedSlotLabel && (
-                              <div className="fx-selected-slot-detail">
-                                <span className="fx-selected-slot-heading">
-                                  Selected slot
-                                </span>
-                                <div className="fx-selected-slot-value">
-                                  <i
-                                    className="pi pi-calendar"
-                                    aria-hidden="true"
-                                  ></i>
-                                  <span>
-                                    <strong>
-                                      {decodeHtml(selectedSlotLabel)}
-                                    </strong>
-                                    <small>{componentQuantityLabel}</small>
-                                  </span>
-                                </div>
-                              </div>
-                            )}
+                           
                           </div>
                         )}
                       </div>
@@ -2893,14 +2862,14 @@ export default function Service(props) {
                   )}
                 </div>
                 <div className="fx-booking-modal-footer">
-                  <button
+                  <span
                     className="fx-back-btn"
                     type="button"
                     onClick={() => setShowBundleSlots(false)}
                   >
                     <i className="pi pi-arrow-left" aria-hidden="true"></i>
                     Back
-                  </button>
+                  </span>
 
                   <span className="fx-bundle-footer-message">
                     {bundleAllSelected
@@ -2908,7 +2877,7 @@ export default function Service(props) {
                       : "Complete all components to continue"}
                   </span>
 
-                  <button
+                  <span
                     className="fx-continue-btn"
                     disabled={!bundleAllSelected || bundleScheduleLoading}
                     type="button"
@@ -2916,7 +2885,7 @@ export default function Service(props) {
                   >
                     Continue
                     <i className="pi pi-arrow-right" aria-hidden="true"></i>
-                  </button>
+                  </span>
                 </div>
               </div>
             </div>
