@@ -74,6 +74,7 @@ export default function Service(props) {
   const [bundleSlotTabs, setBundleSlotTabs] = useState({});
   const [bundleQuantity, setBundleQuantity] = useState(1);
   const [bundleScheduleLoading, setBundleScheduleLoading] = useState(false);
+  const [expandedBundlePosition, setExpandedBundlePosition] = useState(null);
   const [selectedSlotContext, setSelectedSlotContext] = useState({
     serviceId: null,
     bundleId: 0,
@@ -285,6 +286,7 @@ export default function Service(props) {
     setBundleSelectedSlots([]);
     setBundleSlotTabs({});
     setBundleQuantity(1);
+    setExpandedBundlePosition(null);
     if (!visible) {
       setServiceOptionsConfirmed(false);
     }
@@ -857,6 +859,7 @@ export default function Service(props) {
             : nextComponent;
         }),
       });
+      setExpandedBundlePosition(Number(nextSchedule.active_position) || 0);
     } catch (error) {
       Swal.fire({
         toast: true,
@@ -1167,6 +1170,9 @@ export default function Service(props) {
     1,
     Number(bundleTimeSlots?.bundle_capacity_left) || 1,
   );
+  const openBundlePosition =
+    expandedBundlePosition ??
+    (Number(bundleTimeSlots?.active_position) || 0);
 
   const shouldShowCategoryFilter =
     !skeloading &&
@@ -2633,9 +2639,22 @@ export default function Service(props) {
                     </h2>
                     <p>{decodeHtml(bundleTimeSlots?.description || "")}</p>
                   </div>
-                  <span className="fx-bundle-progress">
-                    {decodeHtml(bundleTimeSlots?.progress || "")}
-                  </span>
+                  <div className="fx-bundle-header-actions">
+                    <span className="fx-bundle-progress">
+                      {decodeHtml(bundleTimeSlots?.progress || "")}
+                    </span>
+                    <button
+                      className="fx-booking-modal-close"
+                      type="button"
+                      aria-label="Close bundle slots"
+                      onClick={() => {
+                        setShowBundleSlots(false);
+                        setVisible(false);
+                      }}
+                    >
+                      &times;
+                    </button>
+                  </div>
                 </div>
 
                 <div className="fx-booking-modal-content">
@@ -2646,7 +2665,7 @@ export default function Service(props) {
                     const componentQuantityLabel = Number.isFinite(
                       componentQuantity,
                     )
-                      ? `Qty ${componentQuantity * bundleQuantity}`
+                      ? `Quantity: ${componentQuantity * bundleQuantity}`
                       : component?.quantity_label || "";
                     const selectedComponentSlot =
                       selectedBundleComponentSlots.find(
@@ -2669,7 +2688,7 @@ export default function Service(props) {
                       Boolean(selectedSlotLabel);
                     const isWaiting = component?.state === "waiting";
                     const isExpanded =
-                      component?.state === "active" || isSelected;
+                      !isWaiting && openBundlePosition === position;
                     const activeTab =
                       bundleSlotTabs[position] ||
                       getDefaultBundleTab(component);
@@ -2687,11 +2706,30 @@ export default function Service(props) {
                           `${component?.service_id}-${index}`
                         }
                       >
-                        <div className="fx-massage-card-header">
+                        <div
+                          className="fx-massage-card-header"
+                          onClick={() => {
+                            if (!isWaiting) {
+                              setExpandedBundlePosition(
+                                isExpanded ? 0 : position,
+                              );
+                            }
+                          }}
+                        >
                           <div className="fx-massage-card-info">
                             <div className="fx-component-label-row">
                               <span>{decodeHtml(component?.component_label || "")}</span>
                               <span className={`fx-component-status fx-status-${component?.state || "waiting"}`}>
+                                <i
+                                  className={
+                                    component?.state === "selected"
+                                      ? "pi pi-check-circle"
+                                      : component?.state === "waiting"
+                                        ? "pi pi-clock"
+                                        : "pi pi-circle-fill"
+                                  }
+                                  aria-hidden="true"
+                                ></i>
                                 {decodeHtml(component?.status_label || "")}
                               </span>
                             </div>
@@ -2709,8 +2747,10 @@ export default function Service(props) {
 
                         {isWaiting && (
                           <p className="fx-component-waiting-message">
-                            This service opens after the previous package
-                            component slot is selected.
+                            {decodeHtml(
+                              component?.message ||
+                                `Choose slot after completing Component ${Math.max(1, position - 1)}`,
+                            )}
                           </p>
                         )}
 
@@ -2718,10 +2758,10 @@ export default function Service(props) {
                           <div className="fx-massage-card-content">
                             <div className="fx-bundle-slot-tabs">
                               {[
-                                ["morning", "Morning"],
-                                ["afternoon", "Afternoon"],
-                                ["all", "All"],
-                              ].map(([tabKey, tabLabel]) => (
+                                ["morning", "Morning", "pi pi-sun"],
+                                ["afternoon", "Afternoon", "pi pi-sun"],
+                                ["all", "All day", "pi pi-calendar"],
+                              ].map(([tabKey, tabLabel, tabIcon]) => (
                                 <button
                                   className={
                                     activeTab === tabKey ? "fx-active" : ""
@@ -2735,6 +2775,10 @@ export default function Service(props) {
                                     }))
                                   }
                                 >
+                                  <i
+                                    className={tabIcon}
+                                    aria-hidden="true"
+                                  ></i>
                                   {tabLabel}
                                 </button>
                               ))}
@@ -2755,7 +2799,16 @@ export default function Service(props) {
                                       )
                                     }
                                   >
-                                    <span>{slotItem?.slot_label}</span>
+                                    <span className="fx-slot-time">
+                                      {selectedSlotLabel ===
+                                        slotItem?.slot_label && (
+                                        <i
+                                          className="pi pi-check"
+                                          aria-hidden="true"
+                                        ></i>
+                                      )}
+                                      <span>{slotItem?.slot_label}</span>
+                                    </span>
                                     {slotItem?.capacity_label && (
                                       <small>{slotItem.capacity_label}</small>
                                     )}
@@ -2766,6 +2819,26 @@ export default function Service(props) {
                               <p className="fx-no-bundle-slots">
                                 No {activeTab} slots available
                               </p>
+                            )}
+
+                            {isSelected && selectedSlotLabel && (
+                              <div className="fx-selected-slot-detail">
+                                <span className="fx-selected-slot-heading">
+                                  Selected slot
+                                </span>
+                                <div className="fx-selected-slot-value">
+                                  <i
+                                    className="pi pi-calendar"
+                                    aria-hidden="true"
+                                  ></i>
+                                  <span>
+                                    <strong>
+                                      {decodeHtml(selectedSlotLabel)}
+                                    </strong>
+                                    <small>{componentQuantityLabel}</small>
+                                  </span>
+                                </div>
+                              </div>
                             )}
                           </div>
                         )}
@@ -2825,8 +2898,15 @@ export default function Service(props) {
                     type="button"
                     onClick={() => setShowBundleSlots(false)}
                   >
-                    ‹ Back
+                    <i className="pi pi-arrow-left" aria-hidden="true"></i>
+                    Back
                   </button>
+
+                  <span className="fx-bundle-footer-message">
+                    {bundleAllSelected
+                      ? "Choose a quantity and continue"
+                      : "Complete all components to continue"}
+                  </span>
 
                   <button
                     className="fx-continue-btn"
@@ -2834,7 +2914,8 @@ export default function Service(props) {
                     type="button"
                     onClick={bookBundleService}
                   >
-                    CONTINUE
+                    Continue
+                    <i className="pi pi-arrow-right" aria-hidden="true"></i>
                   </button>
                 </div>
               </div>

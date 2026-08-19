@@ -636,3 +636,432 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Refined bundle-component layout */
+.fx-slot-bundle-modal-box {
+  max-width: 1180px;
+  min-height: 600px;
+  padding: 0;
+  border-color: #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+}
+
+.fx-slot-bundle-modal-box .fx-booking-modal-header {
+  min-height: 92px;
+  padding: 20px 28px;
+  border-bottom-color: #e7edf5;
+}
+
+.fx-slot-bundle-modal-box .fx-booking-modal-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.fx-slot-bundle-modal-box .fx-bundle-modal-heading p {
+  margin-top: 4px;
+  color: #667085;
+  font-size: 15px;
+}
+
+.fx-slot-bundle-modal-box .fx-bundle-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.fx-slot-bundle-modal-box .fx-bundle-progress {
+  margin: 0;
+  padding: 8px 18px;
+  border-radius: 22px;
+  background: #f1f5fb;
+  color: #475467;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.fx-slot-bundle-modal-box .fx-booking-modal-close {
+  width: 34px;
+  height: 34px;
+  color: #475467;
+  font-size: 28px;
+  line-height: 30px;
+}
+
+.fx-slot-bundle-modal-box .fx-booking-modal-content {
+  padding: 20px 28px 12px;
+}
+
+.fx-booking-modal-content .fx-service-slots-details {
+  width: 100%;
+  height: auto;
+  max-height: 58vh;
+  padding-right: 4px;
+  overflow-y: auto;
+}
+
+.fx-slot-bundle-modal-box .fx-massage-card {
+  margin-bottom: 14px;
+  border-color: #dfe6ef;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.fx-slot-bundle-modal-box .fx-massage-card-header {
+  min-height: 118px;
+  padding: 20px 62px 18px 24px;
+  align-items: center;
+}
+
+.fx-slot-bundle-modal-box .fx-component-label-row {
+  margin-bottom: 10px;
+  color: #667085;
+  font-size: 14px;
+}
+
+.fx-slot-bundle-modal-box .fx-component-label-row > span:first-child {
+  padding: 4px 11px;
+  border-radius: 16px;
+  background: #eaf2ff;
+  color: #2474ee;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.fx-slot-bundle-modal-box .fx-component-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-right: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.fx-slot-bundle-modal-box .fx-status-selected {
+  background: transparent;
+  color: #199455;
+}
+
+.fx-slot-bundle-modal-box .fx-status-waiting {
+  background: #fff1df;
+  color: #ef8b18;
+}
+
+.fx-slot-bundle-modal-box .fx-massage-title {
+  margin-bottom: 4px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.fx-slot-bundle-modal-box .fx-massage-description {
+  color: #667085;
+  font-size: 14px;
+}
+
+.fx-slot-bundle-modal-box .fx-massage-accordion-icon {
+  top: 48px;
+  right: 28px;
+  width: 10px;
+  height: 10px;
+  border-color: #475467;
+  border-width: 0 2px 2px 0;
+}
+
+.fx-slot-bundle-modal-box .fx-massage-card-content {
+  padding: 0 24px 20px;
+}
+
+.fx-slot-bundle-modal-box .fx-bundle-slot-tabs {
+  margin-bottom: 16px;
+  border-color: #d8e0ea;
+  border-radius: 9px;
+}
+
+.fx-slot-bundle-modal-box .fx-bundle-slot-tabs button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  border-color: #d8e0ea;
+  color: #475467;
+  font-size: 15px;
+}
+
+.fx-slot-bundle-modal-box .fx-bundle-slot-tabs button i {
+  font-size: 18px;
+}
+
+.fx-slot-bundle-modal-box .fx-bundle-slot-tabs button.fx-active {
+  box-shadow: inset 0 0 0 2px #72a9fa;
+  background: #edf5ff;
+  color: #1668dc;
+}
+
+.fx-slot-bundle-modal-box .fx-time-slots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px 18px;
+}
+
+.fx-slot-bundle-modal-box .fx-time-slot {
+  width: auto;
+  min-width: 0;
+  min-height: 84px;
+  padding: 14px 18px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  border-color: #dce3eb;
+  border-radius: 9px;
+  color: #172033;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.fx-slot-bundle-modal-box .fx-slot-time {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fx-slot-bundle-modal-box .fx-slot-time i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #1671e8;
+  color: #fff;
+  font-size: 12px;
+}
+
+.fx-slot-bundle-modal-box .fx-time-slot small {
+  padding-left: 0;
+  color: #7b8798;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.fx-slot-bundle-modal-box .fx-time-slot.fx-selected {
+  border: 2px solid #287cf5;
+  background: #eef6ff;
+  box-shadow: 0 0 0 2px rgba(40, 124, 245, 0.08);
+  color: #1765d1;
+}
+
+.fx-slot-bundle-modal-box .fx-selected-slot-detail {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border: 1px solid #dbeaff;
+  border-radius: 9px;
+  background: #f4f8ff;
+}
+
+.fx-slot-bundle-modal-box .fx-selected-slot-heading {
+  display: block;
+  margin-bottom: 8px;
+  color: #1f6fe5;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.fx-slot-bundle-modal-box .fx-selected-slot-value {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fx-slot-bundle-modal-box .fx-selected-slot-value > i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #dcecff;
+  color: #1671e8;
+  font-size: 17px;
+}
+
+.fx-slot-bundle-modal-box .fx-selected-slot-value span {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.fx-slot-bundle-modal-box .fx-selected-slot-value strong {
+  font-size: 15px;
+}
+
+.fx-slot-bundle-modal-box .fx-selected-slot-value small {
+  color: #667085;
+  font-size: 12px;
+}
+
+.fx-slot-bundle-modal-box .fx-component-waiting-message {
+  margin: -24px 24px 18px;
+  color: #667085;
+  font-size: 14px;
+}
+
+.fx-slot-bundle-modal-box .fx-bundle-selection-message {
+  display: none;
+}
+
+.fx-slot-bundle-modal-box .fx-bundle-quantity {
+  margin: 16px 0 8px;
+}
+
+.fx-slot-bundle-modal-box .fx-quantity-value {
+  min-width: 24px;
+  font-size: 15px;
+}
+
+.fx-slot-bundle-modal-box .fx-booking-modal-footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 18px;
+  min-height: 76px;
+  padding: 12px 28px;
+  border-top: 1px solid #e7edf5;
+  background: #fff;
+}
+
+.fx-slot-bundle-modal-box .fx-back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  justify-self: start;
+  min-width: 118px;
+  min-height: 46px;
+  margin: 0;
+  padding: 10px 18px;
+  border: 1px solid #d8e0ea;
+  border-radius: 9px;
+  color: #344054;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.fx-slot-bundle-modal-box .fx-bundle-footer-message {
+  align-self: center;
+  color: #7b8798;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.fx-slot-bundle-modal-box .fx-continue-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  justify-self: end;
+  width: 190px;
+  min-height: 48px;
+  padding: 10px 22px;
+  border-radius: 9px;
+  background: #086df0;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: none;
+  box-shadow: 0 6px 14px rgba(8, 109, 240, 0.2);
+}
+
+@media (max-width: 900px) {
+  .fx-slot-bundle-modal-box .fx-time-slots {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .fx-slot-bundle-modal-box .fx-booking-modal-footer {
+    grid-template-columns: auto 1fr auto;
+  }
+}
+
+@media (max-width: 650px) {
+  .fx-slot-bundle-modal-box {
+    min-height: 100vh;
+  }
+
+  .fx-slot-bundle-modal-box .fx-booking-modal-header {
+    align-items: flex-start;
+    min-height: auto;
+    padding: 16px;
+  }
+
+  .fx-slot-bundle-modal-box .fx-booking-modal-title {
+    font-size: 21px;
+  }
+
+  .fx-slot-bundle-modal-box .fx-bundle-modal-heading p {
+    font-size: 13px;
+  }
+
+  .fx-slot-bundle-modal-box .fx-bundle-header-actions {
+    gap: 8px;
+  }
+
+  .fx-slot-bundle-modal-box .fx-bundle-progress {
+    padding: 6px 9px;
+    font-size: 12px;
+  }
+
+  .fx-slot-bundle-modal-box .fx-booking-modal-content {
+    padding: 14px 12px 8px;
+  }
+
+  .fx-slot-bundle-modal-box .fx-massage-card-header {
+    min-height: 104px;
+    padding: 16px 48px 14px 16px;
+  }
+
+  .fx-slot-bundle-modal-box .fx-massage-card-content {
+    padding: 0 14px 16px;
+  }
+
+  .fx-slot-bundle-modal-box .fx-time-slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fx-slot-bundle-modal-box .fx-time-slot {
+    min-height: 72px;
+    padding: 11px;
+    font-size: 13px;
+  }
+
+  .fx-slot-bundle-modal-box .fx-booking-modal-footer {
+    grid-template-columns: auto 1fr;
+    min-height: 68px;
+    padding: 10px 12px;
+  }
+
+  .fx-slot-bundle-modal-box .fx-bundle-footer-message {
+    display: none;
+  }
+
+  .fx-slot-bundle-modal-box .fx-back-btn {
+    min-width: 96px;
+  }
+
+  .fx-slot-bundle-modal-box .fx-continue-btn {
+    width: 150px;
+  }
+}
+
+@media (max-width: 420px) {
+  .fx-slot-bundle-modal-box .fx-time-slots {
+    grid-template-columns: 1fr;
+  }
+
+  .fx-slot-bundle-modal-box .fx-bundle-slot-tabs button {
+    gap: 5px;
+    padding: 5px;
+    font-size: 12px;
+  }
+}
