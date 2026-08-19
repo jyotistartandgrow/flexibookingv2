@@ -298,8 +298,6 @@ export default function Checkout(props) {
           title: `Session Expired`,
           text: "Your session has expired. Please start the booking process again.",
         });
-        dispatch({ type: "app/reset" });
-        window.location.reload();
       }
     }
     dispatch(setLoading(false));

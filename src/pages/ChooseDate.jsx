@@ -11,6 +11,7 @@ import {
   setStep,
   setLoading,
   setGift,
+  setStripeKey,
 } from "../store/step1Slice";
 import { persistor } from "../store/store";
 import {
@@ -28,6 +29,7 @@ export default function ChooseDate(props) {
   const gift = useSelector((state) => state.step1.gift);
   const loading = useSelector((state) => state.step1.loading);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
+  const stripe_key = useSelector((state) => state.step1.stripe_key);
   const [isVisible, setIsVisible] = useState(gift ? "gift" : "booking");
   const [disabledDates, setDisabledDates] = useState([]);
   const [responsearr, setResponsear] = useState([]);
@@ -35,14 +37,22 @@ export default function ChooseDate(props) {
   const [errorlist, setErrorlist] = useState({});
   const [selectedCountry, setSelectedCountry] = useState({ dialCode: "91" });
 
-  const handleFlowSwitch = (type) => {
+  const handleFlowSwitch = async (type) => {
     if (isVisible === type) return;
 
     const isGiftFlow = type === "gift";
 
+    // Preserve stripe key so it isn't lost when clearing the session
+    const preservedStripeKey = stripe_key;
+
     // Clear current booking session so flow changes always start clean.
     dispatch({ type: "app/reset" });
-    persistor.purge();
+    await persistor.purge();
+
+    // restore small global settings that should survive flow switch
+    if (preservedStripeKey) {
+      dispatch(setStripeKey(preservedStripeKey));
+    }
 
     dispatch(setGift(isGiftFlow));
     setIsVisible(type);
