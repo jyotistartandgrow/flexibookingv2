@@ -3,7 +3,7 @@
 .fx-top-order-details-box{
  height: 84px;
  position: relative;
- margin-bottom: 20px;
+ margin-bottom: 28px;
  display: none;
 }
 
@@ -21,7 +21,7 @@
     transition: all 0.2s ease;
     display: block;
     position: absolute;
-    z-index:999;
+    z-index:9;
 }
 .fx-top-order-details-card .fx-coupon-box{
     width: 60%;
