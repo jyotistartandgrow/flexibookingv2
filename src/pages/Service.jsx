@@ -2515,7 +2515,7 @@ export default function Service(props) {
                         )}
                       </div>
 
-                      {bundleId > 0 && (
+                      {bundleId > 0 && !gift && (
                         <div className="fx-popup-rightslot-continuebtn">
                           <div
                             className="continuebtn fx-bundle-cnt"
@@ -2525,7 +2525,7 @@ export default function Service(props) {
                           </div>
                         </div>
                       )}
-                      {bundleId == 0 && (
+                      {bundleId == 0 && !gift && (
                         <>
                           <div
                             className="fx-popup-rightslot-continuebtn"

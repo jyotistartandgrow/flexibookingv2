@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -9,10 +10,12 @@ import useFetch from "../Utils/CustomHook";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { InputSwitch } from "primereact/inputswitch";
+import { Banknote, CreditCard, RefreshCw } from "lucide-react";
 import { setReceiverInfo, setStep, setLoading } from "../store/step1Slice";
 import {
   setCheckoutkey,
   setPaymentstring,
+  setSelectedPaymentMethod,
   setSessionExpired,
 } from "../store/step4Slice";
 import GiftCardPreviewButton from "./Giftcardpreviewbutton";
@@ -24,14 +27,17 @@ import {
 import CouponSection from "./CouponSection";
 
 export default function Checkout(props) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const step = useSelector((state) => state.step1.step);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
+  const checkoutkey = useSelector((state) => state.step4.checkoutkey);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
   const gift = useSelector((state) => state.step1.gift);
   const cart = useSelector((state) => state.step2.cart);
   const opendatepurchase = useSelector((state) => state.step1.opendatepurchase);
   const voucherDetail = useSelector((state) => state.step3.voucherdetail);
+  const redeemBooking = useSelector((state) => state.step1.redeemBooking);
 
   const { data: countries } = useFetch("/countries", {
     method: "get",
@@ -47,6 +53,10 @@ export default function Checkout(props) {
   const [receiverErrors, setReceiverErrors] = useState({});
   const [visibleField, setVisibleField] = useState({});
   const [selectedCountry, setSelectedCountry] = useState({ dialCode: "91" });
+  const [paymentGroups, setPaymentGroups] = useState([]);
+  const [selectedPaymentCard, setSelectedPaymentCard] = useState(null);
+  const [paymentMethodsLoading, setPaymentMethodsLoading] = useState(false);
+  const [paymentMethodsError, setPaymentMethodsError] = useState("");
 
   useEffect(() => {
     setErrorlist({});
@@ -58,6 +68,13 @@ export default function Checkout(props) {
     }
     getFields();
   }, [step]);
+
+  useEffect(() => {
+    if (step != "checkoutstep") {
+      return;
+    }
+    getPaymentMethods();
+  }, [step, gift]);
 
   useEffect(() => {
     if (step !== "checkoutstep" || !props.redeemBooking) return;
@@ -103,6 +120,69 @@ export default function Checkout(props) {
     dispatch(setLoading(false));
   };
 
+  const getPaymentMethods = async () => {
+    setPaymentMethodsLoading(true);
+    setPaymentMethodsError("");
+    dispatch(setSelectedPaymentMethod(null));
+
+    try {
+      const { data } = await axiosInstance.post(`/payment-methods`, {
+        booking_key: bookingkey,
+        checkout_key: checkoutkey,
+      });
+      const paymentData = data?.data;
+      const responseGroups = Array.isArray(paymentData?.groups)
+        ? paymentData.groups
+        : [];
+      const responseCards = Array.isArray(paymentData?.cards)
+        ? paymentData.cards
+        : [];
+      const groups = gift
+        ? responseGroups
+            .map((group) => ({
+              ...group,
+              cards: (group.cards || []).filter(
+                (card) => card.method === "online",
+              ),
+            }))
+            .filter((group) => group.cards.length > 0)
+        : responseGroups;
+      const cards = gift
+        ? responseCards.filter((card) => card.method === "online")
+        : responseCards;
+      const selectedCardIsAvailable = cards.some(
+        (card) => card.id === paymentData?.selected_card?.id,
+      );
+      const defaultCard =
+        (selectedCardIsAvailable ? paymentData.selected_card : null) ||
+        cards.find((card) => card.selected) ||
+        groups
+          .flatMap((group) => group.cards || [])
+          .find((card) => card.selected) ||
+        cards[0] ||
+        groups.flatMap((group) => group.cards || [])[0] ||
+        null;
+
+      setPaymentGroups(groups);
+      setSelectedPaymentCard(defaultCard);
+      dispatch(setSelectedPaymentMethod(defaultCard?.method || null));
+
+      if (groups.length === 0) {
+        setPaymentMethodsError("No payment methods are currently available.");
+      }
+    } catch (error) {
+      setPaymentGroups([]);
+      setSelectedPaymentCard(null);
+      setPaymentMethodsError(
+        error?.data?.message ||
+          error?.message ||
+          "Unable to load payment methods. Please try again.",
+      );
+    } finally {
+      setPaymentMethodsLoading(false);
+    }
+  };
+
   const getState = async (country) => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance(`/states?country_code=${country}`, {
@@ -116,6 +196,18 @@ export default function Checkout(props) {
   };
 
   const checkout = async () => {
+    if (!selectedPaymentCard) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "warning",
+        title: "Please choose a payment method before proceeding",
+      });
+      return;
+    }
+
     // Validate gift receiver information if gift is enabled
     if (gift && !opendatepurchase) {
       const errors = {};
@@ -244,6 +336,9 @@ export default function Checkout(props) {
 
     const { data } = await axiosInstance.post(`/checkout`, {
       booking_data: bookingkey,
+      payment_method: selectedPaymentCard.method,
+      payment_mode: selectedPaymentCard.choice,
+      payment_gateway: selectedPaymentCard.gateway,
       billing_details: billdata,
       shipping_details: {
         shipping_first_name: "",
@@ -276,13 +371,27 @@ export default function Checkout(props) {
         input_coupon_code: "",
         is_gift: gift,
       },
+      payment_method_id: selectedPaymentCard.id,
     });
 
     if (data && data.status == 200 && data.data.status == "success") {
-      dispatch(setCheckoutkey(data.data.checkout));
-      dispatch(setPaymentstring(data.data.data));
-      dispatch(setSessionExpired(false));
-      dispatch(setStep("paymentstep"));
+      if (data.data.payment_method == "cash_on_delivery") {
+        if (redeemBooking) {
+          dispatch(setLoading(false));
+          navigate(`/redeem-thankyou`);
+        } else if (opendatepurchase) {
+          dispatch(setLoading(false));
+          navigate(`/opendate-thankyou?pid=${bookingkey}`);
+        } else {
+          dispatch(setLoading(false));
+          navigate(`/thankyou?pid=${bookingkey}`);
+        }
+      } else {
+        dispatch(setCheckoutkey(data.data.checkout));
+        dispatch(setPaymentstring(data.data.data));
+        dispatch(setSessionExpired(false));
+        dispatch(setStep("paymentstep"));
+      }
     } else {
       Swal.fire({
         toast: true,
@@ -731,6 +840,90 @@ export default function Checkout(props) {
             </>
           )}
           <CouponSection />
+          <section
+            className="fx-payment-methods"
+            aria-labelledby="payment-methods-title"
+          >
+            <div className="fx-payment-methods-heading">
+              <h2 id="payment-methods-title">Choose payment method</h2>
+              <p>
+                Choose the payment method first. The system securely routes it
+                to an enabled provider behind the scenes.
+              </p>
+            </div>
+
+            {paymentMethodsLoading && (
+              <div className="fx-payment-methods-status" role="status">
+                Loading payment methods...
+              </div>
+            )}
+
+            {!paymentMethodsLoading && paymentMethodsError && (
+              <div className="fx-payment-methods-error" role="alert">
+                <span>{paymentMethodsError}</span>
+                <button
+                  type="button"
+                  className="fx-payment-methods-retry"
+                  onClick={getPaymentMethods}
+                  aria-label="Retry loading payment methods"
+                  title="Retry"
+                >
+                  <RefreshCw size={17} aria-hidden="true" />
+                </button>
+              </div>
+            )}
+
+            {!paymentMethodsLoading &&
+              paymentGroups.map((group) => (
+                <div className="fx-payment-method-group" key={group.id}>
+                  <div className="fx-payment-method-group-heading">
+                    <h3>{group.title}</h3>
+                    {group.description && <p>{group.description}</p>}
+                  </div>
+                  <div className="fx-payment-method-card-list">
+                    {(group.cards || []).map((card) => {
+                      const isSelected = selectedPaymentCard?.id === card.id;
+                      const PaymentIcon =
+                        card.method === "online" ? CreditCard : Banknote;
+
+                      return (
+                        <button
+                          type="button"
+                          className={`fx-payment-method-card ${isSelected ? "selected" : ""}`}
+                          key={card.id}
+                          onClick={() => {
+                            setSelectedPaymentCard(card);
+                            dispatch(setSelectedPaymentMethod(card.method));
+                          }}
+                          aria-pressed={isSelected}
+                        >
+                          <span
+                            className="fx-payment-method-icon"
+                            aria-hidden="true"
+                          >
+                            <PaymentIcon size={21} />
+                          </span>
+                          <span className="fx-payment-method-copy">
+                            <span className="fx-payment-method-kicker">
+                              {card.kicker}
+                            </span>
+                            <strong>{card.title}</strong>
+                            {card.description && (
+                              <span>{card.description}</span>
+                            )}
+                          </span>
+                          {card.provider && (
+                            <span className="fx-payment-method-provider">
+                              {card.provider}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+          </section>
           <label htmlFor="option2">Invoice Request</label>
           <InputSwitch
             checked={invoice ? true : false}
@@ -848,7 +1041,8 @@ export default function Checkout(props) {
           <input
             type="button"
             className="btn-primary"
-            value="CONTINUE"
+            value={selectedPaymentCard?.button || "CONTINUE"}
+            disabled={paymentMethodsLoading || !selectedPaymentCard}
             onClick={() => checkout()}
           />
         </div>

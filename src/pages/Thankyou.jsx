@@ -18,11 +18,20 @@ export default function Thankyou() {
   const componentRef = useRef();
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const loading = useSelector((state) => state.step1.loading);
+  const reduxPaymentMethod = useSelector(
+    (state) => state.step4.selectedPaymentMethod,
+  );
+  const [selectedPaymentMethod] = useState(() => reduxPaymentMethod);
   const [bookingData, setBookingData] = useState(null);
   const [email, setEmail] = useState("");
   const qrCodeImage = bookingData?.qrcode
     ? `data:image/png;base64,${bookingData.qrcode}`
     : "https://placehold.co/200x200?text=QR+Code";
+  const paymentMethodLabel =
+    {
+      online: "Online",
+      cash_on_delivery: "Pay at Service / Cash on Delivery",
+    }[selectedPaymentMethod] || selectedPaymentMethod?.replaceAll("_", " ") || "Card";
 
   const bookingdetail = async () => {
     dispatch(setLoading(true));
@@ -202,7 +211,7 @@ export default function Thankyou() {
                   )}
                 <div>
                   Payment via: <br />
-                  <span>Card</span>
+                  <span>{paymentMethodLabel}</span>
                 </div>
               </div>
 
