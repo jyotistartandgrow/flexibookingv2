@@ -35,7 +35,6 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
   const cart = useSelector((state) => state.step2.cart);
-  console.log("cart in commonbox", cart);
   const gift = useSelector((state) => state.step1.gift);
   const topbar = useSelector((state) => state.step1.topbar);
   const paymentstring = useSelector((state) => state.step4.paymentstring);

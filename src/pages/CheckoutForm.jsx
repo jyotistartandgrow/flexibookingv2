@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
 import { decodeHtml } from "../Utils/Functions";
@@ -12,6 +12,7 @@ import {
 } from "../store/step4Slice";
 import CountdownTimer from "./CountdownTimer";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 export default function CheckoutForm() {
   const navigate = useNavigate();
@@ -25,6 +26,11 @@ export default function CheckoutForm() {
   const loading = useSelector((state) => state.step1.loading);
   const gift = useSelector((state) => state.step1.gift);
   const opendatepurchase = useSelector((state) => state.step1.opendatepurchase);
+  const redeemBooking = useSelector((state) => state.step1.redeemBooking);
+  const voucher = useSelector((state) => state.step1.voucher);
+  const date = useSelector((state) => state.step1.date);
+  const slot = useSelector((state) => state.step3.slot);
+  const voucherDetail = useSelector((state) => state.step3.voucherdetail);
 
   //const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -98,19 +104,82 @@ export default function CheckoutForm() {
       }
 
       if (paymentSuccess) {
-        const { data } = await axiosInstance.post(`/payment-save`, {
-          booking: bookingKey,
-          checkout: checkoutKey,
-          gift,
-        });
-        if (data && data.status == 200) {
-          console.log(data);
-          dispatch(setLoading(false));
-          if (opendatepurchase) {
+        try {
+          if (redeemBooking) {
+            const redeemResponse = await axiosInstance.post(
+              `/voucher-redeem`,
+              {
+                voucher,
+                date: moment(date).format("YYYY-MM-DD"),
+                slot,
+                recipient: voucherDetail?.recepient_data || {},
+              },
+            );
+            if (
+              redeemResponse?.data?.status != 200 ||
+              redeemResponse?.data?.data?.status !== "success"
+            ) {
+              throw new Error(
+                redeemResponse?.data?.message ||
+                  "Unable to complete voucher redemption",
+              );
+            }
+          }
+
+          const paymentSaveResponse = await axiosInstance.post(
+            `/payment-save`,
+            {
+              booking: bookingKey,
+              checkout: checkoutKey,
+              gift,
+            },
+          );
+          if (paymentSaveResponse?.data?.status != 200) {
+            throw new Error(
+              paymentSaveResponse?.data?.message ||
+                "Unable to save the successful booking payment",
+            );
+          }
+
+          if (redeemBooking) {
+            // const emailResponse = await axiosInstance.post(
+            //   `/redeem-upsell-send-email`,
+            //   {
+            //     redeem_code: voucher,
+            //     booking_key: bookingKey,
+            //   },
+            // );
+            // if (emailResponse?.data?.status != 200) {
+            //   throw new Error(
+            //     emailResponse?.data?.message ||
+            //       "Unable to send the confirmation email",
+            //   );
+            // }
+
+            dispatch(setLoading(false));
+            navigate(`/redeem-thankyou`);
+          } else if (opendatepurchase) {
+            dispatch(setLoading(false));
             navigate(`/opendate-thankyou?pid=${bookingKey}`);
           } else {
+            dispatch(setLoading(false));
             navigate(`/thankyou?pid=${bookingKey}`);
           }
+        } catch (completionError) {
+          dispatch(setLoading(false));
+          const completionMessage =
+            completionError?.response?.data?.message ||
+            completionError?.message ||
+            "Payment succeeded, but the booking could not be finalized";
+          setMessage(completionMessage);
+          Swal.fire({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            icon: "error",
+            title: completionMessage,
+          });
         }
       }
       dispatch(setLoading(false));

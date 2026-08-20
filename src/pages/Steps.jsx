@@ -52,9 +52,9 @@ export default function Steps({ type = "date", ...props }) {
           "--darkblue-color",
           darkenHex(settings.data.primary_color, 56),
         );
-        if (settings.data.stripe_public_key) {
-          dispatch(setStripeKey(settings.data.stripe_public_key));
-        }
+      }
+      if (settings.data.stripe_public_key) {
+        dispatch(setStripeKey(settings.data.stripe_public_key));
       }
     } catch (error) {
       console.error("Error fetching settings:", error);
@@ -145,7 +145,13 @@ export default function Steps({ type = "date", ...props }) {
             >
               <div>
                 {isRedeemBooking ? 2 : 1}{" "}
-                <span>{isRedeemBooking ? "DATE & SLOT" : gift ? "INFORMATION" : "DATE"}</span>
+                <span>
+                  {isRedeemBooking
+                    ? "DATE & SLOT"
+                    : gift
+                      ? "INFORMATION"
+                      : "DATE"}
+                </span>
               </div>
             </div>
           )}
@@ -168,7 +174,8 @@ export default function Steps({ type = "date", ...props }) {
             }}
           >
             <div>
-              {isRedeemBooking ? 3 : type == "service" ? 1 : 2} <span>SERVICES</span>
+              {isRedeemBooking ? 3 : type == "service" ? 1 : 2}{" "}
+              <span>SERVICES</span>
             </div>
           </div>
           <div
@@ -178,7 +185,8 @@ export default function Steps({ type = "date", ...props }) {
             }}
           >
             <div>
-              {isRedeemBooking ? 4 : type == "service" ? 2 : 3} <span>EXTRA</span>
+              {isRedeemBooking ? 4 : type == "service" ? 2 : 3}{" "}
+              <span>EXTRA</span>
             </div>
           </div>
           <div
@@ -188,12 +196,14 @@ export default function Steps({ type = "date", ...props }) {
             }}
           >
             <div>
-              {isRedeemBooking ? 5 : type == "service" ? 3 : 4} <span>CHECKOUT</span>
+              {isRedeemBooking ? 5 : type == "service" ? 3 : 4}{" "}
+              <span>CHECKOUT</span>
             </div>
           </div>
           <div className={paymentstepclass}>
             <div>
-              {isRedeemBooking ? 6 : type == "service" ? 4 : 5} <span>PAYMENT</span>
+              {isRedeemBooking ? 6 : type == "service" ? 4 : 5}{" "}
+              <span>PAYMENT</span>
             </div>
           </div>
         </div>
@@ -206,7 +216,9 @@ export default function Steps({ type = "date", ...props }) {
               : "fx-mobilesidebar fx-mobilesidebar-top"
           }
           onClick={() => setVisibleBottom(true)}
-          style={{ display: props.bottombar == "true" && !isDesktop ? "block" : "none" }}
+          style={{
+            display: props.bottombar == "true" && !isDesktop ? "block" : "none",
+          }}
         >
           <div className="fx-bottombar-top-details">
             <span className="fx-order-details">Order Details </span>

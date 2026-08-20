@@ -140,14 +140,42 @@
     border: 0;
     background: transparent;
     color: #344054;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: block;
     font: inherit;
     font-size: var(--all-regular-size);
     font-weight: 600;
     text-align: left;
     cursor: pointer;
+}
+
+.fx-combined-details-toggle .fx-combined-details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.fx-combined-details-summary {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-top: 12px;
+    color: #667085;
+    font-size: var(--normal-descriptionsize);
+    font-weight: 400;
+}
+
+.fx-combined-summary-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.fx-combined-summary-item strong {
+    color: #667085;
+    font-weight: 400;
+    overflow-wrap: anywhere;
 }
 
 .fx-combined-details-toggle .fx-chevron {
@@ -166,6 +194,10 @@
 .fx-combined-details-box .fx-collapsible-content {
     margin-left: -16px;
     margin-right: -16px;
+}
+
+.fx-combined-details-box {
+    height: 88px;
 }
 
 .fx-combined-details-box .fx-top-order-details-card.fx-is-open .fx-collapsible-content {
@@ -196,6 +228,16 @@
             opacity: 1;
             overflow: auto;
         }
+
+        .fx-combined-details-summary {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .fx-combined-details-box {
+            height: 120px;
+        }
 }
 
 .fx-top-order-details-card .fx-detail-line {
@@ -225,6 +267,3 @@ font-weight: 400;
 .fx-calendar-box.p-overlaypanel{
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1019607843)
 }
-
-
-

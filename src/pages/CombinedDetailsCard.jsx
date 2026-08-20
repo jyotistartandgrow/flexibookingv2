@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
 import Commonbox from "../components/Commonbox";
 import RedeemCommonbox from "../components/RedeemCommonbox";
 import { setTopbar } from "../store/step1Slice";
 
 export default function CombinedDetailsCard({ topbar }) {
   const dispatch = useDispatch();
+  const voucher = useSelector((state) => state.step1.voucher);
+  const date = useSelector((state) => state.step1.date);
   const cardRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -42,8 +45,22 @@ export default function CombinedDetailsCard({ topbar }) {
           aria-expanded={isOpen}
           onClick={() => setIsOpen((open) => !open)}
         >
-          <span className="fx-title">Details</span>
-          <span className="fx-chevron" aria-hidden="true"></span>
+          <span className="fx-combined-details-header">
+            <span className="fx-title">Details</span>
+            <span className="fx-chevron" aria-hidden="true"></span>
+          </span>
+          <span className="fx-combined-details-summary">
+            {voucher && (
+              <span className="fx-combined-summary-item">
+                <strong>{voucher}</strong>
+              </span>
+            )}
+            {date && (
+              <span className="fx-combined-summary-item">
+                <strong>{moment(date).format("MMM DD, YYYY")}</strong>
+              </span>
+            )}
+          </span>
         </button>
 
         <div className="fx-collapsible-content">

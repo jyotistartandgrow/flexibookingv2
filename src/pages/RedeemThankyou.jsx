@@ -17,21 +17,51 @@ export default function Thankyou() {
   const dispatch = useDispatch();
   const componentRef = useRef();
   const voucher = useSelector((state) => state.step1.voucher);
+  const redeemBooking = useSelector((state) => state.step1.redeemBooking);
+  const bookingkey = useSelector((state) => state.step3.bookingkey);
   const loading = useSelector((state) => state.step1.loading);
   const [bookingData, setBookingData] = useState(null);
+  const [serviceBookingData, setServiceBookingData] = useState(null);
   const [email, setEmail] = useState("");
+  const serviceQrCodeImage = serviceBookingData?.qrcode
+    ? `data:image/png;base64,${serviceBookingData.qrcode}`
+    : null;
   
   const bookingdetail = useCallback(async () => {
     dispatch(setLoading(true));
-    const { data } = await axiosInstance.post(`/redeem-thankyou`, {
-      redeem_code: voucher,
-    });
-    if (data && data.status == 200) {
-      console.log(data);
-      setBookingData(data?.data);
+    try {
+      const [redeemResponse, serviceResponse] = await Promise.all([
+        axiosInstance.post(`/redeem-thankyou`, {
+          redeem_code: voucher,
+        }),
+        redeemBooking && bookingkey
+          ? axiosInstance.post(`/thankyou`, {
+              booking_key: bookingkey,
+            })
+          : Promise.resolve(null),
+      ]);
+
+      if (redeemResponse?.data?.status == 200) {
+        setBookingData(redeemResponse.data?.data);
+      }
+      if (serviceResponse?.data?.status == 200) {
+        setServiceBookingData(serviceResponse.data?.data);
+      }
+    } catch (error) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "error",
+        title:
+          error?.response?.data?.message ||
+          "Unable to load confirmation details",
+      });
+    } finally {
       dispatch(setLoading(false));
     }
-  }, [dispatch, voucher]);
+  }, [bookingkey, dispatch, redeemBooking, voucher]);
 
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
@@ -236,18 +266,6 @@ export default function Thankyou() {
                 </tbody>
               </table>
 
-              <div className="fx-address-block">
-                <div>
-                  <h4>Customer Details</h4>
-                  <p>
-                    {bookingData?.customer_billing?.billing_first_name}{" "}
-                    {bookingData?.customer_billing?.billing_last_name} <br />
-                    {bookingData?.customer_billing?.billing_email} <br />
-                    {bookingData?.customer_billing?.billing_contact}
-                  </p>
-                </div>
-              </div>
-
               {bookingData?.coupon != "N/A" && bookingData?.coupon && (
                 <table className="fx-billing-shipping-notification noborder">
                   <tbody>
@@ -274,7 +292,143 @@ export default function Thankyou() {
                 </table>
               )}
 
-             
+              {redeemBooking && serviceBookingData && (
+                <section className="fx-combined-booking-confirmation">
+                  <h3 className="fx-order-title">New Service Booking</h3>
+
+                  <div className="fx-order-row">
+                    {serviceBookingData?.service_date &&
+                      moment(serviceBookingData.service_date).isValid() && (
+                        <div>
+                          Service Date:
+                          <br />
+                          <span>
+                            {moment(serviceBookingData.service_date).format(
+                              "MMMM Do, YYYY",
+                            )}
+                          </span>
+                        </div>
+                      )}
+                    <div>
+                      Payment via: <br />
+                      <span>Card</span>
+                    </div>
+                  </div>
+
+                  <div className="fx-order-row">
+                    <div>
+                      Order Ref:
+                      <br />
+                      <span>{serviceBookingData?.payment_ref_id}</span>
+                    </div>
+                  </div>
+
+                  <table className="fx-order-table">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {serviceBookingData?.products?.map((product, pkey) => (
+                        <tr key={`service-product-${pkey}`}>
+                          <td>{product.name}</td>
+                          <td>{decodeHtml(product.price)}</td>
+                          <td>{product.quantity}</td>
+                          <td>{decodeHtml(product.total)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
+                  <div className="fx-summary">
+                    {serviceBookingData?.product_details?.discount > 0 && (
+                      <>
+                        <div>
+                          Subtotal
+                          <span>
+                            {decodeHtml(
+                              serviceBookingData?.product_details?.subtotal,
+                            )}
+                          </span>
+                        </div>
+                        <div>
+                          Discount
+                          <span>
+                            {decodeHtml(serviceBookingData?.coupon_discount)}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                    <div>
+                      Total
+                      <span>
+                        {decodeHtml(
+                          serviceBookingData?.product_details?.total,
+                        )}
+                      </span>
+                    </div>
+                  </div>
+
+                  {serviceBookingData?.coupon != "N/A" &&
+                    serviceBookingData?.coupon && (
+                      <table className="fx-billing-shipping-notification noborder">
+                        <tbody>
+                          <tr>
+                            <th>This order has</th>
+                          </tr>
+                          <tr>
+                            <td className="fx-coupon-des">
+                              coupon/s{" "}
+                              <strong>{serviceBookingData.coupon}</strong> with
+                              total discount of{" "}
+                              <span className="postive_price_module_discount">
+                                {decodeHtml(
+                                  serviceBookingData?.coupon_discount,
+                                )}
+                              </span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    )}
+
+                </section>
+              )}
+
+              <div className="fx-address-block">
+                <div>
+                  <h4>Customer Details</h4>
+                  <p>
+                    {bookingData?.customer_billing?.billing_first_name}{" "}
+                    {bookingData?.customer_billing?.billing_last_name} <br />
+                    {bookingData?.customer_billing?.billing_email} <br />
+                    {bookingData?.customer_billing?.billing_contact}
+                  </p>
+                </div>
+              </div>
+
+              {redeemBooking &&
+                serviceBookingData &&
+                !serviceBookingData?.voucher &&
+                serviceQrCodeImage && (
+                  <div className="fx-qr-block">
+                    <div className="fx-qr-block-text">
+                      <h4>Booking Verification QR Code</h4>
+                      <p>Present this QR code at the time of service</p>
+                    </div>
+                    <div className="fx-qr-image-wrapper">
+                      <img
+                        src={serviceQrCodeImage}
+                        alt="Booking verification QR code"
+                        className="fx-qr-image"
+                      />
+                    </div>
+                  </div>
+                )}
             </div>
           </div>
         </div>
