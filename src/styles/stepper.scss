@@ -354,9 +354,18 @@
         margin-right: 3px;
         margin-left: 3px;
   }
-  .fx-stepper-tabstyle .checkoutstep {
-    width: 85%;
-    z-index: 2;
+  .fx-stepper-tabstyle .step.checkoutstep {
+           width: 73%;
+        z-index: 2;
+        left: 13%;
+        padding-right: 16px;
+  }
+
+  .fx-stepper-tabstyle .step.paymentstep {
+    width: 66%;
+    z-index: 1;
+    left: 34%;
+    padding-right: 14px;
   }
 }
 
@@ -401,9 +410,9 @@
         padding-right: 20px;
   }
   .fx-stepper-tabstyle .servicesstep.complete{
-    width: 32%;
-    left: 4%;
-    padding-right: 29px;
+    width: 35%;
+        left: 4%;
+        padding-right: 28px;
   }
 //   .fx-step-top-fixed-box{
 //     display: block;
@@ -416,21 +425,22 @@
 //     padding: 16px;
 // }
   .fx-stepper-tabstyle .servicesstep.active{
-    width: 44%;
-    left: 12%;
-    padding-right: 0px;
-    padding-left: 10px;
+          width: 50%;
+        left: 8%;
+        padding-right: 0;
+        padding-left: 26px;
   }
 
 
   .fx-stepper-tabstyle .extrastep.active{
     left: 29%;
-        width: 40%;
+        width: 43%;
+        padding-left: 3%;
   }
   .fx-stepper-tabstyle .checkoutstep.active{
-        width: 41%;
-        left: 46%;
-        padding-left: 10px;
+        width: 46%;
+        left: 43%;
+        padding-left: 11%;
   }
   .fx-stepper-tabstyle .paymentstep.active{
         width: 40%;
