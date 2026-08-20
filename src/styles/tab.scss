@@ -165,7 +165,7 @@
 .fx-booking #fx-Icontab_nav {
   display: block;
   width: 100%;
-  min-height: 500px;
+min-height: 335px;
 }
 
 .fx-booking #fx-Icontab_nav ul {
@@ -400,6 +400,12 @@
     bottom: auto;
     left: auto;
   }
+
+  .fx-booking #fx-Icontab_nav div.selected {
+  display: block;
+  min-height: 333px;
+}
+
 }
 
 /* Filter row */

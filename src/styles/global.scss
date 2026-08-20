@@ -234,7 +234,7 @@ svg.p-icon.p-datepicker-prev-icon {
     padding-bottom:16px;
     overflow:auto;
     padding-bottom: 16px;
-    min-height: 550px;
+    min-height: auto;
 }
 .fx-booking.fx-container{
     min-height:auto;
@@ -488,6 +488,7 @@ h1{
     padding-left: 0px;
     margin-bottom: 16px;
     height: auto;
+    width:100%;
 }
 }
 
