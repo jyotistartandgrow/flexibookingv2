@@ -76,6 +76,77 @@
   font-weight: 400;
   color: var(--dark-blue-color);
 }
+.fx-booking .fx-bundle-cart-components,
+.fx-mob-footer-order-details .fx-bundle-cart-components {
+  width: 100%;
+  margin: -8px 0 20px;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+.fx-booking .fx-bundle-cart-pricing,
+.fx-mob-footer-order-details .fx-bundle-cart-pricing {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 5px 14px;
+  margin: -8px 0 12px;
+  color: var(--grey);
+  font-size: 13px;
+}
+.fx-booking .fx-bundle-cart-pricing strong,
+.fx-mob-footer-order-details .fx-bundle-cart-pricing strong {
+  color: var(--darkgrey);
+  font-weight: 600;
+}
+.fx-booking .fx-bundle-cart-components table,
+.fx-mob-footer-order-details .fx-bundle-cart-components table {
+  width: 100%;
+  min-width: 610px;
+  border-collapse: collapse;
+  color: var(--darkgrey);
+}
+.fx-booking .fx-bundle-cart-components th,
+.fx-booking .fx-bundle-cart-components td,
+.fx-mob-footer-order-details .fx-bundle-cart-components th,
+.fx-mob-footer-order-details .fx-bundle-cart-components td {
+  padding: 12px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border-color);
+}
+.fx-booking .fx-bundle-cart-components th,
+.fx-mob-footer-order-details .fx-bundle-cart-components th {
+  font-size: 13px;
+  font-weight: 600;
+  background: #f7f9fc;
+}
+.fx-booking .fx-bundle-cart-components td,
+.fx-mob-footer-order-details .fx-bundle-cart-components td {
+  font-size: 14px;
+  font-weight: 300;
+}
+.fx-booking .fx-bundle-cart-components tbody tr:last-child td,
+.fx-mob-footer-order-details .fx-bundle-cart-components tbody tr:last-child td {
+  border-bottom: 0;
+}
+.fx-booking .fx-bundle-cart-components th:last-child,
+.fx-booking .fx-bundle-cart-components td:last-child,
+.fx-mob-footer-order-details .fx-bundle-cart-components th:last-child,
+.fx-mob-footer-order-details .fx-bundle-cart-components td:last-child {
+  text-align: right;
+}
+.fx-booking .fx-bundle-cart-components td strong,
+.fx-mob-footer-order-details .fx-bundle-cart-components td strong {
+  display: block;
+  font-weight: 600;
+}
+.fx-booking .fx-bundle-cart-components td small,
+.fx-mob-footer-order-details .fx-bundle-cart-components td small {
+  display: block;
+  margin-top: 4px;
+  color: var(--grey);
+}
 .fx-booking .fx-totalbar{
   border-top:1px solid #D5D5D5;
   padding: 12px 20px;

@@ -74,9 +74,6 @@ export default function CheckoutForm() {
       return;
     }
 
-    console.log("Payment Method:", paymentMethod);
-    console.log("Payment Method ID:", paymentMethod.id);
-
     const { data } = await axiosInstance.post(`/payment-process`, {
       booking: bookingKey,
       checkout: checkoutKey,
@@ -142,19 +139,19 @@ export default function CheckoutForm() {
           }
 
           if (redeemBooking) {
-            // const emailResponse = await axiosInstance.post(
-            //   `/redeem-upsell-send-email`,
-            //   {
-            //     redeem_code: voucher,
-            //     booking_key: bookingKey,
-            //   },
-            // );
-            // if (emailResponse?.data?.status != 200) {
-            //   throw new Error(
-            //     emailResponse?.data?.message ||
-            //       "Unable to send the confirmation email",
-            //   );
-            // }
+            const emailResponse = await axiosInstance.post(
+              `/redeem-upsell-send-email`,
+              {
+                redeem_code: voucher,
+                booking_key: bookingKey,
+              },
+            );
+            if (emailResponse?.data?.status != 200) {
+              throw new Error(
+                emailResponse?.data?.message ||
+                  "Unable to send the confirmation email",
+              );
+            }
 
             dispatch(setLoading(false));
             navigate(`/redeem-thankyou`);

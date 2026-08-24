@@ -24,6 +24,18 @@ import { setExtracapacity, setExtra } from "../store/step3Slice";
 import axiosInstance from "../Utils/Interceptor";
 import useDeviceType from "../Utils/useDeviceType";
 
+const formatBundleSlot = (component) => {
+  if (component?.from && component?.to) {
+    const from = moment(component.from, "HH:mm", true);
+    const to = moment(component.to, "HH:mm", true);
+    if (from.isValid() && to.isValid()) {
+      return `${from.format("h:mm A")} - ${to.format("h:mm A")}`;
+    }
+  }
+
+  return component?.slot_label || "-";
+};
+
 // const PUBLIC_KEY = import.meta.env.VITE_STRIPE_KEY; // your publishable key
 // const stripePromise = loadStripe(PUBLIC_KEY);
 
@@ -200,28 +212,105 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
             >
               {cart.service.map((ct, ckey) => {
                 return (
-                  <div className="fx-serviceitem" key={"ct-" + ckey}>
-                    <div className="itemname">
-                      {ct.name} {!gift && `X ${ct.capacity}`}
-                      {cart?.service_option_details?.name && (
+                  <React.Fragment key={"ct-" + ckey}>
+                    <div className="fx-serviceitem">
+                      <div className="itemname">
+                        {ct.name}{" "}
+                        {!gift && !ct.bundle_id && `X ${ct.capacity}`}
+                        {cart?.service_option_details?.name && (
+                          <>( {cart.service_option_details.name} )</>
+                        )}
+                        <br />
+                        <div className="time">{ct.slot}</div>
+                        <span onClick={() => edititem(ct.id, "service")}>
+                          <i className="pi pi-pencil"></i>
+                        </span>{" "}
+                        <span onClick={() => deleteitem(ct.id, "service")}>
+                          <i className="pi pi-trash"></i>
+                        </span>{" "}
+                      </div>
+
+                      <div className="price">
+                        {decodeHtml(ct.total_formatted)}
+                      </div>
+                    </div>
+                    {ct.bundle_id > 0 &&
+                      Array.isArray(ct.bundle_components) &&
+                      ct.bundle_components.length > 0 && (
                         <>
-                            ( {cart.service_option_details.name} )
+                          {ct.bundle_pricing && (
+                            <div className="fx-bundle-cart-pricing">
+                              <span>
+                                Original{" "}
+                                <strong>
+                                  {decodeHtml(
+                                    ct.bundle_pricing.subtotal_formatted,
+                                  )}
+                                </strong>
+                              </span>
+                              <span>
+                                Discount{" "}
+                                <strong>
+                                  {decodeHtml(
+                                    ct.bundle_pricing.discount_amount_formatted,
+                                  )}
+                                </strong>
+                              </span>
+                              <span>
+                                Package total{" "}
+                                <strong>
+                                  {decodeHtml(
+                                    ct.bundle_pricing.final_price_formatted,
+                                  )}
+                                </strong>
+                              </span>
+                            </div>
+                          )}
+                          <div className="fx-bundle-cart-components">
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>Component</th>
+                                  <th>Quantity</th>
+                                  <th>Date</th>
+                                  <th>Slot</th>
+                                  <th>Line total</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {ct.bundle_components.map(
+                                  (component, componentIndex) => (
+                                    <tr
+                                      key={
+                                        component.bundle_item_id ||
+                                        componentIndex
+                                      }
+                                    >
+                                      <td>
+                                        <strong>{component.service_name}</strong>
+                                        <small>{component.component_label}</small>
+                                      </td>
+                                      <td>{component.quantity}</td>
+                                      <td>{component.date || "-"}</td>
+                                      <td>{formatBundleSlot(component)}</td>
+                                      <td>
+                                        {component.line_total_formatted
+                                          ? decodeHtml(
+                                              String(
+                                                component.line_total_formatted,
+                                              ),
+                                            )
+                                          : "-"}
+                                      </td>
+                                    </tr>
+                                  ),
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
                         </>
                       )}
-                      <br />
-                      <div className="time">{ct.slot}</div>
-                      <span onClick={() => edititem(ct.id, "service")}>
-                        <i className="pi pi-pencil"></i>
-                      </span>{" "}
-                      <span onClick={() => deleteitem(ct.id, "service")}>
-                        <i className="pi pi-trash"></i>
-                      </span>{" "}
-                    </div>
-
-                    <div className="price">
-                      {decodeHtml(ct.total_formatted)}
-                    </div>
-                  </div>
+                  </React.Fragment>
                 );
               })}
               {cart?.extra?.length > 0 &&

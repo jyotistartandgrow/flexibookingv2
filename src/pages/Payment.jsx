@@ -30,7 +30,6 @@ export default function Payment(props) {
   const stripe_key = useSelector((state) => state.step1.stripe_key);
   const topbar = useSelector((state) => state.step1.topbar);
   const stripePromise = useMemo(() => {
-    console.log("stripe_key", stripe_key);
     if (!stripe_key) return null;
     if (!stripePromiseCache[stripe_key]) {
       stripePromiseCache[stripe_key] = loadStripe(stripe_key);

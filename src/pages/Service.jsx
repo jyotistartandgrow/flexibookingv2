@@ -565,6 +565,34 @@ export default function Service(props) {
     return Number.isNaN(numericValue) ? 0 : numericValue;
   };
 
+  const formatCalculatedPrice = (price, formattedPrice, quantity) => {
+    const numericPrice = Number(price);
+    if (!Number.isFinite(numericPrice)) return "";
+
+    const decodedTemplate = decodeHtml(formattedPrice || "").toString();
+    const firstDigitIndex = decodedTemplate.search(/\d/);
+    const lastDigitIndex = Math.max(
+      decodedTemplate.lastIndexOf("0"),
+      decodedTemplate.lastIndexOf("1"),
+      decodedTemplate.lastIndexOf("2"),
+      decodedTemplate.lastIndexOf("3"),
+      decodedTemplate.lastIndexOf("4"),
+      decodedTemplate.lastIndexOf("5"),
+      decodedTemplate.lastIndexOf("6"),
+      decodedTemplate.lastIndexOf("7"),
+      decodedTemplate.lastIndexOf("8"),
+      decodedTemplate.lastIndexOf("9"),
+    );
+    const decimalSeparator = decodedTemplate.includes(",") ? "," : ".";
+    const total = (numericPrice * quantity)
+      .toFixed(2)
+      .replace(".", decimalSeparator);
+
+    if (firstDigitIndex === -1 || lastDigitIndex === -1) return total;
+
+    return `${decodedTemplate.slice(0, firstDigitIndex)}${total}${decodedTemplate.slice(lastDigitIndex + 1)}`;
+  };
+
   const getBundleIncludedCount = (product) => {
     const rawCount = product?.is_bundle;
     const count = Number(rawCount);
@@ -904,6 +932,90 @@ export default function Service(props) {
         ).format("YYYY-MM-DD")}&extra_id=${extraid}&extra_capacity=${extracapacity}&is_bundle=true&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_component_slots=${encodedComponentSlots}`,
         { method: "get" },
       );
+      const pricedBundleComponents = [
+        data?.data?.bundle_items?.items,
+        data?.data?.bundle_components,
+        data?.data?.bundle_component_details,
+        data?.data?.bundle_details?.components,
+        data?.data?.components,
+      ].find(Array.isArray) || [];
+      const cartBundleComponents = bundleComponents.map((component) => {
+        const componentPosition = Number(component?.component_position);
+        const selectedComponentSlot = selectedBundleComponentSlots.find(
+          (selectedItem) =>
+            Number(selectedItem?.component_position) === componentPosition,
+        );
+        const pricedComponent = pricedBundleComponents.find(
+          (pricedItem) =>
+            Number(pricedItem?.bundle_item_id ?? pricedItem?.id) ===
+              Number(component?.bundle_item_id) ||
+            Number(
+              pricedItem?.component_position ??
+                Number(pricedItem?.item_position) + 1,
+            ) === componentPosition,
+        );
+        const componentAvailableSlots = Object.values(
+          component?.available_slots || {},
+        )
+          .filter(Array.isArray)
+          .flat();
+        const selectedAvailableSlot = componentAvailableSlots.find(
+          (availableSlot) =>
+            availableSlot?.slot_label === selectedComponentSlot?.slot_label,
+        );
+        const componentQuantity =
+          (Number(component?.quantity) || 0) * bundleQuantity;
+        const slotUnitPrice =
+          pricedComponent?.item_price ??
+          selectedAvailableSlot?.slot_price ??
+          pricedComponent?.unit_price ??
+          pricedComponent?.price ??
+          component?.unit_price ??
+          component?.price;
+        const slotUnitPriceFormatted =
+          pricedComponent?.unit_price_formatted ||
+          pricedComponent?.price_formatted ||
+          selectedAvailableSlot?.slot_price_formatted ||
+          component?.unit_price_formatted ||
+          component?.price_formatted ||
+          "";
+        const calculatedLineTotal = formatCalculatedPrice(
+          slotUnitPrice,
+          slotUnitPriceFormatted,
+          componentQuantity,
+        );
+        const apiLineTotalFormatted = formatCalculatedPrice(
+          pricedComponent?.line_total,
+          data?.data?.total_formated,
+          1,
+        );
+
+        return {
+          bundle_item_id: component?.bundle_item_id,
+          service_id: component?.service_id,
+          component_position: componentPosition,
+          component_label: component?.component_label,
+          service_name: component?.service_name,
+          quantity: componentQuantity,
+          date: moment(date).format("YYYY-MM-DD"),
+          slot_label: selectedComponentSlot?.slot_label || "",
+          from: selectedComponentSlot?.from || "",
+          to: selectedComponentSlot?.to || "",
+          unit_price: slotUnitPrice,
+          unit_price_formatted: slotUnitPriceFormatted,
+          line_total_formatted:
+            pricedComponent?.line_total_formatted ||
+            pricedComponent?.total_formatted ||
+            apiLineTotalFormatted ||
+            component?.line_total_formatted ||
+            component?.total_formatted ||
+            calculatedLineTotal ||
+            pricedComponent?.line_total ||
+            pricedComponent?.total ||
+            "",
+        };
+      });
+      const bundleTotals = data?.data?.bundle_items?.totals;
       const cartobj = {
         id: data?.data?.service_id || productDetails.id,
         name: productDetails.service_title,
@@ -914,6 +1026,28 @@ export default function Service(props) {
         capacity: data?.data?.service_capacity || bundleQuantity,
         bundle_id: bundleId,
         selected_component_slots: selectedBundleComponentSlots,
+        bundle_components: cartBundleComponents,
+        bundle_pricing: bundleTotals
+          ? {
+              subtotal: bundleTotals.subtotal,
+              subtotal_formatted: formatCalculatedPrice(
+                bundleTotals.subtotal,
+                data?.data?.total_formated,
+                1,
+              ),
+              discount_type: bundleTotals.discount_type,
+              discount_value: bundleTotals.discount_value,
+              discount_amount: bundleTotals.discount_amount,
+              discount_amount_formatted: formatCalculatedPrice(
+                bundleTotals.discount_amount,
+                data?.data?.total_formated,
+                1,
+              ),
+              final_price: bundleTotals.final_price,
+              final_price_formatted:
+                data?.data?.service_total || data?.data?.total_formated,
+            }
+          : null,
       };
       let extraobj = cart.extra ? cart.extra : [];
       if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
@@ -2515,7 +2649,7 @@ export default function Service(props) {
                         )}
                       </div>
 
-                      {bundleId > 0 && (
+                      {bundleId > 0 && !gift && (
                         <div className="fx-popup-rightslot-continuebtn">
                           <div
                             className="continuebtn fx-bundle-cnt"
@@ -2525,7 +2659,7 @@ export default function Service(props) {
                           </div>
                         </div>
                       )}
-                      {bundleId == 0 && (
+                      {bundleId == 0 && !gift && (
                         <>
                           <div
                             className="fx-popup-rightslot-continuebtn"
@@ -2750,10 +2884,10 @@ export default function Service(props) {
                           <div className="fx-massage-card-content">
                             <div className="fx-bundle-slot-tabs">
                               {[
-                                ["morning", "Morning", "pi pi-sun"],
-                                ["afternoon", "Afternoon", "pi pi-sun"],
-                                ["all", "All day", "pi pi-calendar"],
-                              ].map(([tabKey, tabLabel, tabIcon]) => (
+                                ["morning", "Morning"],
+                                ["afternoon", "Afternoon"],
+                                ["all", "All day"],
+                              ].map(([tabKey, tabLabel]) => (
                                 <button
                                   className={
                                     activeTab === tabKey ? "fx-active" : ""
@@ -2767,7 +2901,6 @@ export default function Service(props) {
                                     }))
                                   }
                                 >
-                                 
                                   {tabLabel}
                                 </button>
                               ))}
