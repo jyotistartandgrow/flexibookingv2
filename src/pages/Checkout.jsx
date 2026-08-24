@@ -375,7 +375,7 @@ export default function Checkout(props) {
     });
 
     if (data && data.status == 200 && data.data.status == "success") {
-      if (data.data.payment_method == "cash_on_delivery") {
+      if (selectedPaymentCard.method === "offline") {
         if (redeemBooking) {
           dispatch(setLoading(false));
           navigate(`/redeem-thankyou`);

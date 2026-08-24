@@ -74,9 +74,6 @@ export default function CheckoutForm() {
       return;
     }
 
-    console.log("Payment Method:", paymentMethod);
-    console.log("Payment Method ID:", paymentMethod.id);
-
     const { data } = await axiosInstance.post(`/payment-process`, {
       booking: bookingKey,
       checkout: checkoutKey,
