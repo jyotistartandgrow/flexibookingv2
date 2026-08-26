@@ -77,7 +77,7 @@
 }
 
 .fx-booking .fx-payment-methods-heading {
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .fx-booking .fx-payment-methods-heading h2 {
@@ -96,77 +96,130 @@
   line-height: 1.45;
 }
 
+.fx-booking .fx-payment-methods-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .fx-booking .fx-payment-method-group {
-  overflow: hidden;
-  margin-bottom: 14px;
-  border: 1px solid var(--new-border-color);
-  border-radius: var(--fx-border-medium-radius);
-  background: var(--white);
+  margin: 0;
+  background: transparent;
+}
+
+.fx-booking .fx-payment-method-group:has(.fx-payment-method-group-heading) {
+  padding-top: 6px;
+}
+
+.fx-booking .fx-payment-method-group:first-child:has(.fx-payment-method-group-heading) {
+  padding-top: 0;
 }
 
 .fx-booking .fx-payment-method-group-heading {
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--border-color);
+  padding: 0 2px 10px;
 }
 
 .fx-booking .fx-payment-method-group-heading h3 {
-  margin: 0 0 3px;
-  font-size: 16px;
+  margin: 0;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1.35;
-  letter-spacing: 0;
+  letter-spacing: 0.02em;
+  color: var(--darkgrey);
+}
+
+.fx-booking .fx-payment-method-group-heading p {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .fx-booking .fx-payment-method-card-list {
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
 }
 
 .fx-booking button.fx-payment-method-card,
 .fx-booking #fx-tab_nav div.selected button.fx-payment-method-card {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr) auto;
+  grid-template-columns: 40px minmax(0, 1fr) 20px;
   align-items: center;
   gap: 12px;
   width: 100%;
-  min-height: 98px;
+  min-height: 0;
   height: auto;
   margin: 0;
-  padding: 14px;
+  padding: 14px 16px;
   color: var(--darkgrey);
   text-align: left;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.35;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
   border: 1px solid var(--new-border-color);
   border-radius: var(--fx-border-medium-radius);
   background: var(--white);
   box-shadow: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .fx-booking button.fx-payment-method-card + button.fx-payment-method-card,
 .fx-booking #fx-tab_nav div.selected button.fx-payment-method-card + button.fx-payment-method-card {
-  margin-top: 10px;
+  margin-top: 0;
 }
 
 .fx-booking button.fx-payment-method-card:hover,
 .fx-booking #fx-tab_nav div.selected button.fx-payment-method-card:hover {
   color: var(--darkgrey);
-  background: var(--white);
-  border-color: var(--primary-color);
+  background: var(--greylight-bg);
+  border-color: color-mix(in srgb, var(--primary-color) 40%, var(--new-border-color));
+}
+
+.fx-booking button.fx-payment-method-card:focus,
+.fx-booking #fx-tab_nav div.selected button.fx-payment-method-card:focus {
+  outline: none;
+}
+
+.fx-booking button.fx-payment-method-card:focus-visible,
+.fx-booking #fx-tab_nav div.selected button.fx-payment-method-card:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 .fx-booking button.fx-payment-method-card.selected,
 .fx-booking #fx-tab_nav div.selected button.fx-payment-method-card.selected {
+  color: var(--darkgrey);
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-color) 18%, transparent);
+  background: color-mix(in srgb, var(--primary-color) 6%, white);
+  box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.fx-booking button.fx-payment-method-card.selected:hover,
+.fx-booking #fx-tab_nav div.selected button.fx-payment-method-card.selected:hover {
+  color: var(--darkgrey);
+  background: color-mix(in srgb, var(--primary-color) 8%, white);
+  border-color: var(--primary-color);
 }
 
 .fx-booking .fx-payment-method-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   color: var(--primary-color);
   border-radius: 8px;
   background: color-mix(in srgb, var(--primary-color) 9%, white);
+  transition: background-color 0.2s ease;
+}
+
+.fx-booking button.fx-payment-method-card.selected .fx-payment-method-icon {
+  background: color-mix(in srgb, var(--primary-color) 16%, white);
 }
 
 .fx-booking .fx-payment-method-copy {
@@ -177,31 +230,76 @@
   line-height: 1.35;
 }
 
+.fx-booking .fx-payment-method-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+
 .fx-booking .fx-payment-method-copy strong {
   font-size: 15px;
+  font-weight: 700;
+  color: var(--darkgrey);
 }
 
-.fx-booking .fx-payment-method-copy > span:last-child:not(.fx-payment-method-kicker) {
+.fx-booking .fx-payment-method-desc {
+  display: -webkit-box;
+  overflow: hidden;
   color: var(--grey);
   font-size: 13px;
-}
-
-.fx-booking .fx-payment-method-kicker {
-  color: var(--primary-color);
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .fx-booking .fx-payment-method-provider {
-  align-self: start;
-  padding: 5px 8px;
-  color: var(--darkgrey);
-  border-radius: 12px;
-  background: #f1f4f8;
+  padding: 3px 8px;
+  color: var(--grey);
+  border-radius: 999px;
+  background: #eef1f6;
   font-size: 11px;
   font-weight: 600;
+  line-height: 1.3;
   white-space: nowrap;
+}
+
+.fx-booking button.fx-payment-method-card.selected .fx-payment-method-provider {
+  color: var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 12%, white);
+}
+
+.fx-booking .fx-payment-method-radio {
+  position: relative;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #c5cdd8;
+  border-radius: 50%;
+  background: var(--white);
+  transition: border-color 0.2s ease;
+}
+
+.fx-booking .fx-payment-method-radio::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 10px;
+  height: 10px;
+  margin: auto;
+  border-radius: 50%;
+  background: var(--primary-color);
+  transform: scale(0);
+  transition: transform 0.15s ease;
+}
+
+.fx-booking button.fx-payment-method-card.selected .fx-payment-method-radio {
+  border-color: var(--primary-color);
+}
+
+.fx-booking button.fx-payment-method-card.selected .fx-payment-method-radio::after {
+  transform: scale(1);
 }
 
 .fx-booking .fx-payment-methods-status,
@@ -240,20 +338,20 @@
 @media screen and (max-width: 560px) {
   .fx-booking button.fx-payment-method-card,
   .fx-booking #fx-tab_nav div.selected button.fx-payment-method-card {
-    grid-template-columns: 44px minmax(0, 1fr);
+    grid-template-columns: 40px minmax(0, 1fr) 20px;
+    align-items: start;
+    padding: 12px;
+  }
+
+  .fx-booking .fx-payment-method-icon,
+  .fx-booking .fx-payment-method-radio {
+    margin-top: 2px;
   }
 
   .fx-booking .fx-payment-method-provider {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: end;
-    max-width: 50%;
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .fx-booking .fx-payment-method-copy {
-    grid-column: 2;
   }
 }
 .fx-booking .fx-paymentbox{

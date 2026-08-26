@@ -846,10 +846,7 @@ export default function Checkout(props) {
           >
             <div className="fx-payment-methods-heading">
               <h2 id="payment-methods-title">Choose payment method</h2>
-              <p>
-                Choose the payment method first. The system securely routes it
-                to an enabled provider behind the scenes.
-              </p>
+              <p>Select how you’d like to pay for this booking.</p>
             </div>
 
             {paymentMethodsLoading && (
@@ -873,56 +870,84 @@ export default function Checkout(props) {
               </div>
             )}
 
-            {!paymentMethodsLoading &&
-              paymentGroups.map((group) => (
-                <div className="fx-payment-method-group" key={group.id}>
-                  <div className="fx-payment-method-group-heading">
-                    <h3>{group.title}</h3>
-                    {group.description && <p>{group.description}</p>}
-                  </div>
-                  <div className="fx-payment-method-card-list">
-                    {(group.cards || []).map((card) => {
-                      const isSelected = selectedPaymentCard?.id === card.id;
-                      const PaymentIcon =
-                        card.method === "online" ? CreditCard : Banknote;
+            {!paymentMethodsLoading && paymentGroups.length > 0 && (
+              <div
+                className="fx-payment-methods-list"
+                role="radiogroup"
+                aria-labelledby="payment-methods-title"
+              >
+                {paymentGroups.map((group) => {
+                  const cards = group.cards || [];
+                  const hasMultiCardGroup = paymentGroups.some(
+                    (item) => (item.cards || []).length > 1,
+                  );
+                  const showGroupHeading =
+                    cards.length > 1 ||
+                    (paymentGroups.length > 1 && hasMultiCardGroup);
 
-                      return (
-                        <button
-                          type="button"
-                          className={`fx-payment-method-card ${isSelected ? "selected" : ""}`}
-                          key={card.id}
-                          onClick={() => {
-                            setSelectedPaymentCard(card);
-                            dispatch(setSelectedPaymentMethod(card.method));
-                          }}
-                          aria-pressed={isSelected}
-                        >
-                          <span
-                            className="fx-payment-method-icon"
-                            aria-hidden="true"
-                          >
-                            <PaymentIcon size={21} />
-                          </span>
-                          <span className="fx-payment-method-copy">
-                            <span className="fx-payment-method-kicker">
-                              {card.kicker}
-                            </span>
-                            <strong>{card.title}</strong>
-                            {card.description && (
-                              <span>{card.description}</span>
-                            )}
-                          </span>
-                          {card.provider && (
-                            <span className="fx-payment-method-provider">
-                              {card.provider}
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
+                  return (
+                    <div className="fx-payment-method-group" key={group.id}>
+                      {showGroupHeading && (
+                        <div className="fx-payment-method-group-heading">
+                          <h3>{group.title}</h3>
+                          {group.description && <p>{group.description}</p>}
+                        </div>
+                      )}
+                      <div className="fx-payment-method-card-list">
+                        {cards.map((card) => {
+                          const isSelected =
+                            selectedPaymentCard?.id === card.id;
+                          const PaymentIcon =
+                            card.method === "online" ? CreditCard : Banknote;
+
+                          return (
+                            <button
+                              type="button"
+                              className={`fx-payment-method-card ${isSelected ? "selected" : ""}`}
+                              key={card.id}
+                              onClick={() => {
+                                setSelectedPaymentCard(card);
+                                dispatch(
+                                  setSelectedPaymentMethod(card.method),
+                                );
+                              }}
+                              role="radio"
+                              aria-checked={isSelected}
+                            >
+                              <span
+                                className="fx-payment-method-icon"
+                                aria-hidden="true"
+                              >
+                                <PaymentIcon size={20} />
+                              </span>
+                              <span className="fx-payment-method-copy">
+                                <span className="fx-payment-method-title-row">
+                                  <strong>{card.title}</strong>
+                                  {card.provider && (
+                                    <span className="fx-payment-method-provider">
+                                      {card.provider}
+                                    </span>
+                                  )}
+                                </span>
+                                {card.description && (
+                                  <span className="fx-payment-method-desc">
+                                    {card.description}
+                                  </span>
+                                )}
+                              </span>
+                              <span
+                                className="fx-payment-method-radio"
+                                aria-hidden="true"
+                              />
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </section>
           <label htmlFor="option2">Invoice Request</label>
           <InputSwitch
