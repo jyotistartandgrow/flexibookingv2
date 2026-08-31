@@ -18,6 +18,9 @@ export default function ReedemCheckout() {
   const dispatch = useDispatch();
   const step = useSelector((state) => state.step1.redeemstep);
   const slot = useSelector((state) => state.step3.slot);
+  const redeemBundleSlots = useSelector(
+    (state) => state.step3.redeemBundleSlots,
+  );
   const voucherdetail = useSelector((state) => state.step3.voucherdetail);
   const date = useSelector((state) => state.step1.date);
   const voucher = useSelector((state) => state.step1.voucher);
@@ -132,6 +135,7 @@ export default function ReedemCheckout() {
       voucher,
       date: moment(date).format("YYYY-MM-DD"),
       slot,
+      selected_component_slots: redeemBundleSlots,
       recipient: billdata,
     });
 

@@ -5,6 +5,7 @@ const initialState = {
   extra: null,
   bookingkey: null,
   slot: null,
+  redeemBundleSlots: [],
   voucherdetail: {},
 };
 
@@ -24,6 +25,9 @@ const step3Slice = createSlice({
     setSlot: (state, action) => {
       state.slot = action.payload;
     },
+    setRedeemBundleSlots: (state, action) => {
+      state.redeemBundleSlots = action.payload;
+    },
     setVoucherDetail: (state, action) => {
       state.voucherdetail = action.payload;
     },
@@ -35,6 +39,7 @@ export const {
   setExtra,
   setBookingkey,
   setSlot,
+  setRedeemBundleSlots,
   setVoucherDetail,
 } = step3Slice.actions;
 export default step3Slice.reducer;

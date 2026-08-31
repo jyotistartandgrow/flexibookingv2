@@ -195,6 +195,17 @@
   overflow: hidden;
 }
 
+.fx-slot-bundle-modal-box.fx-redeem-bundle-slots {
+  min-height: 0;
+  margin-top: 18px;
+  padding: 0;
+  border-radius: 0;
+}
+
+.fx-slot-bundle-modal-box.fx-redeem-bundle-slots .fx-bundle-progress {
+  margin-right: 0;
+}
+
 /* =========================================
        HEADER
     ========================================= */
