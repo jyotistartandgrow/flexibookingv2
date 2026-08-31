@@ -2857,12 +2857,14 @@ export default function Service(props) {
                                 {decodeHtml(component?.status_label || "")}
                               </span>
                             </div>
+                            <div>
                             <h3 className="fx-massage-title">
                               {decodeHtml(component?.service_name || "")}
                             </h3>
                             <p className="fx-massage-description">
                               {decodeHtml(componentQuantityLabel)}
                             </p>
+                            </div>
                           </div>
                           {!isWaiting && (
                             <span className="fx-massage-accordion-icon"></span>
