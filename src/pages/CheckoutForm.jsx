@@ -30,6 +30,9 @@ export default function CheckoutForm() {
   const voucher = useSelector((state) => state.step1.voucher);
   const date = useSelector((state) => state.step1.date);
   const slot = useSelector((state) => state.step3.slot);
+  const redeemBundleSlots = useSelector(
+    (state) => state.step3.redeemBundleSlots,
+  );
   const voucherDetail = useSelector((state) => state.step3.voucherdetail);
 
   //const [loading, setLoading] = useState(false);
@@ -109,6 +112,7 @@ export default function CheckoutForm() {
                 voucher,
                 date: moment(date).format("YYYY-MM-DD"),
                 slot,
+                selected_component_slots: redeemBundleSlots,
                 recipient: voucherDetail?.recepient_data || {},
               },
             );
