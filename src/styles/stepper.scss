@@ -244,6 +244,10 @@
   margin-top: 16px;
 }
 
+.fx-gift-date-box .redemption-Voucher-services-box .btn-primary{
+  margin-top: 0;
+}
+
 .step-for-redeem .codestep.complete{
   width: 33%;
       z-index: 999;
@@ -330,18 +334,18 @@
   }
 
   .fx-stepper-tabstyle.fx-redeem-booking-step .step.active {
-    left: auto;
-    width: auto;
+    width: 45%;
     padding: 10px 2px;
     flex-grow: 2.5;
+    left: 26%;
   }
 
-  .fx-stepper-tabstyle.fx-redeem-booking-step .step.complete {
-    left: auto;
-    width: auto;
-    padding: 10px 2px;
+  .fx-stepper-tabstyle.fx-redeem-booking-step .step.datestep{
+    width: 29%;
+    left: 5%;
+    padding-left: 4%;
+    padding-right: 3%;
   }
-
   .fx-booking .fx-step{
     width: 30px;
     height: 30px;
@@ -357,7 +361,7 @@
   .fx-stepper-tabstyle .step.checkoutstep {
            width: 73%;
         z-index: 2;
-        left: 13%;
+        left:26%;
         padding-right: 16px;
   }
 
@@ -488,10 +492,7 @@
     background: #fff;
     width: 42%;
   }
-  .step-for-redeem .checkoutstep.active{
-        width: 62%;
-        left: 32%;
-  }
+
   .fx-stepper-tabstyle .datestep.complete {
   // background: #fff;
   width: 20%;
@@ -519,8 +520,13 @@
 }
 @media screen and (max-width:768px) {
  .step-for-redeem .complete.datestep{
-    width: 38%;
+    width:44%;
     padding-left: 14%;
+  }
+
+    .step-for-redeem .checkoutstep.active{
+        width: 67%;
+        left: 32%;
   }
 }
 
