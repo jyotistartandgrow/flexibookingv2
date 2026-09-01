@@ -5,10 +5,11 @@ import { addLocale } from "primereact/api";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import { setDate } from "../store/step1Slice";
+import { ArrowLeft, CalendarDays, Clock, ImageOff } from "lucide-react";
 import moment from "moment";
 import Swal from "sweetalert2";
 import {
+  setDate,
   setRedeemStep,
   setLoading,
   setRedeemBooking,
@@ -26,6 +27,45 @@ import { decodeEntities } from "../Utils/Functions";
 addLocale("en-monday", {
   firstDayOfWeek: 1, // Monday
 });
+
+function RedeemItemCard({ product, description }) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const showImage = Boolean(product.image) && !imageFailed;
+
+  return (
+    <article className="fx-redeem-item-card">
+      <div className="fx-redeem-item-media">
+        {showImage ? (
+          <img
+            src={product.image}
+            alt=""
+            onError={() => setImageFailed(true)}
+          />
+        ) : (
+          <span className="fx-redeem-item-fallback" aria-hidden="true">
+            <ImageOff size={22} />
+          </span>
+        )}
+        {product.category_name && (
+          <span className="fx-redeem-item-category">
+            {product.category_name}
+          </span>
+        )}
+      </div>
+      <div className="fx-redeem-item-copy">
+        <h3>{product.name}</h3>
+        {description && (
+          <div
+            className="fx-redeem-item-desc"
+            dangerouslySetInnerHTML={{
+              __html: decodeEntities(description),
+            }}
+          />
+        )}
+      </div>
+    </article>
+  );
+}
 
 export default function SelectDate() {
   const calendarRef = useRef(null);
@@ -53,9 +93,14 @@ export default function SelectDate() {
   const bundleSelectionComplete =
     isBundleVoucher && selectedBundleSlots.length === bundleComponents.length;
 
-  const getDecodedMarkup = (html) => ({
-    __html: decodeEntities(html || ""),
-  });
+  const products = voucherdetail?.products || [];
+  const services = products.filter((product) => product.service_id);
+  const extras = products.filter(
+    (product) => product.id && !product.service_id,
+  );
+  const slots = voucherdetail?.slots || [];
+  const isContinueDisabled =
+    !date || (isBundleVoucher ? !bundleSelectionComplete : !selectedSlot);
 
   const slotset = (slot) => {
     setSelectedSlot(slot);
@@ -91,14 +136,13 @@ export default function SelectDate() {
 
   const getslot = () => {
     dispatch(setLoading(true));
-    console.log("Selected date:", moment(date).format("YYYY-MM-DD"));
     if (!date) {
       Swal.fire({
         toast: true,
-        position: "top-end", // or 'bottom-end', 'top-start', etc.
+        position: "top-end",
         showConfirmButton: false,
-        timer: 3000, // auto-close after 3 seconds
-        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
+        timer: 3000,
+        icon: "warning",
         title: "Please select a date",
       });
       dispatch(setLoading(false));
@@ -203,10 +247,7 @@ export default function SelectDate() {
   };
 
   const selectBundleSlot = async (component, componentIndex, slotItem) => {
-    if (
-      componentIndex > selectedBundleSlots.length ||
-      bundleScheduleLoading
-    ) {
+    if (componentIndex > selectedBundleSlots.length || bundleScheduleLoading) {
       return;
     }
 
@@ -214,8 +255,7 @@ export default function SelectDate() {
     const selectedComponentSlot = {
       bundle_id: component?.bundle_id,
       bundle_item_id: component?.bundle_item_id,
-      service_id:
-        component?.component_service_id ?? component?.service_id,
+      service_id: component?.component_service_id ?? component?.service_id,
       component_position:
         Number(component?.component_position) || componentIndex + 1,
       slot_key: slotItem?.slot_key,
@@ -297,79 +337,64 @@ export default function SelectDate() {
     }
   };
 
-  const isContinueDisabled =
-    !date ||
-    (isBundleVoucher ? !bundleSelectionComplete : !selectedSlot);
-
   return (
     <div
       className="fx-tabcontent fx-gift-date-box"
       style={{ display: step === "datestep" ? "block" : "none" }}
     >
-      <div class="redemption-Voucher-services-box">
-        <div class="fx-booking-container">
-          <div class="fx-content-body">
-            <div class="fx-section-group">
-              <h2 class="fx-section-title">Service</h2>
-              {voucherdetail?.products?.map(
-                (product, p2) =>
-                  product.service_id && (
-                    <div className="fx-serviceboxlist" key={p2}>
-                      <div className="fx-servicepicboxlist">
-                        <div className="fx-list-img-box">
-                          <img src={product.image} alt={product.name} />
-                        </div>
-                        <span className="fx-servicepiccontentbox">
-                          {product.category_name}
-                        </span>
-                      </div>
-                      <div className="fx-servicecontentboxlist">
-                        <div className="list-view-text-content">
-                          <h4>{product.name}</h4>
-                          <div
-                            dangerouslySetInnerHTML={getDecodedMarkup(
-                              product.service_desc,
-                            )}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ),
-              )}
+      <div className="redemption-Voucher-services-box">
+        <div className="fx-booking-container">
+          <div className="fx-content-body">
+            <div className="fx-redeem-slot-heading">
+              <h1>Select date & time</h1>
+              <p>Choose when you’d like to use this voucher.</p>
             </div>
 
-            <div class="fx-section-group">
-              <h2 class="fx-section-title">Extra</h2>
-              {voucherdetail?.products?.map(
-                (product, p2) =>
-                  product.id && (
-                    <div className="fx-serviceboxlist" key={p2}>
-                      <div className="fx-servicepicboxlist">
-                        <div className="fx-list-img-box">
-                          <img src={product.image} alt={product.name} />
-                        </div>
-                      </div>
-                      <div className="fx-servicecontentboxlist">
-                        <div className="list-view-text-content">
-                          <h4>{product.name}</h4>
-                          <div
-                            dangerouslySetInnerHTML={getDecodedMarkup(
-                              product.service_desc,
-                            )}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ),
-              )}
-            </div>
+            {services.length > 0 && (
+              <section className="fx-section-group">
+                <h2 className="fx-section-title">
+                  {services.length === 1
+                    ? "Included service"
+                    : "Included services"}
+                </h2>
+                {services.map((product, index) => (
+                  <RedeemItemCard
+                    key={product.service_id || index}
+                    product={product}
+                    description={product.service_desc}
+                  />
+                ))}
+              </section>
+            )}
 
-            <div class="fx-scheduling-panel">
-              <div class="fx-date-picker-group">
-                <label class="fx-label">Select date</label>
-                <div class="fx-input-with-icon">
+            {extras.length > 0 && (
+              <section className="fx-section-group">
+                <h2 className="fx-section-title">
+                  {extras.length === 1 ? "Extra" : "Extras"}
+                </h2>
+                {extras.map((product, index) => (
+                  <RedeemItemCard
+                    key={product.id || index}
+                    product={product}
+                    description={product.service_desc}
+                  />
+                ))}
+              </section>
+            )}
+
+            <section className="fx-scheduling-panel">
+              <div className="fx-date-picker-group">
+                <label className="fx-label" htmlFor="redeem-slot-date">
+                  Date
+                </label>
+                <div className="fx-input-with-icon">
                   <Calendar
-                    value={moment(voucherdetail?.date).isValid() ? moment(voucherdetail?.date).toDate() : null}
+                    inputId="redeem-slot-date"
+                    value={
+                      moment(voucherdetail?.date).isValid()
+                        ? moment(voucherdetail?.date).toDate()
+                        : null
+                    }
                     onChange={(e) => {
                       setSelectedSlot(null);
                       setSelectedBundleSlots([]);
@@ -383,14 +408,13 @@ export default function SelectDate() {
                     minDate={new Date()}
                     ref={calendarRef}
                     onClick={() => {
-                      // force open
                       calendarRef.current?.show();
                     }}
                     locale="en-monday"
                     dateFormat="dd/mm/yy"
                   />
-                  <span class="fx-icon">
-                    <i class="pi pi-calendar fx-calendaricon"></i>
+                  <span className="fx-icon" aria-hidden="true">
+                    <CalendarDays size={18} />
                   </span>
                 </div>
               </div>
@@ -398,37 +422,39 @@ export default function SelectDate() {
               {!isBundleVoucher && voucherdetail?.slots?.length > 0 && (
                 <p class="fx-availability-note">
                   Available times for{" "}
-                  <strong>{moment(voucherdetail?.date).format("dddd, MMM DD")}</strong>
+                  <strong>
+                    {moment(voucherdetail?.date).format("dddd, MMM DD")}
+                  </strong>
                 </p>
               )}
 
-              {!isBundleVoucher && <div class="fx-time-selector-grid">
-                {voucherdetail?.slots?.length == 0 && (
-                  <div>No slots available for the selected date.</div>
-                )}
-                {voucherdetail?.slots?.map((slot, index) => (
-                  <div
-                    key={index}
-                    className={
-                      slot == selectedSlot
-                        ? "fx-time-btn fx-selected"
-                        : "fx-time-btn"
-                    }
-                    onClick={() => slotset(slot)}
-                  >
-                    {slot.split(" - ")[0]} - {slot.split(" - ")[1]}
-                  </div>
-                ))}
-              </div>}
+              {!isBundleVoucher && (
+                <div class="fx-time-selector-grid">
+                  {voucherdetail?.slots?.length == 0 && (
+                    <div>No slots available for the selected date.</div>
+                  )}
+                  {voucherdetail?.slots?.map((slot, index) => (
+                    <div
+                      key={index}
+                      className={
+                        slot == selectedSlot
+                          ? "fx-time-btn fx-selected"
+                          : "fx-time-btn"
+                      }
+                      onClick={() => slotset(slot)}
+                    >
+                      {slot.split(" - ")[0]} - {slot.split(" - ")[1]}
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {isBundleVoucher && (
                 <div className="fx-slot-bundle-modal-box fx-redeem-bundle-slots">
                   <div className="fx-booking-modal-header">
                     <div className="fx-bundle-modal-heading">
                       <h2 className="fx-booking-modal-title">Bundle slots</h2>
-                      <p>
-                        Pick slots for each package component in order.
-                      </p>
+                      <p>Pick slots for each package component in order.</p>
                     </div>
                     <span className="fx-bundle-progress">
                       {selectedBundleSlots.length} of {bundleComponents.length}{" "}
@@ -470,8 +496,7 @@ export default function SelectDate() {
                               voucherComponent?.quantity ??
                               component?.component_quantity_per_bundle ??
                               component?.quantity,
-                          ) || 1) *
-                            (Number(bundleProduct?.quantity) || 1) ||
+                          ) || 1) * (Number(bundleProduct?.quantity) || 1) ||
                           1;
 
                         return (
@@ -574,9 +599,9 @@ export default function SelectDate() {
                                             availableSlotKey != null &&
                                             String(selectedSlotKey) ===
                                               String(availableSlotKey)) ||
-                                            (selectedComponentSlot?.slot_label &&
-                                              selectedComponentSlot.slot_label ===
-                                                availableSlotLabel),
+                                          (selectedComponentSlot?.slot_label &&
+                                            selectedComponentSlot.slot_label ===
+                                              availableSlotLabel),
                                         );
                                         return (
                                           <button
@@ -634,41 +659,66 @@ export default function SelectDate() {
                 </div>
               )}
 
-              <div class="fx-footer-actions">
+              {slots.length > 0 && (
                 <div
-                  class="fx-btn-back"
-                  onClick={() => dispatch(setRedeemStep("codestep"))}
+                  className="fx-time-selector-grid"
+                  role="radiogroup"
+                  aria-label="Available times"
                 >
-                  ← Back
+                  {slots.map((slot, index) => {
+                    const isSelected = slot == selectedSlot;
+                    const [start, end] = slot.split(" - ");
+
+                    return (
+                      <button
+                        type="button"
+                        key={`${slot}-${index}`}
+                        className={`fx-time-btn ${isSelected ? "fx-selected" : ""}`}
+                        onClick={() => slotset(slot)}
+                        role="radio"
+                        aria-checked={isSelected}
+                      >
+                        <Clock size={16} aria-hidden="true" />
+                        <span>
+                          {start} – {end}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
-                <div className="fx-footer-primary-actions">
-                  <div
-                    className={`fx-btn-secondary ${isContinueDisabled ? "fx-btn-disable" : ""}`}
-                    onClick={bookNewServices}
-                    style={{
-                      opacity: isContinueDisabled ? 0.5 : 1,
-                      pointerEvents: isContinueDisabled ? "none" : "auto",
-                      cursor: isContinueDisabled ? "not-allowed" : "pointer",
-                    }}
-                  >
-                    BOOK NEW SERVICES
-                  </div>
-                  <div
-                    className={`btn-primary btn-primary-countinu ${isContinueDisabled ? "fx-btn-disable" : ""}`}
-                    onClick={() => {
-                      if (!isContinueDisabled) {
-                        getslot();
-                      }
-                    }}
-                    style={{
-                      opacity: isContinueDisabled ? 0.5 : 1,
-                      pointerEvents: isContinueDisabled ? "none" : "auto",
-                      cursor: isContinueDisabled ? "not-allowed" : "pointer",
-                    }}
-                  >
-                    CONTINUE WITH CHECKOUT
-                  </div>
-                </div>
+              )}
+            </section>
+
+            <div className="fx-footer-actions">
+              <button
+                type="button"
+                className="fx-btn-back"
+                onClick={() => dispatch(setRedeemStep("codestep"))}
+              >
+                <ArrowLeft size={16} aria-hidden="true" />
+                Back
+              </button>
+              <div className="fx-footer-primary-actions">
+                <button
+                  type="button"
+                  className={`fx-btn-secondary ${isContinueDisabled ? "fx-btn-disable" : ""}`}
+                  onClick={bookNewServices}
+                  disabled={isContinueDisabled}
+                >
+                  Add more services
+                </button>
+                <button
+                  type="button"
+                  className={`btn-primary btn-primary-countinu ${isContinueDisabled ? "fx-btn-disable" : ""}`}
+                  onClick={() => {
+                    if (!isContinueDisabled) {
+                      getslot();
+                    }
+                  }}
+                  disabled={isContinueDisabled}
+                >
+                  Continue to checkout
+                </button>
               </div>
             </div>
           </div>
