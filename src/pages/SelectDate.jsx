@@ -99,7 +99,8 @@ export default function SelectDate() {
     (product) => product.id && !product.service_id,
   );
   const slots = voucherdetail?.slots || [];
-  const isContinueDisabled = !date || !selectedSlot;
+  const isContinueDisabled =
+    !date || (isBundleVoucher ? !bundleSelectionComplete : !selectedSlot);
 
   const slotset = (slot) => {
     setSelectedSlot(slot);
@@ -246,10 +247,7 @@ export default function SelectDate() {
   };
 
   const selectBundleSlot = async (component, componentIndex, slotItem) => {
-    if (
-      componentIndex > selectedBundleSlots.length ||
-      bundleScheduleLoading
-    ) {
+    if (componentIndex > selectedBundleSlots.length || bundleScheduleLoading) {
       return;
     }
 
@@ -257,8 +255,7 @@ export default function SelectDate() {
     const selectedComponentSlot = {
       bundle_id: component?.bundle_id,
       bundle_item_id: component?.bundle_item_id,
-      service_id:
-        component?.component_service_id ?? component?.service_id,
+      service_id: component?.component_service_id ?? component?.service_id,
       component_position:
         Number(component?.component_position) || componentIndex + 1,
       slot_key: slotItem?.slot_key,
@@ -339,10 +336,6 @@ export default function SelectDate() {
       dispatch(setLoading(false));
     }
   };
-
-  const isContinueDisabled =
-    !date ||
-    (isBundleVoucher ? !bundleSelectionComplete : !selectedSlot);
 
   return (
     <div
@@ -429,37 +422,39 @@ export default function SelectDate() {
               {!isBundleVoucher && voucherdetail?.slots?.length > 0 && (
                 <p class="fx-availability-note">
                   Available times for{" "}
-                  <strong>{moment(voucherdetail?.date).format("dddd, MMM DD")}</strong>
+                  <strong>
+                    {moment(voucherdetail?.date).format("dddd, MMM DD")}
+                  </strong>
                 </p>
               )}
 
-              {!isBundleVoucher && <div class="fx-time-selector-grid">
-                {voucherdetail?.slots?.length == 0 && (
-                  <div>No slots available for the selected date.</div>
-                )}
-                {voucherdetail?.slots?.map((slot, index) => (
-                  <div
-                    key={index}
-                    className={
-                      slot == selectedSlot
-                        ? "fx-time-btn fx-selected"
-                        : "fx-time-btn"
-                    }
-                    onClick={() => slotset(slot)}
-                  >
-                    {slot.split(" - ")[0]} - {slot.split(" - ")[1]}
-                  </div>
-                ))}
-              </div>}
+              {!isBundleVoucher && (
+                <div class="fx-time-selector-grid">
+                  {voucherdetail?.slots?.length == 0 && (
+                    <div>No slots available for the selected date.</div>
+                  )}
+                  {voucherdetail?.slots?.map((slot, index) => (
+                    <div
+                      key={index}
+                      className={
+                        slot == selectedSlot
+                          ? "fx-time-btn fx-selected"
+                          : "fx-time-btn"
+                      }
+                      onClick={() => slotset(slot)}
+                    >
+                      {slot.split(" - ")[0]} - {slot.split(" - ")[1]}
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {isBundleVoucher && (
                 <div className="fx-slot-bundle-modal-box fx-redeem-bundle-slots">
                   <div className="fx-booking-modal-header">
                     <div className="fx-bundle-modal-heading">
                       <h2 className="fx-booking-modal-title">Bundle slots</h2>
-                      <p>
-                        Pick slots for each package component in order.
-                      </p>
+                      <p>Pick slots for each package component in order.</p>
                     </div>
                     <span className="fx-bundle-progress">
                       {selectedBundleSlots.length} of {bundleComponents.length}{" "}
@@ -501,8 +496,7 @@ export default function SelectDate() {
                               voucherComponent?.quantity ??
                               component?.component_quantity_per_bundle ??
                               component?.quantity,
-                          ) || 1) *
-                            (Number(bundleProduct?.quantity) || 1) ||
+                          ) || 1) * (Number(bundleProduct?.quantity) || 1) ||
                           1;
 
                         return (
@@ -605,9 +599,9 @@ export default function SelectDate() {
                                             availableSlotKey != null &&
                                             String(selectedSlotKey) ===
                                               String(availableSlotKey)) ||
-                                            (selectedComponentSlot?.slot_label &&
-                                              selectedComponentSlot.slot_label ===
-                                                availableSlotLabel),
+                                          (selectedComponentSlot?.slot_label &&
+                                            selectedComponentSlot.slot_label ===
+                                              availableSlotLabel),
                                         );
                                         return (
                                           <button
@@ -665,35 +659,34 @@ export default function SelectDate() {
                 </div>
               )}
 
-                {slots.length > 0 && (
-                  <div
-                    className="fx-time-selector-grid"
-                    role="radiogroup"
-                    aria-label="Available times"
-                  >
-                    {slots.map((slot, index) => {
-                      const isSelected = slot == selectedSlot;
-                      const [start, end] = slot.split(" - ");
+              {slots.length > 0 && (
+                <div
+                  className="fx-time-selector-grid"
+                  role="radiogroup"
+                  aria-label="Available times"
+                >
+                  {slots.map((slot, index) => {
+                    const isSelected = slot == selectedSlot;
+                    const [start, end] = slot.split(" - ");
 
-                      return (
-                        <button
-                          type="button"
-                          key={`${slot}-${index}`}
-                          className={`fx-time-btn ${isSelected ? "fx-selected" : ""}`}
-                          onClick={() => slotset(slot)}
-                          role="radio"
-                          aria-checked={isSelected}
-                        >
-                          <Clock size={16} aria-hidden="true" />
-                          <span>
-                            {start} – {end}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
+                    return (
+                      <button
+                        type="button"
+                        key={`${slot}-${index}`}
+                        className={`fx-time-btn ${isSelected ? "fx-selected" : ""}`}
+                        onClick={() => slotset(slot)}
+                        role="radio"
+                        aria-checked={isSelected}
+                      >
+                        <Clock size={16} aria-hidden="true" />
+                        <span>
+                          {start} – {end}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </section>
 
             <div className="fx-footer-actions">
