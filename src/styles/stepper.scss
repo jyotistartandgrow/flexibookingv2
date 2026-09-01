@@ -340,6 +340,28 @@
     left: 26%;
   }
 
+  .fx-stepper-tabstyle.fx-redeem-booking-step .step.datestep.active{
+      width:53%;
+        left: 5%;
+        padding-left: 4%;
+        padding-right: 3%;
+  }
+
+  .fx-stepper-tabstyle.fx-redeem-booking-step .step.servicesstep{
+    width: 23%;
+    left: 45%;
+    padding-left: 4%;
+    padding-right: 3%;
+  }
+
+  .fx-stepper-tabstyle.fx-redeem-booking-step .step.extrastep{
+    left: 39%;
+  }
+
+  .fx-stepper-tabstyle.fx-redeem-booking-step .step.checkoutstep{
+    left: 49%;
+  }
+
   .fx-stepper-tabstyle.fx-redeem-booking-step .step.datestep{
     width: 29%;
     left: 5%;

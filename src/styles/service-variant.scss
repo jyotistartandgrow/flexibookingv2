@@ -197,7 +197,7 @@
 
 .fx-slot-bundle-modal-box.fx-redeem-bundle-slots {
   min-height: 0;
-  margin-top: 18px;
+  margin-top: 0px;
   padding: 0;
   border-radius: 0;
 }
@@ -444,7 +444,7 @@
   width: 273px;
   min-height: 36px;
   height: auto;
-  padding: 6px 8px;
+  padding: 9px 8px;
   border: 1px solid #e1e6ed;
   border-radius: 3px;
   background: #ffffff;
@@ -675,6 +675,10 @@
   padding: 0px 28px 12px;
 }
 
+.fx-redeem-bundle-slots .fx-booking-modal-content {
+  padding:0px;
+}
+
 .fx-booking-modal-content .fx-service-slots-details {
  width: 100%;
     max-height: 73vh;
@@ -759,7 +763,7 @@
 .fx-slot-bundle-modal-box .fx-bundle-slot-tabs {
   margin-bottom: 16px;
   border-color: #d8e0ea;
-  border-radius: 9px;
+  border-radius: 4px;
 }
 
 .fx-slot-bundle-modal-box .fx-bundle-slot-tabs button {
@@ -814,7 +818,7 @@
   align-items: center;
   justify-content: center;
   width: 21px;
-  height: 22px;
+  height: 21px;
   border-radius: 50%;
   background: #1671e8;
   color: #fff;
@@ -929,6 +933,10 @@
   font-size: 15px;
   font-weight: 600;
   border-radius: 30px;
+}
+
+.fx-redeem-bundle-slots .fx-booking-modal-header{
+  padding:20px 0px;
 }
 
 .fx-slot-bundle-modal-box .fx-bundle-footer-message {
@@ -1078,6 +1086,10 @@
     height:40px;
     padding: 11px;
     font-size: 13px;
+  }
+
+  .fx-slot-bundle-modal-box.fx-redeem-bundle-slots {
+    margin-top: 18px;
   }
   
 }
