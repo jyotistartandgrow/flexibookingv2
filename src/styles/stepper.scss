@@ -340,12 +340,7 @@
     left: 26%;
   }
 
-  .fx-stepper-tabstyle.fx-redeem-booking-step .step.datestep.active{
-      width:53%;
-        left: 5%;
-        padding-left: 4%;
-        padding-right: 3%;
-  }
+  
 
   .fx-stepper-tabstyle.fx-redeem-booking-step .step.servicesstep{
     width: 23%;
@@ -354,17 +349,38 @@
     padding-right: 3%;
   }
 
+  .fx-stepper-tabstyle.fx-redeem-booking-step .complete.servicesstep{
+        width: 24%;
+        left: 17%;
+        padding-left: 5%;
+        padding-right: 5%;
+  }
+
+  .fx-stepper-tabstyle.fx-redeem-booking-step .active.servicesstep{
+    width: 45%;
+    left: 25%;
+  }
+
   .fx-stepper-tabstyle.fx-redeem-booking-step .step.extrastep{
     left: 39%;
   }
 
+  .fx-stepper-tabstyle.fx-redeem-booking-step .active.extrastep{
+    left: 32%;
+  }
+
+ .fx-stepper-tabstyle.fx-redeem-booking-step .active.codestep{
+    width: 45%;
+    left: 0px;
+ }
+  
   .fx-stepper-tabstyle.fx-redeem-booking-step .step.checkoutstep{
     left: 49%;
   }
 
   .fx-stepper-tabstyle.fx-redeem-booking-step .step.datestep{
     width: 29%;
-    left: 5%;
+    left: 28%;
     padding-left: 4%;
     padding-right: 3%;
   }
@@ -372,6 +388,12 @@
     width: 30px;
     height: 30px;
   }
+    .fx-stepper-tabstyle.fx-redeem-booking-step .complete.datestep{
+    width: 24%;
+    left: 5%;
+    padding-left: 11%;
+  }
+
   .fx-booking .fx-step-label{
     margin-left: 8px;
     margin-right:6px;
@@ -385,6 +407,12 @@
         z-index: 2;
         left:26%;
         padding-right: 16px;
+  }
+  .fx-stepper-tabstyle.fx-redeem-booking-step .datestep.active{
+      width:53%;
+        left: 5%;
+        padding-left: 4%;
+        padding-right: 3%;
   }
 
   .fx-stepper-tabstyle .step.paymentstep {
