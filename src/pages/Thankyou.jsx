@@ -112,25 +112,7 @@ export default function Thankyou() {
     if (component?.from && component?.to) {
       return `${component.from} - ${component.to}`;
     }
-
-    const availableSlots = Array.isArray(component?.available_slots)
-      ? component.available_slots
-      : [];
-    if (availableSlots.length === 1) return availableSlots[0]?.label || "-";
-
-    const minimumCapacity = Math.min(
-      ...availableSlots.map((slotItem) =>
-        Number.isFinite(Number(slotItem?.capacity_left))
-          ? Number(slotItem.capacity_left)
-          : Number.POSITIVE_INFINITY,
-      ),
-    );
-    const capacityMatches = availableSlots.filter(
-      (slotItem) => Number(slotItem?.capacity_left) === minimumCapacity,
-    );
-    return capacityMatches.length === 1
-      ? capacityMatches[0]?.label || "-"
-      : "-";
+    return "-";
   };
 
   const bookingdetail = async () => {
@@ -373,6 +355,9 @@ export default function Thankyou() {
                   bundlePricing?.bundle_price ??
                   bundlePricing?.final_price ??
                   bundleProduct?.total;
+                const showSlotColumn = bundleProduct.bundle_components.some(
+                  (component) => Boolean(component?.slot_label),
+                );
 
                 return (
                   <section
@@ -401,7 +386,7 @@ export default function Thankyou() {
                             <th>Component</th>
                             <th>Quantity</th>
                             <th>Date</th>
-                            <th>Slot</th>
+                            {showSlotColumn && <th>Slot</th>}
                             <th>Line total</th>
                           </tr>
                         </thead>
@@ -427,12 +412,14 @@ export default function Thankyou() {
                                     "-"}
                                 </td>
                                 <td>{component?.selected_date || "-"}</td>
-                                <td>
-                                  {getBundleComponentSlot(
-                                    bundleProduct,
-                                    component,
-                                  )}
-                                </td>
+                                {showSlotColumn && (
+                                  <td>
+                                    {getBundleComponentSlot(
+                                      bundleProduct,
+                                      component,
+                                    )}
+                                  </td>
+                                )}
                                 <td>
                                   {formatReceiptAmount(component?.line_total)}
                                 </td>
