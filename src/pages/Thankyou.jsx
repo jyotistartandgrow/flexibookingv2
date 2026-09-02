@@ -32,6 +32,106 @@ export default function Thankyou() {
       online: "Online",
       cash_on_delivery: "Pay at Service / Cash on Delivery",
     }[selectedPaymentMethod] || selectedPaymentMethod?.replaceAll("_", " ") || "Card";
+  const receiptProducts = bookingData?.product_details?.products || [];
+  const bundleProducts = receiptProducts.filter(
+    (product) =>
+      product?.item_type === "bundle" &&
+      Array.isArray(product?.bundle_components),
+  );
+
+  const formatReceiptAmount = (amount) => {
+    if (amount === null || amount === undefined || amount === "") return "-";
+
+    const decodedAmount = decodeHtml(String(amount));
+    if (/[^\d.,\s-]/.test(decodedAmount)) return decodedAmount;
+
+    const numericAmount = Number(amount);
+    if (!Number.isFinite(numericAmount)) return decodedAmount;
+
+    const priceTemplate = decodeHtml(
+      String(bookingData?.products?.[0]?.price || ""),
+    );
+    const firstDigit = priceTemplate.search(/\d/);
+    const lastDigit = Math.max(
+      ...Array.from({ length: 10 }, (_, digit) =>
+        priceTemplate.lastIndexOf(String(digit)),
+      ),
+    );
+    const usesCommaDecimal =
+      priceTemplate.lastIndexOf(",") > priceTemplate.lastIndexOf(".");
+    const formattedNumber = new Intl.NumberFormat(
+      usesCommaDecimal ? "de-DE" : "en-US",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      },
+    ).format(numericAmount);
+
+    if (firstDigit < 0 || lastDigit < 0) return formattedNumber;
+    return `${priceTemplate.slice(0, firstDigit)}${formattedNumber}${priceTemplate.slice(lastDigit + 1)}`;
+  };
+
+  const getBundlePricing = (bundleProduct) => {
+    const selectedBundle = bookingData?.product_details?.selected_bundle;
+    const productBundleId =
+      bundleProduct?.bundle_id ??
+      bundleProduct?.bundle_components?.[0]?.bundle_id;
+    if (
+      selectedBundle &&
+      (!productBundleId ||
+        Number(selectedBundle?.bundle_id) === Number(productBundleId))
+    ) {
+      return selectedBundle;
+    }
+    return bundleProduct?.pricing || {};
+  };
+
+  const getBundleComponentSlot = (bundleProduct, component) => {
+    const selectedSlots = [
+      ...(Array.isArray(bundleProduct?.selected_component_slots)
+        ? bundleProduct.selected_component_slots
+        : []),
+      ...(Array.isArray(
+        bookingData?.product_details?.selected_bundle
+          ?.selected_component_slots,
+      )
+        ? bookingData.product_details.selected_bundle.selected_component_slots
+        : []),
+    ];
+    const selectedSlot = selectedSlots.find(
+      (slotItem) =>
+        Number(slotItem?.bundle_item_id) ===
+          Number(component?.bundle_item_id) ||
+        Number(slotItem?.position ?? slotItem?.component_position) ===
+          Number(component?.component_position),
+    );
+    if (selectedSlot?.slot || selectedSlot?.slot_label) {
+      return selectedSlot.slot || selectedSlot.slot_label;
+    }
+    if (component?.slot_label) return component.slot_label;
+    if (component?.from && component?.to) {
+      return `${component.from} - ${component.to}`;
+    }
+
+    const availableSlots = Array.isArray(component?.available_slots)
+      ? component.available_slots
+      : [];
+    if (availableSlots.length === 1) return availableSlots[0]?.label || "-";
+
+    const minimumCapacity = Math.min(
+      ...availableSlots.map((slotItem) =>
+        Number.isFinite(Number(slotItem?.capacity_left))
+          ? Number(slotItem.capacity_left)
+          : Number.POSITIVE_INFINITY,
+      ),
+    );
+    const capacityMatches = availableSlots.filter(
+      (slotItem) => Number(slotItem?.capacity_left) === minimumCapacity,
+    );
+    return capacityMatches.length === 1
+      ? capacityMatches[0]?.label || "-"
+      : "-";
+  };
 
   const bookingdetail = async () => {
     dispatch(setLoading(true));
@@ -60,6 +160,16 @@ export default function Thankyou() {
       .fx-order-table th { font-weight: 600; padding: 10px 4px; text-align: left; border-bottom: 2px solid #ddd; }
       .fx-order-table td { color: #777; font-weight: 300; padding: 10px 4px; text-align: left; border-bottom: 1px solid #eee; }
       .fx-order-table th:last-child, .fx-order-table td:last-child { text-align: right; }
+      .fx-bundle-package { border-top: 1px solid #ddd; padding: 12px 0; }
+      .fx-bundle-package-summary { display: flex; justify-content: space-between; gap: 16px; font-size: 13px; }
+      .fx-bundle-package-summary strong, .fx-bundle-package-summary span { display: block; }
+      .fx-bundle-package-note { color: #777; font-weight: 300; margin-top: 3px; }
+      .fx-bundle-component-wrap { margin: 10px 0 12px; overflow: hidden; border: 1px solid #ddd; border-radius: 7px; }
+      .fx-bundle-component-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+      .fx-bundle-component-table th { background: #f7f9fc; padding: 9px; text-align: left; }
+      .fx-bundle-component-table td { padding: 9px; color: #555; border-top: 1px solid #eee; }
+      .fx-bundle-component-table th:last-child, .fx-bundle-component-table td:last-child { text-align: right; }
+      .fx-bundle-component-table small { display: block; margin-top: 3px; color: #777; }
       .fx-summary { border-top: 2px solid #ddd; padding-top: 15px; font-weight: 500; margin-top: 4px; }
       .fx-summary div { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
       .fx-address-block { border-top: 1px solid #ddd; margin-top: 15px; display: flex; justify-content: space-between; gap: 20px; }
@@ -227,7 +337,9 @@ export default function Thankyou() {
                 <thead>
                   <tr>
                     {/* <th>#</th> */}
-                    <th>Product</th>
+                    <th>
+                      {bookingData?.products?.[0]?.product_heading || "Product"}
+                    </th>
                     <th>Price</th>
                     <th>Qty</th>
                     <th>Total</th>
@@ -247,8 +359,95 @@ export default function Thankyou() {
                 </tbody>
               </table>
 
+              {bundleProducts.map((bundleProduct, bundleIndex) => {
+                const bundlePricing = getBundlePricing(bundleProduct);
+                const originalTotal =
+                  bundlePricing?.original_total ??
+                  bundlePricing?.subtotal ??
+                  bundleProduct?.base_price;
+                const discountAmount =
+                  bundlePricing?.discount_applied ??
+                  bundlePricing?.discount_amount ??
+                  0;
+                const packageTotal =
+                  bundlePricing?.bundle_price ??
+                  bundlePricing?.final_price ??
+                  bundleProduct?.total;
+
+                return (
+                  <section
+                    className="fx-bundle-package"
+                    key={
+                      bundleProduct?.bundle_id ||
+                      `bundle-package-${bundleIndex}`
+                    }
+                  >
+                    <div className="fx-bundle-package-summary">
+                      <div>
+                        <strong>Package</strong>
+                        <span>{bundleProduct?.name}</span>
+                        <span className="fx-bundle-package-note">
+                          Original {formatReceiptAmount(originalTotal)} - Discount{" "}
+                          {formatReceiptAmount(discountAmount)}
+                        </span>
+                      </div>
+                      <strong>{formatReceiptAmount(packageTotal)}</strong>
+                    </div>
+
+                    <div className="fx-bundle-component-wrap">
+                      <table className="fx-bundle-component-table">
+                        <thead>
+                          <tr>
+                            <th>Component</th>
+                            <th>Quantity</th>
+                            <th>Date</th>
+                            <th>Slot</th>
+                            <th>Line total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {bundleProduct.bundle_components.map(
+                            (component, componentIndex) => (
+                              <tr
+                                key={
+                                  component?.bundle_item_id || componentIndex
+                                }
+                              >
+                                <td>
+                                  <strong>{component?.service_name}</strong>
+                                  <small>
+                                    Component{" "}
+                                    {component?.component_position ||
+                                      componentIndex + 1}
+                                  </small>
+                                </td>
+                                <td>
+                                  {component?.quantity_consumed ??
+                                    component?.quantity ??
+                                    "-"}
+                                </td>
+                                <td>{component?.selected_date || "-"}</td>
+                                <td>
+                                  {getBundleComponentSlot(
+                                    bundleProduct,
+                                    component,
+                                  )}
+                                </td>
+                                <td>
+                                  {formatReceiptAmount(component?.line_total)}
+                                </td>
+                              </tr>
+                            ),
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                );
+              })}
+
               <div className="fx-summary">
-                {bookingData?.product_details?.discount > 0 && (
+                {Number(bookingData?.product_details?.discount) > 0 && (
                   <>
                     <div>
                       Subtotal{" "}
@@ -258,7 +457,16 @@ export default function Thankyou() {
                     </div>
                     <div>
                       Discount
-                      <span>{decodeHtml(bookingData?.coupon_discount)}</span>
+                      <span>
+                        -
+                        {formatReceiptAmount(
+                          bundleProducts.length > 0
+                            ? getBundlePricing(bundleProducts[0])
+                                ?.discount_applied ??
+                                bookingData?.product_details?.discount
+                            : bookingData?.coupon_discount,
+                        )}
+                      </span>
                     </div>
                   </>
                 )}

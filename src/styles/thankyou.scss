@@ -177,6 +177,67 @@ div.fx-booking div.fx-confirmation-wrapper div.fx-confirm-left div.fx-email-box 
 .fx-booking .fx-order-table td:last-child{
     text-align: right;
 }
+.fx-booking .fx-bundle-package {
+    padding: 12px 0;
+    border-top: 1px solid var(--border-color);
+}
+.fx-booking .fx-bundle-package-summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--darkgrey);
+    font-size: var(--small-descriptionsize);
+}
+.fx-booking .fx-bundle-package-summary strong,
+.fx-booking .fx-bundle-package-summary span {
+    display: block;
+}
+.fx-booking .fx-bundle-package-note {
+    margin-top: 3px;
+    color: var(--grey);
+    font-weight: 300;
+}
+.fx-booking .fx-bundle-component-wrap {
+    margin: 14px 0 0;
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+.fx-booking .fx-bundle-component-table {
+    width: 100%;
+    min-width: 510px;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+.fx-booking .fx-bundle-component-table th,
+.fx-booking .fx-bundle-component-table td {
+    padding: 10px;
+    text-align: left;
+}
+.fx-booking .fx-bundle-component-table th {
+    background: #f7f9fc;
+    font-weight: 600;
+}
+.fx-booking .fx-bundle-component-table td {
+    color: var(--grey);
+    border-top: 1px solid var(--border-color);
+    font-weight: 300;
+    white-space: nowrap;
+}
+.fx-booking .fx-bundle-component-table th:last-child,
+.fx-booking .fx-bundle-component-table td:last-child {
+    text-align: right;
+}
+.fx-booking .fx-bundle-component-table td strong {
+    display: block;
+    color: var(--darkgrey);
+    font-weight: 600;
+}
+.fx-booking .fx-bundle-component-table td small {
+    display: block;
+    margin-top: 4px;
+    color: var(--grey);
+}
 .fx-booking .fx-summary {
     border-top: 1px solid var(--border-color);
     padding-top: 15px;

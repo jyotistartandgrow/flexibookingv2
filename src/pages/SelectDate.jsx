@@ -659,7 +659,7 @@ export default function SelectDate() {
                 </div>
               )}
 
-              {slots.length > 0 && (
+              {slots.length > 0 && !isBundleVoucher && (
                 <div
                   className="fx-time-selector-grid"
                   role="radiogroup"

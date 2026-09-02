@@ -62,6 +62,34 @@ export const formattedDatewithFormat = (props, format) => {
   return props && moment(props).format(format);
 };
 
+const formatComponentSlotTime = (slotValue) => {
+  const slotParts = String(slotValue || "").split(/\s+-\s+/);
+  if (slotParts.length !== 2) return slotValue || "";
+
+  const formatTime = (timeValue) => {
+    const parsedTime = moment(
+      timeValue.trim(),
+      ["HH:mm", "H:mm", "h:mm A", "hh:mm A"],
+      true,
+    );
+    return parsedTime.isValid() ? parsedTime.format("h:mm A") : timeValue;
+  };
+
+  return `${formatTime(slotParts[0])} - ${formatTime(slotParts[1])}`;
+};
+
+export const formatSelectedComponentSlots = (componentSlots = []) =>
+  componentSlots.map((componentSlot) => ({
+    bundle_item_id: componentSlot?.bundle_item_id,
+    service_id: componentSlot?.service_id,
+    position: Number(
+      componentSlot?.position ?? componentSlot?.component_position,
+    ),
+    slot: formatComponentSlotTime(
+      componentSlot?.slot ?? componentSlot?.slot_label,
+    ),
+  }));
+
 export const useQuery = (id) => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
@@ -113,7 +141,7 @@ export const validatePhoneNumber = (phone) => {
   // Allows international formats: +, digits, spaces, hyphens, parentheses
   // Must have 10-15 digits
   const phoneRegex =
-    /^[+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,5}[-\s\.]?[0-9]{1,5}$/;
+    /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,5}[-\s.]?[0-9]{1,5}$/;
   const digitsOnly = phone.replace(/\D/g, "");
   return phoneRegex.test(phone) && digitsOnly.length == 10;
 };

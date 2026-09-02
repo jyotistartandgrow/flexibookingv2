@@ -11,7 +11,11 @@ import "react-phone-input-2/lib/style.css";
 import { setLoading } from "../store/step1Slice";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { validateEmail,validatePhoneForCountry } from "../Utils/Functions";
+import {
+  formatSelectedComponentSlots,
+  validateEmail,
+  validatePhoneForCountry,
+} from "../Utils/Functions";
 
 export default function ReedemCheckout() {
   const navigate = useNavigate();
@@ -135,7 +139,8 @@ export default function ReedemCheckout() {
       voucher,
       date: moment(date).format("YYYY-MM-DD"),
       slot,
-      selected_component_slots: redeemBundleSlots,
+      selected_component_slots:
+        formatSelectedComponentSlots(redeemBundleSlots),
       recipient: billdata,
     });
 
