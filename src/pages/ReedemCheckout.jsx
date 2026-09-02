@@ -33,7 +33,7 @@ export default function ReedemCheckout() {
     method: "get",
   });
   const [billdata, setBilldata] = useState({});
-  const [states, setState] = useState({});
+  const [states, setState] = useState([]);
   const [term, setTerm] = useState(false);
   const [numberOnly, setNumberOnly] = useState("");
   const [errorlist, setErrorlist] = useState({});
@@ -45,7 +45,11 @@ export default function ReedemCheckout() {
       getFields();
       setErrorlist({});
       setBilldata(voucherdetail.recepient_data || {});
-      getState(voucherdetail.recepient_data?.recipient_country);
+      const recipientCountry =
+        voucherdetail.recepient_data?.recipient_country;
+      if (recipientCountry) {
+        getState(recipientCountry);
+      }
       setNumberOnly(voucherdetail.recepient_data?.recipient_contact || "");
     }
   }, [step]);
@@ -99,25 +103,24 @@ export default function ReedemCheckout() {
       setErrorlist({ recipient_email: true });
       return;
     }
-    if (!billdata.recipient_address && visibleField.sgbm_field_5) {
+    if (!billdata.recipient_address?.trim()) {
       setErrorlist({ recipient_address: true });
       return;
     }
-    if (!billdata.recipient_city && visibleField.sgbm_field_6) {
+    if (!billdata.recipient_city?.trim()) {
       setErrorlist({ recipient_city: true });
       return;
     }
-    if (!billdata.recipient_state && visibleField.sgbm_field_7) {
+    if (!billdata.recipient_country) {
+      setErrorlist({ recipient_country: true });
+      return;
+    }
+    if (!billdata.recipient_state) {
       setErrorlist({ recipient_state: true });
       return;
     }
-    if (!billdata.recipient_postcode && visibleField.sgbm_field_9) {
+    if (!billdata.recipient_postcode?.trim()) {
       setErrorlist({ recipient_postcode: true });
-      return;
-    }
-
-    if (!billdata.recipient_country && visibleField.sgbm_field_8) {
-      setErrorlist({ recipient_country: true });
       return;
     }
 
@@ -267,13 +270,12 @@ export default function ReedemCheckout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div
-            className={`fx-element-box ${visibleField.sgbm_field_5 ? "" : "fx-hidden"}`}
-          >
+          <div className="fx-element-box">
             <label>Address</label>
             <input
               type="text"
               placeholder="Address"
+              required
               value={billdata.recipient_address || ""}
               className={
                 errorlist.recipient_address
@@ -290,24 +292,29 @@ export default function ReedemCheckout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div
-            className={`fx-element-box fx-selectwrapper ${visibleField.sgbm_field_8 ? "" : "fx-hidden"}`}
-          >
+          <div className="fx-element-box fx-selectwrapper">
             <label>Country</label>
             <select
-              defaultValue={billdata.recipient_country}
+              required
+              value={billdata.recipient_country || ""}
               onChange={(e) => {
-                setBilldata({ ...billdata, recipient_country: e.target.value });
-                getState(e.target.value);
+                const recipientCountry = e.target.value;
+                setBilldata({
+                  ...billdata,
+                  recipient_country: recipientCountry,
+                  recipient_state: "",
+                });
+                setState([]);
+                if (recipientCountry) {
+                  getState(recipientCountry);
+                }
               }}
               className={errorlist.recipient_country ? "fx-invalid" : ""}
             >
+              <option value="">Select Country</option>
               {countries &&
                 Object.keys(countries.data).map((code) => (
-                  <option
-                    value={code}
-                    selected={billdata.recipient_country === code}
-                  >
+                  <option key={code} value={code}>
                     {countries.data[code]}
                   </option>
                 ))}
@@ -316,24 +323,21 @@ export default function ReedemCheckout() {
               <span className="fx-errortext">Enter Country</span>
             )}
           </div>
-          <div
-            className={`fx-element-box fx-selectwrapper ${visibleField.sgbm_field_7 ? "" : "fx-hidden"}`}
-          >
+          <div className="fx-element-box fx-selectwrapper">
             <label>State</label>
             <select
-              defaultValue={billdata.recipient_state}
+              required
+              value={billdata.recipient_state || ""}
               onChange={(e) => {
                 setBilldata({ ...billdata, recipient_state: e.target.value });
               }}
               className={errorlist.recipient_state ? "fx-invalid" : ""}
             >
+              <option value="">Select State</option>
               {states.length > 0 &&
-                Object.keys(states).map((key) => (
-                  <option
-                    value={states[key].code}
-                    selected={billdata.recipient_state === states[key].name}
-                  >
-                    {states[key].name}
+                states.map((state) => (
+                  <option key={state.code} value={state.code}>
+                    {state.name}
                   </option>
                 ))}
             </select>
@@ -343,14 +347,13 @@ export default function ReedemCheckout() {
           </div>
         </div>
         <div className="fx-inputgroup">
-          <div
-            className={`fx-element-box ${visibleField.sgbm_field_6 ? "" : "fx-hidden"}`}
-          >
+          <div className="fx-element-box">
             <label>City</label>
             <input
               type="text"
               placeholder="City"
-              value={billdata?.recipient_city}
+              required
+              value={billdata?.recipient_city || ""}
               className={errorlist.recipient_city ? "fx-invalid" : ""}
               onChange={(e) =>
                 setBilldata({ ...billdata, recipient_city: e.target.value })
@@ -360,21 +363,20 @@ export default function ReedemCheckout() {
               <span className="fx-errortext">Enter City</span>
             )}
           </div>
-          <div
-            className={`fx-element-box ${visibleField.sgbm_field_9 ? "" : "fx-hidden"}`}
-          >
-            <label>Zip</label>
+          <div className="fx-element-box">
+            <label>Postcode</label>
             <input
               type="text"
-              placeholder="State"
+              placeholder="Postcode"
+              required
               className={errorlist.recipient_postcode ? "fx-invalid" : ""}
-              value={billdata?.recipient_postcode}
+              value={billdata?.recipient_postcode || ""}
               onChange={(e) =>
                 setBilldata({ ...billdata, recipient_postcode: e.target.value })
               }
             />
             {errorlist.recipient_postcode && (
-              <span className="fx-errortext">Enter Zip</span>
+              <span className="fx-errortext">Enter Postcode</span>
             )}
           </div>
         </div>

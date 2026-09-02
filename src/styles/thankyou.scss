@@ -238,6 +238,13 @@ div.fx-booking div.fx-confirmation-wrapper div.fx-confirm-left div.fx-email-box 
     margin-top: 4px;
     color: var(--grey);
 }
+.fx-booking .fx-redeem-bundle-package .fx-bundle-package-summary {
+    justify-content: flex-start;
+}
+.fx-booking .fx-redeem-bundle-component-table th:last-child,
+.fx-booking .fx-redeem-bundle-component-table td:last-child {
+    text-align: left;
+}
 .fx-booking .fx-summary {
     border-top: 1px solid var(--border-color);
     padding-top: 15px;
