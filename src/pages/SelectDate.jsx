@@ -658,35 +658,6 @@ export default function SelectDate() {
                   </div>
                 </div>
               )}
-
-              {slots.length > 0 && !isBundleVoucher && (
-                <div
-                  className="fx-time-selector-grid"
-                  role="radiogroup"
-                  aria-label="Available times"
-                >
-                  {slots.map((slot, index) => {
-                    const isSelected = slot == selectedSlot;
-                    const [start, end] = slot.split(" - ");
-
-                    return (
-                      <button
-                        type="button"
-                        key={`${slot}-${index}`}
-                        className={`fx-time-btn ${isSelected ? "fx-selected" : ""}`}
-                        onClick={() => slotset(slot)}
-                        role="radio"
-                        aria-checked={isSelected}
-                      >
-                        <Clock size={16} aria-hidden="true" />
-                        <span>
-                          {start} – {end}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
             </section>
 
             <div className="fx-footer-actions">
