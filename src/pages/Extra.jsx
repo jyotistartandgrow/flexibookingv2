@@ -51,6 +51,10 @@ export default function Extra(props) {
     : 0;
   const selectedServiceOptionDetails = cart?.service_option_details;
   const selectedBundleId = Number(cart.service?.[0]?.bundle_id) || 0;
+  const totalServiceBooking =
+    selectedBundleId > 0
+      ? Number(cart.service?.[0]?.bundle_quantity) || Number(capacity) || 1
+      : capacity;
 
   const toggleDiv = (type) => {
     setIsVisible(type);
@@ -134,7 +138,7 @@ export default function Extra(props) {
             const addToCartRes = await axiosInstance.post(`/addtocart`, {
               service_id: service,
               date: moment(date).format("YYYY-MM-DD"),
-              total_service_booking: capacity,
+              total_service_booking: totalServiceBooking,
               time_slot: slot,
               extra_svc_ids: null,
               no_of_persons: 0,
@@ -173,6 +177,7 @@ export default function Extra(props) {
     cart,
     selectedServiceOptionId,
     selectedBundleId,
+    totalServiceBooking,
     dispatch,
   ]);
 
@@ -324,7 +329,7 @@ export default function Extra(props) {
     const { data } = await axiosInstance.post(`/addtocart`, {
       service_id: service,
       date: moment(date).format("YYYY-MM-DD"),
-      total_service_booking: capacity,
+      total_service_booking: totalServiceBooking,
       time_slot: slot,
       extra_svc_ids: extraIdParam,
       no_of_persons: bookParam,
