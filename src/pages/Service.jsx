@@ -1024,6 +1024,7 @@ export default function Service(props) {
         total_formatted: data?.data?.service_total,
         slot: "",
         capacity: data?.data?.service_capacity || bundleQuantity,
+        bundle_quantity: bundleQuantity,
         bundle_id: bundleId,
         selected_component_slots: selectedBundleComponentSlots,
         bundle_components: cartBundleComponents,
@@ -1245,7 +1246,8 @@ export default function Service(props) {
     const { data } = await axiosInstance.post(`/addtocart`, {
       service_id: serviceid,
       date: moment(date).format("YYYY-MM-DD"),
-      total_service_booking: gift ? giftQuantity : book,
+      total_service_booking:
+        bundleId > 0 ? bundleQuantity : gift ? giftQuantity : book,
       time_slot: slot,
       extra_svc_ids: [],
       no_of_persons: 0,
