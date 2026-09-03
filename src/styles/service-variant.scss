@@ -486,9 +486,9 @@
 .fx-slot-bundle-modal-box .fx-component-waiting-message,
 .fx-slot-bundle-modal-box .fx-no-bundle-slots,
 .fx-slot-bundle-modal-box .fx-bundle-selection-message {
-  margin: 0 12px 12px;
+  margin: 0 0px 12px;
   color: #737b87;
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1.4;
 }
 
@@ -739,7 +739,7 @@
 .fx-slot-bundle-modal-box .fx-massage-title {
   margin-bottom: 4px;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .fx-slot-bundle-modal-box .fx-massage-description {
@@ -748,7 +748,7 @@
 }
 
 .fx-slot-bundle-modal-box .fx-massage-accordion-icon {
-  top: 28px;
+  top: 22px;
   right: 28px;
   width: 10px;
   height: 10px;
@@ -817,8 +817,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 21px;
-  height: 21px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: #1671e8;
   color: #fff;

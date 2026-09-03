@@ -1286,10 +1286,10 @@ div.fx-booking input.btn-primary[type="submit"]:focus-visible {
 
 .fx-bundle-box .fx-bundle-item-title {
   margin: 0 0 4px;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   line-height: 1.3;
-  color: #111827;
+  color: var(--darkblue-color);
 }
 
 .fx-bundle-box .fx-bundle-item-description {

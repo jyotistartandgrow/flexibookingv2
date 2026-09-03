@@ -2859,16 +2859,7 @@ export default function Service(props) {
                             <div className="fx-component-label-row">
                              
                               <span className={`fx-component-status fx-status-${component?.state || "waiting"}`}>
-                                <i
-                                  className={
-                                    component?.state === "selected"
-                                      ? "pi pi-check-circle"
-                                      : component?.state === "waiting"
-                                        ? "pi pi-clock"
-                                        : "pi pi-circle-fill"
-                                  }
-                                  aria-hidden="true"
-                                ></i>
+                               
                                 {decodeHtml(component?.status_label || "")}
                               </span>
                             </div>
