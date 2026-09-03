@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
-import { decodeHtml } from "../Utils/Functions";
+import {
+  decodeHtml,
+  formatSelectedComponentSlots,
+} from "../Utils/Functions";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
 import { setStep, setLoading } from "../store/step1Slice";
@@ -86,7 +89,6 @@ export default function CheckoutForm() {
 
     let paymentSuccess = false;
     if (data && data.status == 200) {
-      console.log(data);
       if (data.data.status == "success") {
         const clientSecret = data.data.data;
         const result = await stripe.confirmCardPayment(clientSecret, {
@@ -112,7 +114,8 @@ export default function CheckoutForm() {
                 voucher,
                 date: moment(date).format("YYYY-MM-DD"),
                 slot,
-                selected_component_slots: redeemBundleSlots,
+                selected_component_slots:
+                  formatSelectedComponentSlots(redeemBundleSlots),
                 recipient: voucherDetail?.recepient_data || {},
               },
             );

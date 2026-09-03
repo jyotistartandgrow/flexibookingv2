@@ -2821,6 +2821,21 @@ export default function Service(props) {
                     )
                       ? component.available_slots[activeTab]
                       : [];
+                    const allComponentSlots = Array.isArray(
+                      component?.available_slots?.all,
+                    )
+                      ? component.available_slots.all
+                      : Object.values(component?.available_slots || {})
+                          .filter(Array.isArray)
+                          .flat()
+                          .filter(
+                            (slotItem, slotIndex, slots) =>
+                              slots.findIndex(
+                                (candidate) =>
+                                  candidate?.slot_label ===
+                                  slotItem?.slot_label,
+                              ) === slotIndex,
+                          );
 
                     return (
                       <div
@@ -2882,29 +2897,31 @@ export default function Service(props) {
 
                         {isExpanded && (
                           <div className="fx-massage-card-content">
-                            <div className="fx-bundle-slot-tabs">
-                              {[
-                                ["morning", "Morning"],
-                                ["afternoon", "Afternoon"],
-                                ["all", "All day"],
-                              ].map(([tabKey, tabLabel]) => (
-                                <button
-                                  className={
-                                    activeTab === tabKey ? "fx-active" : ""
-                                  }
-                                  key={tabKey}
-                                  type="button"
-                                  onClick={() =>
-                                    setBundleSlotTabs((previousTabs) => ({
-                                      ...previousTabs,
-                                      [position]: tabKey,
-                                    }))
-                                  }
-                                >
-                                  {tabLabel}
-                                </button>
-                              ))}
-                            </div>
+                            {allComponentSlots.length > 1 && (
+                              <div className="fx-bundle-slot-tabs">
+                                {[
+                                  ["morning", "Morning"],
+                                  ["afternoon", "Afternoon"],
+                                  ["all", "All day"],
+                                ].map(([tabKey, tabLabel]) => (
+                                  <button
+                                    className={
+                                      activeTab === tabKey ? "fx-active" : ""
+                                    }
+                                    key={tabKey}
+                                    type="button"
+                                    onClick={() =>
+                                      setBundleSlotTabs((previousTabs) => ({
+                                        ...previousTabs,
+                                        [position]: tabKey,
+                                      }))
+                                    }
+                                  >
+                                    {tabLabel}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
 
                             {componentSlots.length > 0 ? (
                               <div className="fx-time-slots">

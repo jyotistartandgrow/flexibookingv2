@@ -26,6 +26,59 @@ export default function Thankyou() {
   const serviceQrCodeImage = serviceBookingData?.qrcode
     ? `data:image/png;base64,${serviceBookingData.qrcode}`
     : null;
+  const detailedRedeemProducts = bookingData?.product_details?.products;
+  const redeemProductDetails =
+    Array.isArray(detailedRedeemProducts) && detailedRedeemProducts.length > 0
+      ? detailedRedeemProducts
+      : bookingData?.products || [];
+  const detectedRedeemBundleProducts = redeemProductDetails.filter(
+    (product) =>
+      product?.item_type === "bundle" &&
+      Array.isArray(product?.bundle_components),
+  );
+  const selectedRedeemBundle = bookingData?.product_details?.selected_bundle;
+  const redeemBundleProducts =
+    detectedRedeemBundleProducts.length > 0
+      ? detectedRedeemBundleProducts
+      : Array.isArray(selectedRedeemBundle?.components)
+        ? [
+            {
+              ...selectedRedeemBundle,
+              name: selectedRedeemBundle.bundle_name,
+              bundle_components: selectedRedeemBundle.components,
+            },
+          ]
+        : [];
+
+  const getRedeemBundleComponentSlot = (bundleProduct, component) => {
+    const selectedSlots = [
+      ...(Array.isArray(bundleProduct?.selected_component_slots)
+        ? bundleProduct.selected_component_slots
+        : []),
+      ...(Array.isArray(
+        bookingData?.product_details?.selected_bundle
+          ?.selected_component_slots,
+      )
+        ? bookingData.product_details.selected_bundle.selected_component_slots
+        : []),
+    ];
+    const selectedSlot = selectedSlots.find(
+      (slotItem) =>
+        Number(slotItem?.bundle_item_id) ===
+          Number(component?.bundle_item_id) ||
+        Number(slotItem?.position ?? slotItem?.component_position) ===
+          Number(component?.component_position),
+    );
+
+    return (
+      selectedSlot?.slot ||
+      selectedSlot?.slot_label ||
+      component?.slot_label ||
+      (component?.from && component?.to
+        ? `${component.from} - ${component.to}`
+        : "-")
+    );
+  };
   
   const bookingdetail = useCallback(async () => {
     dispatch(setLoading(true));
@@ -78,6 +131,13 @@ export default function Thankyou() {
       .fx-order-table th { font-weight: 600; padding: 10px 4px; text-align: left; border-bottom: 2px solid #ddd; }
       .fx-order-table td { color: #777; font-weight: 300; padding: 10px 4px; text-align: left; border-bottom: 1px solid #eee; }
       .fx-order-table th:last-child, .fx-order-table td:last-child { text-align: right; }
+      .fx-bundle-package { border-top: 1px solid #ddd; padding: 12px 0; }
+      .fx-bundle-package-summary strong, .fx-bundle-package-summary span { display: block; }
+      .fx-bundle-component-wrap { margin: 10px 0 12px; overflow: hidden; border: 1px solid #ddd; border-radius: 7px; }
+      .fx-bundle-component-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+      .fx-bundle-component-table th { background: #f7f9fc; padding: 9px; text-align: left; }
+      .fx-bundle-component-table td { padding: 9px; color: #555; border-top: 1px solid #eee; text-align: left; }
+      .fx-bundle-component-table small { display: block; margin-top: 3px; color: #777; }
       .fx-summary { border-top: 2px solid #ddd; padding-top: 15px; font-weight: 500; margin-top: 4px; }
       .fx-summary div { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
       .fx-address-block { border-top: 1px solid #ddd; margin-top: 15px; display: flex; justify-content: space-between; gap: 20px; }
@@ -265,6 +325,76 @@ export default function Thankyou() {
                   ))}
                 </tbody>
               </table>
+
+              {redeemBundleProducts.map((bundleProduct, bundleIndex) => {
+                const showSlotColumn = bundleProduct.bundle_components.some(
+                  (component) => Boolean(component?.slot_label),
+                );
+
+                return (
+                  <section
+                    className="fx-bundle-package fx-redeem-bundle-package"
+                    key={
+                      bundleProduct?.bundle_id ||
+                      `redeem-bundle-${bundleIndex}`
+                    }
+                  >
+                    <div className="fx-bundle-package-summary">
+                      <div>
+                        <strong>Package</strong>
+                        <span>{bundleProduct?.name}</span>
+                      </div>
+                    </div>
+
+                    <div className="fx-bundle-component-wrap">
+                      <table className="fx-bundle-component-table fx-redeem-bundle-component-table">
+                        <thead>
+                          <tr>
+                            <th>Component</th>
+                            <th>Quantity</th>
+                            <th>Date</th>
+                            {showSlotColumn && <th>Slot</th>}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {bundleProduct.bundle_components.map(
+                            (component, componentIndex) => (
+                              <tr
+                                key={
+                                  component?.bundle_item_id || componentIndex
+                                }
+                              >
+                                <td>
+                                  <strong>{component?.service_name}</strong>
+                                  <small>
+                                    Component{" "}
+                                    {component?.component_position ||
+                                      componentIndex + 1}
+                                  </small>
+                                </td>
+                                <td>
+                                  {component?.quantity_consumed ??
+                                    component?.quantity ??
+                                    "-"}
+                                </td>
+                                <td>{component?.selected_date || "-"}</td>
+                                {showSlotColumn && (
+                                  <td>
+                                    {getRedeemBundleComponentSlot(
+                                      bundleProduct,
+                                      component,
+                                    )}
+                                  </td>
+                                )}
+                              </tr>
+                            ),
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                );
+              })}
 
               {bookingData?.coupon != "N/A" && bookingData?.coupon && (
                 <table className="fx-billing-shipping-notification noborder">

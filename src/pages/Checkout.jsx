@@ -142,13 +142,16 @@ export default function Checkout(props) {
             .map((group) => ({
               ...group,
               cards: (group.cards || []).filter(
-                (card) => card.method === "online",
+                (card) =>
+                  card.method === "online" && card.id != "partial_payment",
               ),
             }))
             .filter((group) => group.cards.length > 0)
         : responseGroups;
       const cards = gift
-        ? responseCards.filter((card) => card.method === "online")
+        ? responseCards.filter(
+            (card) => card.method === "online" && card.id != "partial_payment",
+          )
         : responseCards;
       const selectedCardIsAvailable = cards.some(
         (card) => card.id === paymentData?.selected_card?.id,
@@ -162,7 +165,6 @@ export default function Checkout(props) {
         cards[0] ||
         groups.flatMap((group) => group.cards || [])[0] ||
         null;
-
       setPaymentGroups(groups);
       setSelectedPaymentCard(defaultCard);
       dispatch(setSelectedPaymentMethod(defaultCard?.method || null));
@@ -907,9 +909,7 @@ export default function Checkout(props) {
                               key={card.id}
                               onClick={() => {
                                 setSelectedPaymentCard(card);
-                                dispatch(
-                                  setSelectedPaymentMethod(card.method),
-                                );
+                                dispatch(setSelectedPaymentMethod(card.method));
                               }}
                               role="radio"
                               aria-checked={isSelected}
