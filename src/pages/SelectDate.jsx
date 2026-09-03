@@ -520,16 +520,7 @@ export default function SelectDate() {
                                   <span
                                     className={`fx-component-status fx-status-${isSelected ? "selected" : isWaiting ? "waiting" : "active"}`}
                                   >
-                                    <i
-                                      className={
-                                        isSelected
-                                          ? "pi pi-check-circle"
-                                          : isWaiting
-                                            ? "pi pi-clock"
-                                            : "pi pi-circle-fill"
-                                      }
-                                      aria-hidden="true"
-                                    ></i>{" "}
+                                   {" "}
                                     {isSelected
                                       ? "Selected"
                                       : isWaiting
