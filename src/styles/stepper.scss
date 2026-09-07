@@ -271,6 +271,10 @@
     padding-left: 4%;
     padding-right: 3%;
 }
+.fx-stepper-tabstyle.fx-redeem-booking-step .active.datestep{
+  width: 25%;
+    left: 10%;
+}
 .fx-stepper-tabstyle.fx-redeem-booking-step .step.servicesstep{
     width: 23%;
     left: 29%;
@@ -302,6 +306,9 @@
     padding-left: 2%;
     padding-right: 3%;
     z-index: 0;
+  }
+  .fx-stepper-tabstyle.fx-redeem-booking-step .active.paymentstep{
+        padding-left: 10%;
   }
 .fx-stepper-tabstyle.fx-redeem-booking-step .codestep.active {
  width: 14%;
@@ -339,8 +346,6 @@
     flex-grow: 2.5;
     left: 26%;
   }
-
-  
 
   .fx-stepper-tabstyle.fx-redeem-booking-step .step.servicesstep{
     width: 23%;
