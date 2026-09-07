@@ -85,6 +85,12 @@ export default function Service(props) {
     return numericBundleId > 0 ? numericBundleId : 0;
   };
 
+  const canContinueService =
+    Number(book) > 0 &&
+    Boolean(slot) &&
+    selectedSlotContext.serviceId === serviceid &&
+    selectedSlotContext.bundleId === normalizeBundleId(bundleId);
+
   const serviceOptionList = serviceOptionChoices
     ? [
         serviceOptionChoices.base_option,
@@ -1086,11 +1092,7 @@ export default function Service(props) {
   };
 
   const bookservice = async () => {
-    const hasMatchingSlotContext =
-      selectedSlotContext.serviceId === serviceid &&
-      selectedSlotContext.bundleId === normalizeBundleId(bundleId);
-
-    if (book == 0 || !slot || !hasMatchingSlotContext) {
+    if (!canContinueService) {
       Swal.fire({
         toast: true,
         position: "top-end", // or 'bottom-end', 'top-start', etc.
@@ -2672,18 +2674,18 @@ export default function Service(props) {
                                   : "none",
                             }}
                           >
-                            <div
+                            <button
+                              type="button"
+                              disabled={!canContinueService}
                               className={
-                                slotVisible == "morning"
+                                canContinueService
                                   ? "continuebtn"
                                   : "continuebtn fx-disable-button"
                               }
-                              onClick={() =>
-                                slotVisible == "morning" ? bookservice() : ""
-                              }
+                              onClick={bookservice}
                             >
                               Continue
-                            </div>
+                            </button>
                           </div>
                           <div
                             className="fx-popup-rightslot-continuebtn"
@@ -2694,18 +2696,18 @@ export default function Service(props) {
                                   : "none",
                             }}
                           >
-                            <div
+                            <button
+                              type="button"
+                              disabled={!canContinueService}
                               className={
-                                slotVisible == "afternoon"
+                                canContinueService
                                   ? "continuebtn"
                                   : "continuebtn fx-disable-button"
                               }
-                              onClick={() =>
-                                slotVisible == "afternoon" ? bookservice() : ""
-                              }
+                              onClick={bookservice}
                             >
                               Continue
-                            </div>
+                            </button>
                           </div>
                           <div
                             className="fx-popup-rightslot-continuebtn"
@@ -2722,30 +2724,18 @@ export default function Service(props) {
                                   : "none",
                             }}
                           >
-                            <div
+                            <button
+                              type="button"
+                              disabled={!canContinueService}
                               className={
-                                slotVisible == "all" ||
-                                dateslot.find((s) =>
-                                  moment(
-                                    moment(date).format("YYYY-MM-DD"),
-                                  ).isSame(s.date),
-                                )?.slots.single_time_slot.slot_type
+                                canContinueService
                                   ? "continuebtn"
                                   : "continuebtn fx-disable-button"
                               }
-                              onClick={() =>
-                                slotVisible == "all" ||
-                                dateslot.find((s) =>
-                                  moment(
-                                    moment(date).format("YYYY-MM-DD"),
-                                  ).isSame(s.date),
-                                )?.slots.single_time_slot.slot_type
-                                  ? bookservice()
-                                  : ""
-                              }
+                              onClick={bookservice}
                             >
                               Continue
-                            </div>
+                            </button>
                           </div>
                         </>
                       )}

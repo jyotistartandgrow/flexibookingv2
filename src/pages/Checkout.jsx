@@ -5,6 +5,7 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import Swal from "sweetalert2";
+import moment from "moment";
 import axiosInstance from "../Utils/Interceptor";
 import useFetch from "../Utils/CustomHook";
 import PhoneInput from "react-phone-input-2";
@@ -21,6 +22,7 @@ import {
 import GiftCardPreviewButton from "./Giftcardpreviewbutton";
 import {
   decodeHtml,
+  formatSelectedComponentSlots,
   validateEmail,
   validatePhoneForCountry,
 } from "../Utils/Functions";
@@ -38,6 +40,12 @@ export default function Checkout(props) {
   const opendatepurchase = useSelector((state) => state.step1.opendatepurchase);
   const voucherDetail = useSelector((state) => state.step3.voucherdetail);
   const redeemBooking = useSelector((state) => state.step1.redeemBooking);
+  const voucher = useSelector((state) => state.step1.voucher);
+  const date = useSelector((state) => state.step1.date);
+  const slot = useSelector((state) => state.step3.slot);
+  const redeemBundleSlots = useSelector(
+    (state) => state.step3.redeemBundleSlots,
+  );
 
   const { data: countries } = useFetch("/countries", {
     method: "get",
@@ -51,7 +59,17 @@ export default function Checkout(props) {
   const [rphoneValid, setRPhoneValid] = useState(true);
   const [errorlist, setErrorlist] = useState({});
   const [receiverErrors, setReceiverErrors] = useState({});
-  const [visibleField, setVisibleField] = useState({});
+  const [configuredFields, setVisibleField] = useState({});
+  const visibleField = props.redeemBooking
+    ? {
+        ...configuredFields,
+        sgbm_field_5: true,
+        sgbm_field_6: true,
+        sgbm_field_7: true,
+        sgbm_field_8: true,
+        sgbm_field_9: true,
+      }
+    : configuredFields;
   const [selectedCountry, setSelectedCountry] = useState({ dialCode: "91" });
   const [paymentGroups, setPaymentGroups] = useState([]);
   const [selectedPaymentCard, setSelectedPaymentCard] = useState(null);
@@ -261,11 +279,17 @@ export default function Checkout(props) {
         return;
       }
     }
-    if (!billdata.sgbm_field_5 && visibleField.sgbm_field_5) {
+    if (
+      !String(billdata.sgbm_field_5 || "").trim() &&
+      visibleField.sgbm_field_5
+    ) {
       setErrorlist({ sgbm_field_5: true });
       return;
     }
-    if (!billdata.sgbm_field_6 && visibleField.sgbm_field_6) {
+    if (
+      !String(billdata.sgbm_field_6 || "").trim() &&
+      visibleField.sgbm_field_6
+    ) {
       setErrorlist({ sgbm_field_6: true });
       return;
     }
@@ -273,7 +297,14 @@ export default function Checkout(props) {
       setErrorlist({ sgbm_field_8: true });
       return;
     }
-    if (!billdata.sgbm_field_9 && visibleField.sgbm_field_9) {
+    if (props.redeemBooking && !billdata.sgbm_field_7) {
+      setErrorlist({ sgbm_field_7: true });
+      return;
+    }
+    if (
+      !String(billdata.sgbm_field_9 || "").trim() &&
+      visibleField.sgbm_field_9
+    ) {
       setErrorlist({ sgbm_field_9: true });
       return;
     }
@@ -377,10 +408,69 @@ export default function Checkout(props) {
     });
 
     if (data && data.status == 200 && data.data.status == "success") {
-      if (selectedPaymentCard.method === "offline") {
+      if (
+        selectedPaymentCard.gateway === "offline" ||
+        selectedPaymentCard.gateway === "payment_link"
+      ) {
         if (redeemBooking) {
-          dispatch(setLoading(false));
-          navigate(`/redeem-thankyou`);
+          try {
+            const { data: redemption } = await axiosInstance.post(
+              `/voucher-redeem`,
+              {
+                voucher,
+                date: moment(date).format("YYYY-MM-DD"),
+                slot,
+                selected_component_slots:
+                  formatSelectedComponentSlots(redeemBundleSlots),
+                recipient: {
+                  ...voucherDetail?.recepient_data,
+                  recipient_first_name: billdata.sgbm_field_1 || "",
+                  recipient_last_name: billdata.sgbm_field_2 || "",
+                  recipient_email: billdata.sgbm_field_3 || "",
+                  recipient_contact: billdata.sgbm_field_4 || "",
+                  recipient_address: billdata.sgbm_field_5 || "",
+                  recipient_city: billdata.sgbm_field_6 || "",
+                  recipient_state: billdata.sgbm_field_7 || "",
+                  recipient_country: billdata.sgbm_field_8 || "",
+                  recipient_postcode: billdata.sgbm_field_9 || "",
+                },
+              },
+            );
+            if (
+              redemption?.status != 200 ||
+              redemption?.data?.status !== "success"
+            ) {
+              throw new Error(
+                redemption?.message || "Unable to redeem the voucher.",
+              );
+            }
+
+            const emailResponse = await axiosInstance.post(
+              `/redeem-upsell-send-email`,
+              {
+                redeem_code: voucher,
+                booking_key: bookingkey,
+              },
+            );
+            if (emailResponse?.data?.status != 200) {
+              throw new Error(
+                emailResponse?.data?.message ||
+                  "Unable to send the confirmation email",
+              );
+            }
+            navigate(`/redeem-thankyou`);
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: "Voucher redemption failed",
+              text:
+                error?.response?.data?.message ||
+                error?.message ||
+                "The new service was booked, but the voucher could not be redeemed.",
+            });
+          } finally {
+            dispatch(setLoading(false));
+          }
         } else if (opendatepurchase) {
           dispatch(setLoading(false));
           navigate(`/opendate-thankyou?pid=${bookingkey}`);
@@ -549,14 +639,22 @@ export default function Checkout(props) {
             <select
               value={billdata.sgbm_field_8 || ""}
               onChange={(e) => {
-                setBilldata({ ...billdata, sgbm_field_8: e.target.value });
-                visibleField.sgbm_field_8 && getState(e.target.value);
+                setBilldata({
+                  ...billdata,
+                  sgbm_field_8: e.target.value,
+                  sgbm_field_7: "",
+                });
+                setState([]);
+                if (e.target.value) getState(e.target.value);
               }}
               className={errorlist.sgbm_field_8 ? "fx-invalid" : ""}
             >
+              <option value="">Select Country</option>
               {countries &&
                 Object.keys(countries.data).map((code) => (
-                  <option value={code}>{countries.data[code]}</option>
+                  <option key={code} value={code}>
+                    {countries.data[code]}
+                  </option>
                 ))}
             </select>
             {errorlist.sgbm_field_8 && (
@@ -574,9 +672,12 @@ export default function Checkout(props) {
               }}
               className={errorlist.sgbm_field_7 ? "fx-invalid" : ""}
             >
+              <option value="">Select State</option>
               {states.length > 0 &&
                 Object.keys(states).map((key) => (
-                  <option value={states[key].code}>{states[key].name}</option>
+                  <option key={states[key].code} value={states[key].code}>
+                    {states[key].name}
+                  </option>
                 ))}
             </select>
             {errorlist.sgbm_field_7 && (
@@ -605,10 +706,10 @@ export default function Checkout(props) {
           <div
             className={`fx-element-box ${visibleField.sgbm_field_9 ? "" : "fx-hidden"}`}
           >
-            <label>Zip</label>
+            <label>Postcode</label>
             <input
               type="text"
-              placeholder="State"
+              placeholder="Postcode"
               value={billdata.sgbm_field_9 || ""}
               className={errorlist.sgbm_field_9 ? "fx-invalid" : ""}
               onChange={(e) =>
@@ -616,7 +717,7 @@ export default function Checkout(props) {
               }
             />
             {errorlist.sgbm_field_9 && (
-              <span class="fx-errortext">Enter Zip</span>
+              <span class="fx-errortext">Enter Postcode</span>
             )}
           </div>
         </div>
