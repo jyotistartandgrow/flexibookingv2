@@ -5,7 +5,6 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import Swal from "sweetalert2";
-import moment from "moment";
 import axiosInstance from "../Utils/Interceptor";
 import useFetch from "../Utils/CustomHook";
 import PhoneInput from "react-phone-input-2";
@@ -22,7 +21,6 @@ import {
 import GiftCardPreviewButton from "./Giftcardpreviewbutton";
 import {
   decodeHtml,
-  formatSelectedComponentSlots,
   validateEmail,
   validatePhoneForCountry,
 } from "../Utils/Functions";
@@ -40,12 +38,6 @@ export default function Checkout(props) {
   const opendatepurchase = useSelector((state) => state.step1.opendatepurchase);
   const voucherDetail = useSelector((state) => state.step3.voucherdetail);
   const redeemBooking = useSelector((state) => state.step1.redeemBooking);
-  const voucher = useSelector((state) => state.step1.voucher);
-  const date = useSelector((state) => state.step1.date);
-  const slot = useSelector((state) => state.step3.slot);
-  const redeemBundleSlots = useSelector(
-    (state) => state.step3.redeemBundleSlots,
-  );
 
   const { data: countries } = useFetch("/countries", {
     method: "get",
@@ -279,17 +271,11 @@ export default function Checkout(props) {
         return;
       }
     }
-    if (
-      !String(billdata.sgbm_field_5 || "").trim() &&
-      visibleField.sgbm_field_5
-    ) {
+    if (!String(billdata.sgbm_field_5 || "").trim() && visibleField.sgbm_field_5) {
       setErrorlist({ sgbm_field_5: true });
       return;
     }
-    if (
-      !String(billdata.sgbm_field_6 || "").trim() &&
-      visibleField.sgbm_field_6
-    ) {
+    if (!String(billdata.sgbm_field_6 || "").trim() && visibleField.sgbm_field_6) {
       setErrorlist({ sgbm_field_6: true });
       return;
     }
@@ -301,10 +287,7 @@ export default function Checkout(props) {
       setErrorlist({ sgbm_field_7: true });
       return;
     }
-    if (
-      !String(billdata.sgbm_field_9 || "").trim() &&
-      visibleField.sgbm_field_9
-    ) {
+    if (!String(billdata.sgbm_field_9 || "").trim() && visibleField.sgbm_field_9) {
       setErrorlist({ sgbm_field_9: true });
       return;
     }
@@ -408,69 +391,10 @@ export default function Checkout(props) {
     });
 
     if (data && data.status == 200 && data.data.status == "success") {
-      if (
-        selectedPaymentCard.gateway === "offline" ||
-        selectedPaymentCard.gateway === "payment_link"
-      ) {
+      if (selectedPaymentCard.method === "offline") {
         if (redeemBooking) {
-          try {
-            const { data: redemption } = await axiosInstance.post(
-              `/voucher-redeem`,
-              {
-                voucher,
-                date: moment(date).format("YYYY-MM-DD"),
-                slot,
-                selected_component_slots:
-                  formatSelectedComponentSlots(redeemBundleSlots),
-                recipient: {
-                  ...voucherDetail?.recepient_data,
-                  recipient_first_name: billdata.sgbm_field_1 || "",
-                  recipient_last_name: billdata.sgbm_field_2 || "",
-                  recipient_email: billdata.sgbm_field_3 || "",
-                  recipient_contact: billdata.sgbm_field_4 || "",
-                  recipient_address: billdata.sgbm_field_5 || "",
-                  recipient_city: billdata.sgbm_field_6 || "",
-                  recipient_state: billdata.sgbm_field_7 || "",
-                  recipient_country: billdata.sgbm_field_8 || "",
-                  recipient_postcode: billdata.sgbm_field_9 || "",
-                },
-              },
-            );
-            if (
-              redemption?.status != 200 ||
-              redemption?.data?.status !== "success"
-            ) {
-              throw new Error(
-                redemption?.message || "Unable to redeem the voucher.",
-              );
-            }
-
-            const emailResponse = await axiosInstance.post(
-              `/redeem-upsell-send-email`,
-              {
-                redeem_code: voucher,
-                booking_key: bookingkey,
-              },
-            );
-            if (emailResponse?.data?.status != 200) {
-              throw new Error(
-                emailResponse?.data?.message ||
-                  "Unable to send the confirmation email",
-              );
-            }
-            navigate(`/redeem-thankyou`);
-          } catch (error) {
-            Swal.fire({
-              icon: "error",
-              title: "Voucher redemption failed",
-              text:
-                error?.response?.data?.message ||
-                error?.message ||
-                "The new service was booked, but the voucher could not be redeemed.",
-            });
-          } finally {
-            dispatch(setLoading(false));
-          }
+          dispatch(setLoading(false));
+          navigate(`/redeem-thankyou`);
         } else if (opendatepurchase) {
           dispatch(setLoading(false));
           navigate(`/opendate-thankyou?pid=${bookingkey}`);
@@ -652,9 +576,7 @@ export default function Checkout(props) {
               <option value="">Select Country</option>
               {countries &&
                 Object.keys(countries.data).map((code) => (
-                  <option key={code} value={code}>
-                    {countries.data[code]}
-                  </option>
+                  <option key={code} value={code}>{countries.data[code]}</option>
                 ))}
             </select>
             {errorlist.sgbm_field_8 && (
@@ -675,9 +597,7 @@ export default function Checkout(props) {
               <option value="">Select State</option>
               {states.length > 0 &&
                 Object.keys(states).map((key) => (
-                  <option key={states[key].code} value={states[key].code}>
-                    {states[key].name}
-                  </option>
+                  <option key={states[key].code} value={states[key].code}>{states[key].name}</option>
                 ))}
             </select>
             {errorlist.sgbm_field_7 && (
