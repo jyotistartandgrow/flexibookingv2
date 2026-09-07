@@ -748,7 +748,7 @@
 }
 
 .fx-slot-bundle-modal-box .fx-massage-accordion-icon {
-  top: 22px;
+  top: 27px;
   right: 28px;
   width: 10px;
   height: 10px;
@@ -775,6 +775,15 @@
   border-color: #d8e0ea;
   color: #475467;
   font-size: 15px;
+}
+
+.fx-combined-details-header span.fx-title {
+  color: #344054;
+}
+
+div.fx-top-order-details-card.fx-is-open > button.fx-combined-details-toggle:hover {
+    border-color: inherit;
+    background-color: inherit;
 }
 
 .fx-slot-bundle-modal-box .fx-bundle-slot-tabs button i {
@@ -817,12 +826,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: #1671e8;
   color: #fff;
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .fx-slot-bundle-modal-box .fx-time-slot small {
