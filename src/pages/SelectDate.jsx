@@ -528,12 +528,14 @@ export default function SelectDate() {
                                         : "Choose now"}
                                   </span>
                                 </div>
+                                <div className="fx-bundle-component-title-row">
                                 <h3 className="fx-massage-title">
                                   {component?.service_name}
                                 </h3>
                                 <p className="fx-massage-description">
                                   Quantity: {componentQuantity}
                                 </p>
+                                </div>
                               </div>
                               {!isWaiting && (
                                 <span className="fx-massage-accordion-icon"></span>

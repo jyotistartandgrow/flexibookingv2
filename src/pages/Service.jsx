@@ -2855,7 +2855,7 @@ export default function Service(props) {
                                 {decodeHtml(component?.status_label || "")}
                               </span>
                             </div>
-                            <div>
+                            <div className="fx-bundle-component-title-row">
                             <h3 className="fx-massage-title">
                               {decodeHtml(component?.service_name || "")}
                             </h3>
