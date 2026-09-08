@@ -781,9 +781,9 @@
   color: #344054;
 }
 
-div.fx-top-order-details-card.fx-is-open > button.fx-combined-details-toggle:hover {
-    border-color: inherit;
+.fx-top-order-details-card button.fx-combined-details-toggle:hover {
     background-color: inherit;
+    border-color: initial;
 }
 
 .fx-slot-bundle-modal-box .fx-bundle-slot-tabs button i {

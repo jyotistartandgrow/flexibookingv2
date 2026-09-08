@@ -39,7 +39,7 @@ export default function CombinedDetailsCard({ topbar }) {
       <div
         className={`fx-top-order-details-card ${isOpen ? "fx-is-open" : ""}`}
       >
-        <button
+        <div
           type="button"
           className="fx-combined-details-toggle"
           aria-expanded={isOpen}
@@ -61,7 +61,7 @@ export default function CombinedDetailsCard({ topbar }) {
               </span>
             )}
           </span>
-        </button>
+        </div>
 
         <div className="fx-collapsible-content">
           <section className="fx-combined-details-section">
