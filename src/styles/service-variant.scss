@@ -1032,7 +1032,10 @@
   .fx-slot-bundle-modal-box .fx-time-slots {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
+ .fx-bundle-component-title-row {
+    width: 100%;
+    display: inline-block;
+}
 
 
   .fx-slot-bundle-modal-box .fx-booking-modal-footer {
