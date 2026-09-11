@@ -215,8 +215,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                   <React.Fragment key={"ct-" + ckey}>
                     <div className="fx-serviceitem">
                       <div className="itemname">
-                        {ct.name}{" "}
-                        {!gift && !ct.bundle_id && `X ${ct.capacity}`}
+                        {ct.name} {!gift && !ct.bundle_id && `X ${ct.capacity}`}
                         {cart?.service_option_details?.name && (
                           <>( {cart.service_option_details.name} )</>
                         )}
@@ -273,7 +272,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                                   <th>Component</th>
                                   <th>Quantity</th>
                                   <th>Date</th>
-                                  <th>Slot</th>
+                                  {!gift && <th>Slot</th>}
                                   <th>Line total</th>
                                 </tr>
                               </thead>
@@ -287,12 +286,16 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                                       }
                                     >
                                       <td>
-                                        <strong>{component.service_name}</strong>
-                                        <small>{component.component_label}</small>
+                                        <strong>
+                                          {component.service_name}
+                                        </strong>
+                                        <small>
+                                          {component.component_label}
+                                        </small>
                                       </td>
                                       <td>{component.quantity}</td>
                                       <td>{component.date || "-"}</td>
-                                      <td>{formatBundleSlot(component)}</td>
+                                      {!gift && <td>{formatBundleSlot(component)}</td>}
                                       <td>
                                         {component.line_total_formatted
                                           ? decodeHtml(

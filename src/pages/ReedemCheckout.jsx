@@ -45,8 +45,7 @@ export default function ReedemCheckout() {
       getFields();
       setErrorlist({});
       setBilldata(voucherdetail.recepient_data || {});
-      const recipientCountry =
-        voucherdetail.recepient_data?.recipient_country;
+      const recipientCountry = voucherdetail.recepient_data?.recipient_country;
       if (recipientCountry) {
         getState(recipientCountry);
       }
@@ -142,8 +141,7 @@ export default function ReedemCheckout() {
       voucher,
       date: moment(date).format("YYYY-MM-DD"),
       slot,
-      selected_component_slots:
-        formatSelectedComponentSlots(redeemBundleSlots),
+      selected_component_slots: redeemBundleSlots,
       recipient: billdata,
     });
 

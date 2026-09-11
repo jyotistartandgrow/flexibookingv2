@@ -935,16 +935,88 @@ export default function Service(props) {
       const { data } = await axiosInstance(
         `/price-format?service_id=${productDetails.id}&capacity=${bundleQuantity}&date=${moment(
           date,
-        ).format("YYYY-MM-DD")}&extra_id=${extraid}&extra_capacity=${extracapacity}&is_bundle=true&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_component_slots=${encodedComponentSlots}`,
+        ).format(
+          "YYYY-MM-DD",
+        )}&extra_id=${extraid}&extra_capacity=${extracapacity}&is_bundle=true&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_component_slots=${encodedComponentSlots}`,
         { method: "get" },
       );
-      const pricedBundleComponents = [
-        data?.data?.bundle_items?.items,
-        data?.data?.bundle_components,
-        data?.data?.bundle_component_details,
-        data?.data?.bundle_details?.components,
-        data?.data?.components,
-      ].find(Array.isArray) || [];
+      cartupdate(data);
+      dispatch(setTimeslot(""));
+      dispatch(setCapacity(bundleQuantity));
+      dispatch(setService(serviceid));
+      setVisible(false);
+      hasExtra();
+    } catch (error) {
+      dispatch(setLoading(false));
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "error",
+        title:
+          error?.response?.data?.message ||
+          "Unable to calculate the bundle price",
+      });
+    }
+  };
+
+  const bookservice = async () => {
+    if (!canContinueService) {
+      Swal.fire({
+        toast: true,
+        position: "top-end", // or 'bottom-end', 'top-start', etc.
+        showConfirmButton: false,
+        timer: 3000, // auto-close after 3 seconds
+        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
+        title: "Please choose slot and capacity",
+      });
+      return;
+    }
+
+    if (book < currentitem.min_capacity) {
+      Swal.fire({
+        toast: true,
+        position: "top-end", // or 'bottom-end', 'top-start', etc.
+        showConfirmButton: false,
+        timer: 3000, // auto-close after 3 seconds
+        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
+        title: "Minimum capacity to book is " + currentitem.min_capacity,
+      });
+      return;
+    }
+
+    dispatch(setLoading(true));
+    const { data } = await axiosInstance(
+      `/price-format?service_id=${
+        productDetails.id
+      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&extra_id=${extraid}&extra_capacity=${extracapacity}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}`,
+      {
+        method: "get",
+      },
+    );
+    cartupdate(data);
+    dispatch(setTimeslot(slot));
+    dispatch(setCapacity(book));
+    dispatch(setService(serviceid));
+    setVisible(false);
+    hasExtra();
+  };
+
+  const cartupdate = (data) => {
+    let cartobj = {};
+    if (
+      bundleId > 0 &&
+      (!data?.data?.bundle_items || !data?.data?.bundle_components)
+    ) {
+      const pricedBundleComponents =
+        [
+          data?.data?.bundle_items?.items,
+          data?.data?.bundle_components,
+          data?.data?.bundle_component_details,
+          data?.data?.bundle_details?.components,
+          data?.data?.components,
+        ].find(Array.isArray) || [];
       const cartBundleComponents = bundleComponents.map((component) => {
         const componentPosition = Number(component?.component_position);
         const selectedComponentSlot = selectedBundleComponentSlots.find(
@@ -1022,7 +1094,8 @@ export default function Service(props) {
         };
       });
       const bundleTotals = data?.data?.bundle_items?.totals;
-      const cartobj = {
+
+      cartobj = {
         id: data?.data?.service_id || productDetails.id,
         name: productDetails.service_title,
         price: productDetails.svc_price,
@@ -1056,85 +1129,18 @@ export default function Service(props) {
             }
           : null,
       };
-      let extraobj = cart.extra ? cart.extra : [];
-      if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
-        extraobj = [];
-      }
-      dispatch(
-        setCart({
-          ...cart,
-          service: [cartobj],
-          extra: extraobj,
-          total: data?.data?.total,
-          total_formatted: data?.data?.total_formated,
-          discount: 0,
-          subtotal: data?.data?.total_formated,
-        }),
-      );
-      dispatch(setTimeslot(""));
-      dispatch(setCapacity(bundleQuantity));
-      dispatch(setService(serviceid));
-      setVisible(false);
-      hasExtra();
-    } catch (error) {
-      dispatch(setLoading(false));
-      Swal.fire({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        icon: "error",
-        title:
-          error?.response?.data?.message ||
-          "Unable to calculate the bundle price",
-      });
+    } else {
+      cartobj = {
+        id: data?.data?.service_id,
+        name: productDetails.service_title,
+        price: productDetails.svc_price,
+        total: data?.data?.service_total,
+        total_formatted: data?.data?.service_total,
+        slot: slot,
+        capacity: data?.data?.service_capacity,
+        bundle_id: bundleId > 0 ? bundleId : null,
+      };
     }
-  };
-
-  const bookservice = async () => {
-    if (!canContinueService) {
-      Swal.fire({
-        toast: true,
-        position: "top-end", // or 'bottom-end', 'top-start', etc.
-        showConfirmButton: false,
-        timer: 3000, // auto-close after 3 seconds
-        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Please choose slot and capacity",
-      });
-      return;
-    }
-
-    if (book < currentitem.min_capacity) {
-      Swal.fire({
-        toast: true,
-        position: "top-end", // or 'bottom-end', 'top-start', etc.
-        showConfirmButton: false,
-        timer: 3000, // auto-close after 3 seconds
-        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Minimum capacity to book is " + currentitem.min_capacity,
-      });
-      return;
-    }
-
-    dispatch(setLoading(true));
-    const { data } = await axiosInstance(
-      `/price-format?service_id=${
-        productDetails.id
-      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&extra_id=${extraid}&extra_capacity=${extracapacity}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}`,
-      {
-        method: "get",
-      },
-    );
-    let cartobj = {
-      id: data?.data?.service_id,
-      name: productDetails.service_title,
-      price: productDetails.svc_price,
-      total: data?.data?.service_total,
-      total_formatted: data?.data?.service_total,
-      slot: slot,
-      capacity: data?.data?.service_capacity,
-      bundle_id: bundleId > 0 ? bundleId : null,
-    };
     let extraobj = cart.extra ? cart.extra : [];
     if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
       extraobj = [];
@@ -1150,11 +1156,6 @@ export default function Service(props) {
         subtotal: data?.data?.total_formated,
       }),
     );
-    dispatch(setTimeslot(slot));
-    dispatch(setCapacity(book));
-    dispatch(setService(serviceid));
-    setVisible(false);
-    hasExtra();
   };
 
   const giftbookservice = async () => {
@@ -1181,31 +1182,8 @@ export default function Service(props) {
         method: "get",
       },
     );
-    let cartobj = {
-      id: productDetails.id,
-      name: productDetails.service_title,
-      price: productDetails.svc_price,
-      total: data?.data?.service_total,
-      total_formatted: data?.data?.service_total,
-      slot: "",
-      capacity: giftQuantity,
-      bundle_id: bundleId > 0 ? bundleId : null,
-    };
-    let extraobj = cart.extra ? cart.extra : [];
-    if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
-      extraobj = [];
-    }
-    dispatch(
-      setCart({
-        ...cart,
-        service: [cartobj],
-        extra: extraobj,
-        total: data?.data?.total,
-        total_formatted: data?.data?.total_formated,
-        discount: 0,
-        subtotal: data?.data?.total_formated,
-      }),
-    );
+
+    cartupdate(data);
     dispatch(setTimeslot(""));
     dispatch(setCapacity(giftQuantity));
     dispatch(setService(serviceid));
@@ -1288,9 +1266,7 @@ export default function Service(props) {
   const slotObj = dateslot.find((s) => s?.date === selectedDate);
   const bundleTimeSlots =
     bundleSchedule || slotObj?.slots?.bundle_time_slots || null;
-  const bundleComponents = Array.isArray(
-    bundleTimeSlots?.components,
-  )
+  const bundleComponents = Array.isArray(bundleTimeSlots?.components)
     ? bundleTimeSlots.components
     : [];
   const selectedBundleComponentSlots =
@@ -1300,17 +1276,16 @@ export default function Service(props) {
       : bundleSelectedSlots;
   const bundleAllSelected = Boolean(
     bundleTimeSlots?.bookable ||
-      (Number(bundleTimeSlots?.total_count) > 0 &&
-        selectedBundleComponentSlots.length >=
-          Number(bundleTimeSlots?.total_count)),
+    (Number(bundleTimeSlots?.total_count) > 0 &&
+      selectedBundleComponentSlots.length >=
+        Number(bundleTimeSlots?.total_count)),
   );
   const maxBundleQuantity = Math.max(
     1,
     Number(bundleTimeSlots?.bundle_capacity_left) || 1,
   );
   const openBundlePosition =
-    expandedBundlePosition ??
-    (Number(bundleTimeSlots?.active_position) || 0);
+    expandedBundlePosition ?? (Number(bundleTimeSlots?.active_position) || 0);
 
   const shouldShowCategoryFilter =
     !skeloading &&
@@ -2769,187 +2744,184 @@ export default function Service(props) {
                     <span className="fx-bundle-progress">
                       {decodeHtml(bundleTimeSlots?.progress || "")}
                     </span>
-                   
                   </div>
                 </div>
 
                 <div className="fx-booking-modal-content">
                   <div className="fx-service-slots-details">
-                  {bundleComponents.map((component, index) => {
-                    const position = Number(component?.component_position);
-                    const componentQuantity = Number(component?.quantity);
-                    const componentQuantityLabel = Number.isFinite(
-                      componentQuantity,
-                    )
-                      ? `Quantity: ${componentQuantity * bundleQuantity}`
-                      : component?.quantity_label || "";
-                    const selectedComponentSlot =
-                      selectedBundleComponentSlots.find(
-                        (item) =>
-                          Number(item?.component_position) === position,
-                      );
-                    const selectedSlotLabel =
-                      component?.selected_slot?.slot_label ||
-                      component?.selected_slot?.time_slot ||
-                      (component?.selected_slot?.from &&
-                      component?.selected_slot?.to
-                        ? `${component.selected_slot.from} - ${component.selected_slot.to}`
-                        : "") ||
-                      (typeof component?.selected_slot === "string"
-                        ? component.selected_slot
-                        : "") ||
-                      selectedComponentSlot?.slot_label;
-                    const isSelected =
-                      component?.state === "selected" ||
-                      Boolean(selectedSlotLabel);
-                    const isWaiting = component?.state === "waiting";
-                    const isExpanded =
-                      !isWaiting && openBundlePosition === position;
-                    const activeTab =
-                      bundleSlotTabs[position] ||
-                      getDefaultBundleTab(component);
-                    const componentSlots = Array.isArray(
-                      component?.available_slots?.[activeTab],
-                    )
-                      ? component.available_slots[activeTab]
-                      : [];
-                    const allComponentSlots = Array.isArray(
-                      component?.available_slots?.all,
-                    )
-                      ? component.available_slots.all
-                      : Object.values(component?.available_slots || {})
-                          .filter(Array.isArray)
-                          .flat()
-                          .filter(
-                            (slotItem, slotIndex, slots) =>
-                              slots.findIndex(
-                                (candidate) =>
-                                  candidate?.slot_label ===
-                                  slotItem?.slot_label,
-                              ) === slotIndex,
-                          );
+                    {bundleComponents.map((component, index) => {
+                      const position = Number(component?.component_position);
+                      const componentQuantity = Number(component?.quantity);
+                      const componentQuantityLabel = Number.isFinite(
+                        componentQuantity,
+                      )
+                        ? `Quantity: ${componentQuantity * bundleQuantity}`
+                        : component?.quantity_label || "";
+                      const selectedComponentSlot =
+                        selectedBundleComponentSlots.find(
+                          (item) =>
+                            Number(item?.component_position) === position,
+                        );
+                      const selectedSlotLabel =
+                        component?.selected_slot?.slot_label ||
+                        component?.selected_slot?.time_slot ||
+                        (component?.selected_slot?.from &&
+                        component?.selected_slot?.to
+                          ? `${component.selected_slot.from} - ${component.selected_slot.to}`
+                          : "") ||
+                        (typeof component?.selected_slot === "string"
+                          ? component.selected_slot
+                          : "") ||
+                        selectedComponentSlot?.slot_label;
+                      const isSelected =
+                        component?.state === "selected" ||
+                        Boolean(selectedSlotLabel);
+                      const isWaiting = component?.state === "waiting";
+                      const isExpanded =
+                        !isWaiting && openBundlePosition === position;
+                      const activeTab =
+                        bundleSlotTabs[position] ||
+                        getDefaultBundleTab(component);
+                      const componentSlots = Array.isArray(
+                        component?.available_slots?.[activeTab],
+                      )
+                        ? component.available_slots[activeTab]
+                        : [];
+                      const allComponentSlots = Array.isArray(
+                        component?.available_slots?.all,
+                      )
+                        ? component.available_slots.all
+                        : Object.values(component?.available_slots || {})
+                            .filter(Array.isArray)
+                            .flat()
+                            .filter(
+                              (slotItem, slotIndex, slots) =>
+                                slots.findIndex(
+                                  (candidate) =>
+                                    candidate?.slot_label ===
+                                    slotItem?.slot_label,
+                                ) === slotIndex,
+                            );
 
-                    return (
-                      <div
-                        className={`fx-massage-card${isExpanded ? " fx-expanded" : ""}${isWaiting ? " fx-waiting" : ""}${isSelected ? " fx-component-selected" : ""}`}
-                        key={
-                          component?.bundle_item_id ??
-                          `${component?.service_id}-${index}`
-                        }
-                      >
+                      return (
                         <div
-                          className="fx-massage-card-header"
-                          onClick={() => {
-                            if (!isWaiting) {
-                              setExpandedBundlePosition(
-                                isExpanded ? 0 : position,
-                              );
-                            }
-                          }}
+                          className={`fx-massage-card${isExpanded ? " fx-expanded" : ""}${isWaiting ? " fx-waiting" : ""}${isSelected ? " fx-component-selected" : ""}`}
+                          key={
+                            component?.bundle_item_id ??
+                            `${component?.service_id}-${index}`
+                          }
                         >
-                          <div className="fx-massage-card-info">
-                            <div className="fx-component-label-row">
-                             
-                              <span className={`fx-component-status fx-status-${component?.state || "waiting"}`}>
-                               
-                                {decodeHtml(component?.status_label || "")}
-                              </span>
+                          <div
+                            className="fx-massage-card-header"
+                            onClick={() => {
+                              if (!isWaiting) {
+                                setExpandedBundlePosition(
+                                  isExpanded ? 0 : position,
+                                );
+                              }
+                            }}
+                          >
+                            <div className="fx-massage-card-info">
+                              <div className="fx-component-label-row">
+                                <span
+                                  className={`fx-component-status fx-status-${component?.state || "waiting"}`}
+                                >
+                                  {decodeHtml(component?.status_label || "")}
+                                </span>
+                              </div>
+                              <div className="fx-bundle-component-title-row">
+                                <h3 className="fx-massage-title">
+                                  {decodeHtml(component?.service_name || "")}
+                                </h3>
+                                <p className="fx-massage-description">
+                                  {decodeHtml(componentQuantityLabel)}
+                                </p>
+                              </div>
                             </div>
-                            <div className="fx-bundle-component-title-row">
-                            <h3 className="fx-massage-title">
-                              {decodeHtml(component?.service_name || "")}
-                            </h3>
-                            <p className="fx-massage-description">
-                              {decodeHtml(componentQuantityLabel)}
-                            </p>
-                            </div>
+                            {!isWaiting && (
+                              <span className="fx-massage-accordion-icon"></span>
+                            )}
                           </div>
-                          {!isWaiting && (
-                            <span className="fx-massage-accordion-icon"></span>
+
+                          {isWaiting && (
+                            <p className="fx-component-waiting-message">
+                              {decodeHtml(
+                                component?.message ||
+                                  `Choose slot after completing Component ${Math.max(1, position - 1)}`,
+                              )}
+                            </p>
+                          )}
+
+                          {isExpanded && (
+                            <div className="fx-massage-card-content">
+                              {allComponentSlots.length > 1 && (
+                                <div className="fx-bundle-slot-tabs">
+                                  {[
+                                    ["morning", "Morning"],
+                                    ["afternoon", "Afternoon"],
+                                    ["all", "All day"],
+                                  ].map(([tabKey, tabLabel]) => (
+                                    <button
+                                      className={
+                                        activeTab === tabKey ? "fx-active" : ""
+                                      }
+                                      key={tabKey}
+                                      type="button"
+                                      onClick={() =>
+                                        setBundleSlotTabs((previousTabs) => ({
+                                          ...previousTabs,
+                                          [position]: tabKey,
+                                        }))
+                                      }
+                                    >
+                                      {tabLabel}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+
+                              {componentSlots.length > 0 ? (
+                                <div className="fx-time-slots">
+                                  {componentSlots.map((slotItem, slotIndex) => (
+                                    <button
+                                      className={`fx-time-slot${selectedSlotLabel === slotItem?.slot_label ? " fx-selected" : ""}`}
+                                      disabled={bundleScheduleLoading}
+                                      key={`${slotItem?.slot_label}-${slotIndex}`}
+                                      type="button"
+                                      onClick={() =>
+                                        selectBundleComponentSlot(
+                                          component,
+                                          slotItem,
+                                        )
+                                      }
+                                    >
+                                      <span className="fx-slot-time">
+                                        {selectedSlotLabel ===
+                                          slotItem?.slot_label && (
+                                          <i
+                                            className="pi pi-check"
+                                            aria-hidden="true"
+                                          ></i>
+                                        )}
+                                        <span>{slotItem?.slot_label}</span>
+                                      </span>
+                                      {slotItem?.capacity_label && (
+                                        <small>{slotItem.capacity_label}</small>
+                                      )}
+                                    </button>
+                                  ))}
+                                </div>
+                              ) : (
+                                <p className="fx-no-bundle-slots">
+                                  No {activeTab} slots available
+                                </p>
+                              )}
+                            </div>
                           )}
                         </div>
-
-                        {isWaiting && (
-                          <p className="fx-component-waiting-message">
-                            {decodeHtml(
-                              component?.message ||
-                                `Choose slot after completing Component ${Math.max(1, position - 1)}`,
-                            )}
-                          </p>
-                        )}
-
-                        {isExpanded && (
-                          <div className="fx-massage-card-content">
-                            {allComponentSlots.length > 1 && (
-                              <div className="fx-bundle-slot-tabs">
-                                {[
-                                  ["morning", "Morning"],
-                                  ["afternoon", "Afternoon"],
-                                  ["all", "All day"],
-                                ].map(([tabKey, tabLabel]) => (
-                                  <button
-                                    className={
-                                      activeTab === tabKey ? "fx-active" : ""
-                                    }
-                                    key={tabKey}
-                                    type="button"
-                                    onClick={() =>
-                                      setBundleSlotTabs((previousTabs) => ({
-                                        ...previousTabs,
-                                        [position]: tabKey,
-                                      }))
-                                    }
-                                  >
-                                    {tabLabel}
-                                  </button>
-                                ))}
-                              </div>
-                            )}
-
-                            {componentSlots.length > 0 ? (
-                              <div className="fx-time-slots">
-                                {componentSlots.map((slotItem, slotIndex) => (
-                                  <button
-                                    className={`fx-time-slot${selectedSlotLabel === slotItem?.slot_label ? " fx-selected" : ""}`}
-                                    disabled={bundleScheduleLoading}
-                                    key={`${slotItem?.slot_label}-${slotIndex}`}
-                                    type="button"
-                                    onClick={() =>
-                                      selectBundleComponentSlot(
-                                        component,
-                                        slotItem,
-                                      )
-                                    }
-                                  >
-                                    <span className="fx-slot-time">
-                                      {selectedSlotLabel ===
-                                        slotItem?.slot_label && (
-                                        <i
-                                          className="pi pi-check"
-                                          aria-hidden="true"
-                                        ></i>
-                                      )}
-                                      <span>{slotItem?.slot_label}</span>
-                                    </span>
-                                    {slotItem?.capacity_label && (
-                                      <small>{slotItem.capacity_label}</small>
-                                    )}
-                                  </button>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="fx-no-bundle-slots">
-                                No {activeTab} slots available
-                              </p>
-                            )}
-
-                           
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
                   <p
                     className={`fx-bundle-selection-message${bundleAllSelected ? " fx-complete" : ""}`}
                   >
@@ -2961,9 +2933,7 @@ export default function Service(props) {
 
                   {bundleAllSelected && (
                     <div className="fx-bundle-quantity">
-                      <span className="fx-quantity-label">
-                        Bundle Quantity
-                      </span>
+                      <span className="fx-quantity-label">Bundle Quantity</span>
                       <div className="fx-quantity-control">
                         <button
                           className="fx-quantity-btn"
