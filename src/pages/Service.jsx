@@ -34,6 +34,12 @@ export default function Service(props) {
   const extraid = useSelector((state) => state.step3.extra);
   const extracapacity = useSelector((state) => state.step3.extracapacity);
   const cart = useSelector((state) => state.step2.cart);
+  const extraTypeStr = extraid
+    ? String(extraid)
+        .split(",")
+        .map((id) => cart.extra?.find((item) => String(item.id) === id.trim())?.extra_type ?? "")
+        .join(",")
+    : "";
   const [products, setProductsArr] = useState([]);
   const [visible, setVisible] = useState(false);
   const [productDetails, setProductDetails] = useState({});
@@ -937,7 +943,7 @@ export default function Service(props) {
           date,
         ).format(
           "YYYY-MM-DD",
-        )}&extra_id=${extraid}&extra_capacity=${extracapacity}&is_bundle=true&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_component_slots=${encodedComponentSlots}`,
+        )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_type=${encodeURIComponent(extraTypeStr)}&is_bundle=true&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_component_slots=${encodedComponentSlots}`,
         { method: "get" },
       );
       cartupdate(data);
@@ -990,7 +996,7 @@ export default function Service(props) {
     const { data } = await axiosInstance(
       `/price-format?service_id=${
         productDetails.id
-      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&extra_id=${extraid}&extra_capacity=${extracapacity}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}`,
+      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_type=${encodeURIComponent(extraTypeStr)}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}`,
       {
         method: "get",
       },
@@ -1177,7 +1183,7 @@ export default function Service(props) {
         date,
       ).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraid}&extra_capacity=${extracapacity}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}`,
+      )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_type=${encodeURIComponent(extraTypeStr)}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}`,
       {
         method: "get",
       },
@@ -1230,6 +1236,7 @@ export default function Service(props) {
         bundleId > 0 ? bundleQuantity : gift ? giftQuantity : book,
       time_slot: slot,
       extra_svc_ids: [],
+      extra_types: null,
       no_of_persons: 0,
       gift,
       selected_bundle_id: bundleId > 0 ? bundleId : null,
