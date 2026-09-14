@@ -13,6 +13,7 @@ import { InputSwitch } from "primereact/inputswitch";
 import { Banknote, CreditCard, RefreshCw } from "lucide-react";
 import { setReceiverInfo, setStep, setLoading } from "../store/step1Slice";
 import {
+  setBillingDetails,
   setCheckoutkey,
   setPaymentstring,
   setSelectedPaymentMethod,
@@ -232,6 +233,24 @@ export default function Checkout(props) {
         errors.phoneNumber = true;
       }
 
+      if (!String(receiverInfo.address || "").trim()) {
+        errors.address = true;
+      }
+      if (!receiverInfo.country) {
+        errors.country = true;
+      }
+      if (!receiverInfo.state) {
+        errors.state = true;
+      }
+      if (!String(receiverInfo.city || "").trim()) {
+        errors.city = true;
+      }
+      if (
+        !String(receiverInfo.postcode || receiverInfo.zip || "").trim()
+      ) {
+        errors.postcode = true;
+      }
+
       if (Object.keys(errors).length > 0) {
         setReceiverErrors(errors);
         Swal.fire({
@@ -240,7 +259,7 @@ export default function Checkout(props) {
           showConfirmButton: false,
           timer: 3000,
           icon: "error",
-          title: "Please enter valid receiver email and phone number",
+          title: "Please complete the gift receiver information",
         });
         return;
       }
@@ -341,11 +360,18 @@ export default function Checkout(props) {
         gift && !opendatepurchase ? (receiverInfo.email ?? "") : "",
       recipient_contact:
         gift && !opendatepurchase ? (receiverInfo.phoneNumber ?? "") : "",
-      recipient_address: "",
-      recipient_country: gift ? (receiverInfo.country ?? "") : "",
-      recipient_state: "",
-      recipient_city: "",
-      recipient_postcode: gift ? (receiverInfo.zip ?? "") : "",
+      recipient_address:
+        gift && !opendatepurchase ? (receiverInfo.address ?? "") : "",
+      recipient_country:
+        gift && !opendatepurchase ? (receiverInfo.country ?? "") : "",
+      recipient_state:
+        gift && !opendatepurchase ? (receiverInfo.state ?? "") : "",
+      recipient_city:
+        gift && !opendatepurchase ? (receiverInfo.city ?? "") : "",
+      recipient_postcode:
+        gift && !opendatepurchase
+          ? (receiverInfo.postcode ?? receiverInfo.zip ?? "")
+          : "",
     };
 
     billdata.country_code = billdata.sgbm_field_8;
@@ -391,6 +417,7 @@ export default function Checkout(props) {
     });
 
     if (data && data.status == 200 && data.data.status == "success") {
+      dispatch(setBillingDetails({ ...billdata }));
       if (selectedPaymentCard.method === "offline") {
         if (redeemBooking) {
           dispatch(setLoading(false));
@@ -434,7 +461,7 @@ export default function Checkout(props) {
     >
       {props.stepsVisibility?.step_4_title_visible == "true" && (
         <h1 className="fx-all-main-heading">
-          {props.stepTitles?.step_4_title || "Checkout"}
+          {props.stepTitles?.step_4_title || (redeemBooking ? "Information" : "Checkout")}
         </h1>
       )}
       <div className="fx-commoninput">
@@ -807,56 +834,121 @@ export default function Checkout(props) {
                     </div>
                   </div>
                 </div>
-                <div class="fx-inputgroup">
-                  <div class="fx-element-box fx-hidden">
-                    <label>Country</label>
-                    <input
-                      placeholder="Country"
-                      type="text"
-                      value={receiverInfo.country}
-                      onBlur={(e) =>
-                        dispatch(
-                          setReceiverInfo({
-                            ...receiverInfo,
-                            country: e.target.value,
-                          }),
-                        )
-                      }
-                    ></input>
-                  </div>
-                  <div class="fx-element-box fx-hidden">
-                    <label>Zip</label>
-                    <input
-                      placeholder="Zip"
-                      type="text"
-                      value={receiverInfo.zip}
-                      onBlur={(e) =>
-                        dispatch(
-                          setReceiverInfo({
-                            ...receiverInfo,
-                            zip: e.target.value,
-                          }),
-                        )
-                      }
-                    ></input>
-                  </div>
-                </div>
-                <div class="fx-inputgroup">
-                  <div class="fx-element-box fx-hidden">
+                <div className="fx-inputgroup">
+                  <div className="fx-element-box">
                     <label>Address</label>
                     <input
                       placeholder="Address"
                       type="text"
-                      value={receiverInfo.address}
-                      onBlur={(e) =>
+                      value={receiverInfo.address || ""}
+                      className={
+                        receiverErrors.address
+                          ? "bigtextbox fx-invalid"
+                          : "bigtextbox"
+                      }
+                      onChange={(e) =>
+                        dispatch(
+                          setReceiverInfo({ address: e.target.value }),
+                        )
+                      }
+                    />
+                    {receiverErrors.address && (
+                      <span className="fx-errortext">Enter Address</span>
+                    )}
+                  </div>
+                </div>
+                <div className="fx-inputgroup">
+                  <div className="fx-element-box fx-selectwrapper">
+                    <label>Country</label>
+                    <select
+                      value={receiverInfo.country || ""}
+                      className={receiverErrors.country ? "fx-invalid" : ""}
+                      onChange={(e) => {
+                        const country = e.target.value;
                         dispatch(
                           setReceiverInfo({
-                            ...receiverInfo,
-                            address: e.target.value,
+                            country,
+                            state: "",
+                          }),
+                        );
+                        setState([]);
+                        if (country) getState(country);
+                      }}
+                    >
+                      <option value="">Select Country</option>
+                      {countries?.data &&
+                        Object.keys(countries.data).map((code) => (
+                          <option key={code} value={code}>
+                            {countries.data[code]}
+                          </option>
+                        ))}
+                    </select>
+                    {receiverErrors.country && (
+                      <span className="fx-errortext">Enter Country</span>
+                    )}
+                  </div>
+                  <div className="fx-element-box fx-selectwrapper">
+                    <label>State</label>
+                    <select
+                      value={receiverInfo.state || ""}
+                      className={receiverErrors.state ? "fx-invalid" : ""}
+                      onChange={(e) =>
+                        dispatch(setReceiverInfo({ state: e.target.value }))
+                      }
+                    >
+                      <option value="">Select State</option>
+                      {Array.isArray(states) &&
+                        states.map((stateOption) => (
+                          <option
+                            key={stateOption.code}
+                            value={stateOption.code}
+                          >
+                            {stateOption.name}
+                          </option>
+                        ))}
+                    </select>
+                    {receiverErrors.state && (
+                      <span className="fx-errortext">Enter State</span>
+                    )}
+                  </div>
+                </div>
+                <div className="fx-inputgroup">
+                  <div className="fx-element-box">
+                    <label>City</label>
+                    <input
+                      placeholder="City"
+                      type="text"
+                      value={receiverInfo.city || ""}
+                      className={receiverErrors.city ? "fx-invalid" : ""}
+                      onChange={(e) =>
+                        dispatch(setReceiverInfo({ city: e.target.value }))
+                      }
+                    />
+                    {receiverErrors.city && (
+                      <span className="fx-errortext">Enter City</span>
+                    )}
+                  </div>
+                  <div className="fx-element-box">
+                    <label>Postcode</label>
+                    <input
+                      placeholder="Postcode"
+                      type="text"
+                      value={receiverInfo.postcode || receiverInfo.zip || ""}
+                      className={
+                        receiverErrors.postcode ? "fx-invalid" : ""
+                      }
+                      onChange={(e) =>
+                        dispatch(
+                          setReceiverInfo({
+                            postcode: e.target.value,
+                            zip: e.target.value,
                           }),
                         )
                       }
-                    ></input>
+                    />
+                    {receiverErrors.postcode && (
+                      <span className="fx-errortext">Enter Postcode</span>
+                    )}
                   </div>
                 </div>
               </div>

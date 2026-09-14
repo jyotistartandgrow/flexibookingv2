@@ -5,6 +5,7 @@ const initialState = {
   paymentstring: null,
   selectedPaymentMethod: null,
   session_expired: false,
+  billingDetails: {},
 };
 
 const step4Slice = createSlice({
@@ -23,11 +24,15 @@ const step4Slice = createSlice({
     setSessionExpired: (state, action) => {
       state.session_expired = action.payload;
     },
+    setBillingDetails: (state, action) => {
+      state.billingDetails = action.payload;
+    },
     sessionClear: (state) => {
       state.checkoutkey = null;
       state.paymentstring = null;
       state.selectedPaymentMethod = null;
       state.session_expired = false;
+      state.billingDetails = {};
       state.bookingkey = null;
     },
   },
@@ -38,6 +43,7 @@ export const {
   setPaymentstring,
   setSelectedPaymentMethod,
   setSessionExpired,
+  setBillingDetails,
   sessionClear,
 } = step4Slice.actions;
 export default step4Slice.reducer;
