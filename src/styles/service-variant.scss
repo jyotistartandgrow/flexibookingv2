@@ -76,7 +76,7 @@
 }
 
 .fx-service-details-content-box .fx-service-card:has(input:checked) {
-  border: 2px solid #2563eb;
+  border: 2px solid var(--primary-color);
 }
 
 /* Title */
