@@ -16,6 +16,7 @@ import {
   setStep,
 } from "../store/step1Slice";
 import {
+  setRedeemBundleSchedule,
   setRedeemBundleSlots,
   setSlot,
   setVoucherDetail,
@@ -73,12 +74,24 @@ export default function SelectDate() {
   const step = useSelector((state) => state.step1.redeemstep);
   const date = useSelector((state) => state.step1.date);
   const voucher = useSelector((state) => state.step1.voucher);
+  const savedBundleSlots = useSelector(
+    (state) => state.step3.redeemBundleSlots,
+  );
+  const savedBundleSchedule = useSelector(
+    (state) => state.step3.redeemBundleSchedule,
+  );
   const [voucherdetail, setVoucherdetail] = useState({});
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [selectedBundleSlots, setSelectedBundleSlots] = useState([]);
-  const [expandedBundleIndex, setExpandedBundleIndex] = useState(0);
+  const [selectedBundleSlots, setSelectedBundleSlots] = useState(
+    () => savedBundleSlots || [],
+  );
+  const [expandedBundleIndex, setExpandedBundleIndex] = useState(() =>
+    savedBundleSlots?.length ? savedBundleSlots.length - 1 : 0,
+  );
   const [bundleSlotTabs, setBundleSlotTabs] = useState({});
-  const [bundleSchedule, setBundleSchedule] = useState(null);
+  const [bundleSchedule, setBundleSchedule] = useState(
+    () => savedBundleSchedule || null,
+  );
   const [bundleScheduleLoading, setBundleScheduleLoading] = useState(false);
 
   const bundleProduct = voucherdetail?.products?.find(
@@ -98,7 +111,6 @@ export default function SelectDate() {
   const extras = products.filter(
     (product) => product.id && !product.service_id,
   );
-  const slots = voucherdetail?.slots || [];
   const isContinueDisabled =
     !date || (isBundleVoucher ? !bundleSelectionComplete : !selectedSlot);
 
@@ -120,14 +132,26 @@ export default function SelectDate() {
       data: { voucher: voucher, date: moment(date).format("YYYY-MM-DD") },
     });
     if (data && data.status == 200 && data?.data?.status == true) {
+      const restoreBundleSelection =
+        Array.isArray(savedBundleSlots) &&
+        savedBundleSlots.length > 0 &&
+        savedBundleSchedule?.components?.length > 0;
       setVoucherdetail(data.data);
       setSelectedSlot(null);
-      setSelectedBundleSlots([]);
-      setExpandedBundleIndex(0);
       setBundleSlotTabs({});
-      setBundleSchedule(null);
-      dispatch(setSlot(null));
-      dispatch(setRedeemBundleSlots([]));
+      if (restoreBundleSelection) {
+        setSelectedBundleSlots(savedBundleSlots);
+        setBundleSchedule(savedBundleSchedule);
+        setExpandedBundleIndex(savedBundleSlots.length - 1);
+        dispatch(setSlot(savedBundleSlots[0]?.slot_label || null));
+      } else {
+        setSelectedBundleSlots([]);
+        setExpandedBundleIndex(0);
+        setBundleSchedule(null);
+        dispatch(setSlot(null));
+        dispatch(setRedeemBundleSlots([]));
+        dispatch(setRedeemBundleSchedule(null));
+      }
       dispatch(setVoucherDetail(data.data));
       dispatch(setDate(data.data.date));
     }
@@ -310,8 +334,13 @@ export default function SelectDate() {
           : nextComponent;
       });
 
-      setBundleSchedule({ ...nextSchedule, components: nextComponents });
+      const hydratedSchedule = {
+        ...nextSchedule,
+        components: nextComponents,
+      };
+      setBundleSchedule(hydratedSchedule);
       setSelectedBundleSlots(responseSelections);
+      dispatch(setRedeemBundleSchedule(hydratedSchedule));
       dispatch(setRedeemBundleSlots(responseSelections));
       dispatch(setSlot(responseSelections[0]?.slot_label || null));
       setExpandedBundleIndex(
@@ -366,22 +395,6 @@ export default function SelectDate() {
                 ))}
               </section>
             )}
-
-            {extras.length > 0 && (
-              <section className="fx-section-group">
-                <h2 className="fx-section-title">
-                  {extras.length === 1 ? "Extra" : "Extras"}
-                </h2>
-                {extras.map((product, index) => (
-                  <RedeemItemCard
-                    key={product.id || index}
-                    product={product}
-                    description={product.service_desc}
-                  />
-                ))}
-              </section>
-            )}
-
             <section className="fx-scheduling-panel">
               <div className="fx-date-picker-group">
                 <label className="fx-label" htmlFor="redeem-slot-date">
@@ -402,6 +415,7 @@ export default function SelectDate() {
                       setBundleSchedule(null);
                       dispatch(setSlot(null));
                       dispatch(setRedeemBundleSlots([]));
+                      dispatch(setRedeemBundleSchedule(null));
                       dispatch(setDate(e.value));
                     }}
                     className="fx-datepicker"
@@ -520,7 +534,7 @@ export default function SelectDate() {
                                   <span
                                     className={`fx-component-status fx-status-${isSelected ? "selected" : isWaiting ? "waiting" : "active"}`}
                                   >
-                                   {" "}
+                                    {" "}
                                     {isSelected
                                       ? "Selected"
                                       : isWaiting
@@ -529,12 +543,12 @@ export default function SelectDate() {
                                   </span>
                                 </div>
                                 <div className="fx-bundle-component-title-row">
-                                <h3 className="fx-massage-title">
-                                  {component?.service_name}
-                                </h3>
-                                <p className="fx-massage-description">
-                                  Quantity: {componentQuantity}
-                                </p>
+                                  <h3 className="fx-massage-title">
+                                    {component?.service_name}
+                                  </h3>
+                                  <p className="fx-massage-description">
+                                    Quantity: {componentQuantity}
+                                  </p>
                                 </div>
                               </div>
                               {!isWaiting && (
@@ -652,6 +666,20 @@ export default function SelectDate() {
                 </div>
               )}
             </section>
+            {extras.length > 0 && (
+              <section className="fx-section-group">
+                <h2 className="fx-section-title">
+                  {extras.length === 1 ? "Extra" : "Extras"}
+                </h2>
+                {extras.map((product, index) => (
+                  <RedeemItemCard
+                    key={product.id || index}
+                    product={product}
+                    description={product.service_desc}
+                  />
+                ))}
+              </section>
+            )}
 
             <div className="fx-footer-actions">
               <button

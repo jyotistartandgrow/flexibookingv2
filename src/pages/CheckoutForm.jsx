@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  decodeHtml,
-  formatSelectedComponentSlots,
-} from "../Utils/Functions";
+import { decodeHtml, formatSelectedComponentSlots } from "../Utils/Functions";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
 import { setStep, setLoading } from "../store/step1Slice";
@@ -25,9 +22,15 @@ const SUCCESS_INTENT_STATUSES = ["succeeded", "requires_capture"];
 // `requires_action`. Accept both so a 3DS/SCA step is never missed.
 const ACTION_INTENT_STATUSES = ["requires_action", "requires_source_action"];
 // States where the intent still has to be confirmed from the browser.
-const CONFIRMABLE_INTENT_STATUSES = ["requires_payment_method", "requires_source"];
+const CONFIRMABLE_INTENT_STATUSES = [
+  "requires_payment_method",
+  "requires_source",
+];
 
-const normalizeStatus = (status) => String(status ?? "").trim().toLowerCase();
+const normalizeStatus = (status) =>
+  String(status ?? "")
+    .trim()
+    .toLowerCase();
 
 // The client secret can arrive HTML-escaped or wrapped in an object; Stripe
 // needs the exact `pi_..._secret_...` string or the lookup silently fails.
@@ -35,7 +38,10 @@ const extractClientSecret = (payload) => {
   const raw =
     typeof payload === "string"
       ? payload
-      : (payload?.client_secret ?? payload?.clientSecret ?? payload?.data ?? "");
+      : (payload?.client_secret ??
+        payload?.clientSecret ??
+        payload?.data ??
+        "");
   if (typeof raw !== "string" || raw.trim() === "") return "";
   const value = decodeHtml(raw).trim();
   return value.includes("_secret_") ? value : "";
@@ -61,6 +67,7 @@ export default function CheckoutForm() {
     (state) => state.step3.redeemBundleSlots,
   );
   const voucherDetail = useSelector((state) => state.step3.voucherdetail);
+  const billingDetails = useSelector((state) => state.step4.billingDetails);
 
   //const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -197,17 +204,44 @@ export default function CheckoutForm() {
       if (paymentSuccess) {
         try {
           if (redeemBooking) {
-            const redeemResponse = await axiosInstance.post(
-              `/voucher-redeem`,
-              {
-                voucher,
-                date: moment(date).format("YYYY-MM-DD"),
-                slot,
-                selected_component_slots:
-                  formatSelectedComponentSlots(redeemBundleSlots),
-                recipient: voucherDetail?.recepient_data || {},
-              },
+            const voucherRecipient = voucherDetail?.recepient_data || {};
+            const recipientFields = [
+              "recipient_first_name",
+              "recipient_last_name",
+              "recipient_email",
+              "recipient_contact",
+              "recipient_address",
+              "recipient_country",
+              "recipient_state",
+              "recipient_city",
+              "recipient_postcode",
+            ];
+            const hasVoucherRecipientData = recipientFields.some((field) =>
+              String(voucherRecipient?.[field] || "").trim(),
             );
+            const recipient = hasVoucherRecipientData
+              ? voucherRecipient
+              : {
+                  recipient_first_name:
+                    billingDetails?.sgbm_field_1 || "",
+                  recipient_last_name: billingDetails?.sgbm_field_2 || "",
+                  recipient_email: billingDetails?.sgbm_field_3 || "",
+                  recipient_contact: billingDetails?.sgbm_field_4 || "",
+                  recipient_address: billingDetails?.sgbm_field_5 || "",
+                  recipient_country: billingDetails?.sgbm_field_8 || "",
+                  recipient_state: billingDetails?.sgbm_field_7 || "",
+                  recipient_city: billingDetails?.sgbm_field_6 || "",
+                  recipient_postcode: billingDetails?.sgbm_field_9 || "",
+                  is_gift: voucherRecipient?.is_gift ?? "1",
+                };
+            const redeemResponse = await axiosInstance.post(`/voucher-redeem`, {
+              voucher,
+              date: moment(date).format("YYYY-MM-DD"),
+              slot,
+              selected_component_slots:
+                formatSelectedComponentSlots(redeemBundleSlots),
+              recipient,
+            });
             if (
               redeemResponse?.data?.status != 200 ||
               redeemResponse?.data?.data?.status !== "success"
@@ -243,7 +277,7 @@ export default function CheckoutForm() {
               },
             );
             if (emailResponse?.data?.status != 200) {
-              throw new Error(
+              console.error(
                 emailResponse?.data?.message ||
                   "Unable to send the confirmation email",
               );

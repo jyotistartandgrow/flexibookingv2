@@ -141,6 +141,7 @@ export default function Extra(props) {
               total_service_booking: totalServiceBooking,
               time_slot: slot,
               extra_svc_ids: null,
+              extra_types: null,
               no_of_persons: 0,
               gift,
               selected_bundle_id: selectedBundleId,
@@ -279,6 +280,9 @@ export default function Extra(props) {
 
     const extraIdStr = selectedIds.join(",");
     const capacityArr = selectedIds.map((id) => quantities[id]);
+    const extraTypeStr = selectedIds
+      .map((id) => products.find((product) => product.id == id)?.extra_type ?? "")
+      .join(",");
     const selectedComponentSlots =
       cart.service?.[0]?.selected_component_slots || [];
     const encodedComponentSlots = encodeURIComponent(
@@ -291,7 +295,7 @@ export default function Extra(props) {
         cart.service[0].capacity
       }&date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&bundle_id=${selectedBundleId}&service_option_id=${selectedServiceOptionId > 0 ? selectedServiceOptionId : null}&selected_component_slots=${encodedComponentSlots}`,
+      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&extra_type=${encodeURIComponent(extraTypeStr)}&bundle_id=${selectedBundleId}&service_option_id=${selectedServiceOptionId > 0 ? selectedServiceOptionId : null}&selected_component_slots=${encodedComponentSlots}`,
       {
         method: "get",
       },
@@ -306,6 +310,7 @@ export default function Extra(props) {
         total_formatted: data?.data?.extra_total[key],
         slot: "",
         capacity: quantities[id],
+        extra_type: product?.extra_type,
       };
     });
     dispatch(
@@ -321,10 +326,10 @@ export default function Extra(props) {
       }),
     );
 
-    addtocart(extraIdStr, capacityArr.join(","));
+    addtocart(extraIdStr, capacityArr.join(","), extraTypeStr);
   };
 
-  const addtocart = async (extraIdParam, bookParam) => {
+  const addtocart = async (extraIdParam, bookParam, extraTypesParam = null) => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/addtocart`, {
       service_id: service,
@@ -332,6 +337,7 @@ export default function Extra(props) {
       total_service_booking: totalServiceBooking,
       time_slot: slot,
       extra_svc_ids: extraIdParam,
+      extra_types: extraTypesParam,
       no_of_persons: bookParam,
       gift,
       selected_bundle_id: selectedBundleId,

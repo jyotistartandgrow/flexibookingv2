@@ -197,7 +197,7 @@ export default function Steps({ type = "date", ...props }) {
           >
             <div>
               {isRedeemBooking ? 5 : type == "service" ? 3 : 4}{" "}
-              <span>CHECKOUT</span>
+              <span>{isRedeemBooking ? "INFORMATION" : "CHECKOUT"}</span>
             </div>
           </div>
           <div className={paymentstepclass}>
