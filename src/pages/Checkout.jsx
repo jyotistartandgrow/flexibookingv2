@@ -418,7 +418,7 @@ export default function Checkout(props) {
 
     if (data && data.status == 200 && data.data.status == "success") {
       dispatch(setBillingDetails({ ...billdata }));
-      if (selectedPaymentCard.method === "offline") {
+      if (selectedPaymentCard.method === "offline" || selectedPaymentCard.method === "payment_link") {
         if (redeemBooking) {
           dispatch(setLoading(false));
           navigate(`/redeem-thankyou`);
