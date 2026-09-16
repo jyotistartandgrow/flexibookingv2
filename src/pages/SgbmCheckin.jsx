@@ -23,6 +23,7 @@ import {
 import { setBookingkey } from "../store/step3Slice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { darkenHex } from "../Utils/Functions";
 
 GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
 
@@ -157,6 +158,32 @@ export default function SgbmCheckin() {
   const [isUploadProcessing, setIsUploadProcessing] = useState(false);
   const [apiStatus, setApiStatus] = useState("idle"); // idle | verifying | checking-in | success | error | invalid | already-checked-in
   const [apiMessage, setApiMessage] = useState("");
+
+   const getSettings = async () => {
+    try {
+      const response = await axiosInstance.get("/settings");
+      const settings = response.data;
+
+      // Set CSS custom property
+      if (settings.data.primary_color) {
+        document.documentElement.style.setProperty(
+          "--primary-color",
+          settings.data.primary_color,
+        );
+
+        document.documentElement.style.setProperty(
+          "--darkblue-color",
+          darkenHex(settings.data.primary_color, 56),
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+    }
+  };
+
+  useEffect(() => {
+    getSettings();
+  }, []);
 
   const canUseBarcodeDetector = useMemo(
     () => typeof window !== "undefined" && "BarcodeDetector" in window,
