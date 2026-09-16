@@ -16,9 +16,13 @@ import Swal from "sweetalert2";
 export default function Thankyou() {
   const dispatch = useDispatch();
   const componentRef = useRef();
-  const voucher = useSelector((state) => state.step1.voucher);
-  const redeemBooking = useSelector((state) => state.step1.redeemBooking);
-  const bookingkey = useSelector((state) => state.step3.bookingkey);
+  const reduxVoucher = useSelector((state) => state.step1.voucher);
+  const reduxRedeemBooking = useSelector((state) => state.step1.redeemBooking);
+  const reduxBookingKey = useSelector((state) => state.step3.bookingkey);
+  // Keep this receipt's details if the checkout state is cleared.
+  const [voucher] = useState(() => reduxVoucher);
+  const [redeemBooking] = useState(() => reduxRedeemBooking);
+  const [bookingkey] = useState(() => reduxBookingKey);
   const loading = useSelector((state) => state.step1.loading);
   const [bookingData, setBookingData] = useState(null);
   const [serviceBookingData, setServiceBookingData] = useState(null);
