@@ -575,6 +575,7 @@ div.fx-booking .btn-primary:hover {
 .fx-booking .fx-commoninput .fx-element-box.fx-checkoutbuttonbar{
   display: flex;
   justify-content: flex-end;
+  margin-top: 12px;
 }
 
 .fx-booking .fx-phone-input {
@@ -719,6 +720,10 @@ div.fx-booking .btn-primary:hover {
 }
 div.fx-bottom-bar input.btn-primary.fx-continue{
   width: 150px;
+}
+
+.fx-booking .fx-commoninput label{
+  margin-left: 4px;
 }
 
 }
