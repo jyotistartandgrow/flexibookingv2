@@ -1,6 +1,6 @@
 :root {
   --greylight-bg: #F9FAFB;
-  --primary-color: #215AD4;
+  --primary-color: #00818a;
   --darkblue-color: #041F5A;
   --primary-light: #5D8EF8;
   --muted-color: #C5C4C4;
@@ -20,7 +20,7 @@
   --secondary-bgcolor: #B8B8B8;
   --lightblue-secondary-active: #F7F9FF;
   --error-color: #cf2929;
-  --fx-secondary-colors:color-mix(in srgb, var(--primary-color) 80%, black);
+  --fx-secondary-colors:color-mix(in srgb, var(--primary-color) 80%, #2bc6d1);
 }
 
 :root {

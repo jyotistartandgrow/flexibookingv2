@@ -215,7 +215,7 @@ min-height: 335px;
 
 .fx-booking #fx-Icontab_nav div.selected {
   display: block;
-  min-height: 412px;
+  min-height: inherit;
 }
 
 .fx-booking #fx-Icontab_nav ul.p-carousel-indicators{
@@ -486,7 +486,7 @@ min-height: 335px;
   &.fx-category-pill-active {
     border-color: var(--primary-color);
     color: var(--primary-color);
-    background: var(--lightblue-secondary);
+    background: #f8f8f8;
   }
 }
 
