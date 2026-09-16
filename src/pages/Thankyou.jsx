@@ -16,7 +16,9 @@ import Swal from "sweetalert2";
 export default function Thankyou() {
   const dispatch = useDispatch();
   const componentRef = useRef();
-  const bookingkey = useSelector((state) => state.step3.bookingkey);
+  const reduxBookingKey = useSelector((state) => state.step3.bookingkey);
+  // Keep this receipt's key after app/reset clears the checkout state.
+  const [bookingkey] = useState(() => reduxBookingKey);
   const loading = useSelector((state) => state.step1.loading);
   const reduxPaymentMethod = useSelector(
     (state) => state.step4.selectedPaymentMethod,
