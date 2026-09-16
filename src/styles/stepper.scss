@@ -214,7 +214,7 @@
 }
 
 .step-for-redeem .datestep{
-   width: 73%;
+   width: 76%;
     z-index: 99;
     padding-right: 6%;
 }
@@ -381,7 +381,7 @@
   }
 
    .fx-stepper-tabstyle.fx-redeem-booking-step .complete.extrastep{
-    left: 13%;
+    left: 11%;
   }
 
   .fx-stepper-tabstyle.fx-redeem-booking-step .active.extrastep{
@@ -406,9 +406,9 @@
   }
 
   .fx-stepper-tabstyle.fx-redeem-booking-step .active.checkoutstep{
-        left: 45%;
-        padding-left: 9%;
-        width: 45%;
+        left: 44%;
+        padding-left: 6%;
+        width: 49%;
   }
 
   .fx-stepper-tabstyle.fx-redeem-booking-step .step.datestep{
@@ -525,7 +525,7 @@
         padding-left: 3%;
   }
   .fx-stepper-tabstyle .checkoutstep.active{
-        width: 46%;
+        width: 47%;
         left: 43%;
         padding-left: 11%;
   }
@@ -545,7 +545,7 @@
 // step for redeem mobile
 @media screen and (max-width: 768px) {  
   .step-for-redeem .codestep.active{
-    width: 68%;
+    width: 64%;
   }
   .step-for-redeem .codestep{
     width: 15%;
