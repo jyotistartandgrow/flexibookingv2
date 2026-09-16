@@ -1470,7 +1470,6 @@ export default function Service(props) {
             <div className="fx-sk-text"></div>
             <div className="fx-sk-text short"></div>
             <div className="fx-sk-price"></div>
-            <div className="fx-sk-button"></div>
           </div>
 
           <div className="fx-card-skeleton">
@@ -1480,7 +1479,6 @@ export default function Service(props) {
             <div className="fx-sk-text"></div>
             <div className="fx-sk-text short"></div>
             <div className="fx-sk-price"></div>
-            <div className="fx-sk-button"></div>
           </div>
 
           <div className="fx-card-skeleton">
@@ -1490,7 +1488,6 @@ export default function Service(props) {
             <div className="fx-sk-text"></div>
             <div className="fx-sk-text short"></div>
             <div className="fx-sk-price"></div>
-            <div className="fx-sk-button"></div>
           </div>
 
           <div className="fx-card-skeleton">
@@ -1500,7 +1497,6 @@ export default function Service(props) {
             <div className="fx-sk-text"></div>
             <div className="fx-sk-text short"></div>
             <div className="fx-sk-price"></div>
-            <div className="fx-sk-button"></div>
           </div>
         </div>
         <div
