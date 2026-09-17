@@ -136,19 +136,20 @@ export default function Category(props) {
       className="fx-leftcontentbox"
       style={{ display: step === "categorystep" ? "block" : "none" }}
     >
-      {props.stepsVisibility?.step_1_title_visible == "true" && (
-        <h1
-          className="fx-all-main-heading"
-          style={{
-            display:
-              props.mobileHeading == "false" && !isDesktop ? "none" : "block",
-          }}
-        >
-          {props.stepTitles?.step_1_title ||
-            "What experience are you looking for?"}{" "}
-        </h1>
-      )}
-
+      <div className="fx-top-box-tab-content">
+        {props.stepsVisibility?.step_1_title_visible == "true" && (
+          <h1
+            className="fx-all-main-heading"
+            style={{
+              display:
+                props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+            }}
+          >
+            {props.stepTitles?.step_1_title ||
+              "What experience are you looking for?"}{" "}
+          </h1>
+        )}
+      </div>
       <div id="fx-Icontab_nav">
         <ul
           style={{
