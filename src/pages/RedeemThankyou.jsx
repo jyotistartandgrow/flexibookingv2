@@ -537,10 +537,10 @@ export default function Thankyou() {
                 <div>
                   <h4>Customer Details</h4>
                   <p>
-                    {bookingData?.customer_billing?.billing_first_name}{" "}
-                    {bookingData?.customer_billing?.billing_last_name} <br />
-                    {bookingData?.customer_billing?.billing_email} <br />
-                    {bookingData?.customer_billing?.billing_contact}
+                    {bookingData?.recipient?.recipient_first_name}{" "}
+                    {bookingData?.recipient?.recipient_last_name} <br />
+                    {bookingData?.recipient?.recipient_email} <br />
+                    {bookingData?.recipient?.recipient_contact}
                   </p>
                 </div>
               </div>

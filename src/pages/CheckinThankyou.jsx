@@ -320,9 +320,6 @@ export default function CheckinThankyou() {
 
           <hr className="fx-footer-separator"></hr>
 
-          <a href="/" className="fx-home-link">
-            ← Return to Homepage
-          </a>
         </div>
       </div>
     </>

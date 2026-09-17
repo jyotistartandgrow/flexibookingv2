@@ -281,7 +281,9 @@ export default function Extra(props) {
     const extraIdStr = selectedIds.join(",");
     const capacityArr = selectedIds.map((id) => quantities[id]);
     const extraTypeStr = selectedIds
-      .map((id) => products.find((product) => product.id == id)?.extra_type ?? "")
+      .map(
+        (id) => products.find((product) => product.id == id)?.extra_type ?? "",
+      )
       .join(",");
     const selectedComponentSlots =
       cart.service?.[0]?.selected_component_slots || [];
@@ -321,7 +323,8 @@ export default function Extra(props) {
         total_formatted: data?.data?.total_formated,
         discount: 0,
         subtotal: data?.data?.total_formated,
-        service_option: selectedServiceOptionId > 0 ? selectedServiceOptionId : null,
+        service_option:
+          selectedServiceOptionId > 0 ? selectedServiceOptionId : null,
         service_option_details: selectedServiceOptionDetails || null,
       }),
     );
@@ -378,18 +381,22 @@ export default function Extra(props) {
         className="fx-leftcontentbox"
         style={{ display: step === "extrastep" ? "block" : "none" }}
       >
-        {props.stepsVisibility?.step_3_title_visible == "true" && (
-          <h1
-            className="fx-all-main-heading"
-            style={{
-              display:
-                props.mobileHeading == "false" && !isDesktop ? "none" : "block",
-            }}
-          >
-            {props.stepTitles?.step_3_title ||
-              "What experience are you looking for?"}{" "}
-          </h1>
-        )}
+        <div className="fx-top-box-tab-content">
+          {props.stepsVisibility?.step_3_title_visible == "true" && (
+            <h1
+              className="fx-all-main-heading"
+              style={{
+                display:
+                  props.mobileHeading == "false" && !isDesktop
+                    ? "none"
+                    : "block",
+              }}
+            >
+              {props.stepTitles?.step_3_title ||
+                "What experience are you looking for?"}{" "}
+            </h1>
+          )}
+        </div>
         <div id="fx-Icontab_nav">
           <ul
             style={{
