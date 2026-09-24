@@ -500,9 +500,18 @@
         padding-right: 20px;
   }
   .fx-stepper-tabstyle .servicesstep.complete{
-    width: 35%;
+   width: 35%;
         left: 4%;
         padding-right: 28px;
+  }
+   .fx-stepper-tabstyle.fx-date-step .servicesstep.complete{
+    width: 32%;
+        left: 4%;
+        padding-right: 21px;
+  }
+  .fx-stepper-tabstyle.fx-date-step .extrastep.complete{
+    width: 46%;
+    padding-right: 22px;
   }
 //   .fx-step-top-fixed-box{
 //     display: block;
@@ -539,6 +548,10 @@
   }
   .fx-stepper-tabstyle .checkoutstep.complete{
         width: 48%;
+           
+  }
+   .fx-stepper-tabstyle.fx-date-step .checkoutstep.complete{
+        width: 38%;
            
   }
 }
