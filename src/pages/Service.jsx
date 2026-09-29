@@ -34,10 +34,15 @@ export default function Service(props) {
   const extraid = useSelector((state) => state.step3.extra);
   const extracapacity = useSelector((state) => state.step3.extracapacity);
   const cart = useSelector((state) => state.step2.cart);
+  const redeemBooking = useSelector((state) => state.step1.redeemBooking);
   const extraTypeStr = extraid
     ? String(extraid)
         .split(",")
-        .map((id) => cart.extra?.find((item) => String(item.id) === id.trim())?.extra_type ?? "")
+        .map(
+          (id) =>
+            cart.extra?.find((item) => String(item.id) === id.trim())
+              ?.extra_type ?? "",
+        )
         .join(",")
     : "";
   const [products, setProductsArr] = useState([]);
@@ -1367,18 +1372,21 @@ export default function Service(props) {
       style={{ display: step === "servicesstep" ? "block" : "none" }}
     >
       <div className="fx-top-box-tab-content">
-        {props.stepsVisibility?.step_2_title_visible == "true" && (
-          <h1
-            className="fx-all-main-heading"
-            style={{
-              display:
-                props.mobileHeading == "false" && !isDesktop ? "none" : "block",
-            }}
-          >
-            {props.stepTitles?.step_2_title ||
-              "What experience are you looking for?"}{" "}
-          </h1>
-        )}
+        {!redeemBooking &&
+          props.stepsVisibility?.step_2_title_visible == "true" && (
+            <h1
+              className="fx-all-main-heading"
+              style={{
+                display:
+                  props.mobileHeading == "false" && !isDesktop
+                    ? "none"
+                    : "block",
+              }}
+            >
+              {props.stepTitles?.step_2_title ||
+                "What experience are you looking for?"}{" "}
+            </h1>
+          )}
         {/* Category filter toggle button + dropdown */}
         {/* Category filter pills */}
         {shouldShowCategoryFilter && (

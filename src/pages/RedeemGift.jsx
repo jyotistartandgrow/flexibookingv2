@@ -43,13 +43,13 @@ export default function SgbmDateGift(props) {
         <Code />
         {/* End Code Tabs */}
         {/* Date Tabs */}
-        <SelectDate />
+        <SelectDate {...props} />
         {/* End Date Tabs */}
         {/* Slot Tabs */}
         <SelectSlot />
         {/* End Slot Tabs */}
         {/* Checkout Tabs */}
-        <ReedemCheckout />
+        <ReedemCheckout {...props}/>
         {/* End Checkout Tabs */}
       </div>
       <ReedemSidebar {...props} />

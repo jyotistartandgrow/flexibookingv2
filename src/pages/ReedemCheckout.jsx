@@ -11,13 +11,9 @@ import "react-phone-input-2/lib/style.css";
 import { setLoading } from "../store/step1Slice";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import {
-  formatSelectedComponentSlots,
-  validateEmail,
-  validatePhoneForCountry,
-} from "../Utils/Functions";
+import { validateEmail, validatePhoneForCountry } from "../Utils/Functions";
 
-export default function ReedemCheckout() {
+export default function ReedemCheckout(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const step = useSelector((state) => state.step1.redeemstep);
@@ -165,7 +161,11 @@ export default function ReedemCheckout() {
       className="fx-leftcontentbox fx-checkoutpage"
       style={{ display: step === "checkoutstep" ? "block" : "none" }}
     >
-      {/* <h1 className="fx-main-heading">Checkout</h1> */}
+      {props.stepsVisibility?.step_3_title_visible == "true" && (
+        <h1 className="fx-all-main-heading">
+          {props.stepTitles?.step_3_title || "Checkout"}{" "}
+        </h1>
+      )}
       <div className="fx-commoninput">
         <div className="fx-inputgroup">
           <div

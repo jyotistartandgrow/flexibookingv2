@@ -68,7 +68,7 @@ function RedeemItemCard({ product, description }) {
   );
 }
 
-export default function SelectDate() {
+export default function SelectDate(props) {
   const calendarRef = useRef(null);
   const dispatch = useDispatch();
   const step = useSelector((state) => state.step1.redeemstep);
@@ -375,7 +375,14 @@ export default function SelectDate() {
         <div className="fx-booking-container">
           <div className="fx-content-body">
             <div className="fx-redeem-slot-heading">
-              <h1>Select date & time</h1>
+              {props.stepsVisibility?.step_2_title_visible == "true" && (
+                <h1
+                  className="fx-all-main-heading"
+                >
+                  {props.stepTitles?.step_2_title ||
+                    "Select Date & Time"}{" "}
+                </h1>
+              )}
               <p>Choose when you’d like to use this voucher.</p>
             </div>
 
