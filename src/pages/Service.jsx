@@ -239,6 +239,7 @@ export default function Service(props) {
   }, [step]);
 
   useEffect(() => {
+    if (props.popupOnly) return;
     if (step !== "servicesstep") return;
 
     if (!date) {
@@ -265,7 +266,7 @@ export default function Service(props) {
       prevDate.currentCategory = category;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date, step, serviceid, category, bundleId]);
+  }, [date, step, serviceid, category, bundleId, props.popupOnly]);
 
   const fetchProductsByDate = async (selectedDate) => {
     setLoadingske(true);
