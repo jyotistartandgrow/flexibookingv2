@@ -1,0 +1,466 @@
+.fx-app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f3f5f6;
+}
+
+.fx-booking-card {
+  width: 430px;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 20px 18px 18px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(25, 44, 50, 0.08);
+  font-family: Inter, "Segoe UI", sans-serif;
+  color: #192c32;
+  -webkit-font-smoothing: antialiased;
+}
+
+.fx-booking-card button {
+  font-family: inherit;
+}
+
+.fx-booking-card .fx-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.fx-booking-card .fx-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 24px;
+}
+
+.fx-booking-card .fx-title {
+  margin: 0;
+  color: #192c32;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.fx-booking-card .fx-info {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: #8d9a9e;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.1;
+}
+
+.fx-booking-card .fx-info .fx-info-dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.fx-booking-card .fx-variants {
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px 0 9px;
+  border: 0;
+  border-radius: 6px;
+  background: #eaf6f5;
+  color: #21797d;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.fx-booking-card .fx-variants svg {
+  width: 10px;
+  height: 10px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fx-booking-card .fx-description {
+  margin: 12px 0 0;
+  color: #8a969c;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+.fx-booking-card .fx-total-price {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 5px 10px 6px;
+  background: #eaf6f5;
+  border-radius: 8px;
+  color: #05686c;
+  font-size: 16px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.fx-booking-card .fx-divider {
+  height: 1px;
+  margin: 16px 0 14px;
+  background: #eef2f3;
+}
+
+.fx-booking-card .fx-date-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fx-booking-card .fx-date-heading strong {
+  color: #192c32;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.fx-booking-card .fx-date-heading span {
+  color: #8a969c;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+.fx-booking-card .fx-month-nav {
+  display: grid;
+  grid-template-columns: 28px 1fr 28px;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.fx-booking-card .fx-nav {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid #e6ecee;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #35474b;
+  cursor: pointer;
+}
+
+.fx-booking-card .fx-nav svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fx-booking-card .fx-nav:hover {
+  background: #f7f9fa;
+}
+
+.fx-booking-card .fx-nav:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.fx-booking-card .fx-month-label {
+  margin: 0;
+  color: #61757b;
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+.fx-booking-card .fx-weekdays,
+.fx-booking-card .fx-week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.fx-booking-card .fx-weekdays {
+  margin: 14px 0 8px;
+  color: #75868c;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 500;
+  text-align: center;
+}
+
+.fx-booking-card .fx-weeks {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.fx-booking-card .fx-day-empty {
+  min-height: 47px;
+}
+
+.fx-booking-card .fx-day {
+  min-height: 47px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 2px 5px;
+  border: 1px solid #dbeee7;
+  border-radius: 10px;
+  background: #f0faf7;
+  cursor: pointer;
+}
+
+.fx-booking-card .fx-day .fx-day-number {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #192c32;
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.fx-booking-card .fx-day .fx-day-number svg {
+  width: 11px;
+  height: 11px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fx-booking-card .fx-day .fx-day-price {
+  color: #147175;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.fx-booking-card .fx-day.is-unavailable {
+  border-color: #f8dddf;
+  background: #fdebec;
+  cursor: not-allowed;
+}
+
+.fx-booking-card .fx-day.is-selected {
+  border-color: #087f83;
+  background: #087f83;
+}
+
+.fx-booking-card .fx-day.is-selected .fx-day-number,
+.fx-booking-card .fx-day.is-selected .fx-day-price {
+  color: #ffffff;
+}
+
+.fx-booking-card .fx-day.is-available:hover {
+  border-color: #b7ddd4;
+}
+
+.fx-booking-card .fx-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 14px;
+  color: #88989c;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.fx-booking-card .fx-calendar-message {
+  margin: 12px 0 0;
+  color: #8a969c;
+  font-size: 12px;
+  text-align: center;
+}
+
+.fx-booking-card .fx-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fx-booking-card .fx-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.fx-booking-card .fx-dot.fx-dot-available {
+  background: #259d71;
+}
+
+.fx-booking-card .fx-dot.fx-dot-unavailable {
+  background: #e9a4a9;
+}
+
+.fx-booking-card .fx-selected-mark {
+  width: 11px;
+  height: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  background: #087f83;
+  color: #ffffff;
+}
+
+.fx-booking-card .fx-selected-mark svg {
+  width: 8px;
+  height: 8px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fx-booking-card .fx-selected {
+  min-height: 46px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #f7f9fa;
+}
+
+.fx-booking-card .fx-selected-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.fx-booking-card .fx-calendar-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: #087f83;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fx-booking-card .fx-selected-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.fx-booking-card .fx-selected-info span {
+  color: #8a969c;
+  font-size: 10px;
+  line-height: 1.1;
+  font-weight: 400;
+}
+
+.fx-booking-card .fx-selected-info strong {
+  color: #4e5e63;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.fx-booking-card .fx-selected-price {
+  flex-shrink: 0;
+  color: #192c32;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.fx-booking-card .fx-proceed {
+  width: 100%;
+  height: 38px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 8px;
+  background: #087f83;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.fx-booking-card .fx-calendar-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.fx-booking-card .fx-calendar-actions .fx-proceed {
+  margin-top: 0;
+}
+
+.fx-booking-card .fx-gift-action {
+  width: 100%;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid #087f83;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #087f83;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fx-booking-card .fx-gift-action:hover {
+  background: #eaf6f5;
+}
+
+.fx-booking-card .fx-proceed .fx-arrow {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.fx-booking-card .fx-proceed:hover {
+  background: #067377;
+}
+
+.fx-booking-card .fx-proceed:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.fx-booking-card .fx-gift-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (max-width: 460px) {
+  .fx-app {
+    padding: 16px;
+  }
+
+  .fx-booking-card {
+    width: 100%;
+  }
+}

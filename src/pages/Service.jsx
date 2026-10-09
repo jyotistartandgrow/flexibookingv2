@@ -449,6 +449,20 @@ export default function Service(props) {
     }
   };
 
+  useEffect(() => {
+    if (
+      !props.popupOnly ||
+      !props.openRequest ||
+      !props.requestedServiceId
+    ) {
+      return;
+    }
+
+    servicedetail(props.requestedServiceId, props.requestedBundleId ?? 0);
+    // The request counter deliberately controls each external popup launch.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.openRequest, props.popupOnly, props.requestedServiceId]);
+
   const handleMonthChange = (e) => {
     if (e.month < 0) {
       return;
@@ -1369,7 +1383,13 @@ export default function Service(props) {
   return (
     <div
       className="fx-leftcontentbox"
-      style={{ display: step === "servicesstep" ? "block" : "none" }}
+      style={{
+        display: props.popupOnly
+          ? "none"
+          : step === "servicesstep"
+            ? "block"
+            : "none",
+      }}
     >
       <div className="fx-top-box-tab-content">
         {!redeemBooking &&

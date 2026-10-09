@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
   mountReactApp("react_sgbm_open_date_purchase", "/opendatepurchase");
   mountReactApp("react_sgbm_checkin", "/checkin");
   mountReactApp("react_sgbm_widget", "/widget");
+  mountReactApp("react_sgbm_single_service_open_calendar", "/ssopencalendar");
+  mountReactApp("react_sgbm_single_service", "/singleservice");
 });
 
 function mountReactApp(id, initialRoute) {
@@ -47,6 +49,12 @@ function mountReactApp(id, initialRoute) {
 
   console.log(el.dataset);
   // 👇 Get data attributes
+  const urlParams = new URLSearchParams(window.location.search);
+  const serviceId =
+    el.dataset.serviceId ||
+    el.getAttribute("data-service_id") ||
+    urlParams.get("service_id") ||
+    "";
   const props = {
     topbar: el.dataset.topbar || "true",
     rightbar: el.dataset.rightbar || "false",
@@ -55,6 +63,7 @@ function mountReactApp(id, initialRoute) {
     showBookNowButton: el.dataset.showBookNowButton || "false",
     calendarInfoVisibility: el.dataset.calendarInfoVisibility || "true",
     calendarInfo: el.dataset.calendarInfo || "price",
+    service_id: serviceId,
     categoryLabelVisibility: el.dataset.categoryLabelVisibility || "true",
     termsAndConditionLink: el.dataset.termsAndConditionLink || "",
     secondaryColor: el.dataset.secondaryColor,

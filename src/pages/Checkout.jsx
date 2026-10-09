@@ -81,11 +81,11 @@ export default function Checkout(props) {
   }, [step]);
 
   useEffect(() => {
-    if (step != "checkoutstep") {
+    if (step != "checkoutstep" || !bookingkey) {
       return;
     }
     getPaymentMethods();
-  }, [step, gift]);
+  }, [step, gift, bookingkey]);
 
   useEffect(() => {
     if (step !== "checkoutstep" || !props.redeemBooking) return;
@@ -132,6 +132,10 @@ export default function Checkout(props) {
   };
 
   const getPaymentMethods = async () => {
+    if (!bookingkey) {
+      return;
+    }
+
     setPaymentMethodsLoading(true);
     setPaymentMethodsError("");
     dispatch(setSelectedPaymentMethod(null));

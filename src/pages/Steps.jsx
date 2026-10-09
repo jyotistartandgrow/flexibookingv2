@@ -155,6 +155,18 @@ export default function Steps({ type = "date", ...props }) {
               </div>
             </div>
           )}
+
+          {type == "singleservice" && (
+            <div
+              className={datestepclass}
+              onClick={() => dispatch(setStep("datestep"))}
+            >
+              <div>
+                1<span> DATE</span>
+              </div>
+            </div>
+          )}
+
           {type == "category" && (
             <div
               className={datestepclass}
@@ -163,21 +175,23 @@ export default function Steps({ type = "date", ...props }) {
               }}
             >
               <div>
-                1 <span>CATEGORY</span>
+                1 <span> CATEGORY</span>
               </div>
             </div>
           )}
-          <div
-            className={servicesstepclass}
-            onClick={() => {
-              if (serviceid) dispatch(setStep("servicesstep"));
-            }}
-          >
-            <div>
-              {isRedeemBooking ? 3 : type == "service" ? 1 : 2}{" "}
-              <span>SERVICES</span>
+          {type !== "singleservice" && (
+            <div
+              className={servicesstepclass}
+              onClick={() => {
+                if (serviceid) dispatch(setStep("servicesstep"));
+              }}
+            >
+              <div>
+                {isRedeemBooking ? 3 : type == "service" ? 1 : 2}{" "}
+                <span>SERVICES</span>
+              </div>
             </div>
-          </div>
+          )}
           <div
             className={extrastepclass}
             onClick={() => {
@@ -185,7 +199,11 @@ export default function Steps({ type = "date", ...props }) {
             }}
           >
             <div>
-              {isRedeemBooking ? 4 : type == "service" ? 2 : 3}{" "}
+              {isRedeemBooking
+                ? 4
+                : type == "service" || type == "singleservice"
+                  ? 2
+                  : 3}{" "}
               <span>EXTRA</span>
             </div>
           </div>
@@ -196,13 +214,21 @@ export default function Steps({ type = "date", ...props }) {
             }}
           >
             <div>
-              {isRedeemBooking ? 5 : type == "service" ? 3 : 4}{" "}
+              {isRedeemBooking
+                ? 5
+                : type == "service" || type == "singleservice"
+                  ? 3
+                  : 4}{" "}
               <span>{isRedeemBooking ? "INFORMATION" : "CHECKOUT"}</span>
             </div>
           </div>
           <div className={paymentstepclass}>
             <div>
-              {isRedeemBooking ? 6 : type == "service" ? 4 : 5}{" "}
+              {isRedeemBooking
+                ? 6
+                : type == "service" || type == "singleservice"
+                  ? 4
+                  : 5}{" "}
               <span>PAYMENT</span>
             </div>
           </div>
