@@ -326,6 +326,30 @@
 }
 
 
+// fx-singleservice-step Step
+
+.fx-singleservice-step .extrastep{
+  width: 60%;
+    z-index: 3;
+}
+
+.fx-singleservice-step.fx-stepper-tabstyle .datestep.active{
+  width: 42%;
+}
+
+.fx-singleservice-step .checkoutstep{
+  width: 81%;
+}
+
+@media screen and (max-width: 768px) {
+
+}
+
+// fx-singleservice-step Step End
+
+
+
+
 // .fx-stepper-tabstyle.fx-redeem-booking-step .step.complete {
 //   left: auto;
 //   width: auto;
