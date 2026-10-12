@@ -299,7 +299,7 @@ export default function DateTab(props) {
   return (
     <>
       <section
-        className="fx-booking-card"
+        className="fx-booking-single-calender-card"
         style={{ display: step === "datestep" ? "block" : "none" }}
       >
         <header className="fx-header">
@@ -489,7 +489,7 @@ export default function DateTab(props) {
               setPopupRequest((request) => request + 1);
             }}
           >
-            Gift
+            <i class="pi pi-gift"></i> Gift
           </button>
         </div>
       </section>
