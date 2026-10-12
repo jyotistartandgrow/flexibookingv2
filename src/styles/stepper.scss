@@ -337,11 +337,40 @@
   width: 42%;
 }
 
+.fx-singleservice-step.fx-stepper-tabstyle .extrastep.complete{
+          width: 34%;
+    padding-right: 52px;
+} 
+
+.fx-singleservice-step.fx-stepper-tabstyle .checkoutstep.active{
+       width: 46%;
+    left: 33%;
+    padding-left: 6%;
+}
+
+.fx-singleservice-step.fx-stepper-tabstyle .paymentstep.active{
+  width: 40%;
+      left: 59%;
+} 
+
+.fx-singleservice-step.fx-stepper-tabstyle .checkoutstep.complete{
+     width: 44%;
+    padding-right: 54px;
+}
+
 .fx-singleservice-step .checkoutstep{
   width: 81%;
 }
 
 @media screen and (max-width: 768px) {
+.fx-singleservice-step.fx-stepper-tabstyle .datestep.active{
+  width:56%;
+}
+
+.fx-singleservice-step.fx-stepper-tabstyle .checkoutstep.active{
+  width: 56%;
+    left: 30%;
+}
 
 }
 
