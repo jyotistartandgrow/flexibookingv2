@@ -14,7 +14,9 @@ export default function SgbmssOpenCalendar(props) {
     <div
       className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}
     >
-      <Steps type="service" {...props} />
+      {props.showStepsAfterProceed == "true" && cart?.service?.length > 0 && (
+        <Steps type="singleservice" {...props} />
+      )}
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
         <div className="fx-seg-loader"></div>
       </div>

@@ -48,13 +48,7 @@ function mountReactApp(id, initialRoute) {
   store.dispatch(setGift(id === "react_sgbm_starting_gift"));
 
   console.log(el.dataset);
-  // 👇 Get data attributes
-  const urlParams = new URLSearchParams(window.location.search);
-  const serviceId =
-    el.dataset.serviceId ||
-    el.getAttribute("data-service_id") ||
-    urlParams.get("service_id") ||
-    "";
+  
   const props = {
     topbar: el.dataset.topbar || "true",
     rightbar: el.dataset.rightbar || "false",
@@ -63,7 +57,7 @@ function mountReactApp(id, initialRoute) {
     showBookNowButton: el.dataset.showBookNowButton || "false",
     calendarInfoVisibility: el.dataset.calendarInfoVisibility || "true",
     calendarInfo: el.dataset.calendarInfo || "price",
-    service_id: serviceId,
+    service_id: el.dataset.serviceId || 1,
     categoryLabelVisibility: el.dataset.categoryLabelVisibility || "true",
     termsAndConditionLink: el.dataset.termsAndConditionLink || "",
     secondaryColor: el.dataset.secondaryColor,
@@ -77,6 +71,12 @@ function mountReactApp(id, initialRoute) {
           step_4_title_visible: "true",
           step_5_title_visible: "true",
         },
+    showPriceInDate: el.dataset.showPriceInDate || "true",
+    showPrice: el.dataset.showPrice || "true",
+    showDescription: el.dataset.showDescription || "true",
+    showStepsAfterProceed: el.dataset.showStepsAfterProceed || "true",
+    showProceedButton: el.dataset.showProceedButton || "true",
+    showGiftButton: el.dataset.showGiftButton || "false",
   };
 
   // Set CSS custom property for secondary color
