@@ -484,9 +484,8 @@
   --fx-service-muted: #496367;
   --fx-service-border: #d9e5e5;
   --fx-service-surface: #ffffff;
-
   width: 100%;
-  padding: 24px 18px;
+  padding: 0px;
   background: #f7f9f9;
   color: var(--fx-service-text);
   font-family: Arial, Helvetica, sans-serif;
@@ -498,8 +497,8 @@
   }
 
   .fx-service-card {
-    display: grid;
-    grid-template-columns: 242px minmax(0, 1fr);
+    display: flex;
+    flex-direction: row;
     width: 100%;
     min-height: 218px;
     overflow: hidden;
@@ -534,6 +533,7 @@
       color: #7a9294;
       font-size: 34px;
       background: #e8eeee;
+      min-width: 231px;
     }
 
     &__tags {
@@ -591,7 +591,7 @@
       align-items: flex-start;
       justify-content: center;
       min-width: 0;
-      padding: 28px 31px;
+      padding: 20px;
     }
 
     &__eyebrow {
@@ -634,6 +634,7 @@
       color: var(--fx-service-muted);
       font-size: 12px;
       line-height: 1.5;
+          height: 36px;
     }
 
     &__price {
@@ -715,6 +716,11 @@
   }
 
   @media (max-width: 600px) {
+
+     .fx-service-card{
+        flex-direction: column;
+     }
+
     padding: 16px 12px;
 
     .fx-service-card {
