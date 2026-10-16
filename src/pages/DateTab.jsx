@@ -327,7 +327,7 @@ export default function DateTab(props) {
                 <span>{serviceDetails.category_name}</span>
               </span>
             )}
-            {props.showPrice && (
+            {props.showPrice == 'true' && (
               <div className="fx-total-price">{servicePrice || "-"}</div>
             )}
           </div>
@@ -423,7 +423,7 @@ export default function DateTab(props) {
                         {day}
                         {selected ? <CheckIcon /> : null}
                       </span>
-                      {props.showPriceInDate && (
+                      {props.showPriceInDate == "true" && (
                         <span className="fx-day-price">{datePrice}</span>
                       )}
                     </button>
@@ -471,14 +471,14 @@ export default function DateTab(props) {
                 <strong>{formatSelectedDate(selectedDate)}</strong>
               </div>
             </div>
-            {props.showPrice && (
+            {props.showPrice == "true" && (
               <strong className="fx-selected-price">{selectedPrice}</strong>
             )}
           </div>
         )}
 
         <div className="fx-calendar-actions">
-          {props.showProceedButton && (
+          {props.showProceedButton == "true" && (
             <button
               type="button"
               className="fx-proceed"
@@ -496,7 +496,7 @@ export default function DateTab(props) {
               </span>
             </button>
           )}
-          {props.showGiftButton && (
+          {props.showGiftButton == "true" && (
             <button
               type="button"
               className="fx-gift-action"

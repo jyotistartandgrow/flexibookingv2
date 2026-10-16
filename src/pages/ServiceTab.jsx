@@ -99,7 +99,6 @@ export default function ServiceTab(props) {
     <>
       <div
         className="fx-single-service-page"
-        style={{ display: step === "servicesstep" ? "block" : "none" }}
       >
         {props.stepsVisibility?.step_1_title_visible == "true" && (
           <h1
@@ -174,7 +173,7 @@ export default function ServiceTab(props) {
               {description ? decodeHtml(description) : errorMessage}
             </p>
 
-            {props.showPrice && (
+            {props.showPrice == "true" && (
               <p className="fx-service-card__price">
                 <span>Total</span>
                 <strong>
@@ -186,7 +185,7 @@ export default function ServiceTab(props) {
             )}
 
             <div className="fx-service-card__actions">
-              {props.showGiftButton && (
+              {props.showGiftButton == "true" && (
                 <button
                   className="fx-service-card__button fx-service-card__button--gift"
                   type="button"
@@ -206,7 +205,7 @@ export default function ServiceTab(props) {
                   Buy as Gift
                 </button>
               )}
-              {props.showProceedButton && (
+              {props.showProceedButton == "true" && (
                 <button
                   className="fx-service-card__button fx-service-card__button--book"
                   type="button"
