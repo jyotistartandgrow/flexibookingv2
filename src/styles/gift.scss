@@ -5,6 +5,94 @@
   --fx-border-color: #e2e8f0;
 }
 
+.fx-booking .fx-customize-page {
+  padding: 24px;
+}
+
+.fx-booking .fx-customize-card {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.fx-booking .fx-customize-heading h2 {
+  margin: 0 0 8px;
+  color: var(--darkblue-color);
+  font-size: 24px;
+}
+
+.fx-booking .fx-customize-heading p {
+  margin: 0 0 24px;
+  color: var(--muted-color);
+}
+
+.fx-booking .fx-customize-field {
+  position: relative;
+}
+
+.fx-booking .fx-customize-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--darkgrey);
+  font-weight: 500;
+}
+
+.fx-booking .fx-customize-field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 140px;
+  padding: 14px;
+  resize: vertical;
+  border: 1px solid var(--new-border-color);
+  border-radius: var(--fx-border-medium-radius);
+  background: #fff;
+  color: var(--darkgrey);
+  font: inherit;
+  outline: none;
+}
+
+.fx-booking .fx-customize-field textarea:focus {
+  border-color: var(--primary-color);
+}
+
+.fx-booking .fx-customize-count {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted-color);
+  font-size: 12px;
+  text-align: right;
+}
+
+.fx-booking .fx-customize-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.fx-booking .fx-customize-actions button {
+  min-width: 130px;
+}
+
+.fx-booking .fx-customize-back {
+  padding: 10px 22px;
+  border: 1px solid var(--new-border-color);
+  border-radius: var(--fx-border-medium-radius);
+  background: #fff;
+  color: var(--darkgrey);
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .fx-booking .fx-customize-page {
+    padding: 16px;
+  }
+
+  .fx-booking .fx-customize-actions button {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
 /* All children scoped to .fx-booking */
 .fx-booking .fx-redeem-container {
   max-width:300px;

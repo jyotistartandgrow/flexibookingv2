@@ -100,6 +100,11 @@
   z-index: 3;
 }
 
+.fx-stepper-tabstyle .customizestep {
+  width: 74%;
+  z-index: 3;
+}
+
 .fx-stepper-tabstyle .checkoutstep {
   width: 83%;
   z-index: 2;
@@ -137,6 +142,15 @@
   text-align: center;
   left: 30%;
   padding-right: 0px;
+}
+
+.fx-stepper-tabstyle .customizestep.active {
+  width: 35%;
+  border: 1px solid var(--primary-color);
+  background: #fff;
+  text-align: center;
+  left: 42%;
+  padding-right: 0;
 }
 
 .fx-stepper-tabstyle .checkoutstep.active {
@@ -186,6 +200,78 @@
   width: 48%;
   left: 5%;
   padding-right: 30px;
+}
+
+.fx-stepper-tabstyle .customizestep.complete {
+  background: #fff;
+}
+
+// Gift bookings have an additional Customize step between Extra and Checkout.
+.fx-stepper-tabstyle.fx-gift-step .step.datestep {
+  width: 17%;
+  z-index: 6;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.servicesstep {
+  width: 34%;
+  z-index: 5;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.extrastep {
+  width: 51%;
+  z-index: 4;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.customizestep {
+  width: 68%;
+  z-index: 3;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.checkoutstep {
+  width: 84%;
+  z-index: 2;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.paymentstep {
+  width: 100%;
+  z-index: 1;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.datestep.active,
+.fx-stepper-tabstyle.fx-gift-step .step.servicesstep.active,
+.fx-stepper-tabstyle.fx-gift-step .step.extrastep.active,
+.fx-stepper-tabstyle.fx-gift-step .step.customizestep.active,
+.fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.active,
+.fx-stepper-tabstyle.fx-gift-step .step.paymentstep.active {
+  width: 30%;
+  padding-right: 0;
+  background: #fff;
+  border: 1px solid var(--primary-color);
+  text-align: center;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.datestep.active {
+  left: 0;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.servicesstep.active {
+  left: 14%;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.extrastep.active {
+  left: 28%;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.customizestep.active {
+  left: 42%;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.active {
+  left: 56%;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.paymentstep.active {
+  left: 70%;
 }
 
 .fx-stepper-tabstyle .checkoutstep.complete {

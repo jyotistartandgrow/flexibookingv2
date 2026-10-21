@@ -35,6 +35,9 @@ export default function Checkout(props) {
   const checkoutkey = useSelector((state) => state.step4.checkoutkey);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
   const gift = useSelector((state) => state.step1.gift);
+  const giftCustomization = useSelector(
+    (state) => state.step1.giftCustomization || { message: "" },
+  );
   const cart = useSelector((state) => state.step2.cart);
   const opendatepurchase = useSelector((state) => state.step1.opendatepurchase);
   const voucherDetail = useSelector((state) => state.step3.voucherdetail);
@@ -376,6 +379,20 @@ export default function Checkout(props) {
         gift && !opendatepurchase
           ? (receiverInfo.postcode ?? receiverInfo.zip ?? "")
           : "",
+      gift_message: gift ? (giftCustomization.message ?? "") : "",
+      gift_type: gift ? (giftCustomization.giftType ?? "") : "",
+      gift_template: gift ? (giftCustomization.template ?? "") : "",
+      gift_font: gift ? (giftCustomization.font ?? "") : "",
+      delivery_method: gift ? (giftCustomization.delivery ?? "") : "",
+      delivery_scheduled: gift ? Boolean(giftCustomization.schedule) : false,
+      delivery_date:
+        gift && giftCustomization.schedule
+          ? (giftCustomization.deliveryDate ?? "")
+          : "",
+      delivery_time:
+        gift && giftCustomization.schedule
+          ? (giftCustomization.deliveryTime ?? "")
+          : "",
     };
 
     billdata.country_code = billdata.sgbm_field_8;
@@ -713,7 +730,9 @@ export default function Checkout(props) {
                   services={cart}
                   total={decodeHtml(cart.total_formatted)}
                   senderName={billdata.sgbm_field_1 || "You"}
-                  message="Enjoy your special day!"
+                  message={
+                    giftCustomization.message || "Enjoy your special day!"
+                  }
                 />
               </div>
               <div className="fx-commoninput">

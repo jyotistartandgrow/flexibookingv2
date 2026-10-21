@@ -158,7 +158,7 @@ export default function Extra(props) {
               dispatch(setExtracapacity(0));
               dispatch(setExtra(null));
               dispatch(setBookingkey(addToCartRes.data.data.booking_string));
-              dispatch(setStep("checkoutstep"));
+              dispatch(setStep(gift ? "customizestep" : "checkoutstep"));
               dispatch(setLoading(false));
             }
           }
@@ -353,7 +353,7 @@ export default function Extra(props) {
       dispatch(setExtracapacity(bookParam));
       dispatch(setExtra(extraIdParam));
       dispatch(setBookingkey(data.data.booking_string));
-      dispatch(setStep("checkoutstep"));
+      dispatch(setStep(gift ? "customizestep" : "checkoutstep"));
       dispatch(setLoading(false));
     } else {
       Swal.fire({
@@ -371,8 +371,6 @@ export default function Extra(props) {
   const skipextra = () => {
     setQuantities({});
     addtocart(null, 0);
-    dispatch(setStep("checkoutstep"));
-    dispatch(setLoading(false));
   };
 
   return (

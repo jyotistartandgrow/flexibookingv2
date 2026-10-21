@@ -1,6 +1,7 @@
 import Steps from "./Steps";
 import ServiceTab from "./ServiceTab";
 import Extra from "./Extra";
+import Customize from "./Customize";
 import Checkout from "./Checkout";
 import Payment from "./Payment";
 import { useSelector } from "react-redux";
@@ -28,6 +29,7 @@ export default function SgbmssOpenCalendar(props) {
       {/* Extra Tabs */}
       <Extra {...props} />
       {/* End Extra Tabs */}
+      <Customize previousStep="datestep" {...props} />
       {/* Checkout Tabs */}
       <Checkout {...props} />
       {/* End Checkout Tabs */}

@@ -20,6 +20,16 @@ const initialState = {
   loading: false,
   category: "",
   gift: false,
+  giftCustomization: {
+    giftType: "New Year",
+    template: "happy-new-year",
+    message: "",
+    font: "Roboto",
+    delivery: "recipient",
+    schedule: false,
+    deliveryDate: "",
+    deliveryTime: "",
+  },
   all: false,
   voucher: null,
   stripe_key: null,
@@ -56,6 +66,12 @@ const step1Slice = createSlice({
     setGift: (state, action) => {
       state.gift = action.payload;
     },
+    setGiftCustomization: (state, action) => {
+      state.giftCustomization = {
+        ...state.giftCustomization,
+        ...action.payload,
+      };
+    },
     setAll: (state, action) => {
       state.all = action.payload;
     },
@@ -86,6 +102,7 @@ export const {
   setLoading,
   setCategory,
   setGift,
+  setGiftCustomization,
   setAll,
   setVoucher,
   setStripeKey,

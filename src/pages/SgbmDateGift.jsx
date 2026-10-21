@@ -3,6 +3,7 @@ import Steps from "./Steps";
 import ChooseDate from "./ChooseDate";
 import Service from "./Service";
 import Extra from "./Extra";
+import Customize from "./Customize";
 import Checkout from "./Checkout";
 import Payment from "./Payment";
 import OrderDetailsCard from "./OrderDetailsCard";
@@ -58,6 +59,9 @@ export default function SgbmDateGift(props) {
       {/* Extra Tabs */}
       <Extra {...props} />
       {/* End Extra Tabs */}
+      {/* Gift Customize Tab */}
+      <Customize {...props} />
+      {/* End Gift Customize Tab */}
       {/* Checkout Tabs */}
       <Checkout {...props} />
       {/* End Checkout Tabs */}
