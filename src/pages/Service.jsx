@@ -1267,7 +1267,7 @@ export default function Service(props) {
     });
     if (data && data.status == 200 && data.data.booking_string) {
       dispatch(setBookingkey(data.data.booking_string));
-      dispatch(setStep("checkoutstep"));
+      dispatch(setStep(gift ? "customizestep" : "checkoutstep"));
       dispatch(setLoading(false));
     } else {
       Swal.fire({

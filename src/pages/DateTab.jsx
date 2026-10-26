@@ -302,6 +302,16 @@ export default function DateTab(props) {
         className="fx-booking-single-calender-card"
         style={{ display: step === "datestep" ? "block" : "none" }}
       >
+        {props.stepsVisibility?.step_1_title_visible == "true" && (
+          <h1
+            className="fx-all-main-heading"
+            style={{
+              display: props.mobileHeading == "false" ? "none" : "block",
+            }}
+          >
+            {props.stepTitles?.step_1_title || ""}{" "}
+          </h1>
+        )}
         <header className="fx-header">
           <div className="fx-title-row">
             <h2
@@ -317,10 +327,12 @@ export default function DateTab(props) {
                 <span>{serviceDetails.category_name}</span>
               </span>
             )}
-            <div className="fx-total-price">{servicePrice || "-"}</div>
+            {props.showPrice == 'true' && (
+              <div className="fx-total-price">{servicePrice || "-"}</div>
+            )}
           </div>
           <p className="fx-description">
-            {serviceDetails
+            {serviceDetails && props.showDescription == "true"
               ? decodeHtml(
                   serviceDetails.svc_long_desc ||
                     serviceDetails.svc_short_desc ||
@@ -411,7 +423,9 @@ export default function DateTab(props) {
                         {day}
                         {selected ? <CheckIcon /> : null}
                       </span>
-                      <span className="fx-day-price">{datePrice}</span>
+                      {props.showPriceInDate == "true" && (
+                        <span className="fx-day-price">{datePrice}</span>
+                      )}
                     </button>
                   );
                 })}
@@ -457,40 +471,46 @@ export default function DateTab(props) {
                 <strong>{formatSelectedDate(selectedDate)}</strong>
               </div>
             </div>
-            <strong className="fx-selected-price">{selectedPrice}</strong>
+            {props.showPrice == "true" && (
+              <strong className="fx-selected-price">{selectedPrice}</strong>
+            )}
           </div>
         )}
 
         <div className="fx-calendar-actions">
-          <button
-            type="button"
-            className="fx-proceed"
-            disabled={!selectedDate || detailsLoading || calendarLoading}
-            onClick={() => {
-              dispatch(setDate(selectedDate));
-              dispatch(setService(serviceDetails?.id || serviceid));
-              dispatch(setGift(false));
-              setPopupRequest((request) => request + 1);
-            }}
-          >
-            <span>Proceed</span>
-            <span className="fx-arrow" aria-hidden="true">
-              →
-            </span>
-          </button>
-          <button
-            type="button"
-            className="fx-gift-action"
-            disabled={!selectedDate || detailsLoading || calendarLoading}
-            onClick={() => {
-              dispatch(setDate(selectedDate));
-              dispatch(setService(serviceDetails?.id || serviceid));
-              dispatch(setGift(true));
-              setPopupRequest((request) => request + 1);
-            }}
-          >
-            <i class="pi pi-gift"></i> Gift
-          </button>
+          {props.showProceedButton == "true" && (
+            <button
+              type="button"
+              className="fx-proceed"
+              disabled={!selectedDate || detailsLoading || calendarLoading}
+              onClick={() => {
+                dispatch(setDate(selectedDate));
+                dispatch(setService(serviceDetails?.id || serviceid));
+                dispatch(setGift(false));
+                setPopupRequest((request) => request + 1);
+              }}
+            >
+              <span>Proceed</span>
+              <span className="fx-arrow" aria-hidden="true">
+                →
+              </span>
+            </button>
+          )}
+          {props.showGiftButton == "true" && (
+            <button
+              type="button"
+              className="fx-gift-action"
+              disabled={!selectedDate || detailsLoading || calendarLoading}
+              onClick={() => {
+                dispatch(setDate(selectedDate));
+                dispatch(setService(serviceDetails?.id || serviceid));
+                dispatch(setGift(true));
+                setPopupRequest((request) => request + 1);
+              }}
+            >
+              <i class="pi pi-gift"></i> Gift
+            </button>
+          )}
         </div>
       </section>
       <Service

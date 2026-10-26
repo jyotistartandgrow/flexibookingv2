@@ -28,6 +28,7 @@ export default function Steps({ type = "date", ...props }) {
   const gift = useSelector((state) => state.step1.gift);
   const serviceid = useSelector((state) => state.step2.service);
   const extra = useSelector((state) => state.step3.extra);
+  const bookingkey = useSelector((state) => state.step3.bookingkey);
   const checkoutkey = useSelector((state) => state.step4.checkoutkey);
   const cart = useSelector((state) => state.step2.cart);
   const topbar = useSelector((state) => state.step1.topbar);
@@ -35,6 +36,7 @@ export default function Steps({ type = "date", ...props }) {
   const [visibleBottom, setVisibleBottom] = useState(false);
   const isDesktop = useDeviceType();
   const isRedeemBooking = props.redeemBooking === true;
+  const showCustomize = gift && !isRedeemBooking;
 
   const getSettings = async () => {
     try {
@@ -77,6 +79,7 @@ export default function Steps({ type = "date", ...props }) {
   let datestepclass = "step datestep";
   let servicesstepclass = "step servicesstep";
   let extrastepclass = "step extrastep";
+  let customizestepclass = "step customizestep";
   let checkoutstepclass = "step checkoutstep";
   let paymentstepclass = "step paymentstep";
   if (step == "datestep") {
@@ -90,16 +93,27 @@ export default function Steps({ type = "date", ...props }) {
     extrastepclass = extrastepclass + " active";
     datestepclass = datestepclass + " complete";
     servicesstepclass = servicesstepclass + " complete";
+  } else if (step == "customizestep") {
+    customizestepclass = customizestepclass + " active";
+    datestepclass = datestepclass + " complete";
+    servicesstepclass = servicesstepclass + " complete";
+    extrastepclass = extrastepclass + " complete";
   } else if (step == "checkoutstep") {
     checkoutstepclass = checkoutstepclass + " active";
     datestepclass = datestepclass + " complete";
     servicesstepclass = servicesstepclass + " complete";
     extrastepclass = extrastepclass + " complete";
+    if (showCustomize) {
+      customizestepclass = customizestepclass + " complete";
+    }
   } else if (step == "paymentstep") {
     paymentstepclass = paymentstepclass + " active";
     datestepclass = datestepclass + " complete";
     servicesstepclass = servicesstepclass + " complete";
     extrastepclass = extrastepclass + " complete";
+    if (showCustomize) {
+      customizestepclass = customizestepclass + " complete";
+    }
     checkoutstepclass = checkoutstepclass + " complete";
   }
 
@@ -116,7 +130,7 @@ export default function Steps({ type = "date", ...props }) {
         <div
           className={`fx-stepper-tabstyle fx-${type}-step ${
             isRedeemBooking ? "fx-redeem-booking-step" : ""
-          }`}
+          } ${showCustomize ? "fx-gift-step" : ""}`}
         >
           {isRedeemBooking && (
             <div
@@ -207,6 +221,19 @@ export default function Steps({ type = "date", ...props }) {
               <span>EXTRA</span>
             </div>
           </div>
+          {showCustomize && (
+            <div
+              className={customizestepclass}
+              onClick={() => {
+                if (bookingkey) dispatch(setStep("customizestep"));
+              }}
+            >
+              <div>
+                {type == "service" || type == "singleservice" ? 3 : 4}{" "}
+                <span>CUSTOMIZE</span>
+              </div>
+            </div>
+          )}
           <div
             className={checkoutstepclass}
             onClick={() => {
@@ -217,8 +244,12 @@ export default function Steps({ type = "date", ...props }) {
               {isRedeemBooking
                 ? 5
                 : type == "service" || type == "singleservice"
-                  ? 3
-                  : 4}{" "}
+                  ? showCustomize
+                    ? 4
+                    : 3
+                  : showCustomize
+                    ? 5
+                    : 4}{" "}
               <span>{isRedeemBooking ? "INFORMATION" : "CHECKOUT"}</span>
             </div>
           </div>
@@ -227,8 +258,12 @@ export default function Steps({ type = "date", ...props }) {
               {isRedeemBooking
                 ? 6
                 : type == "service" || type == "singleservice"
-                  ? 4
-                  : 5}{" "}
+                  ? showCustomize
+                    ? 5
+                    : 4
+                  : showCustomize
+                    ? 6
+                    : 5}{" "}
               <span>PAYMENT</span>
             </div>
           </div>

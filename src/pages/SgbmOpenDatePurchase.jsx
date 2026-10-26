@@ -1,6 +1,7 @@
 import Steps from "./Steps";
 import Service from "./Service";
 import Extra from "./Extra";
+import Customize from "./Customize";
 import Checkout from "./Checkout";
 import Payment from "./Payment";
 import { useSelector, useDispatch } from "react-redux";
@@ -35,6 +36,7 @@ export default function SgbmOpenDatePurchase(props) {
       {/* Extra Tabs */}
       <Extra {...props} />
       {/* End Extra Tabs */}
+      <Customize {...props} />
       {/* Checkout Tabs */}
       <Checkout {...props} />
       {/* End Checkout Tabs */}

@@ -36,7 +36,8 @@ export default function ServiceTab(props) {
         let response = await getServiceDetails(requestDate);
         const todayHasNoService =
           !response?.data?.data ||
-          (Array.isArray(response.data.data) && response.data.data.length === 0);
+          (Array.isArray(response.data.data) &&
+            response.data.data.length === 0);
 
         if (todayHasNoService) {
           requestDate = moment().add(1, "day").format("YYYY-MM-DD");
@@ -98,8 +99,17 @@ export default function ServiceTab(props) {
     <>
       <div
         className="fx-single-service-page"
-        style={{ display: step === "servicesstep" ? "block" : "none" }}
       >
+        {props.stepsVisibility?.step_1_title_visible == "true" && (
+          <h1
+            className="fx-all-main-heading"
+            style={{
+              display: props.mobileHeading == "false" ? "none" : "block",
+            }}
+          >
+            {props.stepTitles?.step_1_title || ""}{" "}
+          </h1>
+        )}
         <div className="fx-service-card">
           <div className="fx-service-card__media">
             {serviceDetails?.svc_img ? (
@@ -148,7 +158,11 @@ export default function ServiceTab(props) {
               {title || (errorMessage ? "Service unavailable" : "Loading...")}
               <span
                 className="fx-service-card__info"
-                title={description ? decodeHtml(description) : "Service information"}
+                title={
+                  description && props.showDescription == "true"
+                    ? decodeHtml(description)
+                    : "Service information"
+                }
                 aria-label="More information"
               >
                 i
@@ -159,40 +173,51 @@ export default function ServiceTab(props) {
               {description ? decodeHtml(description) : errorMessage}
             </p>
 
-            <p className="fx-service-card__price">
-              <span>Total</span>
-              <strong>
-                {serviceDetails?.svc_price
-                  ? decodeHtml(serviceDetails.svc_price)
-                  : "-"}
-              </strong>
-            </p>
+            {props.showPrice == "true" && (
+              <p className="fx-service-card__price">
+                <span>Total</span>
+                <strong>
+                  {serviceDetails?.svc_price
+                    ? decodeHtml(serviceDetails.svc_price)
+                    : "-"}
+                </strong>
+              </p>
+            )}
 
             <div className="fx-service-card__actions">
-              <button
-                className="fx-service-card__button fx-service-card__button--gift"
-                type="button"
-                disabled={!serviceDetails}
-                onClick={() => openServicePopup(true)}
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="3.5" y="9" width="17" height="11.5" rx="1.5"></rect>
-                  <path d="M2.8 6h18.4v3H2.8zM12 6v14.5M12 6H8.8a2.2 2.2 0 1 1 2.2-2.2V6Zm0 0h3.2a2.2 2.2 0 1 0-2.2-2.2V6Z"></path>
-                </svg>
-                Buy as Gift
-              </button>
-
-              <button
-                className="fx-service-card__button fx-service-card__button--book"
-                type="button"
-                disabled={!serviceDetails}
-                onClick={() => openServicePopup(false)}
-              >
-                Book Now
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 12h13M13 6.5l5.5 5.5-5.5 5.5"></path>
-                </svg>
-              </button>
+              {props.showGiftButton == "true" && (
+                <button
+                  className="fx-service-card__button fx-service-card__button--gift"
+                  type="button"
+                  disabled={!serviceDetails}
+                  onClick={() => openServicePopup(true)}
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect
+                      x="3.5"
+                      y="9"
+                      width="17"
+                      height="11.5"
+                      rx="1.5"
+                    ></rect>
+                    <path d="M2.8 6h18.4v3H2.8zM12 6v14.5M12 6H8.8a2.2 2.2 0 1 1 2.2-2.2V6Zm0 0h3.2a2.2 2.2 0 1 0-2.2-2.2V6Z"></path>
+                  </svg>
+                  Buy as Gift
+                </button>
+              )}
+              {props.showProceedButton == "true" && (
+                <button
+                  className="fx-service-card__button fx-service-card__button--book"
+                  type="button"
+                  disabled={!serviceDetails}
+                  onClick={() => openServicePopup(false)}
+                >
+                  Book Now
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h13M13 6.5l5.5 5.5-5.5 5.5"></path>
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
         </div>

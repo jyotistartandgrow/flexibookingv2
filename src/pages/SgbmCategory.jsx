@@ -1,6 +1,7 @@
 import Steps from "./Steps";
 import Service from "./Service";
 import Extra from "./Extra";
+import Customize from "./Customize";
 import Checkout from "./Checkout";
 import Payment from "./Payment";
 import Category from "./Category";
@@ -28,6 +29,7 @@ export default function SgbmCategory(props) {
       {/* Extra Tabs */}
       <Extra {...props} />
       {/* End Extra Tabs */}
+      <Customize {...props} />
       {/* Checkout Tabs */}
       <Checkout {...props}/>
       {/* End Checkout Tabs */}

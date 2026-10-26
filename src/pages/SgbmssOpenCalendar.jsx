@@ -1,6 +1,7 @@
 import Steps from "./Steps";
 import DateTab from "./DateTab";
 import Extra from "./Extra";
+import Customize from "./Customize";
 import Checkout from "./Checkout";
 import Payment from "./Payment";
 import { useSelector } from "react-redux";
@@ -14,7 +15,9 @@ export default function SgbmssOpenCalendar(props) {
     <div
       className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}
     >
-      <Steps type="singleservice" {...props} />
+      {props.showStepsAfterProceed == "true" && cart?.service?.length > 0 && (
+        <Steps type="singleservice" {...props} />
+      )}
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
         <div className="fx-seg-loader"></div>
       </div>
@@ -26,6 +29,7 @@ export default function SgbmssOpenCalendar(props) {
       {/* Extra Tabs */}
       <Extra {...props} />
       {/* End Extra Tabs */}
+      <Customize previousStep="datestep" {...props} />
       {/* Checkout Tabs */}
       <Checkout {...props} />
       {/* End Checkout Tabs */}
