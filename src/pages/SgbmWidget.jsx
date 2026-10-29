@@ -42,12 +42,6 @@ function getDaysInMonth(year, month) {
   return new Date(year, month + 1, 0).getDate();
 }
 
-function buildApiUrl(path) {
-  const normalizedBase = String(API_BASE || "").replace(/\/+$/, "");
-  const normalizedPath = String(path || "").replace(/^\/+/, "");
-  return `${normalizedBase}/${normalizedPath}`;
-}
-
 function resolveWidgetScriptUrl(origin) {
   const configuredPath = String(WIDGET_SCRIPT_PATH || "").trim();
 
@@ -70,10 +64,10 @@ function CalendarPreview({ accentColor, redirectUrl }) {
     setError(null);
     try {
       const key = getMonthKey(y, m);
-      const res = await fetch(
-        buildApiUrl(`service-availability-calendar?month=${key}`),
+      const { data: json } = await axiosInstance.get(
+        "/service-availability-calendar",
+        { params: { month: key } },
       );
-      const json = await res.json();
       if (json.status === 200 && Array.isArray(json.data)) {
         const map = {};
         json.data.forEach((d) => {
@@ -228,9 +222,11 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    fetch(buildApiUrl(`services?date=${today}&category=&all=true`))
-      .then((r) => r.json())
-      .then((json) => {
+    axiosInstance
+      .get("/services", {
+        params: { date: today, category: "", all: true },
+      })
+      .then(({ data: json }) => {
         if (json.status === 200 && Array.isArray(json.data)) {
           // Filter out test entries
           const filtered = json.data.filter(

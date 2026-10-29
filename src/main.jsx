@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { store, persistor } from "./store/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { setGift } from "./store/step1Slice";
+import { initializeBookingNonce } from "./Utils/Interceptor";
 
 const FLOW_STORAGE_KEY = "fx-active-flow";
 
@@ -27,6 +28,11 @@ function ensureCleanSessionForFlow(flowId) {
 
 // Mount React only when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
+  // Start nonce loading once for all API requests made by this frontend.
+  initializeBookingNonce().catch((error) => {
+    console.error("Unable to initialize the booking API nonce.", error);
+  });
+
   mountReactApp("react_sgbm_starting_date", "/");
   mountReactApp("react_sgbm_starting_gift", "/?type=gift");
   mountReactApp("react_sgbm_starting_category", "/startingcategory");
