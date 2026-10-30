@@ -14,7 +14,6 @@ import {
   List,
   ListOrdered,
   Mail,
-  MapPin,
   Send,
   Underline,
   X,
@@ -24,8 +23,9 @@ import {
   setReceiverInfo,
   setStep,
 } from "../store/step1Slice";
+import axiosInstance from "../Utils/Interceptor";
 
-const templates = [
+const fallbackTemplates = [
   { id: "happy-new-year", name: "Happy New Year", year: "2026", giftType: "New Year", variant: "champagne", className: "newyear" },
   { id: "fireworks", name: "Fireworks", year: "2028", giftType: "New Year", variant: "fireworks", className: "newyear" },
   { id: "midnight", name: "Midnight Magic", year: "2026", giftType: "New Year", variant: "midnight", className: "newyear" },
@@ -33,6 +33,35 @@ const templates = [
   { id: "blackfriday", name: "Black Friday", year: "2026", giftType: "Black Friday", variant: "photo", image: "/assets/template-blackfriday.jpg", title: "BLACK FRIDAY", className: "blackfriday" },
   { id: "birthday", name: "Golden Birthday", year: "2026", giftType: "Birthday", variant: "photo", image: "/assets/golden-birthday.jpg", title: "Happy Birthday", className: "fx-birthday" },
 ];
+
+const normalizeTemplate = (template, occasion) => ({
+  id: String(template.id),
+  name: template.name || "Gift template",
+  giftType: occasion?.name || "",
+  occasionId: occasion?.id ?? null,
+  variant: "photo",
+  image: template.image_url || template.thumbnail_url || "",
+  thumbnail: template.thumbnail_url || template.image_url || "",
+  settings: template.settings || {},
+  className: "fx-api-template",
+  source: "api",
+});
+
+const normalizeFont = (font, index) => {
+  if (typeof font === "string") {
+    return { id: String(index), label: font, value: font, family: font };
+  }
+
+  const label =
+    font.name || font.label || font.font_name || font.font_family || "Roboto";
+  const key = font.key || font.slug || font.value || label;
+  return {
+    id: String(font.id ?? key ?? index),
+    label,
+    value: key,
+    family: font.family || font.font_family || label,
+  };
+};
 
 const timeOptions = Array.from({ length: 48 }, (_, index) => {
   const hours = Math.floor(index / 2);
@@ -144,22 +173,35 @@ function TemplateArt({ variant, image, alt }) {
 }
 
 function PreviewCard({ active, font, firstName, lastName, message }) {
+  const configuredRatio = active.settings?.preview_ratio;
+  const previewArtStyle =
+    configuredRatio && configuredRatio !== "auto"
+      ? { aspectRatio: String(configuredRatio).replace(":", " / ") }
+      : undefined;
+  const previewStyle = {
+    fontFamily: font,
+    textAlign: active.settings?.text_alignment || "center",
+    color: active.settings?.text_color || undefined,
+  };
+
   return (
     <div className="fx-preview-card">
-      <div className={`fx-preview-art ${active.variant !== "photo" ? "fx-design-art" : ""} ${active.className}`}>
+      <div className={`fx-preview-art ${active.variant !== "photo" ? "fx-design-art" : ""} ${active.className}`} style={previewArtStyle}>
         {active.variant === "photo" ? (
           <>
             <img src={active.image} alt="Selected gift template preview" />
-            {active.id !== "birthday" && <div className="fx-art-label">{active.title}</div>}
+            {active.source !== "api" && active.id !== "birthday" && (
+              <div className="fx-art-label">{active.title}</div>
+            )}
           </>
         ) : <TemplateArt variant={active.variant} />}
       </div>
-      <div className="fx-preview-content" style={{ fontFamily: font }}>
+      <div className="fx-preview-content" style={previewStyle}>
         <h2>{active.name}</h2>
-        <p className="fx-year">{active.year}</p>
+        {active.year && <p className="fx-year">{active.year}</p>}
         <h3>{[firstName, lastName].filter(Boolean).join(" ") || "Recipient"}</h3>
         <div className="fx-preview-divider" />
-        <p className="fx-preview-message">{message || "Your personal message will appear here."}</p>
+        <p className="fx-preview-message" style={{ color: active.settings?.text_color || undefined }}>{message || "Your personal message will appear here."}</p>
         <p className="fx-sender">From Your Name</p>
       </div>
     </div>
@@ -185,12 +227,21 @@ export default function Customize() {
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
   const customization = useSelector((state) => state.step1.giftCustomization || {});
   const [showPreview, setShowPreview] = useState(false);
+  const [occasions, setOccasions] = useState([]);
+  const [availableTemplates, setAvailableTemplates] = useState([]);
+  const [fontOptions, setFontOptions] = useState([]);
+  const [catalogLoading, setCatalogLoading] = useState(false);
+  const [catalogLoaded, setCatalogLoaded] = useState(false);
+  const [catalogError, setCatalogError] = useState("");
 
+  const occasionId = customization.occasionId ?? "";
   const giftType = customization.giftType || "New Year";
   const selected = customization.template || "happy-new-year";
   const message = customization.message || "";
   const font = customization.font || "Roboto";
-  const delivery = customization.delivery || "recipient";
+  const delivery = ["recipient", "me"].includes(customization.delivery)
+    ? customization.delivery
+    : "recipient";
   const schedule = Boolean(customization.schedule);
   const deliveryDate = customization.deliveryDate || "";
   const deliveryTime = customization.deliveryTime || "";
@@ -204,16 +255,198 @@ export default function Customize() {
     return () => document.removeEventListener("keydown", closeOnEscape);
   }, [showPreview]);
 
+  useEffect(() => {
+    if (
+      customization.delivery &&
+      !["recipient", "me"].includes(customization.delivery)
+    ) {
+      dispatch(setGiftCustomization({ delivery: "recipient" }));
+    }
+  }, [customization.delivery, dispatch]);
+
+  useEffect(() => {
+    if (!gift || step !== "customizestep" || catalogLoaded) return undefined;
+
+    let mounted = true;
+    const loadCatalog = async () => {
+      setCatalogLoading(true);
+      setCatalogError("");
+      try {
+        const response = await axiosInstance.get("/occasions");
+        const payload = response?.data?.data || {};
+        const occasionList = Array.isArray(payload.occasions)
+          ? payload.occasions
+          : [];
+        const apiFonts = Array.isArray(payload.fonts)
+          ? payload.fonts.map(normalizeFont)
+          : [];
+
+        if (!mounted) return;
+        setOccasions(occasionList);
+        setFontOptions(apiFonts);
+
+        if (!payload.gift_enabled) {
+          setCatalogError("Gift customization is currently unavailable.");
+          return;
+        }
+        if (!payload.catalog_configured || occasionList.length === 0) {
+          setCatalogError("No gift occasions are configured.");
+          return;
+        }
+
+        const selectedOccasion =
+          occasionList.find(
+            (occasion) => String(occasion.id) === String(occasionId),
+          ) ||
+          occasionList.find((occasion) => occasion.name === giftType) ||
+          occasionList[0];
+
+        let templateList = Array.isArray(selectedOccasion.templates)
+          ? selectedOccasion.templates
+          : [];
+        try {
+          const templateResponse = await axiosInstance.get("/templates", {
+            params: { occasion_id: selectedOccasion.id },
+          });
+          if (Array.isArray(templateResponse?.data?.data)) {
+            templateList = templateResponse.data.data;
+          }
+        } catch (error) {
+          console.error("Unable to load gift templates:", error);
+        }
+
+        if (!mounted) return;
+        const normalizedTemplates = templateList.map((template) =>
+          normalizeTemplate(template, selectedOccasion),
+        );
+        setAvailableTemplates(normalizedTemplates);
+
+        const selectedTemplate =
+          normalizedTemplates.find(
+            (template) => String(template.id) === String(selected),
+          ) || normalizedTemplates[0];
+
+        dispatch(
+          setGiftCustomization({
+            occasionId: selectedOccasion.id,
+            occasionSlug: selectedOccasion.slug || "",
+            giftType: selectedOccasion.name,
+            template: selectedTemplate?.id || "",
+            templateName: selectedTemplate?.name || "",
+            templateSettings: selectedTemplate?.settings || {},
+            message: message || selectedOccasion.default_message || "",
+            font:
+              apiFonts.find(
+                (option) =>
+                  option.value === font ||
+                  option.label === font ||
+                  option.family === font,
+              )?.value || apiFonts[0]?.value || font,
+            fontFamily:
+              apiFonts.find(
+                (option) =>
+                  option.value === font ||
+                  option.label === font ||
+                  option.family === font,
+              )?.family || apiFonts[0]?.family || font,
+          }),
+        );
+      } catch (error) {
+        console.error("Unable to load gift occasions:", error);
+        if (mounted) {
+          setCatalogError("Unable to load gift customization options.");
+        }
+      } finally {
+        if (mounted) {
+          setCatalogLoading(false);
+          setCatalogLoaded(true);
+        }
+      }
+    };
+
+    loadCatalog();
+    return () => {
+      mounted = false;
+    };
+  }, [
+    catalogLoaded,
+    dispatch,
+    font,
+    gift,
+    giftType,
+    message,
+    occasionId,
+    selected,
+    step,
+  ]);
+
   if (!gift || step !== "customizestep") return null;
 
-  const active = templates.find((template) => template.id === selected) || templates[0];
-  const matches = templates.filter((template) => template.giftType === giftType);
-  const visibleTemplates = matches.length ? matches : templates.filter((template) => template.giftType === "New Year");
+  const active =
+    availableTemplates.find(
+      (template) => String(template.id) === String(selected),
+    ) || availableTemplates[0] || fallbackTemplates[0];
+  const visibleTemplates = availableTemplates;
+  const visibleFonts = fontOptions.length
+    ? fontOptions
+    : ["Roboto", "Arial", "Georgia", "Times New Roman", "Verdana", "Courier New"].map(
+        (value, index) => ({ id: String(index), label: value, value, family: value }),
+      );
+  const selectedFont =
+    visibleFonts.find(
+      (option) =>
+        option.value === font ||
+        option.label === font ||
+        option.family === font,
+    ) || visibleFonts[0];
+  const previewFontFamily =
+    selectedFont?.family || customization.fontFamily || font;
   const updateCustomization = (values) => dispatch(setGiftCustomization(values));
   const updateRecipient = (values) => dispatch(setReceiverInfo(values));
-  const chooseType = (value) => {
-    const firstMatch = templates.find((template) => template.giftType === value);
-    updateCustomization({ giftType: value, ...(firstMatch ? { template: firstMatch.id } : {}) });
+  const chooseOccasion = async (value) => {
+    const occasion = occasions.find(
+      (item) => String(item.id) === String(value),
+    );
+    if (!occasion) return;
+
+    updateCustomization({
+      occasionId: occasion.id,
+      occasionSlug: occasion.slug || "",
+      giftType: occasion.name,
+      message: occasion.default_message || "",
+      template: "",
+      templateName: "",
+      templateSettings: {},
+    });
+
+    setCatalogLoading(true);
+    setCatalogError("");
+    try {
+      const response = await axiosInstance.get("/templates", {
+        params: { occasion_id: occasion.id },
+      });
+      const templateList = Array.isArray(response?.data?.data)
+        ? response.data.data
+        : Array.isArray(occasion.templates)
+          ? occasion.templates
+          : [];
+      const normalizedTemplates = templateList.map((template) =>
+        normalizeTemplate(template, occasion),
+      );
+      setAvailableTemplates(normalizedTemplates);
+      const firstTemplate = normalizedTemplates[0];
+      updateCustomization({
+        template: firstTemplate?.id || "",
+        templateName: firstTemplate?.name || "",
+        templateSettings: firstTemplate?.settings || {},
+      });
+    } catch (error) {
+      console.error("Unable to load gift templates:", error);
+      setAvailableTemplates([]);
+      setCatalogError("Unable to load templates for this occasion.");
+    } finally {
+      setCatalogLoading(false);
+    }
   };
 
   return (
@@ -223,10 +456,19 @@ export default function Customize() {
           <h1>Customize</h1>
 
           <div className="fx-panel type-panel">
-            <StepTitle number="1">Select Gift Type</StepTitle>
+            <StepTitle number="1">Occasion</StepTitle>
             <div className="fx-select-wrap">
-              <select value={giftType} onChange={(event) => chooseType(event.target.value)}>
-                <option>New Year</option><option>Birthday</option><option>Anniversary</option><option>Black Friday</option><option>Thank You</option><option>Congratulations</option>
+              <select
+                value={String(occasionId)}
+                onChange={(event) => chooseOccasion(event.target.value)}
+                disabled={catalogLoading || occasions.length === 0}
+              >
+                {occasions.length === 0 && <option value="">Select occasion</option>}
+                {occasions.map((occasion) => (
+                  <option key={occasion.id} value={String(occasion.id)}>
+                    {occasion.name}
+                  </option>
+                ))}
               </select>
               <ChevronDown size={15} />
             </div>
@@ -239,12 +481,15 @@ export default function Customize() {
             </div>
             <div className="fx-template-grid" role="radiogroup" aria-label="Choose template">
               {visibleTemplates.map((template) => (
-                <button key={template.id} type="button" role="radio" aria-checked={selected === template.id} className={`fx-template-choice ${selected === template.id ? "fx-active" : ""}`} onClick={() => updateCustomization({ template: template.id, giftType: template.giftType })} aria-label={`Choose ${template.name} template`}>
-                  <span className="fx-template-face"><TemplateArt variant={template.variant} image={template.image} alt="" /></span>
-                  {selected === template.id && <span className="fx-template-check"><Check size={13} strokeWidth={3} /></span>}
+                <button key={template.id} type="button" role="radio" aria-checked={String(selected) === String(template.id)} className={`fx-template-choice ${String(selected) === String(template.id) ? "fx-active" : ""}`} onClick={() => updateCustomization({ template: template.id, templateName: template.name, templateSettings: template.settings || {} })} aria-label={`Choose ${template.name} template`}>
+                  <span className="fx-template-face"><TemplateArt variant={template.variant} image={template.thumbnail || template.image} alt={template.name} /></span>
+                  {String(selected) === String(template.id) && <span className="fx-template-check"><Check size={13} strokeWidth={3} /></span>}
                 </button>
               ))}
             </div>
+            {!catalogLoading && visibleTemplates.length === 0 && <p className="fx-customize-empty">No templates are available for this occasion.</p>}
+            {catalogLoading && <p className="fx-customize-empty">Loading templates…</p>}
+            {catalogError && <p className="fx-customize-error">{catalogError}</p>}
           </div>
 
           <div className="fx-panel message-panel">
@@ -265,8 +510,21 @@ export default function Customize() {
           <div className="fx-panel font-panel">
             <StepTitle number="4">Select font</StepTitle>
             <div className="fx-select-wrap">
-              <select value={font} onChange={(event) => updateCustomization({ font: event.target.value })}>
-                <option>Roboto</option><option>Arial</option><option>Georgia</option><option>Times New Roman</option><option>Verdana</option><option>Courier New</option>
+              <select
+                value={selectedFont?.value || ""}
+                onChange={(event) => {
+                  const option = visibleFonts.find(
+                    (fontOption) => fontOption.value === event.target.value,
+                  );
+                  updateCustomization({
+                    font: option?.value || event.target.value,
+                    fontFamily: option?.family || event.target.value,
+                  });
+                }}
+              >
+                {visibleFonts.map((fontOption) => (
+                  <option key={fontOption.id} value={fontOption.value}>{fontOption.label}</option>
+                ))}
               </select><ChevronDown size={15} />
             </div>
           </div>
@@ -282,42 +540,41 @@ export default function Customize() {
 
           <div className="fx-panel fx-delivery-panel">
             <div className="fx-step-title fx-template-step-title">
-              <span className="fx-step-number">6</span><span>Delivery method</span>
-              <button type="button" className="fx-template-info" aria-label="Choose how the gift card is delivered" title="Choose how the gift card is delivered"><Info size={15} strokeWidth={1.75} /></button>
+              <span className="fx-step-number">6</span><span>Voucher delivery</span>
+              <button type="button" className="fx-template-info" aria-label="Choose who receives the voucher email" title="Choose who receives the voucher email"><Info size={15} strokeWidth={1.75} /></button>
             </div>
-            <div className="fx-delivery-list" role="radiogroup" aria-label="Delivery method">
-              <DeliveryOption value="mail" selected={delivery} icon={<MapPin size={14} />} title="Send Gift Card by mail" description="Physical gift card delivered to recipient's address" onChange={updateCustomization} />
-              <DeliveryOption value="me" selected={delivery} icon={<Mail size={14} />} title="Send e-gift to me" description="Digital voucher sent to your email for manual delivery" onChange={updateCustomization} />
-              <DeliveryOption value="recipient" selected={delivery} icon={<Send size={14} />} title="Send e-gift to recipient" description="Digital voucher sent directly to recipient's email" onChange={updateCustomization} />
+            <div className="fx-delivery-list" role="radiogroup" aria-label="Voucher delivery">
+              <DeliveryOption value="recipient" selected={delivery} icon={<Send size={14} />} title="Email the recipient immediately" description="Send the digital voucher directly to the recipient's email." onChange={updateCustomization} />
+              <DeliveryOption value="me" selected={delivery} icon={<Mail size={14} />} title="Email me so I can deliver it" description="Send the digital voucher to your email for personal delivery." onChange={(values) => updateCustomization({ ...values, schedule: false, deliveryDate: "", deliveryTime: "" })} />
             </div>
             {delivery === "recipient" && (
               <>
                 <div className="fx-email-field fx-delivery-email"><input type="email" value={receiverInfo.email || ""} onChange={(event) => updateRecipient({ email: event.target.value })} placeholder="Recipient's email" aria-label="Recipient's email" /><Mail size={15} /></div>
-                <label className="fx-schedule-check"><input type="checkbox" checked={schedule} onChange={(event) => updateCustomization({ schedule: event.target.checked })} /><span>Schedule gift voucher for a specific date &amp; time</span></label>
+                {/* <label className="fx-schedule-check"><input type="checkbox" checked={schedule} onChange={(event) => updateCustomization({ schedule: event.target.checked })} /><span>Schedule the recipient email for a specific date &amp; time</span></label>
                 {schedule && (
                   <div className="fx-schedule-stack">
                     <label className={`fx-schedule-date ${deliveryDate ? "fx-has-value" : ""}`}><CalendarDays size={15} /><input type="date" value={deliveryDate} onChange={(event) => updateCustomization({ deliveryDate: event.target.value })} aria-label="Select a date" />{!deliveryDate && <span className="fx-schedule-placeholder">Select a date</span>}</label>
                     <div className={`fx-select-wrap fx-schedule-time ${deliveryTime ? "" : "fx-is-empty"}`}><select value={deliveryTime} onChange={(event) => updateCustomization({ deliveryTime: event.target.value })} aria-label="Select a time"><option value="">Select a time</option>{timeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select><ChevronDown size={15} /></div>
                   </div>
-                )}
+                )} */}
               </>
             )}
           </div>
 
           <button type="button" className="fx-preview-button" onClick={() => setShowPreview(true)}>PREVIEW</button>
-          <button type="button" className="fx-save-button" onClick={() => dispatch(setStep("checkoutstep"))}>SAVE &amp; CONTINUE</button>
+          <button type="button" className="fx-save-button" disabled={catalogLoading || visibleTemplates.length === 0} onClick={() => dispatch(setStep("checkoutstep"))}>CONTINUE</button>
         </section>
 
         <aside className="fx-preview-column">
           <h1>Live Preview</h1>
-          <PreviewCard active={active} font={font} firstName={receiverInfo.firstName} lastName={receiverInfo.lastName} message={message} />
+          <PreviewCard active={active} font={previewFontFamily} firstName={receiverInfo.firstName} lastName={receiverInfo.lastName} message={message} />
         </aside>
 
         {showPreview && (
           <div className="fx-preview-modal" onClick={() => setShowPreview(false)}>
             <div className="fx-preview-dialog" role="dialog" aria-modal="true" aria-label="Live Preview" onClick={(event) => event.stopPropagation()}>
               <div className="fx-preview-modal-bar"><h2>Live Preview</h2><button type="button" className="fx-preview-close" onClick={() => setShowPreview(false)} aria-label="Close preview"><X size={18} /></button></div>
-              <PreviewCard active={active} font={font} firstName={receiverInfo.firstName} lastName={receiverInfo.lastName} message={message} />
+              <PreviewCard active={active} font={previewFontFamily} firstName={receiverInfo.firstName} lastName={receiverInfo.lastName} message={message} />
             </div>
           </div>
         )}

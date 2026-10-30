@@ -275,7 +275,7 @@ export default function Service(props) {
     const { data } = await axiosInstance(
       `/services?date=${moment(selectedDate).format(
         "YYYY-MM-DD",
-      )}&category=${category}&all=${allService}`,
+      )}&category=${category}&all=${allService}&gift=${gift ? true : false}`,
       {
         method: "get",
       },

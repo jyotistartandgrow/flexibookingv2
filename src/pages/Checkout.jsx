@@ -379,21 +379,28 @@ export default function Checkout(props) {
         gift && !opendatepurchase
           ? (receiverInfo.postcode ?? receiverInfo.zip ?? "")
           : "",
-      gift_message: gift ? (giftCustomization.message ?? "") : "",
-      gift_type: gift ? (giftCustomization.giftType ?? "") : "",
-      gift_template: gift ? (giftCustomization.template ?? "") : "",
-      gift_font: gift ? (giftCustomization.font ?? "") : "",
-      delivery_method: gift ? (giftCustomization.delivery ?? "") : "",
-      delivery_scheduled: gift ? Boolean(giftCustomization.schedule) : false,
-      delivery_date:
-        gift && giftCustomization.schedule
-          ? (giftCustomization.deliveryDate ?? "")
-          : "",
-      delivery_time:
-        gift && giftCustomization.schedule
-          ? (giftCustomization.deliveryTime ?? "")
-          : "",
     };
+
+    const giftCustomizationData = gift
+      ? {
+          occasion_id: giftCustomization.occasionId ?? "",
+          template_id: giftCustomization.template ?? "",
+          personal_message: giftCustomization.message ?? "",
+          font_key: giftCustomization.font ?? "",
+        }
+      : {};
+    const voucherDelivery =
+      giftCustomization.delivery === "me" ? "me" : "recipient";
+    const giftDeliveryData = gift
+      ? {
+          channel: "email",
+          target:
+            voucherDelivery === "me"
+              ? "purchaser_email"
+              : "recipient_email",
+          timing: "immediate",
+        }
+      : {};
 
     billdata.country_code = billdata.sgbm_field_8;
 
@@ -415,9 +422,13 @@ export default function Checkout(props) {
         shipping_postcode: "",
       },
       gift_details: gift_info,
+      gift_customization: giftCustomizationData,
+      gift_delivery: giftDeliveryData,
+      voucher_delivery: gift ? voucherDelivery : "",
       is_gift: gift,
       other_data: {
         terms_conditions: 1,
+        booking_acknowledgement: true,
         shipping_same_as_billing: 1,
         age_group_from_0: 0,
         age_group_to_0: 2,
