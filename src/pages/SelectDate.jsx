@@ -68,6 +68,19 @@ function RedeemItemCard({ product, description }) {
   );
 }
 
+function getSlotLabel(slot) {
+  if (typeof slot === "string") return slot;
+  if (!slot || typeof slot !== "object") return "";
+
+  const label = slot.label ?? slot.slot_label;
+  if (typeof label === "string" && label.trim()) return label;
+
+  const from = slot.from ?? slot.slot_start ?? "";
+  const to = slot.to ?? slot.slot_end ?? "";
+
+  return [from, to].filter(Boolean).join(" - ");
+}
+
 export default function SelectDate(props) {
   const calendarRef = useRef(null);
   const dispatch = useDispatch();
@@ -441,7 +454,7 @@ export default function SelectDate(props) {
               </div>
 
               {!isBundleVoucher && voucherdetail?.slots?.length > 0 && (
-                <p class="fx-availability-note">
+                <p className="fx-availability-note">
                   Available times for{" "}
                   <strong>
                     {moment(voucherdetail?.date).format("dddd, MMM DD")}
@@ -450,23 +463,29 @@ export default function SelectDate(props) {
               )}
 
               {!isBundleVoucher && (
-                <div class="fx-time-selector-grid">
+                <div className="fx-time-selector-grid">
                   {voucherdetail?.slots?.length == 0 && (
                     <div>No slots available for the selected date.</div>
                   )}
-                  {voucherdetail?.slots?.map((slot, index) => (
-                    <div
-                      key={index}
-                      className={
-                        slot == selectedSlot
-                          ? "fx-time-btn fx-selected"
-                          : "fx-time-btn"
-                      }
-                      onClick={() => slotset(slot)}
-                    >
-                      {slot.split(" - ")[0]} - {slot.split(" - ")[1]}
-                    </div>
-                  ))}
+                  {voucherdetail?.slots?.map((slot, index) => {
+                    const slotLabel = getSlotLabel(slot);
+
+                    if (!slotLabel) return null;
+
+                    return (
+                      <div
+                        key={slot?.slot_id ?? slotLabel ?? index}
+                        className={
+                          slotLabel === selectedSlot
+                            ? "fx-time-btn fx-selected"
+                            : "fx-time-btn"
+                        }
+                        onClick={() => slotset(slotLabel)}
+                      >
+                        {slotLabel}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
 
