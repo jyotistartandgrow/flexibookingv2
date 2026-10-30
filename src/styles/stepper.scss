@@ -276,6 +276,7 @@
 
 .fx-stepper-tabstyle.fx-gift-step .step.customizestep.active {
   left: 43%;
+  padding-left: 4%;
 }
 
 .fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.active {
@@ -295,6 +296,27 @@
 }
 .fx-stepper-tabstyle.fx-gift-step .step.extrastep.complete{
   width: 42%;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.customizestep.complete{
+  width: 64%;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.active{
+  left: 58%;
+    width: 27%;
+    padding-left: 4%;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.complete{
+      width: 59%;
+}
+
+.fx-stepper-tabstyle.fx-gift-step .step.paymentstep.active{
+    left: 0px;
+    padding-right: 5%;
+    width: 100%;
+    text-align: right;
 }
 
 @media screen and (max-width: 768px) {
@@ -338,6 +360,17 @@
     width: 37%;
     left: 40%;
   }
+  .fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.active{
+       width: 36%;
+        left: 54%;
+  }
+  .fx-stepper-tabstyle.fx-gift-step .step.customizestep.complete{
+     width: 61%;
+  }
+  .fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.complete{
+    width: 46%;
+  }
+  
 }
 
 .fx-stepper-tabstyle .checkoutstep.complete {
