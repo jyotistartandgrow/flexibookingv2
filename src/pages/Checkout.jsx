@@ -27,6 +27,11 @@ import {
 } from "../Utils/Functions";
 import CouponSection from "./CouponSection";
 
+const formatInternationalPhone = (value) => {
+  const digits = String(value ?? "").replace(/\D/g, "");
+  return digits ? `+${digits}` : "";
+};
+
 export default function Checkout(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -366,7 +371,9 @@ export default function Checkout(props) {
       recipient_email:
         gift && !opendatepurchase ? (receiverInfo.email ?? "") : "",
       recipient_contact:
-        gift && !opendatepurchase ? (receiverInfo.phoneNumber ?? "") : "",
+        gift && !opendatepurchase
+          ? formatInternationalPhone(receiverInfo.phoneNumber)
+          : "",
       recipient_address:
         gift && !opendatepurchase ? (receiverInfo.address ?? "") : "",
       recipient_country:
@@ -402,14 +409,18 @@ export default function Checkout(props) {
         }
       : {};
 
-    billdata.country_code = billdata.sgbm_field_8;
+    const billingDataForRequest = {
+      ...billdata,
+      sgbm_field_4: formatInternationalPhone(billdata.sgbm_field_4),
+      country_code: billdata.sgbm_field_8,
+    };
 
     const { data } = await axiosInstance.post(`/checkout`, {
       booking_data: bookingkey,
       payment_method: selectedPaymentCard.method,
       payment_mode: selectedPaymentCard.choice,
       payment_gateway: selectedPaymentCard.gateway,
-      billing_details: billdata,
+      billing_details: billingDataForRequest,
       shipping_details: {
         shipping_first_name: "",
         shipping_last_name: "",
@@ -449,7 +460,7 @@ export default function Checkout(props) {
     });
 
     if (data && data.status == 200 && data.data.status == "success") {
-      dispatch(setBillingDetails({ ...billdata }));
+      dispatch(setBillingDetails(billingDataForRequest));
       if (selectedPaymentCard.method === "offline" || selectedPaymentCard.method === "cash_on_delivery" || selectedPaymentCard.method === "payment_link") {
         if (redeemBooking) {
           dispatch(setLoading(false));

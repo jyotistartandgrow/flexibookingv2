@@ -102,13 +102,13 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
           : 0;
     let extraid = remainingExtras.map((item) => item.id).join(",");
     let extracapacity = remainingExtras.map((item) => item.capacity).join(",");
-    const extraTypeStr = remainingExtras.map((item) => item.extra_type ?? "").join(",");
+    const extraTypeStr = remainingExtras.map((item) => item.extra_type || "local").join(",");
     const { data } = await axiosInstance(
       `/price-format?service_id=${serviceid}&capacity=${servicecapacity}&date=${moment(
         date,
       ).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_type=${encodeURIComponent(extraTypeStr)}`,
+      )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_type=${encodeURIComponent(extraTypeStr)}&selected_virtual_service_id=${type === "service" ? 0 : Number(cart.service?.[0]?.virtual_service_id) || 0}`,
       {
         method: "get",
       },

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import axiosInstance from "../Utils/Interceptor";
 import moment from "moment";
 import { setDate, setGift, setLoading } from "../store/step1Slice";
@@ -9,11 +9,11 @@ import Service from "./Service";
 
 export default function ServiceTab(props) {
   const dispatch = useDispatch();
-  const step = useSelector((state) => state.step1.step);
   const [serviceDetails, setServiceDetails] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [popupRequest, setPopupRequest] = useState(0);
   const serviceid = String(props.service_id ?? "").trim();
+  const bundleid = Number(props.bundle_id) > 0 ? Number(props.bundle_id) : 0;
 
   useEffect(() => {
     if (!serviceid) {
@@ -27,7 +27,7 @@ export default function ServiceTab(props) {
     setErrorMessage("");
     const getServiceDetails = (requestDate) =>
       axiosInstance.get(
-        `/service-details?date=${requestDate}&service_id=${encodeURIComponent(serviceid)}&all=false&is_bundle=false&bundle_id=0`,
+        `/service-details?date=${requestDate}&service_id=${encodeURIComponent(serviceid)}&all=false&is_bundle=${bundleid > 0}&bundle_id=${bundleid}`,
       );
 
     (async () => {
@@ -81,7 +81,7 @@ export default function ServiceTab(props) {
     return () => {
       active = false;
     };
-  }, [dispatch, serviceid]);
+  }, [dispatch, serviceid, bundleid]);
 
   const openServicePopup = (isGift) => {
     if (!serviceDetails) return;
@@ -97,9 +97,7 @@ export default function ServiceTab(props) {
 
   return (
     <>
-      <div
-        className="fx-single-service-page"
-      >
+      <div className="fx-single-service-page">
         {props.stepsVisibility?.step_1_title_visible == "true" && (
           <h1
             className="fx-all-main-heading"
@@ -226,6 +224,7 @@ export default function ServiceTab(props) {
         {...props}
         popupOnly
         requestedServiceId={props.service_id}
+        requestedBundleId={bundleid}
         openRequest={popupRequest}
       />
     </>

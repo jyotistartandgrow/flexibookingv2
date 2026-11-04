@@ -78,6 +78,24 @@ const formatComponentSlotTime = (slotValue) => {
   return `${formatTime(slotParts[0])} - ${formatTime(slotParts[1])}`;
 };
 
+export const formatExtrasTimeSlot = (slotValue) => {
+  const label =
+    typeof slotValue === "string"
+      ? slotValue
+      : slotValue?.slot_label || slotValue?.label || slotValue?.slot || "";
+  const parts = label.split(/\s*[-–—]\s*/);
+  const from = slotValue?.from || parts[0];
+  const to = slotValue?.to || parts[1];
+  if (!from || !to) return "";
+
+  const formats = ["HH:mm", "H:mm", "HH:mm:ss", "h:mm A", "hh:mm A"];
+  const start = moment(String(from).trim(), formats, true);
+  const end = moment(String(to).trim(), formats, true);
+  return start.isValid() && end.isValid()
+    ? `${start.format("HH:mm")} - ${end.format("HH:mm")}`
+    : "";
+};
+
 export const formatSelectedComponentSlots = (componentSlots = []) =>
   componentSlots.map((componentSlot) => ({
     bundle_item_id: componentSlot?.bundle_item_id,

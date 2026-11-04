@@ -6,7 +6,7 @@ import "primeicons/primeicons.css";
 import { Sidebar as Calendarsidebar } from "primereact/sidebar";
 import axiosInstance from "../Utils/Interceptor";
 import moment from "moment";
-import { decodeHtml } from "../Utils/Functions";
+import { decodeHtml, formatExtrasTimeSlot } from "../Utils/Functions";
 import { Dialog } from "primereact/dialog";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { setDate, setStep, setLoading } from "../store/step1Slice";
@@ -41,7 +41,7 @@ export default function Service(props) {
         .map(
           (id) =>
             cart.extra?.find((item) => String(item.id) === id.trim())
-              ?.extra_type ?? "",
+              ?.extra_type || "local",
         )
         .join(",")
     : "";
@@ -76,6 +76,7 @@ export default function Service(props) {
   const [isDesktopCarouselHovered, setIsDesktopCarouselHovered] =
     useState(false);
   const [bundleId, setBundleId] = useState(0);
+  const [virtualServiceId, setVirtualServiceId] = useState(0);
   const [serviceOptionChoices, setServiceOptionChoices] = useState(null);
   const [selectedServiceOptionId, setSelectedServiceOptionId] = useState(0);
   const [serviceOptionsConfirmed, setServiceOptionsConfirmed] = useState(false);
@@ -89,6 +90,7 @@ export default function Service(props) {
   const [selectedSlotContext, setSelectedSlotContext] = useState({
     serviceId: null,
     bundleId: 0,
+    virtualServiceId: 0,
   });
 
   const normalizeBundleId = (value) => {
@@ -100,7 +102,8 @@ export default function Service(props) {
     Number(book) > 0 &&
     Boolean(slot) &&
     selectedSlotContext.serviceId === serviceid &&
-    selectedSlotContext.bundleId === normalizeBundleId(bundleId);
+    selectedSlotContext.bundleId === normalizeBundleId(bundleId) &&
+    selectedSlotContext.virtualServiceId === virtualServiceId;
 
   const serviceOptionList = serviceOptionChoices
     ? [
@@ -258,7 +261,7 @@ export default function Service(props) {
         fetchProductsByDate(date);
         if (serviceid) {
           dispatch(setLoading(true));
-          servicedetail(serviceid, bundleId);
+          servicedetail(serviceid, bundleId, virtualServiceId);
         }
         isInitialMount.current = false;
       }
@@ -266,7 +269,7 @@ export default function Service(props) {
       prevDate.currentCategory = category;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date, step, serviceid, category, bundleId, props.popupOnly]);
+  }, [date, step, serviceid, category, bundleId, virtualServiceId, props.popupOnly]);
 
   const fetchProductsByDate = async (selectedDate) => {
     setLoadingske(true);
@@ -297,8 +300,19 @@ export default function Service(props) {
     }
   };
 
-  const servicedetail = async (id, selectedBundleId = 0) => {
-    const normalizedBundleId = normalizeBundleId(selectedBundleId);
+  const getVirtualServiceId = (product) =>
+    product?.product_type === "virtual_service"
+      ? normalizeBundleId(
+          product.virtual_service_id ?? product.selected_virtual_service_id ?? product.product_id,
+        )
+      : 0;
+
+  const openProductDetails = (product) =>
+    servicedetail(product.id, product.bundle_id ?? 0, getVirtualServiceId(product));
+
+  const servicedetail = async (id, selectedBundleId = 0, selectedVirtualId = 0) => {
+    const normalizedVirtualId = normalizeBundleId(selectedVirtualId);
+    const normalizedBundleId = normalizedVirtualId > 0 ? 0 : normalizeBundleId(selectedBundleId);
     setShowBundleSlots(false);
     setBundleSchedule(null);
     setBundleSelectedSlots([]);
@@ -309,14 +323,31 @@ export default function Service(props) {
       setServiceOptionsConfirmed(false);
     }
     const isSameDetailContext =
-      serviceid === id && normalizeBundleId(bundleId) === normalizedBundleId;
+      serviceid === id && normalizeBundleId(bundleId) === normalizedBundleId &&
+      virtualServiceId === normalizedVirtualId;
+    const savedService = cart.service?.find(
+      (item) =>
+        String(item.id) === String(id) &&
+        normalizeBundleId(item.bundle_id) === normalizedBundleId &&
+        normalizeBundleId(item.virtual_service_id) === normalizedVirtualId,
+    );
+    const savedComponentSlot = savedService?.selected_component_slots?.find(
+      (component) => String(component.service_id) === String(id),
+    );
+    const extrasTimeSlot = gift
+      ? ""
+      : formatExtrasTimeSlot(
+          (isSameDetailContext && slot) ||
+            savedComponentSlot ||
+            savedService?.slot,
+        );
 
     if (!isSameDetailContext) {
       setSlot("");
       setBook(0);
       setCurrentItem({});
-      setSelectedSlotContext({ serviceId: null, bundleId: 0 });
-      if (serviceid !== id) {
+      setSelectedSlotContext({ serviceId: null, bundleId: 0, virtualServiceId: 0 });
+      if (serviceid !== id || virtualServiceId !== normalizedVirtualId) {
         setServiceOptionChoices(null);
         setSelectedServiceOptionId(0);
       }
@@ -327,13 +358,14 @@ export default function Service(props) {
     setGiftQuantity(1);
     setServiceId(id);
     setBundleId(normalizedBundleId);
+    setVirtualServiceId(normalizedVirtualId);
     let allService = gift ? true : false;
     allService = all ? true : allService;
     const [{ data }, extrasResponse] = await Promise.all([
       axiosInstance(
         `/service-details?date=${moment(date).format(
           "YYYY-MM-DD",
-        )}&service_id=${id}&all=${allService}&is_bundle=${normalizedBundleId > 0 ? true : false}&bundle_id=${normalizedBundleId}`,
+        )}&service_id=${id}${normalizedVirtualId > 0 ? `&virtual_service_id=${normalizedVirtualId}` : ""}&all=${allService}&is_bundle=${normalizedBundleId > 0 ? true : false}&bundle_id=${normalizedBundleId}`,
         {
           method: "get",
         },
@@ -341,7 +373,7 @@ export default function Service(props) {
       axiosInstance(
         `/extras?date=${moment(date).format(
           "YYYY-MM-DD",
-        )}&service_id=${id}&all=${gift ? true : false}&bundle_id=${normalizedBundleId}`,
+        )}&service_id=${id}&all=${gift ? true : false}&bundle_id=${normalizedBundleId}&time_slot=${encodeURIComponent(extrasTimeSlot)}&selected_virtual_service_id=${normalizedVirtualId}`,
         {
           method: "get",
         },
@@ -413,9 +445,15 @@ export default function Service(props) {
         }
       }
 
-      if (!gift) {
+      if (!gift && normalizedVirtualId > 0) {
+        setCalendarslots(
+          (data.data.date_slots || []).map((item) => ({ ...item, ...item.slots })),
+        );
+        setDisabledDates([]);
+        dispatch(setLoading(false));
+      } else if (!gift) {
         const monthYear = moment().format("YYYY-MM");
-        getslotavailabilitycalendar(monthYear, id, normalizedBundleId);
+        getslotavailabilitycalendar(monthYear, id, normalizedBundleId, normalizedVirtualId);
       } else {
         dispatch(setLoading(false));
       }
@@ -426,11 +464,14 @@ export default function Service(props) {
     monthYear,
     id,
     selectedBundleId = bundleId,
+    selectedVirtualId = virtualServiceId,
   ) => {
     const normalizedBundleId = normalizeBundleId(selectedBundleId);
     /* Slot availability calendar */
     const { data: dataa } = await axiosInstance(
-      `/slot-availability-calendar?month=${monthYear}&service_id=${id}&is_bundle=${normalizedBundleId > 0 ? true : false}&bundle_id=${normalizedBundleId}`,
+      selectedVirtualId > 0
+        ? `/service-details?service_id=${id}&virtual_service_id=${selectedVirtualId}&date=${moment.max(moment(`${monthYear}-01`), moment().startOf("day")).format("YYYY-MM-DD")}`
+        : `/slot-availability-calendar?month=${monthYear}&service_id=${id}&is_bundle=${normalizedBundleId > 0 ? true : false}&bundle_id=${normalizedBundleId}`,
       {
         method: "get",
       },
@@ -438,8 +479,11 @@ export default function Service(props) {
 
     if (dataa?.data) {
       const datedarr = [];
-      setCalendarslots(dataa?.data);
-      dataa?.data.forEach((dateItem) => {
+      const calendarDays = selectedVirtualId > 0
+        ? (dataa.data.date_slots || []).map((item) => ({ ...item, ...item.slots }))
+        : dataa.data;
+      setCalendarslots(calendarDays);
+      calendarDays.forEach((dateItem) => {
         if (dateItem.is_bookable === false) {
           const dateObj = new Date(dateItem.date);
           datedarr.push(dateObj);
@@ -459,10 +503,10 @@ export default function Service(props) {
       return;
     }
 
-    servicedetail(props.requestedServiceId, props.requestedBundleId ?? 0);
+    servicedetail(props.requestedServiceId, props.requestedBundleId ?? 0, props.requestedVirtualServiceId ?? 0);
     // The request counter deliberately controls each external popup launch.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.openRequest, props.popupOnly, props.requestedServiceId]);
+  }, [props.openRequest, props.popupOnly, props.requestedServiceId, props.requestedBundleId, props.requestedVirtualServiceId]);
 
   const handleMonthChange = (e) => {
     if (e.month < 0) {
@@ -643,7 +687,8 @@ export default function Service(props) {
 
     if (
       serviceid === product.id &&
-      normalizeBundleId(bundleId) === productBundleId
+      normalizeBundleId(bundleId) === productBundleId &&
+      virtualServiceId === getVirtualServiceId(product)
     ) {
       classes.push("fx-servicebox-selected");
     }
@@ -692,7 +737,7 @@ export default function Service(props) {
     return (
       <div
         className={getServiceCardClassName(product)}
-        onClick={() => servicedetail(product.id, product.bundle_id ?? 0)}
+        onClick={() => openProductDetails(product)}
       >
         {renderBundleTooltip(product)}
         <div className="fx-servicepicbox">
@@ -740,7 +785,7 @@ export default function Service(props) {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                servicedetail(product.id, product.bundle_id ?? 0);
+                openProductDetails(product);
               }}
             >
               <a href="#" onClick={(e) => e.preventDefault()}>
@@ -761,10 +806,23 @@ export default function Service(props) {
     setSelectedSlotContext({
       serviceId: serviceid,
       bundleId: normalizeBundleId(bundleId),
+      virtualServiceId,
     });
     if (currentslot != itemm.time_slot) {
       currentbook = 0;
       setBook(0);
+    }
+
+    if (virtualServiceId > 0 && itemm.allowed_quantities?.length > 0) {
+      const allowed = itemm.allowed_quantities
+        .map(Number)
+        .filter((quantity) => quantity > 0 && quantity <= itemm.capacity_left)
+        .sort((a, b) => a - b);
+      const nextQuantity = type === "add"
+        ? allowed.find((quantity) => quantity > currentbook)
+        : allowed.filter((quantity) => quantity < currentbook).at(-1) || 0;
+      if (nextQuantity !== undefined) setBook(nextQuantity);
+      return;
     }
 
     if (type == "add") {
@@ -801,6 +859,7 @@ export default function Service(props) {
     setSelectedSlotContext({
       serviceId: serviceid,
       bundleId: normalizeBundleId(bundleId),
+      virtualServiceId,
     });
   };
 
@@ -963,7 +1022,7 @@ export default function Service(props) {
           date,
         ).format(
           "YYYY-MM-DD",
-        )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_type=${encodeURIComponent(extraTypeStr)}&is_bundle=true&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_component_slots=${encodedComponentSlots}`,
+        )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_types=${encodeURIComponent(extraTypeStr)}&is_bundle=true&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_component_slots=${encodedComponentSlots}`,
         { method: "get" },
       );
       cartupdate(data);
@@ -1016,7 +1075,7 @@ export default function Service(props) {
     const { data } = await axiosInstance(
       `/price-format?service_id=${
         productDetails.id
-      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_type=${encodeURIComponent(extraTypeStr)}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}`,
+      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_types=${encodeURIComponent(extraTypeStr)}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_virtual_service_id=${virtualServiceId}`,
       {
         method: "get",
       },
@@ -1165,6 +1224,11 @@ export default function Service(props) {
         slot: slot,
         capacity: data?.data?.service_capacity,
         bundle_id: bundleId > 0 ? bundleId : null,
+        product_type: virtualServiceId > 0 ? "virtual_service" : "service",
+        product_id: virtualServiceId > 0 ? virtualServiceId : productDetails.id,
+        virtual_service_id: virtualServiceId || null,
+        selected_virtual_service_id: virtualServiceId || null,
+        components: virtualServiceId > 0 ? productDetails.components || [] : [],
       };
     }
     let extraobj = cart.extra ? cart.extra : [];
@@ -1203,7 +1267,7 @@ export default function Service(props) {
         date,
       ).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_type=${encodeURIComponent(extraTypeStr)}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}`,
+      )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_types=${encodeURIComponent(extraTypeStr)}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_virtual_service_id=${virtualServiceId}`,
       {
         method: "get",
       },
@@ -1218,11 +1282,17 @@ export default function Service(props) {
   };
 
   const hasExtra = async () => {
+    const selectedComponentSlot = selectedBundleComponentSlots.find(
+      (component) => String(component.service_id) === String(serviceid),
+    );
+    const timeSlot = gift
+      ? ""
+      : formatExtrasTimeSlot(bundleId > 0 ? selectedComponentSlot : slot);
     dispatch(setLoading(true));
     const { data } = await axiosInstance(
       `/has-extra?date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&service_id=${serviceid}&all=${gift ? true : false}&bundle_id=${bundleId}`,
+      )}&service_id=${serviceid}&all=${gift ? true : false}&bundle_id=${bundleId}&time_slot=${encodeURIComponent(timeSlot)}&selected_virtual_service_id=${virtualServiceId}`,
       {
         method: "get",
       },
@@ -1260,6 +1330,7 @@ export default function Service(props) {
       no_of_persons: 0,
       gift,
       selected_bundle_id: bundleId > 0 ? bundleId : null,
+      selected_virtual_service_id: virtualServiceId || null,
       selected_component_slots:
         bundleId > 0 ? selectedBundleComponentSlots : [],
       option_value_ids:
@@ -1551,7 +1622,7 @@ export default function Service(props) {
                     className={getServiceCardClassName(product)}
                     key={p1}
                     onClick={() =>
-                      servicedetail(product.id, product.bundle_id ?? 0)
+                      openProductDetails(product)
                     }
                   >
                     {renderBundleTooltip(product)}
@@ -1605,7 +1676,7 @@ export default function Service(props) {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            servicedetail(product.id, product.bundle_id ?? 0);
+                            openProductDetails(product);
                           }}
                         >
                           <a href="#" onClick={(e) => e.preventDefault()}>
@@ -1633,7 +1704,7 @@ export default function Service(props) {
                   className={getListCardClassName(product)}
                   key={p2}
                   onClick={() =>
-                    servicedetail(product.id, product.bundle_id ?? 0)
+                    openProductDetails(product)
                   }
                 >
                   <div className="fx-servicepicboxlist">

@@ -136,6 +136,7 @@ export default function DateTab(props) {
   const [popupRequest, setPopupRequest] = useState(0);
 
   const serviceid = String(props.service_id ?? "").trim();
+  const bundleid = Number(props.bundle_id) > 0 ? Number(props.bundle_id) : 0;
 
   const weeks = useMemo(
     () => buildWeekdayWeeks(visibleMonth.year, visibleMonth.month),
@@ -174,7 +175,7 @@ export default function DateTab(props) {
       setErrorMessage("");
       try {
         const { data } = await axiosInstance.get(
-          `/service-details?date=${requestDate}&service_id=${encodeURIComponent(serviceid)}&all=false&is_bundle=false&bundle_id=0`,
+          `/service-details?date=${requestDate}&service_id=${encodeURIComponent(serviceid)}&all=false&is_bundle=${bundleid > 0}&bundle_id=${bundleid}`,
         );
         if (requestId !== detailRequestIdRef.current) return;
         if (data?.status == 200 && data?.data && data.data.length !== 0) {
@@ -197,7 +198,7 @@ export default function DateTab(props) {
         }
       }
     },
-    [dispatch, serviceid],
+    [dispatch, serviceid, bundleid],
   );
 
   const selectDate = useCallback(
@@ -233,7 +234,7 @@ export default function DateTab(props) {
     dispatch(setLoading(true));
     axiosInstance
       .get(
-        `/slot-availability-calendar?month=${month}&service_id=${encodeURIComponent(serviceid)}&is_bundle=false&bundle_id=0`,
+        `/slot-availability-calendar?month=${month}&service_id=${encodeURIComponent(serviceid)}&is_bundle=${bundleid > 0}&bundle_id=${bundleid}`,
       )
       .then(({ data }) => {
         if (!active) return;
@@ -279,7 +280,7 @@ export default function DateTab(props) {
     return () => {
       active = false;
     };
-  }, [dispatch, loadServiceDetails, selectDate, serviceid, visibleMonth]);
+  }, [dispatch, loadServiceDetails, selectDate, serviceid, bundleid, visibleMonth]);
 
   const selectedAvailability = selectedDate
     ? availabilityByDate.get(selectedDate)
@@ -517,6 +518,7 @@ export default function DateTab(props) {
         {...props}
         popupOnly
         requestedServiceId={props.service_id}
+        requestedBundleId={bundleid}
         openRequest={popupRequest}
       />
     </>

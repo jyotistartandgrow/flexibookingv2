@@ -54,7 +54,7 @@ function mountReactApp(id, initialRoute) {
   store.dispatch(setGift(id === "react_sgbm_starting_gift"));
 
   console.log(el.dataset);
-  
+
   const props = {
     topbar: el.dataset.topbar || "true",
     rightbar: el.dataset.rightbar || "false",
@@ -64,6 +64,7 @@ function mountReactApp(id, initialRoute) {
     calendarInfoVisibility: el.dataset.calendarInfoVisibility || "true",
     calendarInfo: el.dataset.calendarInfo || "price",
     service_id: el.dataset.serviceId || 1,
+    bundle_id: el.dataset.bundleId || 0,
     categoryLabelVisibility: el.dataset.categoryLabelVisibility || "true",
     termsAndConditionLink: el.dataset.termsAndConditionLink || "",
     secondaryColor: el.dataset.secondaryColor,

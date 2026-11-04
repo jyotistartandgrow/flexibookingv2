@@ -6,13 +6,26 @@ import "primeicons/primeicons.css";
 import { Carousel } from "primereact/carousel";
 import axiosInstance from "../Utils/Interceptor";
 import moment from "moment";
-import { decodeHtml } from "../Utils/Functions";
+import { decodeHtml, formatExtrasTimeSlot } from "../Utils/Functions";
 import extra from "../assets/extra1.jpg";
 import { setExtracapacity, setExtra, setBookingkey } from "../store/step3Slice";
 import { setStep, setLoading } from "../store/step1Slice";
 import { setCart } from "../store/step2Slice";
 import Swal from "sweetalert2";
 import useDeviceType from "../Utils/useDeviceType";
+
+function ExtraProductTitle({ product }) {
+  const typeLabel = String(product.type_label ?? "").trim();
+
+  return (
+    <h4 className="fx-extra-product-title">
+      <span>{product.extra_name} {product.owner_label}</span>
+      {typeLabel && (
+        <span className="fx-extra-type-badge">{typeLabel}</span>
+      )}
+    </h4>
+  );
+}
 
 export default function Extra(props) {
   const dispatch = useDispatch();
@@ -51,6 +64,18 @@ export default function Extra(props) {
     : 0;
   const selectedServiceOptionDetails = cart?.service_option_details;
   const selectedBundleId = Number(cart.service?.[0]?.bundle_id) || 0;
+  const selectedVirtualServiceId = Number(cart.service?.[0]?.virtual_service_id) || 0;
+  const selectedService = cart.service?.find(
+    (item) => String(item.id) === String(service),
+  );
+  const selectedComponentSlot = selectedService?.selected_component_slots?.find(
+    (component) => String(component.service_id) === String(service),
+  );
+  const extrasTimeSlot = gift
+    ? ""
+    : formatExtrasTimeSlot(
+        selectedComponentSlot || slot || selectedService?.slot,
+      );
   const totalServiceBooking =
     selectedBundleId > 0
       ? Number(cart.service?.[0]?.bundle_quantity) || Number(capacity) || 1
@@ -120,7 +145,7 @@ export default function Extra(props) {
         const { data } = await axiosInstance(
           `/extras?date=${moment(date).format(
             "YYYY-MM-DD",
-          )}&service_id=${service}&all=${gift ? true : false}&bundle_id=${selectedBundleId}`,
+          )}&service_id=${service}&all=${gift ? true : false}&bundle_id=${selectedBundleId}&time_slot=${encodeURIComponent(extrasTimeSlot)}&selected_virtual_service_id=${selectedVirtualServiceId}`,
           {
             method: "get",
           },
@@ -132,7 +157,12 @@ export default function Extra(props) {
               ? data.data.extras
               : [];
 
-          setProductsArr(extraList);
+          setProductsArr(
+            extraList.map((product) => ({
+              ...product,
+              extra_type: String(product.extra_type ?? "").trim() || "local",
+            })),
+          );
 
           if (extraList.length == 0) {
             const addToCartRes = await axiosInstance.post(`/addtocart`, {
@@ -145,6 +175,7 @@ export default function Extra(props) {
               no_of_persons: 0,
               gift,
               selected_bundle_id: selectedBundleId,
+              selected_virtual_service_id: selectedVirtualServiceId || null,
               selected_component_slots:
                 cart.service?.[0]?.selected_component_slots || [],
               option_value_ids:
@@ -178,7 +209,9 @@ export default function Extra(props) {
     cart,
     selectedServiceOptionId,
     selectedBundleId,
+    selectedVirtualServiceId,
     totalServiceBooking,
+    extrasTimeSlot,
     dispatch,
   ]);
 
@@ -194,8 +227,10 @@ export default function Extra(props) {
             </p> */}
           </div>
           <div className="fx-extracontentbox">
-            <h4>{product.extra_name}</h4>
-            <p>{decodeHtml(product.extra_desc)}</p>
+            <ExtraProductTitle product={product} />
+            {product.extra_desc?.trim() && (
+              <p>{decodeHtml(product.extra_desc)}</p>
+            )}
 
             <div className="fx-common">
               <p className="fx-extrapicpriceboxright">
@@ -278,12 +313,15 @@ export default function Extra(props) {
       return;
     }
 
-    const extraIdStr = selectedIds.join(",");
-    const capacityArr = selectedIds.map((id) => quantities[id]);
-    const extraTypeStr = selectedIds
-      .map(
-        (id) => products.find((product) => product.id == id)?.extra_type ?? "",
-      )
+    const selectedExtras = selectedIds.map((id) => ({
+      product: products.find((product) => String(product.id) === id),
+      id,
+      quantity: quantities[id],
+    }));
+    const extraIdStr = selectedExtras.map((item) => item.id).join(",");
+    const capacityArr = selectedExtras.map((item) => item.quantity);
+    const extraTypeStr = selectedExtras
+      .map((item) => item.product?.extra_type || "local")
       .join(",");
     const selectedComponentSlots =
       cart.service?.[0]?.selected_component_slots || [];
@@ -297,13 +335,12 @@ export default function Extra(props) {
         cart.service[0].capacity
       }&date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&extra_type=${encodeURIComponent(extraTypeStr)}&bundle_id=${selectedBundleId}&service_option_id=${selectedServiceOptionId > 0 ? selectedServiceOptionId : null}&selected_component_slots=${encodedComponentSlots}`,
+      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&extra_types=${encodeURIComponent(extraTypeStr)}&bundle_id=${selectedBundleId}&service_option_id=${selectedServiceOptionId > 0 ? selectedServiceOptionId : null}&selected_component_slots=${encodedComponentSlots}&selected_virtual_service_id=${selectedVirtualServiceId}`,
       {
         method: "get",
       },
     );
-    const extraArr = selectedIds.map((id, key) => {
-      const product = products.find((p) => p.id == id);
+    const extraArr = selectedExtras.map(({ id, product, quantity }, key) => {
       return {
         id: parseInt(id),
         name: product?.extra_name,
@@ -311,8 +348,8 @@ export default function Extra(props) {
         total: data?.data?.price,
         total_formatted: data?.data?.extra_total[key],
         slot: "",
-        capacity: quantities[id],
-        extra_type: product?.extra_type,
+        capacity: quantity,
+        extra_type: product?.extra_type || "local",
       };
     });
     dispatch(
@@ -344,6 +381,7 @@ export default function Extra(props) {
       no_of_persons: bookParam,
       gift,
       selected_bundle_id: selectedBundleId,
+      selected_virtual_service_id: selectedVirtualServiceId || null,
       selected_component_slots:
         cart.service?.[0]?.selected_component_slots || [],
       option_value_ids:
@@ -494,8 +532,10 @@ export default function Extra(props) {
                               </p> */}
                             </div>
                             <div className="fx-extracontentbox">
-                              <h4>{product.extra_name}</h4>
-                              <p>{decodeHtml(product.extra_desc)}</p>
+                              <ExtraProductTitle product={product} />
+                              {product.extra_desc?.trim() && (
+                                <p>{decodeHtml(product.extra_desc)}</p>
+                              )}
 
                               <div className="fx-common">
                                 <p className="fx-extrapicpriceboxright">
@@ -568,8 +608,10 @@ export default function Extra(props) {
                           <div className="fx-extracontentboxlist">
                             <div className="fx-extra-main-contentbox">
                               <div className="fx-extra-contentbox">
-                                <h4>{product.extra_name}</h4>
-                                <p>{decodeHtml(product.extra_desc)}</p>
+                                <ExtraProductTitle product={product} />
+                                {product.extra_desc?.trim() && (
+                                  <p>{decodeHtml(product.extra_desc)}</p>
+                                )}
                               </div>
                               <p className="price">
                                 {" "}
