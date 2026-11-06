@@ -128,9 +128,9 @@ export default function ServiceTab(props) {
                   {decodeHtml(serviceDetails.category_name)}
                 </span>
               )}
-              {serviceDetails?.is_bundle && (
+              {/* {serviceDetails?.is_bundle && (
                 <span className="fx-service-card__tag">Bundle</span>
-              )}
+              )} */}
             </div>
 
             {duration && duration !== "N/A" && (
