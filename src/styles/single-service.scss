@@ -650,7 +650,7 @@
       gap: 5px;
       margin: 0 0 16px;
       color: var(--fx-service-muted);
-      font-size: 11px;
+      font-size: 14px;
 
       strong {
         color: var(--fx-service-text);
@@ -676,8 +676,8 @@
       border: 1px solid var(--fx-service-teal);
       border-radius: 22px;
       font: inherit;
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 400;
       cursor: pointer;
       transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
 
