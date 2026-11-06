@@ -518,6 +518,7 @@
       min-height: 218px;
       overflow: hidden;
       background: #d8e0df;
+      width: 100%;
     }
 
     &__image {
@@ -638,9 +639,9 @@
     &__description {
       margin: 7px 0 24px;
       color: var(--fx-service-muted);
-      font-size: 12px;
+      font-size: 14px;
       line-height: 1.5;
-          height: 36px;
+      height: auto;
     }
 
     &__price {
