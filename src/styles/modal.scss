@@ -294,6 +294,22 @@ h2 {
   overflow: auto;
   height:100%;
 }
+.fx-booking fieldset.fx-popup-slot-selection {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.fx-booking .fx-popup-slot-selection.fx-slot-selection-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.fx-booking .fx-popup-slot-selection.fx-slot-selection-disabled * {
+  cursor: default;
+}
+
 .fx-booking .fx-timelistbox {
   padding: 7px 12px;
   border-radius: var(--fx-border-medium-radius);

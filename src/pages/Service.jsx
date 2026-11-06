@@ -48,6 +48,8 @@ export default function Service(props) {
   const [products, setProductsArr] = useState([]);
   const [visible, setVisible] = useState(false);
   const [productDetails, setProductDetails] = useState({});
+  const [detailsDate, setDetailsDate] = useState("");
+  const [detailsPending, setDetailsPending] = useState(false);
   const [dateslot, setDateslot] = useState([]);
   const [isVisible, setIsVisible] = useState("grid");
   const [slotVisible, setSlotVisible] = useState("morning");
@@ -98,7 +100,17 @@ export default function Service(props) {
     return numericBundleId > 0 ? numericBundleId : 0;
   };
 
+  const detailCapacity = productDetails?.svc_total_cap_left;
+  const hasNoServiceCapacity = detailCapacity !== null &&
+    detailCapacity !== undefined && String(detailCapacity).trim() !== "" &&
+    Number(detailCapacity) === 0;
+  const isPopupBookingDisabled = !gift && (
+    detailsPending || detailsDate !== moment(date).format("YYYY-MM-DD") ||
+    hasNoServiceCapacity
+  );
+
   const canContinueService =
+    !isPopupBookingDisabled &&
     Number(book) > 0 &&
     Boolean(slot) &&
     selectedSlotContext.serviceId === serviceid &&
@@ -307,10 +319,13 @@ export default function Service(props) {
         )
       : 0;
 
-  const openProductDetails = (product) =>
+  const openProductDetails = (product) => {
     servicedetail(product.id, product.bundle_id ?? 0, getVirtualServiceId(product));
+  };
 
   const servicedetail = async (id, selectedBundleId = 0, selectedVirtualId = 0) => {
+    const requestDate = moment(date).format("YYYY-MM-DD");
+    setDetailsPending(true);
     const normalizedVirtualId = normalizeBundleId(selectedVirtualId);
     const normalizedBundleId = normalizedVirtualId > 0 ? 0 : normalizeBundleId(selectedBundleId);
     setShowBundleSlots(false);
@@ -415,6 +430,9 @@ export default function Service(props) {
 
     if (data && data.status == 200) {
       if (data.data.length == 0) {
+        setProductDetails({});
+        setDetailsDate("");
+        setDetailsPending(false);
         Swal.fire({
           toast: true,
           position: "top-end", // or 'bottom-end', 'top-start', etc.
@@ -427,6 +445,15 @@ export default function Service(props) {
         return;
       }
       setProductDetails(data?.data);
+      const capacityLeft = data?.data?.svc_total_cap_left;
+      if (capacityLeft !== null && capacityLeft !== undefined &&
+          String(capacityLeft).trim() !== "" && Number(capacityLeft) === 0) {
+        setSlot("");
+        setBook(0);
+        setCurrentItem({});
+      }
+      setDetailsDate(requestDate);
+      setDetailsPending(false);
       setVisible(true);
 
       if (data?.data?.date_slots) {
@@ -507,6 +534,16 @@ export default function Service(props) {
     // The request counter deliberately controls each external popup launch.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.openRequest, props.popupOnly, props.requestedServiceId, props.requestedBundleId, props.requestedVirtualServiceId]);
+
+  useEffect(() => {
+    if (props.popupOnly && visible && serviceid) {
+      setSlot("");
+      setBook(0);
+      servicedetail(serviceid, bundleId, virtualServiceId);
+    }
+    // Refresh the popup details when its selected date changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date]);
 
   const handleMonthChange = (e) => {
     if (e.month < 0) {
@@ -799,6 +836,7 @@ export default function Service(props) {
   };
 
   const slotbook = (type, itemm) => {
+    if (isPopupBookingDisabled || itemm?.slot_type !== "active") return;
     setCurrentItem(itemm);
     const currentslot = slot;
     let currentbook = book;
@@ -852,7 +890,7 @@ export default function Service(props) {
   };
 
   const selectBundleSlot = (slotItem) => {
-    if (slotItem?.slot_type !== "active") return;
+    if (isPopupBookingDisabled || slotItem?.slot_type !== "active") return;
     setCurrentItem(slotItem);
     setSlot(slotItem.time_slot);
     setBook(getBundleFixedQuantity(slotItem));
@@ -914,6 +952,7 @@ export default function Service(props) {
   };
 
   const selectBundleComponentSlot = async (component, slotItem) => {
+    if (isPopupBookingDisabled) return;
     if (component?.state === "waiting" || bundleScheduleLoading) return;
 
     const componentPosition = Number(component?.component_position);
@@ -998,6 +1037,7 @@ export default function Service(props) {
   };
 
   const bookBundleService = async () => {
+    if (isPopupBookingDisabled) return;
     if (!bundleAllSelected || selectedBundleComponentSlots.length === 0) {
       Swal.fire({
         toast: true,
@@ -1372,7 +1412,7 @@ export default function Service(props) {
     bundleTimeSlots.selected_component_slots.length > 0
       ? bundleTimeSlots.selected_component_slots
       : bundleSelectedSlots;
-  const bundleAllSelected = Boolean(
+  const bundleAllSelected = !isPopupBookingDisabled && Boolean(
     bundleTimeSlots?.bookable ||
     (Number(bundleTimeSlots?.total_count) > 0 &&
       selectedBundleComponentSlots.length >=
@@ -2159,7 +2199,12 @@ export default function Service(props) {
                               </div>
                             )}
                             {bundleId == 0 && (
-                              <div id="fx-modaltab_nav">
+                              <fieldset
+                                id="fx-modaltab_nav"
+                                className={`fx-popup-slot-selection${isPopupBookingDisabled ? " fx-slot-selection-disabled" : ""}`}
+                                disabled={isPopupBookingDisabled}
+                                aria-disabled={isPopupBookingDisabled}
+                              >
                                 {!slotObj?.slots.single_time_slot.slot_type && (
                                   <>
                                     <ul>
@@ -2725,7 +2770,7 @@ export default function Service(props) {
                                     })()}
                                   </div>
                                 </div>
-                              </div>
+                              </fieldset>
                             )}
                           </>
                         )}
@@ -2734,8 +2779,11 @@ export default function Service(props) {
                       {bundleId > 0 && !gift && (
                         <div className="fx-popup-rightslot-continuebtn">
                           <div
-                            className="continuebtn fx-bundle-cnt"
-                            onClick={() => setShowBundleSlots(true)}
+                            className={`continuebtn fx-bundle-cnt${isPopupBookingDisabled ? " fx-disable-button" : ""}`}
+                            aria-disabled={isPopupBookingDisabled}
+                            onClick={() => {
+                              if (!isPopupBookingDisabled) setShowBundleSlots(true);
+                            }}
                           >
                             Continue
                           </div>
