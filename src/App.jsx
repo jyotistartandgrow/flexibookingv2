@@ -19,6 +19,7 @@ export default function App({ initialRoute = "/", ...props }) {
   const SgbmWidget = lazy(() => import("./pages/SgbmWidget"));
   const SgbmssOpenCalendar = lazy(() => import("./pages/SgbmssOpenCalendar"));
   const SgbmSingleService = lazy(() => import("./pages/SgbmSingleService"));
+  const MultiServices = lazy(() => import("./pages/MultiServices"));
 
   return (
     <MemoryRouter initialEntries={[initialRoute]}>
@@ -52,6 +53,7 @@ export default function App({ initialRoute = "/", ...props }) {
           <Route path="checkin" element={<SgbmCheckin {...props} />} />
           <Route path="checkin-thankyou" element={<CheckinThankyou />} />
           <Route path="widget" element={<SgbmWidget {...props} />} />
+          <Route path="multiservices" element={<MultiServices />} />
         </Routes>
       </Suspense>
     </MemoryRouter>
