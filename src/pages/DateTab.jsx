@@ -497,7 +497,7 @@ export default function DateTab(props) {
               </span>
             </button>
           )}
-          {props.showGiftButton == "true" && (
+          {props.showGiftButton == "true" && serviceDetails?.is_gift_allowed === true && (
             <button
               type="button"
               className="fx-gift-action"
