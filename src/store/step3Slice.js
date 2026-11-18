@@ -7,6 +7,9 @@ const initialState = {
   slot: null,
   redeemBundleSlots: [],
   redeemBundleSchedule: null,
+  redeemParticipants: null,
+  redeemUpsellSelections: [],
+  redeemUpsellQuote: null,
   voucherdetail: {},
 };
 
@@ -14,6 +17,9 @@ const step3Slice = createSlice({
   name: "step3",
   initialState,
   reducers: {
+    setRedeemParticipants: (state, action) => {
+      state.redeemParticipants = action.payload;
+    },
     setExtracapacity: (state, action) => {
       state.extracapacity = action.payload;
     },
@@ -32,6 +38,12 @@ const step3Slice = createSlice({
     setRedeemBundleSchedule: (state, action) => {
       state.redeemBundleSchedule = action.payload;
     },
+    setRedeemUpsellSelections: (state, action) => {
+      state.redeemUpsellSelections = action.payload;
+    },
+    setRedeemUpsellQuote: (state, action) => {
+      state.redeemUpsellQuote = action.payload;
+    },
     setVoucherDetail: (state, action) => {
       state.voucherdetail = action.payload;
     },
@@ -39,6 +51,7 @@ const step3Slice = createSlice({
 });
 
 export const {
+  setRedeemParticipants,
   setExtracapacity,
   setExtra,
   setBookingkey,
@@ -46,5 +59,7 @@ export const {
   setRedeemBundleSlots,
   setRedeemBundleSchedule,
   setVoucherDetail,
+  setRedeemUpsellSelections,
+  setRedeemUpsellQuote,
 } = step3Slice.actions;
 export default step3Slice.reducer;

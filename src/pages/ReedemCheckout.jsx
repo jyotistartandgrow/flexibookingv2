@@ -8,22 +8,27 @@ import axiosInstance from "../Utils/Interceptor";
 import useFetch from "../Utils/CustomHook";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { setLoading } from "../store/step1Slice";
+import { setLoading, setRedeemStep } from "../store/step1Slice";
+import { setRedeemUpsellQuote } from "../store/step3Slice";
+import { callVoucherApi, getApiErrorMessage } from "../Utils/redeemUpsells";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { validateEmail, validatePhoneForCountry } from "../Utils/Functions";
+import { formatSelectedComponentSlots, validateEmail, validatePhoneForCountry } from "../Utils/Functions";
 
 export default function ReedemCheckout(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const step = useSelector((state) => state.step1.redeemstep);
   const slot = useSelector((state) => state.step3.slot);
+  const redeemParticipants = useSelector((state) => state.step3.redeemParticipants);
   const redeemBundleSlots = useSelector(
     (state) => state.step3.redeemBundleSlots,
   );
   const voucherdetail = useSelector((state) => state.step3.voucherdetail);
   const date = useSelector((state) => state.step1.date);
   const voucher = useSelector((state) => state.step1.voucher);
+  const isUpsell = useSelector((state) => state.step1.redeemUpsell);
+  const upsellSelections = useSelector((state) => state.step3.redeemUpsellSelections);
 
   const { data: countries } = useFetch("/countries", {
     method: "get",
@@ -133,11 +138,49 @@ export default function ReedemCheckout(props) {
 
     dispatch(setLoading(true));
 
+    // With additions, the server quotes them first; the voucher is redeemed after payment.
+    if (isUpsell && upsellSelections?.length > 0) {
+      try {
+        const quote = await callVoucherApi("/upsells/quote", "quote_redemption_upsells", {
+          voucher,
+          date: moment(date).format("YYYY-MM-DD"),
+          slot,
+          selected_component_slots: formatSelectedComponentSlots(redeemBundleSlots || []),
+          // Drop the summary-only display data; the quote API takes the selection fields only.
+          selections: upsellSelections.map((selection) => {
+            const apiSelection = { ...selection };
+            delete apiSelection.display;
+            return apiSelection;
+          }),
+          recipient: billdata,
+          country: { country: billdata.recipient_country, state: billdata.recipient_state },
+        });
+        dispatch(setRedeemUpsellQuote({ ...quote, recipient: billdata }));
+        dispatch(setRedeemStep("paymentstep"));
+      } catch (error) {
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 4000,
+          icon: "error",
+          title: getApiErrorMessage(error, "Unable to prepare your additions. Please try again."),
+        });
+      } finally {
+        dispatch(setLoading(false));
+      }
+      return;
+    }
+
     const { data } = await axiosInstance.post(`/voucher-redeem`, {
       voucher,
       date: moment(date).format("YYYY-MM-DD"),
       slot,
       selected_component_slots: redeemBundleSlots,
+      ...(redeemParticipants ? {
+        slot_selection: redeemParticipants.slot_selection,
+        capacity_component_guests: redeemParticipants.capacity_component_guests,
+      } : {}),
       recipient: billdata,
     });
 

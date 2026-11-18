@@ -6,12 +6,14 @@ import {
   setLoading,
   setVoucher,
   setDate,
+  setRedeemUpsell,
 } from "../store/step1Slice";
 import Swal from "sweetalert2";
 import moment from "moment";
 import {
   setRedeemBundleSchedule,
   setRedeemBundleSlots,
+  setRedeemUpsellSelections,
   setSlot,
 } from "../store/step3Slice";
 
@@ -45,6 +47,8 @@ export default function Code() {
       dispatch(setSlot(null));
       dispatch(setRedeemBundleSlots([]));
       dispatch(setRedeemBundleSchedule(null));
+      dispatch(setRedeemUpsellSelections([]));
+      dispatch(setRedeemUpsell(false));
       dispatch(setRedeemStep("datestep"));
       dispatch(setDate(moment()));
     } else {

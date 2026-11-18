@@ -1,4 +1,24 @@
 /* Parent Container */
+.fx-booking .fx-order-participants {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin: 6px 0 10px;
+  color: var(--grey);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.fx-booking .fx-order-participants ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 
 .fx-top-order-details-box{
  height: 84px;

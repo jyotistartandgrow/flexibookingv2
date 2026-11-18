@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setRedeemStep } from "../store/step1Slice";
+import { setRedeemStep, setStripeKey } from "../store/step1Slice";
 import moment from "moment";
 import { decodeHtml, darkenHex } from "../Utils/Functions";
 import { Sidebar as Sidebarpanel } from "primereact/sidebar";
@@ -18,20 +18,32 @@ export default function ReedemSteps(props) {
   const isDesktop = useDeviceType();
   const [visibleBottom, setVisibleBottom] = useState(false);
   const isRedeemBooking = props.redeemBooking === true;
-  let codestepclass = "step codestep";
-  let datestepclass = "step datestep";
-  let checkoutstepclass = "step checkoutstep";
+  const isUpsell = useSelector((state) => state.step1.redeemUpsell);
+  const hasAdditions = useSelector((state) => state.step3.redeemUpsellSelections?.length > 0);
 
-  if (step == "codestep") {
-    codestepclass = codestepclass + " active";
-  } else if (step == "datestep") {
-    datestepclass = datestepclass + " active";
-    codestepclass = codestepclass + " complete";
-  } else if (step == "checkoutstep") {
-    checkoutstepclass = checkoutstepclass + " active";
-    codestepclass = codestepclass + " complete";
-    datestepclass = datestepclass + " complete";
-  }
+  // "Add more services" adds a Service step and a Payment step for the paid additions.
+  const redeemSteps = isUpsell
+    ? [
+        ["codestep", "CODE", "ENTER YOUR CODE"],
+        ["datestep", "DATE & SLOT", "SELECT DATE & SLOT"],
+        ["upsellstep", "OPTIONAL ADDITIONS", "OPTIONAL ADDITIONS"],
+        ["checkoutstep", "YOUR DETAILS", "YOUR DETAILS"],
+        // Payment only applies when additions were chosen; skipping redeems the gift directly.
+        ...(hasAdditions ? [["paymentstep", "PAYMENT", "PAYMENT"]] : []),
+      ]
+    : [
+        ["codestep", "CODE", "ENTER YOUR CODE"],
+        ["datestep", "DATE & SLOT", "SELECT DATE & SLOT"],
+        ["checkoutstep", "CHECKOUT", "CHECKOUT"],
+      ];
+  const activeIndex = Math.max(0, redeemSteps.findIndex(([key]) => key === step));
+
+  // Only completed steps before payment can be revisited from the bar.
+  const goToStep = (key, index) => {
+    if (index >= activeIndex || step === "paymentstep") return;
+    if (key !== "codestep" && !(voucherdetail?.products?.length > 0)) return;
+    dispatch(setRedeemStep(key));
+  };
 
   const getSettings = async () => {
     try {
@@ -39,6 +51,9 @@ export default function ReedemSteps(props) {
       const settings = response.data;
 
       // Set CSS custom property
+      if (settings.data.stripe_public_key) {
+        dispatch(setStripeKey(settings.data.stripe_public_key));
+      }
       if (settings.data.primary_color) {
         document.documentElement.style.setProperty(
           "--primary-color",
@@ -64,53 +79,20 @@ export default function ReedemSteps(props) {
       <div className="fx-step-top-fixed-box">
         <div
           className={`fx-stepper-tabstyle step-for-redeem ${
-            isRedeemBooking ? "fx-redeem-booking-step" : ""
+            isUpsell ? "fx-redeem-upsell-step" : isRedeemBooking ? "fx-redeem-booking-step" : ""
           }`}
         >
-          <div
-            className={codestepclass}
-            onClick={() => {
-              dispatch(setRedeemStep("codestep"));
-            }}
-          >
-            <div>
-              1 <span>{isRedeemBooking ? "CODE" : "ENTER YOUR CODE"}</span>
-            </div>
-          </div>
-          <div
-            className={datestepclass}
-            onClick={() => {
-              voucherdetail?.products?.length > 0 &&
-                dispatch(setRedeemStep("datestep"));
-            }}
-          >
-            <div>
-              2 <span>{isRedeemBooking ? "DATE & SLOT" : "SELECT DATE & SLOT"}</span>
-            </div>
-          </div>
-
-          {isRedeemBooking ? (
-            <>
-              <div className="step servicesstep">
-                <div>3 <span>SERVICES</span></div>
-              </div>
-              <div className="step extrastep">
-                <div>4 <span>EXTRA</span></div>
-              </div>
-              <div className="step checkoutstep">
-                <div>5 <span>CHECKOUT</span></div>
-              </div>
-              <div className="step paymentstep">
-                <div>6 <span>PAYMENT</span></div>
-              </div>
-            </>
-          ) : (
-            <div className={checkoutstepclass}>
+          {redeemSteps.map(([key, shortLabel, label], index) => (
+            <div
+              key={key}
+              className={`step ${key}${index === activeIndex ? " active" : ""}${index < activeIndex ? " complete" : ""}`}
+              onClick={() => goToStep(key, index)}
+            >
               <div>
-                3 <span>CHECKOUT</span>
+                {index + 1} <span>{isRedeemBooking || isUpsell ? shortLabel : label}</span>
               </div>
             </div>
-          )}
+          ))}
         </div>
       </div>
       {date && (

@@ -85,6 +85,18 @@ axiosInstance.interceptors.request.use(
     const nonce = await getNonce();
 
     setNonceHeader(config, nonce);
+    // Native voucher REST handlers also validate the AJAX nonce in the body.
+    // Form bodies arrive as URLSearchParams, or as an encoded string when a request is retried.
+    const isFormString =
+      typeof config.data === "string" && !config.data.trim().startsWith("{");
+    if (config.bookingNonceBody && (config.data instanceof URLSearchParams || isFormString)) {
+      const form = new URLSearchParams(config.data);
+      form.set("nonce", nonce);
+      config.data = form;
+    } else if (config.bookingNonceBody) {
+      const body = typeof config.data === "string" ? JSON.parse(config.data) : config.data;
+      config.data = { ...body, nonce };
+    }
     return config;
   },
   (error) => {

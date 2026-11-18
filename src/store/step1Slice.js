@@ -41,6 +41,7 @@ const initialState = {
   topbar: false,
   opendatepurchase: false,
   redeemBooking: false,
+  redeemUpsell: false,
 };
 
 const step1Slice = createSlice({
@@ -95,6 +96,9 @@ const step1Slice = createSlice({
     setRedeemBooking: (state, action) => {
       state.redeemBooking = action.payload;
     },
+    setRedeemUpsell: (state, action) => {
+      state.redeemUpsell = action.payload;
+    },
   },
 });
 
@@ -114,5 +118,6 @@ export const {
   setTopbar,
   setOpenDatePurchase,
   setRedeemBooking,
+  setRedeemUpsell,
 } = step1Slice.actions;
 export default step1Slice.reducer;

@@ -66,6 +66,7 @@ export default function CheckoutForm() {
   const redeemBundleSlots = useSelector(
     (state) => state.step3.redeemBundleSlots,
   );
+  const redeemParticipants = useSelector((state) => state.step3.redeemParticipants);
   const voucherDetail = useSelector((state) => state.step3.voucherdetail);
   const billingDetails = useSelector((state) => state.step4.billingDetails);
 
@@ -236,6 +237,10 @@ export default function CheckoutForm() {
                 };
             const redeemResponse = await axiosInstance.post(`/voucher-redeem`, {
               voucher,
+              ...(redeemParticipants ? {
+                slot_selection: redeemParticipants.slot_selection,
+                capacity_component_guests: redeemParticipants.capacity_component_guests,
+              } : {}),
               date: moment(date).format("YYYY-MM-DD"),
               slot,
               selected_component_slots:

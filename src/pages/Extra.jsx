@@ -51,6 +51,7 @@ export default function Extra(props) {
   const slot = useSelector((state) => state.step2.slot);
   const cart = useSelector((state) => state.step2.cart);
   const gift = useSelector((state) => state.step1.gift);
+  const openDatePurchase = useSelector((state) => state.step1.opendatepurchase);
   const extracapacity = useSelector((state) => state.step3.extracapacity);
   const extraID = useSelector((state) => state.step3.extra);
 
@@ -166,6 +167,12 @@ export default function Extra(props) {
 
           if (extraList.length == 0) {
             const addToCartRes = await axiosInstance.post(`/addtocart`, {
+              ...(!gift && cart.service?.[0]?.participant_guests?.length > 0
+                ? {
+                    capacity_line_key: cart.service[0].line_key,
+                    capacity_guests: cart.service[0].participant_guests,
+                  }
+                : {}),
               service_id: service,
               date: moment(date).format("YYYY-MM-DD"),
               total_service_booking: totalServiceBooking,
@@ -189,7 +196,7 @@ export default function Extra(props) {
               dispatch(setExtracapacity(0));
               dispatch(setExtra(null));
               dispatch(setBookingkey(addToCartRes.data.data.booking_string));
-              dispatch(setStep(gift ? "customizestep" : "checkoutstep"));
+              dispatch(setStep(gift && !openDatePurchase ? "customizestep" : "checkoutstep"));
               dispatch(setLoading(false));
             }
           }
@@ -203,6 +210,7 @@ export default function Extra(props) {
     capacity,
     slot,
     gift,
+    openDatePurchase,
     step,
     extraID,
     extracapacity,
@@ -372,6 +380,12 @@ export default function Extra(props) {
   const addtocart = async (extraIdParam, bookParam, extraTypesParam = null) => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/addtocart`, {
+      ...(!gift && cart.service?.[0]?.participant_guests?.length > 0
+        ? {
+            capacity_line_key: cart.service[0].line_key,
+            capacity_guests: cart.service[0].participant_guests,
+          }
+        : {}),
       service_id: service,
       date: moment(date).format("YYYY-MM-DD"),
       total_service_booking: totalServiceBooking,
@@ -391,7 +405,7 @@ export default function Extra(props) {
       dispatch(setExtracapacity(bookParam));
       dispatch(setExtra(extraIdParam));
       dispatch(setBookingkey(data.data.booking_string));
-      dispatch(setStep(gift ? "customizestep" : "checkoutstep"));
+      dispatch(setStep(gift && !openDatePurchase ? "customizestep" : "checkoutstep"));
       dispatch(setLoading(false));
     } else {
       Swal.fire({

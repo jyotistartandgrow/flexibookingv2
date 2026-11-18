@@ -22,6 +22,7 @@ import {
 } from "../store/step2Slice";
 import { setExtracapacity, setExtra } from "../store/step3Slice";
 import axiosInstance from "../Utils/Interceptor";
+import { getParticipantSummary } from "../Utils/participants";
 import useDeviceType from "../Utils/useDeviceType";
 
 const formatBundleSlot = (component) => {
@@ -212,6 +213,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
               }}
             >
               {cart.service.map((ct, ckey) => {
+                const participantSummary = getParticipantSummary(ct);
                 return (
                   <React.Fragment key={"ct-" + ckey}>
                     <div className="fx-serviceitem">
@@ -222,6 +224,16 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                         )}
                         <br />
                         <div className="time">{ct.slot}</div>
+                        {!gift && participantSummary.length > 0 && (
+                          <div className="fx-order-participants">
+                            <div>Participants:</div>
+                            <ul aria-label="Selected participants">
+                              {participantSummary.map((participant) => (
+                                <li key={participant.key}>{participant.name} × {participant.quantity}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                         <span onClick={() => edititem(ct.id, "service")}>
                           <i className="pi pi-pencil"></i>
                         </span>{" "}

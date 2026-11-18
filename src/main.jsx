@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   mountReactApp("react_sgbm_widget", "/widget");
   mountReactApp("react_sgbm_single_service_open_calendar", "/ssopencalendar");
   mountReactApp("react_sgbm_single_service", "/singleservice");
+  mountReactApp("react_sgbm_multi_services", "/multiservices");
 });
 
 function mountReactApp(id, initialRoute) {

@@ -8,6 +8,8 @@ import ReedemSidebar from "../components/ReedemSidebar";
 import RedeemDetailCard from "./RedeemDetailCard";
 import BookingDateFlow from "./SgbmDateGift";
 import Sidebar from "../components/Sidebar";
+import RedeemUpsellServices from "./RedeemUpsellServices";
+import RedeemUpsellPayment from "./RedeemUpsellPayment";
 
 export default function SgbmDateGift(props) {
   const loading = useSelector((state) => state.step1.loading);
@@ -44,12 +46,14 @@ export default function SgbmDateGift(props) {
         {/* End Code Tabs */}
         {/* Date Tabs */}
         <SelectDate {...props} />
+        <RedeemUpsellServices />
         {/* End Date Tabs */}
         {/* Slot Tabs */}
         <SelectSlot />
         {/* End Slot Tabs */}
         {/* Checkout Tabs */}
         <ReedemCheckout {...props}/>
+        <RedeemUpsellPayment {...props} />
         {/* End Checkout Tabs */}
       </div>
       <ReedemSidebar {...props} />

@@ -26,6 +26,7 @@ export default function Steps({ type = "date", ...props }) {
   const step = useSelector((state) => state.step1.step);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
   const gift = useSelector((state) => state.step1.gift);
+  const openDatePurchase = useSelector((state) => state.step1.opendatepurchase);
   const serviceid = useSelector((state) => state.step2.service);
   const extra = useSelector((state) => state.step3.extra);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
@@ -36,7 +37,7 @@ export default function Steps({ type = "date", ...props }) {
   const [visibleBottom, setVisibleBottom] = useState(false);
   const isDesktop = useDeviceType();
   const isRedeemBooking = props.redeemBooking === true;
-  const showCustomize = gift && !isRedeemBooking;
+  const showCustomize = gift && !openDatePurchase && !isRedeemBooking;
 
   const getSettings = async () => {
     try {
