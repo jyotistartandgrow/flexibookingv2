@@ -120,7 +120,7 @@ export default function Checkout(props) {
     }
   }, [step, props.redeemBooking, voucherDetail]);
 
-  const getFields = async () => {
+  const getFieldsRequest = async () => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance(`/get-fields`, {
       method: "get",
@@ -208,7 +208,7 @@ export default function Checkout(props) {
     }
   };
 
-  const getState = async (country) => {
+  const getStateRequest = async (country) => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance(`/states?country_code=${country}`, {
       method: "get",
@@ -220,7 +220,7 @@ export default function Checkout(props) {
     }
   };
 
-  const checkout = async () => {
+  const checkoutRequest = async () => {
     if (!selectedPaymentCard) {
       Swal.fire({
         toast: true,
@@ -502,6 +502,30 @@ export default function Checkout(props) {
     }
     dispatch(setLoading(false));
   };
+  // A rejected request would otherwise leave the fullscreen loader on forever.
+  const guardRequest =
+    (request, fallbackMessage) =>
+    async (...args) => {
+      try {
+        return await request(...args);
+      } catch (error) {
+        console.error(fallbackMessage, error);
+        dispatch(setLoading(false));
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          icon: "error",
+          title: error?.data?.message || error?.response?.data?.message || fallbackMessage,
+        });
+        return undefined;
+      }
+    };
+  const getFields = guardRequest(getFieldsRequest, "Unable to load checkout fields");
+  const getState = guardRequest(getStateRequest, "Unable to load states");
+  const checkout = guardRequest(checkoutRequest, "Unable to complete checkout, please try again");
+
   return (
     <div
       className="fx-leftcontentbox fx-checkoutpage"

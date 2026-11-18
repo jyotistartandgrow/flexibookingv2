@@ -1,4 +1,7 @@
-.fx-booking .fx-popup .fx-rightpopup {
+// Shared by the single-service participant step and the bundle modal so both
+// participant screens look the same.
+.fx-booking .fx-popup .fx-rightpopup,
+.fx-booking .fx-popup .fx-slot-bundle-modal-box {
   fieldset.fx-service-slot-flow,
   fieldset.fx-service-participant-panel {
     min-width: 0;
@@ -82,4 +85,81 @@ color-mix(in srgb, var(--primary-color) 4%, white);}
     .fx-service-selected-slot-row > button { align-self: flex-end; }
     .fx-service-slot-flow .fx-ms-slot-time { white-space: normal; }
   }
+}
+
+// Component participants (bundle slots modal and virtual-service participant
+// step). Status copy is neutral: no error colour for "choose N visitors" guidance.
+.fx-booking .fx-popup .fx-slot-bundle-modal-box,
+.fx-booking .fx-popup .fx-rightpopup {
+  .fx-bundle-participants { margin-top: 16px; }
+  .fx-bundle-participant-component + .fx-bundle-participant-component {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-color);
+  }
+  .fx-bundle-participant-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .fx-bundle-participant-services { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .fx-bundle-participant-services span { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .fx-bundle-participant-services strong { color: var(--darkgrey); font-size: 16px; font-weight: 600; }
+  .fx-bundle-participant-services small,
+  .fx-bundle-participant-required {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--grey);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .fx-bundle-participant-required {
+    flex-shrink: 0;
+    padding: 4px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+  }
+  .fx-bundle-participant-required svg,
+  .fx-bundle-participant-services svg { color: var(--primary-color); }
+  p.fx-bundle-participant-note { margin: 4px 0 0; color: var(--grey); font-size: 13px; }
+  p.fx-bundle-participant-note.is-complete { color: var(--primary-color); }
+  p.fx-bundle-participant-footnote {
+    margin: 14px 0 0;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #f5f7fa;
+    color: var(--grey);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .fx-bundle-participant-error { border-color: var(--border-color); }
+  .fx-bundle-participant-error p { color: var(--darkgrey); }
+}
+
+// Service bundle modal layout: fill the popup and scroll the middle section so
+// the participant panel is reachable. The component list keeps its natural
+// height (the shared rule fixes it at 358px, which left a large empty gap).
+.fx-booking .fx-popup .fx-slot-bundle-modal-box.fx-service-bundle-slots {
+  height: 100%;
+  min-height: 0;
+
+  .fx-booking-modal-header,
+  .fx-booking-modal-footer { flex-shrink: 0; }
+
+  .fx-booking-modal-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .fx-booking-modal-content .fx-service-slots-details {
+    height: auto;
+    overflow: visible;
+  }
+
+  .fx-bundle-participants { margin-top: 8px; }
 }

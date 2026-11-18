@@ -143,6 +143,8 @@
     border: 1px solid var(--new-border-color);
     border-radius: var(--fx-border-medium-radius);
     background: var(--white);
+    max-height: 400px;
+    overflow: auto;
 }
 
 .redemption-Voucher-services-box .fx-label {

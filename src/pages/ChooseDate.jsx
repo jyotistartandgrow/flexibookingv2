@@ -15,12 +15,39 @@ import {
 } from "../store/step1Slice";
 import { persistor } from "../store/store";
 import {
+  setCart,
+  setCapacity,
+  setService,
+  setTimeslot,
+} from "../store/step2Slice";
+import {
+  setBookingkey,
+  setExtra,
+  setExtracapacity,
+} from "../store/step3Slice";
+import { sessionClear } from "../store/step4Slice";
+import {
   decodeHtml,
   validateEmail,
   validatePhoneForCountry,
 } from "../Utils/Functions";
 import CalendarPage from "./CalendarPage";
 import CouponSection from "./CouponSection";
+
+const DATE_FORMAT = "YYYY-MM-DD";
+const toDateString = (value) =>
+  value ? moment(value).format(DATE_FORMAT) : "";
+const giftDefaultDate = () => moment().add(1, "day").format(DATE_FORMAT);
+
+const showToast = (icon, title) =>
+  Swal.fire({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    icon,
+    title,
+  });
 
 export default function ChooseDate(props) {
   const dispatch = useDispatch();
@@ -56,13 +83,46 @@ export default function ChooseDate(props) {
 
     dispatch(setGift(isGiftFlow));
     setIsVisible(type);
+    setErrorlist({});
+
+    // The reset wiped the date, so pick a fresh default for the new flow.
+    if (isGiftFlow) {
+      dispatch(setDate(giftDefaultDate()));
+    } else {
+      getserviceavailabilitycalendar(month, { autoSelect: true });
+    }
+  };
+
+  // A different date invalidates everything booked after the date step
+  // (cart, booking key, checkout session), so drop it.
+  const clearBookingProgress = () => {
+    dispatch(setCart([]));
+    dispatch(setService(null));
+    dispatch(setTimeslot(""));
+    dispatch(setCapacity(0));
+    dispatch(setBookingkey(null));
+    dispatch(setExtra(null));
+    dispatch(setExtracapacity(0));
+    dispatch(sessionClear());
+  };
+
+  const handleDateChange = (value) => {
+    const nextDate = toDateString(value);
+    if (nextDate === toDateString(date)) return;
+    clearBookingProgress();
+    dispatch(setDate(nextDate));
   };
 
   useEffect(() => {
-    if (gift) {
-      dispatch(setDate(moment().add(1, "day")));
+    // Only fill in a default date when none exists yet; a date restored from the
+    // persisted session (page reload) or picked by the user must be kept.
+    if (gift && !date) {
+      dispatch(setDate(giftDefaultDate()));
     }
-    getserviceavailabilitycalendar(month);
+    getserviceavailabilitycalendar(month, {
+      autoSelect: !gift && !date && step === "datestep",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [month]);
 
   const dateTemplate = (dateMeta) => {
@@ -150,42 +210,35 @@ export default function ChooseDate(props) {
       return;
     }
     if (!date) {
-      Swal.fire({
-        toast: true,
-        position: "top-end", // or 'bottom-end', 'top-start', etc.
-        showConfirmButton: false,
-        timer: 3000, // auto-close after 3 seconds
-        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Please select a date to check availability",
-      });
+      showToast("warning", "Please select a date to check availability");
+      return;
     }
 
     dispatch(setLoading(true));
-    const { data } = await axiosInstance(
-      `/availability?date=${moment(date).format("YYYY-MM-DD")}`,
-      {
-        method: "get",
-      },
-    );
-    if (data?.data?.is_bookable) {
-      dispatch(setStep("servicesstep"));
+    try {
+      const { data } = await axiosInstance(
+        `/availability?date=${toDateString(date)}`,
+        {
+          method: "get",
+        },
+      );
+      if (data?.data?.is_bookable) {
+        dispatch(setStep("servicesstep"));
+      } else {
+        showToast("warning", "There is no service available on selected Date");
+      }
+    } catch (error) {
+      console.error("Unable to check availability.", error);
+      showToast(
+        "error",
+        error?.data?.message || "Unable to check availability, please try again",
+      );
+    } finally {
       dispatch(setLoading(false));
-    } else {
-      Swal.fire({
-        toast: true,
-        position: "top-end", // or 'bottom-end', 'top-start', etc.
-        showConfirmButton: false,
-        timer: 3000, // auto-close after 3 seconds
-        icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: "There is no service available on selected Date",
-      });
     }
-    dispatch(setLoading(false));
   };
 
   const viewService = () => {
-    console.log("Receiver Info:", receiverInfo);
-
     if (!receiverInfo.firstName) {
       setErrorlist({ firstName: true });
       return;
@@ -221,35 +274,44 @@ export default function ChooseDate(props) {
     checkavailability();
   };
 
-  const getserviceavailabilitycalendar = async (monthYear) => {
+  // autoSelect: pick the month's first bookable date. Only used when there is
+  // no date yet, so browsing months or reloading never replaces the user's choice.
+  const getserviceavailabilitycalendar = async (
+    monthYear,
+    { autoSelect = false } = {},
+  ) => {
     dispatch(setLoading(true));
-    /* Service availability calendar */
-    const { data: dataa } = await axiosInstance(
-      `/service-availability-calendar?month=${monthYear}`,
-      {
-        method: "get",
-      },
-    );
+    try {
+      /* Service availability calendar */
+      const { data: dataa } = await axiosInstance(
+        `/service-availability-calendar?month=${monthYear}`,
+        {
+          method: "get",
+        },
+      );
 
-    if (dataa?.data) {
-      setResponsear(dataa?.data);
-      if (dataa?.data) {
-        const datedarr = [];
-        let firstBookable = null;
-        dataa?.data.forEach((dateItem) => {
-          if (dateItem.is_bookable === false) {
-            const dateObj = new Date(dateItem.date);
-            datedarr.push(dateObj);
-          } else if (!firstBookable) {
-            firstBookable = new Date(dateItem.date);
-          }
-        });
-        setDisabledDates(datedarr);
-        if (firstBookable && !gift) {
-          dispatch(setDate(firstBookable));
+      const days = Array.isArray(dataa?.data) ? dataa.data : [];
+      setResponsear(days);
+      const datedarr = [];
+      let firstBookable = null;
+      days.forEach((dateItem) => {
+        // moment parses "YYYY-MM-DD" as local midnight; new Date() would use
+        // UTC and shift the day for users west of UTC.
+        if (dateItem.is_bookable === false) {
+          datedarr.push(moment(dateItem.date).toDate());
+        } else if (!firstBookable) {
+          firstBookable = toDateString(dateItem.date);
         }
-        dispatch(setLoading(false));
+      });
+      setDisabledDates(datedarr);
+      if (autoSelect && firstBookable) {
+        dispatch(setDate(firstBookable));
       }
+    } catch (error) {
+      console.error("Unable to load the availability calendar.", error);
+      showToast("error", "Unable to load availability, please try again");
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
@@ -322,7 +384,7 @@ export default function ChooseDate(props) {
             <div className="fx-calendar fx-commoninput">
               <CalendarPage
                 value={date}
-                onChange={(e) => dispatch(setDate(e.value))}
+                onChange={(e) => handleDateChange(e.value)}
                 dateTemplate={dateTemplate}
                 disabledDates={disabledDates}
                 handleMonthChange={handleMonthChange}
@@ -355,6 +417,7 @@ export default function ChooseDate(props) {
                 <input
                   type="text"
                   placeholder="First Name"
+                  value={receiverInfo.firstName}
                   className={
                     errorlist.firstName
                       ? "fx-invalid fx-inputbox-generic"
@@ -370,13 +433,14 @@ export default function ChooseDate(props) {
                   }
                 />
                 {errorlist.firstName && (
-                  <span class="fx-errortext">Enter First Name</span>
+                  <span className="fx-errortext">Enter First Name</span>
                 )}
               </div>
               <div className="fx-input-wrapper">
                 <input
                   type="text"
                   placeholder="Last Name"
+                  value={receiverInfo.lastName}
                   className={
                     errorlist.lastName ? "fx-invalid" : "fx-input-lastname-box"
                   }
@@ -390,7 +454,7 @@ export default function ChooseDate(props) {
                   }
                 />
                 {errorlist.lastName && (
-                  <span class="fx-errortext">Enter Last Name</span>
+                  <span className="fx-errortext">Enter Last Name</span>
                 )}
               </div>
             </div>
@@ -400,6 +464,7 @@ export default function ChooseDate(props) {
                 <input
                   type="email"
                   placeholder="Email"
+                  value={receiverInfo.email}
                   className={
                     errorlist.email ? "fx-invalid" : "fx-input-email-box"
                   }
@@ -421,7 +486,7 @@ export default function ChooseDate(props) {
                 />
                 <i className="pi pi-envelope"></i>
                 {errorlist.email && (
-                  <span class="fx-errortext">Enter Valid Email</span>
+                  <span className="fx-errortext">Enter Valid Email</span>
                 )}
               </div>
               <div className="fx-input-wrapper">
@@ -476,6 +541,7 @@ export default function ChooseDate(props) {
                 <input
                   type="text"
                   placeholder="Country"
+                  value={receiverInfo.country}
                   className={errorlist.country ? "fx-invalid" : ""}
                   onChange={(e) =>
                     dispatch(
@@ -488,13 +554,14 @@ export default function ChooseDate(props) {
                 />
                 <i className="pi pi-flag"></i>
                 {errorlist.country && (
-                  <span class="fx-errortext">Enter Country</span>
+                  <span className="fx-errortext">Enter Country</span>
                 )}
               </div>
               <div className="fx-input-wrapper">
                 <input
                   type="text"
                   placeholder="Zip"
+                  value={receiverInfo.zip}
                   className={errorlist.zip ? "fx-invalid" : ""}
                   onChange={(e) =>
                     dispatch(
@@ -505,7 +572,7 @@ export default function ChooseDate(props) {
                     )
                   }
                 />
-                {errorlist.zip && <span class="fx-errortext">Enter Zip</span>}
+                {errorlist.zip && <span className="fx-errortext">Enter Zip</span>}
               </div>
             </div>
             <div className="fx-inputgroup fx-hidden">
@@ -513,6 +580,7 @@ export default function ChooseDate(props) {
                 <input
                   type="text"
                   placeholder="Address"
+                  value={receiverInfo.address}
                   className={
                     errorlist.address ? "fx-invalid bigtextbox" : "bigtextbox"
                   }
@@ -526,7 +594,7 @@ export default function ChooseDate(props) {
                   }
                 />
                 {errorlist.address && (
-                  <span class="fx-errortext">Enter Address</span>
+                  <span className="fx-errortext">Enter Address</span>
                 )}
               </div>
             </div>
