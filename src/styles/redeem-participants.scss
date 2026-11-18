@@ -1,0 +1,20 @@
+.fx-redeem-participants {
+  margin: 24px 0;
+  padding: 22px;
+  border: 1px solid var(--border-color, #d8deed);
+  border-radius: 12px;
+  background: white;
+  h2 { margin: 0 0 20px; font-size: 24px; }
+  h3 { margin: 0 0 8px; font-size: 17px; }
+  p { margin: 8px 0 18px; }
+  .fx-redeem-participant-service + .fx-redeem-participant-service { margin-top: 24px; }
+  .fx-redeem-participant-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border-color, #d8deed); }
+  small { display: block; margin-top: 5px; color: var(--grey); }
+  .fx-redeem-participant-controls { display: flex; align-items: center; gap: 8px; }
+  button, output { display: grid; place-items: center; min-width: 40px; height: 40px; padding: 0 10px; border: 1px solid var(--border-color, #d8deed); border-radius: 8px; background: white; color: var(--darkgrey); font: inherit; }
+  button { cursor: pointer; }
+  button:disabled { opacity: .4; cursor: default; }
+  .fx-redeem-participant-note { margin: 18px 0 0; padding: 12px; border-radius: 6px; background: #f4f6fa; font-size: 13px; }
+  .fx-redeem-participant-warning { color: var(--error-color, #a52c2c); font-size: 13px; }
+  @media (max-width: 480px) { padding: 16px; button, output { min-width: 32px; height: 34px; padding: 0 7px; } }
+}

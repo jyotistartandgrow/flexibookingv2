@@ -183,7 +183,7 @@ export default function ServiceTab(props) {
             )}
 
             <div className="fx-service-card__actions">
-              {props.showGiftButton == "true" && (
+              {props.showGiftButton == "true" && serviceDetails?.is_gift_allowed === true && (
                 <button
                   className="fx-service-card__button fx-service-card__button--gift"
                   type="button"

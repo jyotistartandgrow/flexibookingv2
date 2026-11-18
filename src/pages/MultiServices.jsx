@@ -3,6 +3,7 @@ import { CalendarDays, Minus, Plus, Trash2, Wallet, X } from "lucide-react";
 import Swal from "sweetalert2";
 import daySpaImage from "../assets/popupservice.jpg";
 import spaPackImage from "../assets/service1.jpg";
+import TimeSlotCard from "../components/TimeSlotCard";
 
 // Placeholder data matching the design. Replace with the API response.
 const createSlots = (serviceId) =>
@@ -77,22 +78,17 @@ function ServiceRow({ service, onChange, onRemove }) {
           {slots.map((slot) => {
             const isSelected = slot.id === selectedSlotId;
             return (
-              <button
+              <TimeSlotCard
                 key={slot.id}
-                type="button"
-                className={`fx-ms-slot${isSelected ? " is-selected" : ""}`}
-                aria-pressed={isSelected}
+                time={slot.time}
+                price={`€${slot.price}`}
+                left={slot.left}
+                selected={isSelected}
                 disabled={slot.left < quantity}
-                onClick={() =>
+                onSelect={() =>
                   onChange({ selectedSlotId: isSelected ? null : slot.id })
                 }
-              >
-                <span className="fx-ms-slot-time">{slot.time}</span>
-                <span className="fx-ms-slot-meta">
-                  <strong>€{slot.price}</strong>
-                  <small>{slot.left} left</small>
-                </span>
-              </button>
+              />
             );
           })}
         </div>

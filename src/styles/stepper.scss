@@ -964,3 +964,42 @@
     padding: 20px 0px;
   }
 }
+
+// Redeem + additions flow: five evenly overlapping pills (Code, Date & Slot, Service, Checkout, Payment).
+.fx-stepper-tabstyle.fx-redeem-upsell-step {
+  display: flex;
+  height: auto;
+  padding: 0;
+
+  .step.step {
+    position: relative;
+    top: auto;
+    left: auto;
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    margin-left: -28px;
+    padding: 10px 8px 10px 36px;
+    overflow: hidden;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .step.step:first-child { margin-left: 0; padding-left: 8px; }
+  .step.step:nth-child(1) { z-index: 5; }
+  .step.step:nth-child(2) { z-index: 4; }
+  .step.step:nth-child(3) { z-index: 3; }
+  .step.step:nth-child(4) { z-index: 2; }
+  .step.step:nth-child(5) { z-index: 1; }
+  .step.step.complete { background: #fff; }
+  .step.step.active { background: #fff; border-color: var(--primary-color); }
+}
+
+@media screen and (max-width: 768px) {
+  .fx-stepper-tabstyle.fx-redeem-upsell-step {
+    .step.step { font-size: 13px; margin-left: -20px; padding-left: 26px; }
+    .step.step:first-child { padding-left: 8px; }
+    .step.step.active { flex-grow: 2.5; }
+  }
+}

@@ -365,11 +365,15 @@ export default function Checkout(props) {
     dispatch(setLoading(true));
     const gift_info = {
       recipient_first_name:
-        gift && !opendatepurchase ? (receiverInfo.firstName ?? "") : "",
+        opendatepurchase
+          ? (billdata.sgbm_field_1 ?? "")
+          : gift ? (receiverInfo.firstName ?? "") : "",
       recipient_last_name:
         gift && !opendatepurchase ? (receiverInfo.lastName ?? "") : "",
       recipient_email:
-        gift && !opendatepurchase ? (receiverInfo.email ?? "") : "",
+        opendatepurchase
+          ? (billdata.sgbm_field_3 ?? "")
+          : gift ? (receiverInfo.email ?? "") : "",
       recipient_contact:
         gift && !opendatepurchase
           ? formatInternationalPhone(receiverInfo.phoneNumber)
@@ -388,7 +392,7 @@ export default function Checkout(props) {
           : "",
     };
 
-    const giftCustomizationData = gift
+    const giftCustomizationData = gift && !opendatepurchase
       ? {
           occasion_id: giftCustomization.occasionId ?? "",
           template_id: giftCustomization.template ?? "",
@@ -398,7 +402,7 @@ export default function Checkout(props) {
       : {};
     const voucherDelivery =
       giftCustomization.delivery === "me" ? "me" : "recipient";
-    const giftDeliveryData = gift
+    const giftDeliveryData = gift && !opendatepurchase
       ? {
           channel: "email",
           target:
@@ -435,8 +439,9 @@ export default function Checkout(props) {
       gift_details: gift_info,
       gift_customization: giftCustomizationData,
       gift_delivery: giftDeliveryData,
-      voucher_delivery: gift ? voucherDelivery : "",
+      voucher_delivery: gift && !opendatepurchase ? voucherDelivery : "",
       is_gift: gift,
+      is_open_date_purchase: Boolean(opendatepurchase),
       other_data: {
         terms_conditions: 1,
         booking_acknowledgement: true,

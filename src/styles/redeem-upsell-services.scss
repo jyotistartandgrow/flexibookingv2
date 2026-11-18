@@ -1,0 +1,147 @@
+.fx-booking .fx-redemption-upsells .fx-servicecontainer {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  padding-bottom: 0;
+}
+
+.fx-booking .fx-redemption-upsells .fx-servicecontainer .fx-servicebox {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin-bottom: 0;
+}
+
+.fx-redemption-upsells {
+  padding: 28px 20px 32px;
+  color: var(--darkgrey);
+
+  &__heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 12px;
+
+    h1 { margin: 0 0 8px; font-size: 25px; font-weight: 600; line-height: 1.25; }
+    p { margin: 0; color: var(--grey); font-size: 14px; line-height: 1.5; }
+    .fx-redemption-upsells__eyebrow { margin-bottom: 7px; color: var(--primary-color); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  }
+
+  &__count {
+    flex-shrink: 0;
+    padding: 7px 11px;
+    border-radius: 30px;
+    background: color-mix(in srgb, var(--primary-color) 9%, white);
+    color: var(--primary-color);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  &__status { margin: 24px 0; padding: 28px 20px; border: 1px dashed var(--new-border-color); border-radius: 12px; color: var(--grey); font-size: 14px; text-align: center; }
+  &__error { display: flex; flex-direction: column; align-items: center; gap: 14px; p { margin: 0; } }
+
+  .fx-servicebox-blocked { opacity: .55; cursor: not-allowed; }
+  .fx-servicepic-fallback { display: grid; place-items: center; width: 100%; height: 100%; min-height: 160px; background: color-mix(in srgb, var(--primary-color) 6%, white); color: var(--primary-color); }
+  &__actions { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-top: 30px; }
+  &__continue { display: flex; align-items: center; gap: 20px; }
+
+  // Card layout, typography, images, badges and selection styles come from card.scss.
+  .fx-upsell-service-checkbox {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 21px;
+    height: 21px;
+    margin: 0;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+  }
+
+  .fx-upsell-service-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .fx-upsell-service__quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    button { display: grid; place-items: center; width: 23px; height: 23px; padding: 0; border: 1px solid var(--new-border-color); border-radius: 50%; background: white; color: var(--darkgrey); cursor: pointer; }
+    button:hover:not(:disabled) { border-color: var(--primary-color); background: color-mix(in srgb, var(--primary-color) 7%, white); color: var(--primary-color); }
+    button:disabled { opacity: .4; cursor: default; }
+    output { min-width: 12px; color: var(--grey); font-size: 13px; text-align: center; }
+  }
+
+  .fx-upsell-back, .fx-upsell-skip, .fx-upsell-continue { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 40px; padding: 0 24px; border: 1px solid var(--primary-color); border-radius: 30px; font: inherit; font-size: 13px; cursor: pointer; }
+  .fx-upsell-back { min-width: 120px; background: transparent; color: var(--primary-color); }
+  .fx-upsell-skip { min-width: 110px; background: transparent; color: var(--primary-color); }
+  .fx-upsell-continue { min-width: 160px; background: var(--primary-color); color: white; }
+  .fx-upsell-continue:disabled { opacity: .45; cursor: default; }
+  .fx-upsell-total { display: flex; flex-direction: column; gap: 3px; color: var(--grey); font-size: 11px; text-align: right; }
+  .fx-upsell-total strong { color: var(--primary-color); font-size: 16px; }
+  button:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 3px; }
+}
+
+.fx-redeem-selected-services-dialog {
+  border-radius: 16px;
+  overflow: hidden;
+
+  .fx-multi-services { max-width: none; min-height: 0; font-family: inherit; }
+  .fx-multi-services .fx-ms-title { font-size: var(--main-headingsize); font-weight: 600; color: var(--darkgrey); }
+  .fx-multi-services .fx-ms-badge { padding: 6px 14px; font-size: 13px; font-weight: 600; }
+  .fx-multi-services .fx-ms-name { font-size: 16px; font-weight: 500; color: var(--darkgrey); }
+  .fx-ms-list { max-height: calc(100vh - 260px); overflow-y: auto; }
+  .fx-ms-image-fallback { display: grid; place-items: center; background: color-mix(in srgb, var(--primary-color) 6%, white); color: var(--primary-color); }
+}
+
+@media (max-width: 700px) {
+  .fx-booking .fx-redemption-upsells .fx-servicecontainer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fx-redemption-upsells {
+    padding: 22px 16px;
+    &__heading h1 { font-size: 22px; }
+    &__continue { gap: 12px; }
+    .fx-upsell-back, .fx-upsell-skip { min-width: 0; padding: 0 16px; }
+    .fx-upsell-continue { min-width: 0; padding: 0 20px; }
+  }
+}
+
+@media (max-width: 430px) {
+  .fx-booking .fx-redemption-upsells .fx-servicecontainer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fx-redemption-upsells {
+    &__heading { gap: 12px; }
+    &__count { padding: 6px 9px; font-size: 11px; }
+    &__continue { align-items: flex-end; flex-direction: column; gap: 8px; }
+  }
+}
+
+.fx-redeem-upsell-payment {
+  .fx-paymentbox { margin-top: 24px; }
+  .fx-redeem-payment-back {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 120px; min-height: 40px; margin-top: 20px; padding: 0 24px;
+    border: 1px solid var(--primary-color); border-radius: 30px; background: transparent; color: var(--primary-color); font: inherit; font-size: 13px; cursor: pointer;
+  }
+}
+
+.fx-redeem-summary-additions {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--new-border-color);
+
+  &__title { margin-bottom: 8px; color: var(--primary-color); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  .fx-serviceitem { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .itemname small { display: block; margin-top: 3px; color: var(--grey); 
+    font-size: 14px; }
+  .price { flex-shrink: 0; color: var(--darkgrey); }
+  &__total { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; font-size: 14px; strong { color: var(--primary-color); } }
+}

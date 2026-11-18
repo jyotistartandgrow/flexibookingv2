@@ -13,17 +13,20 @@ import {
   setRedeemStep,
   setLoading,
   setRedeemBooking,
-  setStep,
+  setRedeemUpsell,
 } from "../store/step1Slice";
 import {
   setRedeemBundleSchedule,
   setRedeemBundleSlots,
+  setRedeemUpsellQuote,
+  setRedeemUpsellSelections,
   setSlot,
   setVoucherDetail,
 } from "../store/step3Slice";
-import { setTimeslot } from "../store/step2Slice";
 import axiosInstance from "../Utils/Interceptor";
 import { decodeEntities } from "../Utils/Functions";
+import { useRedeemParticipants } from "../Utils/redeemParticipants";
+import RedeemParticipants from "../components/RedeemParticipants";
 
 addLocale("en-monday", {
   firstDayOfWeek: 1, // Monday
@@ -87,6 +90,8 @@ export default function SelectDate(props) {
   const step = useSelector((state) => state.step1.redeemstep);
   const date = useSelector((state) => state.step1.date);
   const voucher = useSelector((state) => state.step1.voucher);
+  const savedSlot = useSelector((state) => state.step3.slot);
+  const savedVoucherDetail = useSelector((state) => state.step3.voucherdetail);
   const savedBundleSlots = useSelector(
     (state) => state.step3.redeemBundleSlots,
   );
@@ -94,7 +99,7 @@ export default function SelectDate(props) {
     (state) => state.step3.redeemBundleSchedule,
   );
   const [voucherdetail, setVoucherdetail] = useState({});
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(savedSlot || null);
   const [selectedBundleSlots, setSelectedBundleSlots] = useState(
     () => savedBundleSlots || [],
   );
@@ -124,8 +129,32 @@ export default function SelectDate(props) {
   const extras = products.filter(
     (product) => product.id && !product.service_id,
   );
-  const isContinueDisabled =
+  const scheduleIncomplete =
     !date || (isBundleVoucher ? !bundleSelectionComplete : !selectedSlot);
+  const primaryLabel = isBundleVoucher ? selectedBundleSlots[0]?.slot_label : selectedSlot;
+  const primarySlot = isBundleVoucher ? selectedBundleSlots[0] :
+    voucherdetail?.slots?.find((item) => getSlotLabel(item) === selectedSlot);
+  const [fromLabel, toLabel] = String(primaryLabel || "").split(/\s*[-–—]\s*/);
+  const formatTime = (value) => {
+    const time = moment(value, ["HH:mm", "H:mm", "HH:mm:ss", "h:mm A"], true);
+    return time.isValid() ? time.format("HH:mm") : value;
+  };
+  const slotSelection = {
+    ...(typeof primarySlot === "object" ? primarySlot : {}),
+    from: formatTime(primarySlot?.from || fromLabel),
+    to: formatTime(primarySlot?.to || toLabel),
+    label: primaryLabel,
+    preflight_valid: true,
+  };
+  const participants = useRedeemParticipants(!scheduleIncomplete &&
+    moment(date).format("YYYY-MM-DD") === moment(voucherdetail?.date).format("YYYY-MM-DD") ? {
+      voucher,
+      date: moment(date).format("YYYY-MM-DD"),
+      slot: primaryLabel,
+      slot_selection: slotSelection,
+      ...(isBundleVoucher ? { selected_component_slots: selectedBundleSlots } : {}),
+    } : null);
+  const isContinueDisabled = scheduleIncomplete || !participants.valid || participants.checking;
 
   const slotset = (slot) => {
     setSelectedSlot(slot);
@@ -150,7 +179,10 @@ export default function SelectDate(props) {
         savedBundleSlots.length > 0 &&
         savedBundleSchedule?.components?.length > 0;
       setVoucherdetail(data.data);
-      setSelectedSlot(null);
+      const restoredSlot = !restoreBundleSelection &&
+        savedVoucherDetail?.date === data.data.date &&
+        data.data.slots?.some((item) => getSlotLabel(item) === savedSlot) ? savedSlot : null;
+      setSelectedSlot(restoredSlot);
       setBundleSlotTabs({});
       if (restoreBundleSelection) {
         setSelectedBundleSlots(savedBundleSlots);
@@ -161,7 +193,7 @@ export default function SelectDate(props) {
         setSelectedBundleSlots([]);
         setExpandedBundleIndex(0);
         setBundleSchedule(null);
-        dispatch(setSlot(null));
+        dispatch(setSlot(restoredSlot));
         dispatch(setRedeemBundleSlots([]));
         dispatch(setRedeemBundleSchedule(null));
       }
@@ -171,7 +203,8 @@ export default function SelectDate(props) {
     dispatch(setLoading(false));
   };
 
-  const getslot = () => {
+  const getslot = async () => {
+    if (isContinueDisabled || !(await participants.validate())) return;
     dispatch(setLoading(true));
     if (!date) {
       Swal.fire({
@@ -200,23 +233,13 @@ export default function SelectDate(props) {
       dispatch(setLoading(false));
       return;
     }
+    // Every redemption passes through Optional Additions, where the customer can skip or add services.
     dispatch(setRedeemBooking(false));
-    dispatch(setRedeemStep("checkoutstep"));
+    dispatch(setRedeemUpsell(true));
+    dispatch(setRedeemUpsellSelections([]));
+    dispatch(setRedeemUpsellQuote(null));
+    dispatch(setRedeemStep("upsellstep"));
     dispatch(setLoading(false));
-  };
-
-  const bookNewServices = () => {
-    if (isContinueDisabled) return;
-
-    dispatch(
-      setTimeslot(
-        isBundleVoucher
-          ? selectedBundleSlots[0]?.slot_label || null
-          : selectedSlot,
-      ),
-    );
-    dispatch(setStep("servicesstep"));
-    dispatch(setRedeemBooking(true));
   };
 
   const getBundleSlotMinutes = (slotItem) => {
@@ -707,6 +730,8 @@ export default function SelectDate(props) {
               </section>
             )}
 
+            <RedeemParticipants selection={participants} />
+
             <div className="fx-footer-actions">
               <button
                 type="button"
@@ -719,14 +744,6 @@ export default function SelectDate(props) {
               <div className="fx-footer-primary-actions">
                 <button
                   type="button"
-                  className={`fx-btn-secondary ${isContinueDisabled ? "fx-btn-disable" : ""}`}
-                  onClick={bookNewServices}
-                  disabled={isContinueDisabled}
-                >
-                  Add more services
-                </button>
-                <button
-                  type="button"
                   className={`btn-primary btn-primary-countinu ${isContinueDisabled ? "fx-btn-disable" : ""}`}
                   onClick={() => {
                     if (!isContinueDisabled) {
@@ -735,7 +752,7 @@ export default function SelectDate(props) {
                   }}
                   disabled={isContinueDisabled}
                 >
-                  Continue to checkout
+                  Continue
                 </button>
               </div>
             </div>
