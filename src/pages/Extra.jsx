@@ -6,7 +6,7 @@ import "primeicons/primeicons.css";
 import { Carousel } from "primereact/carousel";
 import axiosInstance from "../Utils/Interceptor";
 import moment from "moment";
-import { decodeHtml, formatExtrasTimeSlot } from "../Utils/Functions";
+import { decodeHtml, formatExtrasTimeSlot, toPlainText } from "../Utils/Functions";
 import extra from "../assets/extra1.jpg";
 import { setExtracapacity, setExtra, setBookingkey } from "../store/step3Slice";
 import { setStep, setLoading } from "../store/step1Slice";
@@ -460,7 +460,7 @@ export default function Extra(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
-        title: data?.message ?? "There is some error , please try again",
+        titleText: toPlainText(data?.message ?? "There is some error , please try again"),
       });
       dispatch(setLoading(false));
     }

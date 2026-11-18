@@ -7,7 +7,7 @@ import Payment from "./Payment";
 import { useSelector } from "react-redux";
 import OrderDetailsCard from "./OrderDetailsCard";
 
-export default function SgbmssOpenCalendar(props) {
+export default function SgbmSingleService(props) {
   const loading = useSelector((state) => state.step1.loading);
   const date = useSelector((state) => state.step1.date);
   const cart = useSelector((state) => state.step2.cart);

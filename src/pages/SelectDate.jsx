@@ -24,7 +24,7 @@ import {
   setVoucherDetail,
 } from "../store/step3Slice";
 import axiosInstance from "../Utils/Interceptor";
-import { decodeEntities } from "../Utils/Functions";
+import { decodeEntities, sanitizeHtml } from "../Utils/Functions";
 import { useRedeemParticipants } from "../Utils/redeemParticipants";
 import RedeemParticipants from "../components/RedeemParticipants";
 
@@ -62,7 +62,7 @@ function RedeemItemCard({ product, description }) {
           <div
             className="fx-redeem-item-desc"
             dangerouslySetInnerHTML={{
-              __html: decodeEntities(description),
+              __html: sanitizeHtml(decodeEntities(description)),
             }}
           />
         )}

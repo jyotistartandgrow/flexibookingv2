@@ -263,7 +263,6 @@ export default function SgbmCheckin() {
             booking_key: value,
           },
         );
-        console.log("Verification response:", verifyData);
         if (!verifyData?.status) {
           setApiStatus("invalid");
           setApiMessage(verifyData?.message || "Invalid QR code.");
@@ -273,7 +272,6 @@ export default function SgbmCheckin() {
         if (verifyData?.status) {
           setApiStatus("success");
           setApiMessage(verifyData?.message || "Check-in successful!");
-          console.log("Check-in successful for booking key:", value);
           dispatch(setBookingkey(value));
           navigate("/checkin-thankyou");
           return;

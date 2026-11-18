@@ -13,7 +13,7 @@ import {
   setGift,
   setStripeKey,
 } from "../store/step1Slice";
-import { persistor } from "../store/store";
+import { usePersistor } from "../store/PersistorContext";
 import {
   setCart,
   setCapacity,
@@ -51,6 +51,7 @@ const showToast = (icon, title) =>
 
 export default function ChooseDate(props) {
   const dispatch = useDispatch();
+  const persistor = usePersistor();
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.step);
   const gift = useSelector((state) => state.step1.gift);
@@ -74,7 +75,7 @@ export default function ChooseDate(props) {
 
     // Clear current booking session so flow changes always start clean.
     dispatch({ type: "app/reset" });
-    await persistor.purge();
+    await persistor?.purge();
 
     // restore small global settings that should survive flow switch
     if (preservedStripeKey) {

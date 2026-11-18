@@ -1,3 +1,4 @@
+import MissingServiceId from "../components/MissingServiceId";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axiosInstance from "../Utils/Interceptor";
@@ -135,7 +136,9 @@ export default function DateTab(props) {
   const [errorMessage, setErrorMessage] = useState("");
   const [popupRequest, setPopupRequest] = useState(0);
 
-  const serviceid = String(props.service_id ?? "").trim();
+  // 0 / missing means the shortcode has no data-service-id: show an error.
+  const serviceid =
+    Number(props.service_id) > 0 ? String(props.service_id).trim() : "";
   const bundleid = Number(props.bundle_id) > 0 ? Number(props.bundle_id) : 0;
 
   const weeks = useMemo(
@@ -296,6 +299,8 @@ export default function DateTab(props) {
     date: 1,
   });
   const canGoToPreviousMonth = visibleMonthStart.isAfter(currentMonthStart);
+
+  if (!serviceid) return <MissingServiceId />;
 
   return (
     <>

@@ -22,6 +22,8 @@ import {
 import GiftCardPreviewButton from "./Giftcardpreviewbutton";
 import {
   decodeHtml,
+  toPlainText,
+  toSafeUrl,
   validateEmail,
   validatePhoneForCountry,
 } from "../Utils/Functions";
@@ -490,7 +492,7 @@ export default function Checkout(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
-        title: data?.message ?? "There is some error , please try again",
+        titleText: toPlainText(data?.message ?? "There is some error , please try again"),
       });
       if (data?.message == "Error Fetching Booking Information !!") {
         Swal.fire({
@@ -517,7 +519,7 @@ export default function Checkout(props) {
           showConfirmButton: false,
           timer: 3000,
           icon: "error",
-          title: error?.data?.message || error?.response?.data?.message || fallbackMessage,
+          titleText: toPlainText(error?.data?.message || error?.response?.data?.message || fallbackMessage),
         });
         return undefined;
       }
@@ -1243,7 +1245,11 @@ export default function Checkout(props) {
           />
           <label htmlFor="terms-checkbox" className="checkbox-label">
             You are making a direct booking.Please accept{" "}
-            <a href={props.termsAndConditionLink} target="_blank">
+            <a
+              href={toSafeUrl(props.termsAndConditionLink) || undefined}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               terms and conditions
             </a>{" "}
             before proceeding

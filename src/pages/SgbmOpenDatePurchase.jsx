@@ -16,10 +16,13 @@ export default function SgbmOpenDatePurchase(props) {
   const openDatePurchase = useSelector((state) => state.step1.opendatepurchase);
   const step = useSelector((state) => state.step1.step);
   const dispatch = useDispatch();
-  if (!gift || !openDatePurchase) {
-    dispatch(setGift(true));
-    dispatch(setOpenDatePurchase(true));
-  }
+  // main.jsx seeds these flags for this shortcode; this is only a safety net.
+  // Dispatching from an effect (not during render) avoids React's
+  // "Cannot update a component while rendering a different component" error.
+  useEffect(() => {
+    if (!gift) dispatch(setGift(true));
+    if (!openDatePurchase) dispatch(setOpenDatePurchase(true));
+  }, [dispatch, gift, openDatePurchase]);
 
   useEffect(() => {
     if (step === "customizestep") dispatch(setStep("checkoutstep"));

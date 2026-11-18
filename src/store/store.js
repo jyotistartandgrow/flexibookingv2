@@ -5,15 +5,11 @@ import step3Reducer from "./step3Slice";
 import step4Reducer from "./step4Slice";
 
 import { persistReducer, persistStore } from "redux-persist";
-//import storage from "redux-persist/lib/storage"; // localStorage
-import storageSession from "redux-persist/lib/storage/session"; // 👈 IMPORTANT
+import storageSession from "redux-persist/lib/storage/session"; // per-tab storage
 import { combineReducers } from "redux";
 
-const persistConfig = {
-  key: "root",
-  storage: storageSession,
-  // whitelist: ["step1"],  // optional → only persist selected slices
-};
+// Every persisted booking store is saved under "persist:<PERSIST_PREFIX><key>".
+export const PERSIST_PREFIX = "fx-";
 
 const appReducer = combineReducers({
   step1: step1Reducer,
@@ -22,25 +18,35 @@ const appReducer = combineReducers({
   step4: step4Reducer,
 });
 
-// 🔹 Root reducer with RESET support
-const rootReducer = (state, action) => {
-  if (action.type === "app/reset") {
-    // clear persisted storage
-    storageSession.removeItem("persist:root");
-    state = undefined; // 👈 resets ALL slices
-  }
-  return appReducer(state, action);
-};
+// Creates an isolated Redux store (and its sessionStorage entry) for one
+// shortcode, so several shortcodes on the same page never share state.
+export function createBookingStore(key) {
+  const persistKey = `${PERSIST_PREFIX}${key}`;
 
-// 🔹 Persisted reducer
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+  // Root reducer with RESET support
+  const rootReducer = (state, action) => {
+    if (action.type === "app/reset") {
+      // clear this store's persisted copy only
+      storageSession.removeItem(`persist:${persistKey}`);
+      state = undefined; // resets ALL slices of this store
+    }
+    return appReducer(state, action);
+  };
 
-export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false, // required for redux-persist
-    }),
-});
+  const persistedReducer = persistReducer(
+    { key: persistKey, storage: storageSession },
+    rootReducer,
+  );
 
-export const persistor = persistStore(store);
+  const store = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false, // required for redux-persist
+      }),
+  });
+
+  const persistor = persistStore(store);
+
+  return { store, persistor };
+}

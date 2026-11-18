@@ -6,7 +6,7 @@ import "primeicons/primeicons.css";
 import { Sidebar as Calendarsidebar } from "primereact/sidebar";
 import axiosInstance from "../Utils/Interceptor";
 import moment from "moment";
-import { decodeHtml, formatExtrasTimeSlot } from "../Utils/Functions";
+import { decodeHtml, formatExtrasTimeSlot, toPlainText } from "../Utils/Functions";
 import { Dialog } from "primereact/dialog";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { setDate, setStep, setLoading } from "../store/step1Slice";
@@ -356,10 +356,16 @@ export default function Service(props) {
     setLoadingske(true);
     let allService = gift ? true : false;
     allService = all ? true : allService;
+    // data-service-ids="1,2,3" limits the list to those services. The API
+    // rejects anything but positive IDs, so drop blanks/invalid entries.
+    const serviceIdsFilter = (Array.isArray(props.serviceIds) ? props.serviceIds : [])
+      .map((id) => String(id).trim())
+      .filter((id) => /^[1-9][0-9]*$/.test(id))
+      .join(",");
     const { data } = await axiosInstance(
       `/services?date=${moment(selectedDate).format(
         "YYYY-MM-DD",
-      )}&category=${category}&all=${allService}&gift=${gift ? true : false}`,
+      )}&category=${category}&all=${allService}&gift=${gift ? true : false}${serviceIdsFilter ? `&service_id=${serviceIdsFilter}` : ""}`,
       {
         method: "get",
       },
@@ -376,7 +382,7 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: data?.message || "No services found for the selected date",
+        titleText: toPlainText(data?.message || "No services found for the selected date"),
       });
     }
   };
@@ -519,7 +525,7 @@ export default function Service(props) {
           showConfirmButton: false,
           timer: 3000, // auto-close after 3 seconds
           icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-          title: data?.message,
+          titleText: toPlainText(data?.message),
         });
         dispatch(setLoading(false));
         return;
@@ -573,7 +579,7 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000,
         icon: "error",
-        title: data?.message || "Unable to load service details",
+        titleText: toPlainText(data?.message || "Unable to load service details"),
       });
     }
   };
@@ -1524,7 +1530,7 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
-        title: data?.message ?? "There is some error , please try again",
+        titleText: toPlainText(data?.message ?? "There is some error , please try again"),
       });
       dispatch(setLoading(false));
     }
@@ -1548,7 +1554,7 @@ export default function Service(props) {
           showConfirmButton: false,
           timer: 3000,
           icon: "error",
-          title: error?.data?.message || error?.response?.data?.message || fallbackMessage,
+          titleText: toPlainText(error?.data?.message || error?.response?.data?.message || fallbackMessage),
         });
         return undefined;
       }

@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { Elements, CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { setLoading, setRedeemStep } from "../store/step1Slice";
-import { formatSelectedComponentSlots } from "../Utils/Functions";
+import { formatSelectedComponentSlots, toSafeUrl } from "../Utils/Functions";
 import { callVoucherApi, formatLikePrice, getApiErrorMessage } from "../Utils/redeemUpsells";
 import "../styles/redeem-upsell-services.scss";
 
@@ -63,7 +63,10 @@ function usePayAdditions() {
         return;
       }
       if (payment.transport === "woocommerce" && payment.payment_url) {
-        window.location.href = payment.payment_url;
+        // Only follow http(s) payment URLs; never script-capable schemes.
+        const paymentUrl = toSafeUrl(payment.payment_url);
+        if (!paymentUrl) throw new Error("Invalid payment link. Please try again.");
+        window.location.href = paymentUrl;
         return;
       }
       if (payment.status !== "provider_paid") {

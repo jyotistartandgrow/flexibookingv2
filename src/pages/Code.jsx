@@ -10,6 +10,7 @@ import {
 } from "../store/step1Slice";
 import Swal from "sweetalert2";
 import moment from "moment";
+import { toPlainText } from "../Utils/Functions";
 import {
   setRedeemBundleSchedule,
   setRedeemBundleSlots,
@@ -25,7 +26,6 @@ export default function Code() {
 
   const reedemcode = async () => {
     // Dispatch an action or perform validation here
-    console.log("Verifying code:", code);
     if (!code) {
       Swal.fire({
         toast: true,
@@ -58,7 +58,7 @@ export default function Code() {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
-        title: data?.message || "Invalid voucher code",
+        titleText: toPlainText(data?.message || "Invalid voucher code"),
       });
     }
     dispatch(setLoading(false));
