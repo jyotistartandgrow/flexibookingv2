@@ -67,6 +67,10 @@
     }
   }
 
+  .fx-booking .fx-popup .fx-rightpopup .fx-service-selected-slot-value strong{
+          font-weight: 400;
+  }
+
   @media (max-width: 1024px) {
     .fx-ms-slots {
       grid-column: 1 / -1;

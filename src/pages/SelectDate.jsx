@@ -422,315 +422,333 @@ export default function SelectDate(props) {
               <p>Choose when you’d like to use this voucher.</p>
             </div>
 
-            {services.length > 0 && (
-              <section className="fx-section-group">
-                <h2 className="fx-section-title">
-                  {services.length === 1
-                    ? "Included service"
-                    : "Included services"}
-                </h2>
-                {services.map((product, index) => (
-                  <RedeemItemCard
-                    key={product.service_id || index}
-                    product={product}
-                    description={product.service_desc}
-                  />
-                ))}
-              </section>
-            )}
-            <section className="fx-scheduling-panel">
-              <div className="fx-date-picker-group">
-                <label className="fx-label" htmlFor="redeem-slot-date">
-                  Date
-                </label>
-                <div className="fx-input-with-icon">
-                  <Calendar
-                    inputId="redeem-slot-date"
-                    value={
-                      moment(voucherdetail?.date).isValid()
-                        ? moment(voucherdetail?.date).toDate()
-                        : null
-                    }
-                    onChange={(e) => {
-                      setSelectedSlot(null);
-                      setSelectedBundleSlots([]);
-                      setExpandedBundleIndex(0);
-                      setBundleSchedule(null);
-                      dispatch(setSlot(null));
-                      dispatch(setRedeemBundleSlots([]));
-                      dispatch(setRedeemBundleSchedule(null));
-                      dispatch(setDate(e.value));
-                    }}
-                    className="fx-datepicker"
-                    minDate={new Date()}
-                    ref={calendarRef}
-                    onClick={() => {
-                      calendarRef.current?.show();
-                    }}
-                    locale="en-monday"
-                    dateFormat="dd/mm/yy"
-                  />
-                  <span className="fx-icon" aria-hidden="true">
-                    <CalendarDays size={18} />
-                  </span>
-                </div>
-              </div>
-
-              {!isBundleVoucher && voucherdetail?.slots?.length > 0 && (
-                <p className="fx-availability-note">
-                  Available times for{" "}
-                  <strong>
-                    {moment(voucherdetail?.date).format("dddd, MMM DD")}
-                  </strong>
-                </p>
-              )}
-
-              {!isBundleVoucher && (
-                <div className="fx-time-selector-grid">
-                  {voucherdetail?.slots?.length == 0 && (
-                    <div>No slots available for the selected date.</div>
-                  )}
-                  {voucherdetail?.slots?.map((slot, index) => {
-                    const slotLabel = getSlotLabel(slot);
-
-                    if (!slotLabel) return null;
-
-                    return (
-                      <div
-                        key={slot?.slot_id ?? slotLabel ?? index}
-                        className={
-                          slotLabel === selectedSlot
-                            ? "fx-time-btn fx-selected"
-                            : "fx-time-btn"
+            <div
+              className={`fx-redeem-date-layout${participants.visible ? " fx-has-participants" : ""}`}
+            >
+              <div className="fx-redeem-date-main">
+                {services.length > 0 && (
+                  <section className="fx-section-group">
+                    <h2 className="fx-section-title">
+                      {services.length === 1
+                        ? "Included service"
+                        : "Included services"}
+                    </h2>
+                    {services.map((product, index) => (
+                      <RedeemItemCard
+                        key={product.service_id || index}
+                        product={product}
+                        description={product.service_desc}
+                      />
+                    ))}
+                  </section>
+                )}
+                <section className="fx-scheduling-panel">
+                  <div className="fx-date-picker-group">
+                    <label className="fx-label" htmlFor="redeem-slot-date">
+                      Date
+                    </label>
+                    <div className="fx-input-with-icon">
+                      <Calendar
+                        inputId="redeem-slot-date"
+                        value={
+                          moment(voucherdetail?.date).isValid()
+                            ? moment(voucherdetail?.date).toDate()
+                            : null
                         }
-                        onClick={() => slotset(slotLabel)}
-                      >
-                        {slotLabel}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {isBundleVoucher && (
-                <div className="fx-slot-bundle-modal-box fx-redeem-bundle-slots">
-                  <div className="fx-booking-modal-header">
-                    <div className="fx-bundle-modal-heading">
-                      <h2 className="fx-booking-modal-title">Bundle slots</h2>
-                      <p>Pick slots for each package component in order.</p>
+                        onChange={(e) => {
+                          setSelectedSlot(null);
+                          setSelectedBundleSlots([]);
+                          setExpandedBundleIndex(0);
+                          setBundleSchedule(null);
+                          dispatch(setSlot(null));
+                          dispatch(setRedeemBundleSlots([]));
+                          dispatch(setRedeemBundleSchedule(null));
+                          dispatch(setDate(e.value));
+                        }}
+                        className="fx-datepicker"
+                        minDate={new Date()}
+                        ref={calendarRef}
+                        onClick={() => {
+                          calendarRef.current?.show();
+                        }}
+                        locale="en-monday"
+                        dateFormat="dd/mm/yy"
+                      />
+                      <span className="fx-icon" aria-hidden="true">
+                        <CalendarDays size={18} />
+                      </span>
                     </div>
-                    <span className="fx-bundle-progress">
-                      {selectedBundleSlots.length} of {bundleComponents.length}{" "}
-                      selected
-                    </span>
                   </div>
 
-                  <div className="fx-booking-modal-content">
-                    <div className="fx-service-slots-details">
-                      {bundleComponents.map((component, componentIndex) => {
-                        const position =
-                          Number(component?.component_position) ||
-                          componentIndex + 1;
-                        const selectedComponentSlot =
-                          selectedBundleSlots[componentIndex];
-                        const isWaiting =
-                          componentIndex > selectedBundleSlots.length;
-                        const isSelected = Boolean(selectedComponentSlot);
-                        const isExpanded =
-                          !isWaiting && expandedBundleIndex === componentIndex;
-                        const activeTab =
-                          bundleSlotTabs[position] ||
-                          getDefaultBundleTab(component);
-                        const componentSlots = getBundleSlotsByTab(
-                          component,
-                          activeTab,
-                        );
-                        const voucherComponent =
-                          bundleProduct?.bundle_components?.find(
-                            (voucherBundleComponent) =>
-                              Number(
-                                voucherBundleComponent?.component_position,
-                              ) === position,
-                          );
-                        const componentQuantity =
-                          Number(voucherComponent?.quantity_consumed) ||
-                          (Number(
-                            voucherComponent?.component_quantity_per_bundle ??
-                              voucherComponent?.quantity ??
-                              component?.component_quantity_per_bundle ??
-                              component?.quantity,
-                          ) || 1) * (Number(bundleProduct?.quantity) || 1) ||
-                          1;
+                  {!isBundleVoucher && voucherdetail?.slots?.length > 0 && (
+                    <p className="fx-availability-note">
+                      Available times for{" "}
+                      <strong>
+                        {moment(voucherdetail?.date).format("dddd, MMM DD")}
+                      </strong>
+                    </p>
+                  )}
+
+                  {!isBundleVoucher && (
+                    <div className="fx-time-selector-grid">
+                      {voucherdetail?.slots?.length == 0 && (
+                        <div>No slots available for the selected date.</div>
+                      )}
+                      {voucherdetail?.slots?.map((slot, index) => {
+                        const slotLabel = getSlotLabel(slot);
+
+                        if (!slotLabel) return null;
 
                         return (
                           <div
-                            className={`fx-massage-card${isExpanded ? " fx-expanded" : ""}${isWaiting ? " fx-waiting" : ""}${isSelected ? " fx-component-selected" : ""}`}
-                            key={component?.bundle_item_id || componentIndex}
+                            key={slot?.slot_id ?? slotLabel ?? index}
+                            className={
+                              slotLabel === selectedSlot
+                                ? "fx-time-btn fx-selected"
+                                : "fx-time-btn"
+                            }
+                            onClick={() => slotset(slotLabel)}
                           >
-                            <div
-                              className="fx-massage-card-header"
-                              onClick={() => {
-                                if (!isWaiting) {
-                                  setExpandedBundleIndex(
-                                    isExpanded ? -1 : componentIndex,
-                                  );
-                                }
-                              }}
-                            >
-                              <div className="fx-massage-card-info">
-                                <div className="fx-component-label-row">
-                                  <span>Component {position}</span>
-                                  <span
-                                    className={`fx-component-status fx-status-${isSelected ? "selected" : isWaiting ? "waiting" : "active"}`}
-                                  >
-                                    {" "}
-                                    {isSelected
-                                      ? "Selected"
-                                      : isWaiting
-                                        ? "Waiting"
-                                        : "Choose now"}
-                                  </span>
-                                </div>
-                                <div className="fx-bundle-component-title-row">
-                                  <h3 className="fx-massage-title">
-                                    {component?.service_name}
-                                  </h3>
-                                  <p className="fx-massage-description">
-                                    Quantity: {componentQuantity}
-                                  </p>
-                                </div>
-                              </div>
-                              {!isWaiting && (
-                                <span className="fx-massage-accordion-icon"></span>
-                              )}
-                            </div>
-
-                            {isWaiting && (
-                              <p className="fx-component-waiting-message">
-                                Choose slot after completing Component{" "}
-                                {componentIndex}
-                              </p>
-                            )}
-
-                            {isExpanded && (
-                              <div className="fx-massage-card-content">
-                                <div className="fx-bundle-slot-tabs">
-                                  {[
-                                    ["morning", "Morning"],
-                                    ["afternoon", "Afternoon"],
-                                    ["all", "All day"],
-                                  ].map(([tabKey, tabLabel]) => (
-                                    <button
-                                      className={
-                                        activeTab === tabKey ? "fx-active" : ""
-                                      }
-                                      key={tabKey}
-                                      type="button"
-                                      onClick={(event) => {
-                                        event.stopPropagation();
-                                        setBundleSlotTabs((previousTabs) => ({
-                                          ...previousTabs,
-                                          [position]: tabKey,
-                                        }));
-                                      }}
-                                    >
-                                      {tabLabel}
-                                    </button>
-                                  ))}
-                                </div>
-
-                                {componentSlots.length > 0 ? (
-                                  <div className="fx-time-slots">
-                                    {componentSlots.map(
-                                      (slotItem, slotIndex) => {
-                                        const selectedSlotKey =
-                                          selectedComponentSlot?.slot_key;
-                                        const availableSlotKey =
-                                          slotItem?.slot_key;
-                                        const availableSlotLabel =
-                                          slotItem?.label ||
-                                          slotItem?.slot_label;
-                                        const isSlotSelected = Boolean(
-                                          (selectedSlotKey != null &&
-                                            availableSlotKey != null &&
-                                            String(selectedSlotKey) ===
-                                              String(availableSlotKey)) ||
-                                          (selectedComponentSlot?.slot_label &&
-                                            selectedComponentSlot.slot_label ===
-                                              availableSlotLabel),
-                                        );
-                                        return (
-                                          <button
-                                            className={`fx-time-slot${isSlotSelected ? " fx-selected" : ""}`}
-                                            disabled={bundleScheduleLoading}
-                                            key={`${slotItem?.slot_key || slotItem?.label}-${slotIndex}`}
-                                            type="button"
-                                            onClick={() =>
-                                              selectBundleSlot(
-                                                component,
-                                                componentIndex,
-                                                slotItem,
-                                              )
-                                            }
-                                          >
-                                            <span className="fx-slot-time">
-                                              {isSlotSelected && (
-                                                <i
-                                                  className="pi pi-check"
-                                                  aria-hidden="true"
-                                                ></i>
-                                              )}
-                                              <span>
-                                                {slotItem?.label ||
-                                                  slotItem?.slot_label}
-                                              </span>
-                                            </span>
-                                            <small>
-                                              {slotItem?.capacity_left} left
-                                            </small>
-                                          </button>
-                                        );
-                                      },
-                                    )}
-                                  </div>
-                                ) : (
-                                  <p className="fx-no-bundle-slots">
-                                    No {activeTab} slots available
-                                  </p>
-                                )}
-                              </div>
-                            )}
+                            {slotLabel}
                           </div>
                         );
                       })}
                     </div>
-                    <p
-                      className={`fx-bundle-selection-message${bundleSelectionComplete ? " fx-complete" : ""}`}
-                    >
-                      {bundleSelectionComplete
-                        ? "All component slots are selected."
-                        : "Choose every bundle component slot."}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </section>
-            {extras.length > 0 && (
-              <section className="fx-section-group">
-                <h2 className="fx-section-title">
-                  {extras.length === 1 ? "Extra" : "Extras"}
-                </h2>
-                {extras.map((product, index) => (
-                  <RedeemItemCard
-                    key={product.id || index}
-                    product={product}
-                    description={product.service_desc}
-                  />
-                ))}
-              </section>
-            )}
+                  )}
 
-            <RedeemParticipants selection={participants} />
+                  {isBundleVoucher && (
+                    <div className="fx-slot-bundle-modal-box fx-redeem-bundle-slots">
+                      <div className="fx-booking-modal-header">
+                        <div className="fx-bundle-modal-heading">
+                          <h2 className="fx-booking-modal-title">Bundle slots</h2>
+                          <p>Pick slots for each package component in order.</p>
+                        </div>
+                        <span className="fx-bundle-progress">
+                          {selectedBundleSlots.length} of {bundleComponents.length}{" "}
+                          selected
+                        </span>
+                      </div>
+
+                      <div className="fx-booking-modal-content">
+                        <div className="fx-service-slots-details">
+                          {bundleComponents.map((component, componentIndex) => {
+                            const position =
+                              Number(component?.component_position) ||
+                              componentIndex + 1;
+                            const selectedComponentSlot =
+                              selectedBundleSlots[componentIndex];
+                            const isWaiting =
+                              componentIndex > selectedBundleSlots.length;
+                            const isSelected = Boolean(selectedComponentSlot);
+                            const isExpanded =
+                              !isWaiting && expandedBundleIndex === componentIndex;
+                            const activeTab =
+                              bundleSlotTabs[position] ||
+                              getDefaultBundleTab(component);
+                            const componentSlots = getBundleSlotsByTab(
+                              component,
+                              activeTab,
+                            );
+                            const voucherComponent =
+                              bundleProduct?.bundle_components?.find(
+                                (voucherBundleComponent) =>
+                                  Number(
+                                    voucherBundleComponent?.component_position,
+                                  ) === position,
+                              );
+                            const componentQuantity =
+                              Number(voucherComponent?.quantity_consumed) ||
+                              (Number(
+                                voucherComponent?.component_quantity_per_bundle ??
+                                  voucherComponent?.quantity ??
+                                  component?.component_quantity_per_bundle ??
+                                  component?.quantity,
+                              ) || 1) * (Number(bundleProduct?.quantity) || 1) ||
+                              1;
+
+                            return (
+                              <div
+                                className={`fx-massage-card${isExpanded ? " fx-expanded" : ""}${isWaiting ? " fx-waiting" : ""}${isSelected ? " fx-component-selected" : ""}`}
+                                key={component?.bundle_item_id || componentIndex}
+                              >
+                                <div
+                                  className="fx-massage-card-header"
+                                  onClick={() => {
+                                    if (!isWaiting) {
+                                      setExpandedBundleIndex(
+                                        isExpanded ? -1 : componentIndex,
+                                      );
+                                    }
+                                  }}
+                                >
+                                  <div className="fx-massage-card-info">
+                                    <div className="fx-component-label-row">
+                                      <span>Component {position}</span>
+                                      <span
+                                        className={`fx-component-status fx-status-${isSelected ? "selected" : isWaiting ? "waiting" : "active"}`}
+                                      >
+                                        {" "}
+                                        {isSelected
+                                          ? "Selected"
+                                          : isWaiting
+                                            ? "Waiting"
+                                            : "Choose now"}
+                                      </span>
+                                    </div>
+                                    <div className="fx-bundle-component-title-row">
+                                      <h3 className="fx-massage-title">
+                                        {component?.service_name}
+                                      </h3>
+                                      <p className="fx-massage-description">
+                                        Quantity: {componentQuantity}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  {!isWaiting && (
+                                    <span className="fx-massage-accordion-icon"></span>
+                                  )}
+                                </div>
+
+                                {isWaiting && (
+                                  <p className="fx-component-waiting-message">
+                                    Choose slot after completing Component{" "}
+                                    {componentIndex}
+                                  </p>
+                                )}
+
+                                {isExpanded && (
+                                  <div className="fx-massage-card-content">
+                                    <div className="fx-bundle-slot-tabs">
+                                      {[
+                                        ["morning", "Morning"],
+                                        ["afternoon", "Afternoon"],
+                                        ["all", "All day"],
+                                      ].map(([tabKey, tabLabel]) => (
+                                        <button
+                                          className={
+                                            activeTab === tabKey ? "fx-active" : ""
+                                          }
+                                          key={tabKey}
+                                          type="button"
+                                          onClick={(event) => {
+                                            event.stopPropagation();
+                                            setBundleSlotTabs((previousTabs) => ({
+                                              ...previousTabs,
+                                              [position]: tabKey,
+                                            }));
+                                          }}
+                                        >
+                                          {tabLabel}
+                                        </button>
+                                      ))}
+                                    </div>
+
+                                    {componentSlots.length > 0 ? (
+                                      <div className="fx-time-slots">
+                                        {componentSlots.map(
+                                          (slotItem, slotIndex) => {
+                                            const selectedSlotKey =
+                                              selectedComponentSlot?.slot_key;
+                                            const availableSlotKey =
+                                              slotItem?.slot_key;
+                                            const availableSlotLabel =
+                                              slotItem?.label ||
+                                              slotItem?.slot_label;
+                                            const isSlotSelected = Boolean(
+                                              (selectedSlotKey != null &&
+                                                availableSlotKey != null &&
+                                                String(selectedSlotKey) ===
+                                                  String(availableSlotKey)) ||
+                                              (selectedComponentSlot?.slot_label &&
+                                                selectedComponentSlot.slot_label ===
+                                                  availableSlotLabel),
+                                            );
+                                            return (
+                                              <button
+                                                className={`fx-time-slot${isSlotSelected ? " fx-selected" : ""}`}
+                                                disabled={bundleScheduleLoading}
+                                                key={`${slotItem?.slot_key || slotItem?.label}-${slotIndex}`}
+                                                type="button"
+                                                onClick={() =>
+                                                  selectBundleSlot(
+                                                    component,
+                                                    componentIndex,
+                                                    slotItem,
+                                                  )
+                                                }
+                                              >
+                                                <span className="fx-slot-time">
+                                                  {isSlotSelected && (
+                                                    <i
+                                                      className="pi pi-check"
+                                                      aria-hidden="true"
+                                                    ></i>
+                                                  )}
+                                                  <span>
+                                                    {slotItem?.label ||
+                                                      slotItem?.slot_label}
+                                                  </span>
+                                                </span>
+                                                <small>
+                                                  {slotItem?.capacity_left} left
+                                                </small>
+                                              </button>
+                                            );
+                                          },
+                                        )}
+                                      </div>
+                                    ) : (
+                                      <p className="fx-no-bundle-slots">
+                                        No {activeTab} slots available
+                                      </p>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <p
+                          className={`fx-bundle-selection-message${bundleSelectionComplete ? " fx-complete" : ""}`}
+                        >
+                          {bundleSelectionComplete
+                            ? "All component slots are selected."
+                            : "Choose every bundle component slot."}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </section>
+                {extras.length > 0 && (
+                  <section className="fx-section-group">
+                    <h2 className="fx-section-title">
+                      {extras.length === 1 ? "Extra" : "Extras"}
+                    </h2>
+                    {extras.map((product, index) => (
+                      <RedeemItemCard
+                        key={product.id || index}
+                        product={product}
+                        description={product.service_desc}
+                      />
+                    ))}
+                  </section>
+                )}
+              </div>
+              {participants.visible && (
+                <aside className="fx-redeem-date-aside">
+                  {/* Same height as the "Included service" label, so both boxes start on one line */}
+                  {services.length > 0 && (
+                    <span
+                      className="fx-section-title fx-redeem-date-aside-spacer"
+                      aria-hidden="true"
+                    >
+                      &nbsp;
+                    </span>
+                  )}
+                  <RedeemParticipants selection={participants} />
+                </aside>
+              )}
+            </div>
 
             <div className="fx-footer-actions">
               <button
