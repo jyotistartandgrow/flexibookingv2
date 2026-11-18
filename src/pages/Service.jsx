@@ -23,6 +23,14 @@ import CalendarPage from "./CalendarPage";
 import ServiceCard from "../components/ServiceCard";
 import ServiceSlotSelection from "../components/ServiceSlotSelection";
 import ServiceParticipants from "../components/ServiceParticipants";
+import BundleParticipants from "../components/BundleParticipants";
+import VirtualServiceParticipants from "../components/VirtualServiceParticipants";
+import {
+  buildBundleParticipantsRequest,
+  buildVirtualParticipantsRequest,
+  useBundleParticipants,
+  useComponentParticipants,
+} from "../Utils/bundleParticipants";
 import "../styles/service-participants.scss";
 import { getParticipantSlotStart, getParticipantSelection, normalizeParticipantGroups } from "../Utils/participants";
 
@@ -139,7 +147,43 @@ export default function Service(props) {
     selectedSlotContext.bundleId === normalizeBundleId(bundleId) &&
     selectedSlotContext.virtualServiceId === virtualServiceId;
 
-  const canContinueService = canContinueToParticipants && validParticipantQuantity && book === participantSelection.total;
+  // Virtual services: the booking quantity is chosen directly, and visitors per
+  // included service come from the component-participants API (as for bundles).
+  const isVirtualSelection = virtualServiceId > 0 && !gift;
+  const virtualMinQuantity = Math.max(1, Number(currentitem.min_capacity) || 1);
+  const virtualMaxQuantity = Math.max(
+    0,
+    Math.min(
+      selectedSlotCapacity,
+      Number(currentitem.max_capacity) > 0 ? Number(currentitem.max_capacity) : Infinity,
+      detailCapacity !== null && detailCapacity !== undefined && String(detailCapacity).trim() !== ""
+        ? Number(detailCapacity)
+        : Infinity,
+    ),
+  );
+  const virtualQuantityValid = book >= virtualMinQuantity && book <= virtualMaxQuantity;
+  const virtualParticipants = useComponentParticipants(
+    isVirtualSelection && visible && showParticipantStep && canContinueToParticipants && virtualQuantityValid
+      ? buildVirtualParticipantsRequest({
+          serviceId: serviceid,
+          virtualServiceId,
+          date: moment(date).format("YYYY-MM-DD"),
+          quantity: book,
+          timeSlot: slot,
+          lineKey: participantLineKey.current,
+        })
+      : null,
+  );
+  const virtualParticipantsBlocking =
+    !virtualParticipants.visible ||
+    virtualParticipants.loading ||
+    virtualParticipants.checking ||
+    Boolean(virtualParticipants.error) ||
+    (virtualParticipants.required && !virtualParticipants.valid);
+
+  const canContinueService = isVirtualSelection
+    ? canContinueToParticipants && virtualQuantityValid && !virtualParticipantsBlocking
+    : canContinueToParticipants && validParticipantQuantity && book === participantSelection.total;
   const participantQuantityMessage = participantSelection.message;
 
   const serviceOptionList = serviceOptionChoices
@@ -594,7 +638,7 @@ export default function Service(props) {
   }, [date]);
 
   useEffect(() => {
-    if (!showParticipantStep || !visible || gift || bundleId > 0 || !serviceid || !participantStart) return;
+    if (!showParticipantStep || !visible || gift || bundleId > 0 || virtualServiceId > 0 || !serviceid || !participantStart) return;
 
     const controller = new AbortController();
     let active = true;
@@ -636,7 +680,7 @@ export default function Service(props) {
     };
     loadParticipants();
     return () => { active = false; controller.abort(); };
-  }, [showParticipantStep, visible, gift, bundleId, serviceid, date, participantStart, selectedServiceOptionId, participantRequestKey, participantRetry]);
+  }, [showParticipantStep, visible, gift, bundleId, virtualServiceId, serviceid, date, participantStart, selectedServiceOptionId, participantRequestKey, participantRetry]);
 
   const handleMonthChange = (e) => {
     if (e.month < 0) {
@@ -1095,6 +1139,22 @@ export default function Service(props) {
       return;
     }
 
+    if (bundleParticipantsBlocking) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "info",
+        title: "Please choose the participants for each included service",
+      });
+      return;
+    }
+    // Re-check the chosen parties against live capacity before pricing.
+    if (bundleParticipants.required && !(await bundleParticipants.validate())) {
+      return;
+    }
+
     dispatch(setLoading(true));
     try {
       const encodedComponentSlots = encodeURIComponent(
@@ -1142,7 +1202,11 @@ export default function Service(props) {
       return;
     }
 
-    if (book < (participantConfig?.quantity_rules?.minimum_quantity ?? currentitem.min_capacity)) {
+    if (isVirtualSelection) {
+      if (!virtualQuantityValid || virtualParticipantsBlocking) return;
+      // Re-check the chosen visitors against live capacity before pricing.
+      if (virtualParticipants.required && !(await virtualParticipants.validate())) return;
+    } else if (book < (participantConfig?.quantity_rules?.minimum_quantity ?? currentitem.min_capacity)) {
       Swal.fire({
         toast: true,
         position: "top-end", // or 'bottom-end', 'top-start', etc.
@@ -1275,6 +1339,10 @@ export default function Service(props) {
         bundle_id: bundleId,
         selected_component_slots: selectedBundleComponentSlots,
         bundle_components: cartBundleComponents,
+        line_key: participantLineKey.current,
+        capacity_component_guests: bundleParticipants.required
+          ? bundleParticipants.guests
+          : {},
         bundle_pricing: bundleTotals
           ? {
               subtotal: bundleTotals.subtotal,
@@ -1312,9 +1380,13 @@ export default function Service(props) {
         virtual_service_id: virtualServiceId || null,
         selected_virtual_service_id: virtualServiceId || null,
         components: virtualServiceId > 0 ? productDetails.components || [] : [],
-        participants: gift ? null : { ...participants },
-        participant_guests: gift ? [] : participantSelection.guests,
-        participant_configuration: gift ? null : participantConfig,
+        participants: gift || isVirtualSelection ? null : { ...participants },
+        participant_guests: gift || isVirtualSelection ? [] : participantSelection.guests,
+        participant_configuration: gift || isVirtualSelection ? null : participantConfig,
+        capacity_component_guests:
+          isVirtualSelection && virtualParticipants.required
+            ? virtualParticipants.guests
+            : {},
         line_key: participantLineKey.current,
       };
     }
@@ -1407,10 +1479,22 @@ export default function Service(props) {
   const addtocartRequest = async () => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/addtocart`, {
-      ...(!gift && participantSelection.guests.length > 0
+      ...(!gift && bundleId === 0 && virtualServiceId === 0 && participantSelection.guests.length > 0
         ? {
             capacity_line_key: participantLineKey.current,
             capacity_guests: participantSelection.guests,
+          }
+        : {}),
+      ...(!gift && bundleId > 0 && bundleParticipants.required
+        ? {
+            capacity_line_key: participantLineKey.current,
+            capacity_component_guests: bundleParticipants.guests,
+          }
+        : {}),
+      ...(isVirtualSelection && virtualParticipants.required
+        ? {
+            capacity_line_key: participantLineKey.current,
+            capacity_component_guests: virtualParticipants.guests,
           }
         : {}),
       service_id: serviceid,
@@ -1515,6 +1599,27 @@ export default function Service(props) {
     (isDesktop ? products.length >= 9 : products.length >= 6);
 
   const isBundleSelection = normalizeBundleId(bundleId) > 0;
+
+  // Once every bundle component has a slot, load the participant rules for each
+  // component (POST bm-capacity/v1/services/{id}/component-participants).
+  const bundleParticipants = useBundleParticipants(
+    isBundleSelection && showBundleSlots && bundleAllSelected && !gift
+      ? buildBundleParticipantsRequest({
+          serviceId: serviceid,
+          bundleId: normalizeBundleId(bundleId),
+          date: moment(date).format("YYYY-MM-DD"),
+          quantity: bundleQuantity,
+          componentSlots: selectedBundleComponentSlots,
+          lineKey: participantLineKey.current,
+        })
+      : null,
+  );
+  const bundleParticipantsBlocking =
+    bundleParticipants.visible &&
+    (bundleParticipants.loading ||
+      bundleParticipants.checking ||
+      Boolean(bundleParticipants.error) ||
+      (bundleParticipants.required && !bundleParticipants.valid));
 
   const updateGiftQuantity = (type) => {
     setGiftQuantity((prev) => {
@@ -2269,7 +2374,22 @@ export default function Service(props) {
                               />
                             )}
                             </div>
-                            {showParticipantStep && bundleId === 0 && (
+                            {showParticipantStep && bundleId === 0 && isVirtualSelection && (
+                              <VirtualServiceParticipants
+                                slot={slot}
+                                price={decodeHtml(String(currentitem.slot_price_formatted || currentitem.formatted_price || productDetails.svc_price || ""))}
+                                quantity={book}
+                                minQuantity={virtualMinQuantity}
+                                maxQuantity={virtualMaxQuantity}
+                                onQuantityChange={(next) =>
+                                  setBook(Math.min(virtualMaxQuantity, Math.max(virtualMinQuantity, next)))
+                                }
+                                onBack={() => setShowParticipantStep(false)}
+                                disabled={isPopupBookingDisabled}
+                                selection={virtualParticipants}
+                              />
+                            )}
+                            {showParticipantStep && bundleId === 0 && !isVirtualSelection && (
                               <ServiceParticipants
                                 slot={slot}
                                 price={decodeHtml(String(currentitem.slot_price_formatted || currentitem.formatted_price || productDetails.svc_price || ""))}
@@ -2323,6 +2443,10 @@ export default function Service(props) {
                               if (showParticipantStep) {
                                 bookservice();
                               } else if (canContinueToParticipants) {
+                                // Virtual services start at the slot's minimum quantity.
+                                if (isVirtualSelection && !virtualQuantityValid) {
+                                  setBook(Math.min(virtualMaxQuantity, virtualMinQuantity));
+                                }
                                 setShowParticipantStep(true);
                               }
                             }}
@@ -2344,7 +2468,7 @@ export default function Service(props) {
                 </>
               )}
               <div
-                className="fx-slot-bundle-modal-box"
+                className="fx-slot-bundle-modal-box fx-service-bundle-slots"
                 style={{
                   display:
                     isBundleSelection && showBundleSlots ? undefined : "none",
@@ -2548,39 +2672,9 @@ export default function Service(props) {
                         "Choose every bundle component slot."}
                   </p>
 
+                  {/* Bundle quantity is fixed at 1; visitors are chosen per component below. */}
                   {bundleAllSelected && (
-                    <div className="fx-bundle-quantity">
-                      <span className="fx-quantity-label">Bundle Quantity</span>
-                      <div className="fx-quantity-control">
-                        <button
-                          className="fx-quantity-btn"
-                          disabled={bundleQuantity <= 1}
-                          type="button"
-                          onClick={() =>
-                            setBundleQuantity((quantity) =>
-                              Math.max(1, quantity - 1),
-                            )
-                          }
-                        >
-                          −
-                        </button>
-                        <span className="fx-quantity-value">
-                          {bundleQuantity}
-                        </span>
-                        <button
-                          className="fx-quantity-btn"
-                          disabled={bundleQuantity >= maxBundleQuantity}
-                          type="button"
-                          onClick={() =>
-                            setBundleQuantity((quantity) =>
-                              Math.min(maxBundleQuantity, quantity + 1),
-                            )
-                          }
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
+                    <BundleParticipants selection={bundleParticipants} />
                   )}
                 </div>
                 <div className="fx-booking-modal-footer">
@@ -2594,14 +2688,22 @@ export default function Service(props) {
                   </span>
 
                   <span className="fx-bundle-footer-message">
-                    {bundleAllSelected
-                      ? "Choose a quantity and continue"
-                      : "Complete all components to continue"}
+                    {!bundleAllSelected
+                      ? "Complete all components to continue"
+                      : bundleParticipants.checking
+                        ? "Checking availability…"
+                        : bundleParticipantsBlocking
+                          ? "Choose participants to continue"
+                          : "Ready to continue"}
                   </span>
 
                   <span
                     className="fx-continue-btn"
-                    disabled={!bundleAllSelected || bundleScheduleLoading}
+                    disabled={
+                      !bundleAllSelected ||
+                      bundleScheduleLoading ||
+                      bundleParticipantsBlocking
+                    }
                     type="button"
                     onClick={bookBundleService}
                   >

@@ -27,6 +27,16 @@ function ExtraProductTitle({ product }) {
   );
 }
 
+// Bundle lines carry the participants chosen for each component (keyed
+// "serviceId|HH:mm"); the server needs them with the same capacity line key.
+const bundleGuestFields = (gift, line) =>
+  !gift && line && Object.keys(line.capacity_component_guests || {}).length > 0
+    ? {
+        capacity_line_key: line.line_key,
+        capacity_component_guests: line.capacity_component_guests,
+      }
+    : {};
+
 export default function Extra(props) {
   const dispatch = useDispatch();
   const isDesktop = useDeviceType();
@@ -184,6 +194,7 @@ export default function Extra(props) {
                       capacity_guests: cart.service[0].participant_guests,
                     }
                   : {}),
+                ...bundleGuestFields(gift, cart.service?.[0]),
                 service_id: service,
                 date: moment(date).format("YYYY-MM-DD"),
                 total_service_booking: totalServiceBooking,
@@ -418,6 +429,7 @@ export default function Extra(props) {
             capacity_guests: cart.service[0].participant_guests,
           }
         : {}),
+      ...bundleGuestFields(gift, cart.service?.[0]),
       service_id: service,
       date: moment(date).format("YYYY-MM-DD"),
       total_service_booking: totalServiceBooking,
