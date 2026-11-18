@@ -140,7 +140,8 @@
 
   &__title { margin-bottom: 8px; color: var(--primary-color); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
   .fx-serviceitem { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-  .itemname small { display: block; margin-top: 3px; color: var(--grey); font-size: 12px; }
+  .itemname small { display: block; margin-top: 3px; color: var(--grey); 
+    font-size: 14px; }
   .price { flex-shrink: 0; color: var(--darkgrey); }
   &__total { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; font-size: 14px; strong { color: var(--primary-color); } }
 }
