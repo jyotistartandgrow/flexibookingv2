@@ -27,7 +27,7 @@ export default function ReedemSteps(props) {
         ["codestep", "CODE", "ENTER YOUR CODE"],
         ["datestep", "DATE & SLOT", "SELECT DATE & SLOT"],
         ["upsellstep", "OPTIONAL ADDITIONS", "OPTIONAL ADDITIONS"],
-        ["checkoutstep", "YOUR DETAILS", "YOUR DETAILS"],
+        ["checkoutstep", "DETAILS", "DETAILS"],
         // Payment only applies when additions were chosen; skipping redeems the gift directly.
         ...(hasAdditions ? [["paymentstep", "PAYMENT", "PAYMENT"]] : []),
       ]

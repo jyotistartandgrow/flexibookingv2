@@ -46,7 +46,7 @@
   }
 
   .fx-ms-slot-time {
-    font-size: var(--small-font-size);
+    font-size: var(--all-regular-size);
     white-space: nowrap;
   }
 
@@ -57,7 +57,7 @@
     gap: 8px;
 
     strong {
-      font-size: var(--big-descriptionsize);
+      font-size: 14px;
       font-weight: 700;
     }
 
@@ -65,6 +65,10 @@
       font-size: 14px;
       white-space: nowrap;
     }
+  }
+
+  .fx-booking .fx-popup .fx-rightpopup .fx-service-selected-slot-value strong{
+          font-weight: 400;
   }
 
   @media (max-width: 1024px) {

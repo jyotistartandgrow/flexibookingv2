@@ -14,7 +14,7 @@
 }
 
 .fx-redemption-upsells {
-  padding: 28px 20px 32px;
+  padding: 0px;
   color: var(--darkgrey);
 
   &__heading {
@@ -125,12 +125,19 @@
   }
 }
 
+
 .fx-redeem-upsell-payment {
-  .fx-paymentbox { margin-top: 24px; }
+  .fx-paymentbox { margin-top: 12px; width: 50%; }
   .fx-redeem-payment-back {
     display: inline-flex; align-items: center; justify-content: center; min-width: 120px; min-height: 40px; margin-top: 20px; padding: 0 24px;
     border: 1px solid var(--primary-color); border-radius: 30px; background: transparent; color: var(--primary-color); font: inherit; font-size: 13px; cursor: pointer;
   }
+}
+
+@media (max-width: 600px) {
+    .fx-redeem-upsell-payment .fx-paymentbox{
+      width: 100%;
+    }
 }
 
 .fx-redeem-summary-additions {
@@ -138,7 +145,14 @@
   padding-top: 12px;
   border-top: 1px solid var(--new-border-color);
 
-  &__title { margin-bottom: 8px; color: var(--primary-color); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  &__title { margin-bottom: 8px;
+    color: #344054;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: var(--all-regular-size); }
+
   .fx-serviceitem { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
   .itemname small { display: block; margin-top: 3px; color: var(--grey); 
     font-size: 14px; }

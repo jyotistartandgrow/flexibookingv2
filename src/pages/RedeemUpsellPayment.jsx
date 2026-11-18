@@ -170,7 +170,7 @@ export default function RedeemUpsellPayment(props) {
         <h1 className="fx-all-main-heading">{props.stepTitles?.step_5_title || "Payment"}</h1>
       )}
 
-      <div className="fx-order-summary">
+      {/* <div className="fx-order-summary">
         <table className="fx-summary-table">
           <thead>
             <tr>
@@ -211,7 +211,7 @@ export default function RedeemUpsellPayment(props) {
             <span className="value">{totalLabel}</span>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="fx-paymentbox">
         {stripePromise ? (

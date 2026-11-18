@@ -971,11 +971,11 @@
   height: auto;
   padding: 0;
 
-  .step.step {
+  .step {
     position: relative;
     top: auto;
     left: auto;
-    flex: 1 1 0;
+    // flex: 1 1 0;
     width: auto;
     min-width: 0;
     margin-left: -28px;
@@ -1003,3 +1003,47 @@
     .step.step.active { flex-grow: 2.5; }
   }
 }
+
+// redeem-upsell-step
+
+.fx-stepper-tabstyle.fx-redeem-upsell-step .codestep.active{
+width:18%;
+}
+
+.fx-stepper-tabstyle.fx-redeem-upsell-step .step.datestep, 
+.fx-stepper-tabstyle.fx-redeem-upsell-step .step.checkoutstep,
+.fx-stepper-tabstyle.fx-redeem-upsell-step .step.paymentstep{
+width:22%;
+}
+
+.fx-stepper-tabstyle.fx-redeem-upsell-step .step.upsellstep{
+width:31%;
+}
+
+.fx-stepper-tabstyle.fx-redeem-upsell-step .upsellstep.complete{
+margin-left: -30px;
+}
+.fx-stepper-tabstyle.fx-redeem-upsell-step .codestep.complete {
+    width:18%;
+}
+.fx-stepper-tabstyle.fx-redeem-upsell-step .datestep.complete {
+    width:22%;
+}
+.fx-stepper-tabstyle.fx-redeem-upsell-step .upsellstep.active {
+    width:33%;
+}
+.fx-stepper-tabstyle.fx-redeem-upsell-step .checkoutstep.active{
+    width:22%;
+}
+
+
+.fx-stepper-tabstyle.fx-redeem-upsell-step .upsellstep.complete{
+    width:32%;
+}
+.fx-stepper-tabstyle.fx-redeem-upsell-step .checkoutstep.complete{
+    width:20%;
+}
+.fx-stepper-tabstyle.fx-redeem-upsell-step .paymentstep.step{
+    width:20%;
+}
+
