@@ -1,26 +1,28 @@
 import { Suspense, lazy } from "react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 
-export default function App({ initialRoute = "/", ...props }) {
-  const Layout = lazy(() => import("./components/Layout"));
-  const Component = lazy(() => import("./pages/Component"));
-  const SgbmDateGift = lazy(() => import("./pages/SgbmDateGift"));
-  const Thankyou = lazy(() => import("./pages/Thankyou"));
-  const SgbmService = lazy(() => import("./pages/SgbmService"));
-  const SgbmCategory = lazy(() => import("./pages/SgbmCategory"));
-  const RedeemGift = lazy(() => import("./pages/RedeemGift"));
-  const RedeemThankyou = lazy(() => import("./pages/RedeemThankyou"));
-  const SgbmOpenDatePurchase = lazy(
-    () => import("./pages/SgbmOpenDatePurchase"),
-  );
-  const OpenDateThankyou = lazy(() => import("./pages/OpenDateThankyou"));
-  const SgbmCheckin = lazy(() => import("./pages/SgbmCheckin"));
-  const CheckinThankyou = lazy(() => import("./pages/CheckinThankyou"));
-  const SgbmWidget = lazy(() => import("./pages/SgbmWidget"));
-  const SgbmssOpenCalendar = lazy(() => import("./pages/SgbmssOpenCalendar"));
-  const SgbmSingleService = lazy(() => import("./pages/SgbmSingleService"));
-  const MultiServices = lazy(() => import("./pages/MultiServices"));
+// Declared at module scope: lazy() inside the component body creates new
+// component types on every render, which remounts the whole booking tree.
+const Layout = lazy(() => import("./components/Layout"));
+const Component = lazy(() => import("./pages/Component"));
+const SgbmDateGift = lazy(() => import("./pages/SgbmDateGift"));
+const Thankyou = lazy(() => import("./pages/Thankyou"));
+const SgbmService = lazy(() => import("./pages/SgbmService"));
+const SgbmCategory = lazy(() => import("./pages/SgbmCategory"));
+const RedeemGift = lazy(() => import("./pages/RedeemGift"));
+const RedeemThankyou = lazy(() => import("./pages/RedeemThankyou"));
+const SgbmOpenDatePurchase = lazy(
+  () => import("./pages/SgbmOpenDatePurchase"),
+);
+const OpenDateThankyou = lazy(() => import("./pages/OpenDateThankyou"));
+const SgbmCheckin = lazy(() => import("./pages/SgbmCheckin"));
+const CheckinThankyou = lazy(() => import("./pages/CheckinThankyou"));
+const SgbmWidget = lazy(() => import("./pages/SgbmWidget"));
+const SgbmssOpenCalendar = lazy(() => import("./pages/SgbmssOpenCalendar"));
+const SgbmSingleService = lazy(() => import("./pages/SgbmSingleService"));
+const MultiServices = lazy(() => import("./pages/MultiServices"));
 
+export default function App({ initialRoute = "/", ...props }) {
   return (
     <MemoryRouter initialEntries={[initialRoute]}>
       <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>

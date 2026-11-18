@@ -68,15 +68,28 @@ export default function Steps({ type = "date", ...props }) {
     getSettings();
   }, []);
 
-  if (type == "category" || type == "service") {
-    dispatch(setAll(true));
-  }
-  if (type == "service" && step == "datestep") {
-    dispatch(setStep("servicesstep"));
-  }
-  if (type == "date" && !gift && typeParam == "gift") {
-    dispatch(setGift(true));
-  }
+  // Store updates belong in effects, not in render (dispatching during render
+  // triggers React "cannot update while rendering" warnings and extra renders).
+  useEffect(() => {
+    if (type == "category" || type == "service") {
+      dispatch(setAll(true));
+    }
+  }, [dispatch, type]);
+
+  useEffect(() => {
+    if (type == "service" && step == "datestep") {
+      dispatch(setStep("servicesstep"));
+    }
+  }, [dispatch, type, step]);
+
+  // Honour a host-page ?type=gift once on mount only. Re-applying it on every
+  // render forced gift=true and made the Booking tab impossible to select.
+  useEffect(() => {
+    if (type == "date" && !gift && typeParam == "gift") {
+      dispatch(setGift(true));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   let datestepclass = "step datestep";
   let servicesstepclass = "step servicesstep";
   let extrastepclass = "step extrastep";

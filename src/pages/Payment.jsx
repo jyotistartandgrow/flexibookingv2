@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
@@ -26,6 +26,10 @@ export default function Payment(props) {
   const cart = useSelector((state) => state.step2.cart);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const couponcode = useSelector((state) => state.step1.couponcode);
+  const checkoutkey = useSelector((state) => state.step4.checkoutkey);
+  // Coupons are applied once per checkout session, not every time the user
+  // navigates back to the payment step.
+  const appliedCouponsFor = useRef(null);
   const isDesktop = useDeviceType();
   const stripe_key = useSelector((state) => state.step1.stripe_key);
   const topbar = useSelector((state) => state.step1.topbar);
@@ -38,13 +42,28 @@ export default function Payment(props) {
   }, [stripe_key]);
 
   useEffect(() => {
-    if (step == "paymentstep") {
-      auto_apply_coupon();
-    }
-  }, [step]);
+    if (step != "paymentstep") return;
+    const sessionKey = `${bookingkey}|${checkoutkey}`;
+    if (appliedCouponsFor.current === sessionKey) return;
+    appliedCouponsFor.current = sessionKey;
+    auto_apply_coupon();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, bookingkey, checkoutkey]);
 
   const auto_apply_coupon = async () => {
     dispatch(setLoading(true));
+    try {
+      await applyCoupons();
+    } catch (error) {
+      console.error("Unable to apply coupons.", error);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  const applyCoupons = async () => {
+    // Build each update on the latest cart, not the one captured at render.
+    let latestCart = cart;
     const { data } = await axiosInstance(
       `/auto-apply-coupon?booking_key=${bookingkey}`,
       {
@@ -52,13 +71,13 @@ export default function Payment(props) {
       },
     );
     if (data && data.status == 200 && data?.data.status) {
-      const updatedCart = {
-        ...cart,
+      latestCart = {
+        ...latestCart,
         total_formatted: data?.data?.total,
         discount: data?.data?.discount,
         subtotal: data?.data?.subtotal,
       };
-      dispatch(setCart(updatedCart));
+      dispatch(setCart(latestCart));
     }
     if (couponcode && couponcode.length > 0) {
       // apply coupons one by one
@@ -73,15 +92,14 @@ export default function Payment(props) {
           coupondata.status == 200 &&
           coupondata.data.status == true
         ) {
-          dispatch(
-            setCart({
-              ...cart,
-              total: coupondata?.data?.original_data?.amount,
-              total_formatted: coupondata?.data?.total,
-              discount: coupondata?.data?.coupon_discount,
-              subtotal: coupondata?.data?.original_data?.subtotal,
-            }),
-          );
+          latestCart = {
+            ...latestCart,
+            total: coupondata?.data?.original_data?.amount,
+            total_formatted: coupondata?.data?.total,
+            discount: coupondata?.data?.coupon_discount,
+            subtotal: coupondata?.data?.original_data?.subtotal,
+          };
+          dispatch(setCart(latestCart));
         } else {
           Swal.fire({
             iconHtml: `<img class="fx-coupon-close-icon" src="${closeicon}">`,
@@ -95,8 +113,6 @@ export default function Payment(props) {
         }
       }
     }
-
-    dispatch(setLoading(false));
   };
 
   return (

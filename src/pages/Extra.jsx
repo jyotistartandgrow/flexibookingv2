@@ -19,10 +19,10 @@ function ExtraProductTitle({ product }) {
 
   return (
     <h4 className="fx-extra-product-title">
-      <span>{product.extra_name} {product.owner_label}</span>
-      {typeLabel && (
-        <span className="fx-extra-type-badge">{typeLabel}</span>
-      )}
+      <span>
+        {product.extra_name} {product.owner_label}
+      </span>
+      {typeLabel && <span className="fx-extra-type-badge">{typeLabel}</span>}
     </h4>
   );
 }
@@ -65,7 +65,8 @@ export default function Extra(props) {
     : 0;
   const selectedServiceOptionDetails = cart?.service_option_details;
   const selectedBundleId = Number(cart.service?.[0]?.bundle_id) || 0;
-  const selectedVirtualServiceId = Number(cart.service?.[0]?.virtual_service_id) || 0;
+  const selectedVirtualServiceId =
+    Number(cart.service?.[0]?.virtual_service_id) || 0;
   const selectedService = cart.service?.find(
     (item) => String(item.id) === String(service),
   );
@@ -142,66 +143,97 @@ export default function Extra(props) {
     setQuantities(initQ);
     if (date && service) {
       setLoadingske(true);
+      const showExtraError = (title) =>
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          icon: "error",
+          title,
+        });
       (async () => {
-        const { data } = await axiosInstance(
-          `/extras?date=${moment(date).format(
-            "YYYY-MM-DD",
-          )}&service_id=${service}&all=${gift ? true : false}&bundle_id=${selectedBundleId}&time_slot=${encodeURIComponent(extrasTimeSlot)}&selected_virtual_service_id=${selectedVirtualServiceId}`,
-          {
-            method: "get",
-          },
-        );
-        if (data && data.status == 200) {
-          const extraList = Array.isArray(data.data)
-            ? data.data
-            : Array.isArray(data?.data?.extras)
-              ? data.data.extras
-              : [];
-
-          setProductsArr(
-            extraList.map((product) => ({
-              ...product,
-              extra_type: String(product.extra_type ?? "").trim() || "local",
-            })),
+        try {
+          const { data } = await axiosInstance(
+            `/extras?date=${moment(date).format(
+              "YYYY-MM-DD",
+            )}&service_id=${service}&all=${gift ? true : false}&bundle_id=${selectedBundleId}&time_slot=${encodeURIComponent(extrasTimeSlot)}&selected_virtual_service_id=${selectedVirtualServiceId}`,
+            {
+              method: "get",
+            },
           );
+          if (data && data.status == 200) {
+            const extraList = Array.isArray(data.data)
+              ? data.data
+              : Array.isArray(data?.data?.extras)
+                ? data.data.extras
+                : [];
 
-          if (extraList.length == 0) {
-            const addToCartRes = await axiosInstance.post(`/addtocart`, {
-              ...(!gift && cart.service?.[0]?.participant_guests?.length > 0
-                ? {
-                    capacity_line_key: cart.service[0].line_key,
-                    capacity_guests: cart.service[0].participant_guests,
-                  }
-                : {}),
-              service_id: service,
-              date: moment(date).format("YYYY-MM-DD"),
-              total_service_booking: totalServiceBooking,
-              time_slot: slot,
-              extra_svc_ids: null,
-              extra_types: null,
-              no_of_persons: 0,
-              gift,
-              selected_bundle_id: selectedBundleId,
-              selected_virtual_service_id: selectedVirtualServiceId || null,
-              selected_component_slots:
-                cart.service?.[0]?.selected_component_slots || [],
-              option_value_ids:
-                selectedServiceOptionId > 0 ? selectedServiceOptionId : null,
-            });
-            if (
-              addToCartRes?.data &&
-              addToCartRes.data.status == 200 &&
-              addToCartRes.data.data.booking_string
-            ) {
-              dispatch(setExtracapacity(0));
-              dispatch(setExtra(null));
-              dispatch(setBookingkey(addToCartRes.data.data.booking_string));
-              dispatch(setStep(gift && !openDatePurchase ? "customizestep" : "checkoutstep"));
-              dispatch(setLoading(false));
+            setProductsArr(
+              extraList.map((product) => ({
+                ...product,
+                extra_type: String(product.extra_type ?? "").trim() || "local",
+              })),
+            );
+
+            if (extraList.length == 0) {
+              const addToCartRes = await axiosInstance.post(`/addtocart`, {
+                ...(!gift && cart.service?.[0]?.participant_guests?.length > 0
+                  ? {
+                      capacity_line_key: cart.service[0].line_key,
+                      capacity_guests: cart.service[0].participant_guests,
+                    }
+                  : {}),
+                service_id: service,
+                date: moment(date).format("YYYY-MM-DD"),
+                total_service_booking: totalServiceBooking,
+                time_slot: slot,
+                extra_svc_ids: null,
+                extra_types: null,
+                no_of_persons: 0,
+                gift,
+                selected_bundle_id: selectedBundleId,
+                selected_virtual_service_id: selectedVirtualServiceId || null,
+                selected_component_slots:
+                  cart.service?.[0]?.selected_component_slots || [],
+                option_value_ids:
+                  selectedServiceOptionId > 0 ? selectedServiceOptionId : null,
+              });
+              if (
+                addToCartRes?.data &&
+                addToCartRes.data.status == 200 &&
+                addToCartRes.data.data.booking_string
+              ) {
+                dispatch(setExtracapacity(0));
+                dispatch(setExtra(null));
+                dispatch(setBookingkey(addToCartRes.data.data.booking_string));
+                dispatch(
+                  setStep(
+                    gift && !openDatePurchase
+                      ? "customizestep"
+                      : "checkoutstep",
+                  ),
+                );
+                dispatch(setLoading(false));
+              } else {
+                showExtraError(
+                  addToCartRes?.data?.message ??
+                    "There is some error , please try again",
+                );
+              }
             }
+          } else {
+            showExtraError(data?.message || "Unable to load extras");
           }
+        } catch (error) {
+          console.error("Unable to load extras.", error);
+          showExtraError(
+            error?.data?.message || "Unable to load extras, please try again",
+          );
+        } finally {
+          setLoadingske(false);
+          dispatch(setLoading(false));
         }
-        setLoadingske(false);
       })();
     }
   }, [
@@ -405,7 +437,9 @@ export default function Extra(props) {
       dispatch(setExtracapacity(bookParam));
       dispatch(setExtra(extraIdParam));
       dispatch(setBookingkey(data.data.booking_string));
-      dispatch(setStep(gift && !openDatePurchase ? "customizestep" : "checkoutstep"));
+      dispatch(
+        setStep(gift && !openDatePurchase ? "customizestep" : "checkoutstep"),
+      );
       dispatch(setLoading(false));
     } else {
       Swal.fire({

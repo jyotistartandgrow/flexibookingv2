@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axiosInstance from "../Utils/Interceptor";
 import moment from "moment";
 import { setDate, setGift, setLoading } from "../store/step1Slice";
@@ -13,7 +13,16 @@ export default function ServiceTab(props) {
   const [errorMessage, setErrorMessage] = useState("");
   const [popupRequest, setPopupRequest] = useState(0);
   const serviceid = String(props.service_id ?? "").trim();
-  const bundleid = Number(props.bundle_id) > 0 ? Number(props.bundle_id) : 0;
+  const virtualserviceid =
+    Number(props.virtual_service_id) > 0 ? Number(props.virtual_service_id) : 0;
+  // A virtual service is never a bundle: when virtual_service_id is set, ignore bundle_id.
+  const bundleid =
+    virtualserviceid > 0
+      ? 0
+      : Number(props.bundle_id) > 0
+        ? Number(props.bundle_id)
+        : 0;
+  const step = useSelector((state) => state.step1.step);
 
   useEffect(() => {
     if (!serviceid) {
@@ -27,7 +36,7 @@ export default function ServiceTab(props) {
     setErrorMessage("");
     const getServiceDetails = (requestDate) =>
       axiosInstance.get(
-        `/service-details?date=${requestDate}&service_id=${encodeURIComponent(serviceid)}&all=false&is_bundle=${bundleid > 0}&bundle_id=${bundleid}`,
+        `/service-details?date=${requestDate}&service_id=${encodeURIComponent(serviceid)}${virtualserviceid > 0 ? `&virtual_service_id=${virtualserviceid}` : ""}&all=false&is_bundle=${bundleid > 0}&bundle_id=${bundleid}`,
       );
 
     (async () => {
@@ -81,7 +90,7 @@ export default function ServiceTab(props) {
     return () => {
       active = false;
     };
-  }, [dispatch, serviceid, bundleid]);
+  }, [dispatch, serviceid, bundleid, virtualserviceid]);
 
   const openServicePopup = (isGift) => {
     if (!serviceDetails) return;
@@ -94,10 +103,12 @@ export default function ServiceTab(props) {
   const description =
     serviceDetails?.svc_long_desc || serviceDetails?.svc_short_desc;
   const duration = serviceDetails?.duration;
-
   return (
     <>
-      <div className="fx-single-service-page">
+      <div
+        className="fx-single-service-page"
+        style={{ display: step === "datestep" ? "block" : "none" }}
+      >
         {props.stepsVisibility?.step_1_title_visible == "true" && (
           <h1
             className="fx-all-main-heading"
@@ -183,26 +194,27 @@ export default function ServiceTab(props) {
             )}
 
             <div className="fx-service-card__actions">
-              {props.showGiftButton == "true" && serviceDetails?.is_gift_allowed === true && (
-                <button
-                  className="fx-service-card__button fx-service-card__button--gift"
-                  type="button"
-                  disabled={!serviceDetails}
-                  onClick={() => openServicePopup(true)}
-                >
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <rect
-                      x="3.5"
-                      y="9"
-                      width="17"
-                      height="11.5"
-                      rx="1.5"
-                    ></rect>
-                    <path d="M2.8 6h18.4v3H2.8zM12 6v14.5M12 6H8.8a2.2 2.2 0 1 1 2.2-2.2V6Zm0 0h3.2a2.2 2.2 0 1 0-2.2-2.2V6Z"></path>
-                  </svg>
-                  Buy as Gift
-                </button>
-              )}
+              {props.showGiftButton == "true" &&
+                serviceDetails?.is_gift_allowed === true && (
+                  <button
+                    className="fx-service-card__button fx-service-card__button--gift"
+                    type="button"
+                    disabled={!serviceDetails}
+                    onClick={() => openServicePopup(true)}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect
+                        x="3.5"
+                        y="9"
+                        width="17"
+                        height="11.5"
+                        rx="1.5"
+                      ></rect>
+                      <path d="M2.8 6h18.4v3H2.8zM12 6v14.5M12 6H8.8a2.2 2.2 0 1 1 2.2-2.2V6Zm0 0h3.2a2.2 2.2 0 1 0-2.2-2.2V6Z"></path>
+                    </svg>
+                    Buy as Gift
+                  </button>
+                )}
               {props.showProceedButton == "true" && (
                 <button
                   className="fx-service-card__button fx-service-card__button--book"
@@ -225,6 +237,7 @@ export default function ServiceTab(props) {
         popupOnly
         requestedServiceId={props.service_id}
         requestedBundleId={bundleid}
+        requestedVirtualServiceId={virtualserviceid}
         openRequest={popupRequest}
       />
     </>

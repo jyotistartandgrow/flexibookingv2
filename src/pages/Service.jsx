@@ -308,7 +308,7 @@ export default function Service(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, step, serviceid, category, bundleId, virtualServiceId, props.popupOnly]);
 
-  const fetchProductsByDate = async (selectedDate) => {
+  const fetchProductsByDateRequest = async (selectedDate) => {
     setLoadingske(true);
     let allService = gift ? true : false;
     allService = all ? true : allService;
@@ -348,7 +348,7 @@ export default function Service(props) {
     servicedetail(product.id, product.bundle_id ?? 0, getVirtualServiceId(product));
   };
 
-  const servicedetail = async (id, selectedBundleId = 0, selectedVirtualId = 0) => {
+  const servicedetailRequest = async (id, selectedBundleId = 0, selectedVirtualId = 0) => {
     participantDefaultsKey.current = null;
     setShowParticipantStep(false);
     setParticipants({});
@@ -520,10 +520,21 @@ export default function Service(props) {
       } else {
         dispatch(setLoading(false));
       }
+    } else {
+      setDetailsPending(false);
+      dispatch(setLoading(false));
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "error",
+        title: data?.message || "Unable to load service details",
+      });
     }
   };
 
-  const getslotavailabilitycalendar = async (
+  const getslotavailabilitycalendarRequest = async (
     monthYear,
     id,
     selectedBundleId = bundleId,
@@ -548,13 +559,14 @@ export default function Service(props) {
       setCalendarslots(calendarDays);
       calendarDays.forEach((dateItem) => {
         if (dateItem.is_bookable === false) {
-          const dateObj = new Date(dateItem.date);
-          datedarr.push(dateObj);
+          // moment parses "YYYY-MM-DD" as local midnight; new Date() would use UTC
+          // and shift the day for users west of UTC.
+          datedarr.push(moment(dateItem.date).toDate());
         }
       });
       setDisabledDates(datedarr);
-      dispatch(setLoading(false));
     }
+    dispatch(setLoading(false));
   };
 
   useEffect(() => {
@@ -1117,7 +1129,7 @@ export default function Service(props) {
     }
   };
 
-  const bookservice = async () => {
+  const bookserviceRequest = async () => {
     if (!canContinueService) {
       Swal.fire({
         toast: true,
@@ -1323,7 +1335,7 @@ export default function Service(props) {
     );
   };
 
-  const giftbookservice = async () => {
+  const giftbookserviceRequest = async () => {
     if (giftQuantity < 1) {
       Swal.fire({
         toast: true,
@@ -1356,7 +1368,7 @@ export default function Service(props) {
     hasExtra();
   };
 
-  const hasExtra = async () => {
+  const hasExtraRequest = async () => {
     const selectedComponentSlot = selectedBundleComponentSlots.find(
       (component) => String(component.service_id) === String(serviceid),
     );
@@ -1392,7 +1404,7 @@ export default function Service(props) {
     }
   };
 
-  const addtocart = async () => {
+  const addtocartRequest = async () => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/addtocart`, {
       ...(!gift && participantSelection.guests.length > 0
@@ -1433,6 +1445,37 @@ export default function Service(props) {
       dispatch(setLoading(false));
     }
   };
+
+  // Every API step below can fail (network, 5xx, nonce refresh failure). Without a
+  // guard the rejected promise leaves the fullscreen loader on forever.
+  const guardRequest =
+    (request, fallbackMessage) =>
+    async (...args) => {
+      try {
+        return await request(...args);
+      } catch (error) {
+        console.error(fallbackMessage, error);
+        setLoadingske(false);
+        setDetailsPending(false);
+        dispatch(setLoading(false));
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          icon: "error",
+          title: error?.data?.message || error?.response?.data?.message || fallbackMessage,
+        });
+        return undefined;
+      }
+    };
+  const fetchProductsByDate = guardRequest(fetchProductsByDateRequest, "Unable to load services for the selected date");
+  const servicedetail = guardRequest(servicedetailRequest, "Unable to load service details");
+  const getslotavailabilitycalendar = guardRequest(getslotavailabilitycalendarRequest, "Unable to load slot availability");
+  const bookservice = guardRequest(bookserviceRequest, "Unable to calculate the price");
+  const giftbookservice = guardRequest(giftbookserviceRequest, "Unable to calculate the price");
+  const hasExtra = guardRequest(hasExtraRequest, "Failed to fetch extras");
+  const addtocart = guardRequest(addtocartRequest, "Unable to add the service to the cart");
 
   const displayedProducts =
     selectedCategory === "all"

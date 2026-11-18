@@ -19,11 +19,13 @@ function ensureCleanSessionForFlow(flowId) {
   const previousFlow = sessionStorage.getItem(FLOW_STORAGE_KEY);
 
   // Always start with a clean booking session on first load and whenever flow changes.
-  if (!previousFlow || previousFlow !== flowId) {
+  const isNewSession = !previousFlow || previousFlow !== flowId;
+  if (isNewSession) {
     resetBookingSession();
   }
 
   sessionStorage.setItem(FLOW_STORAGE_KEY, flowId);
+  return isNewSession;
 }
 
 // Mount React only when DOM is ready
@@ -51,10 +53,11 @@ function mountReactApp(id, initialRoute) {
 
   if (!el) return;
 
-  ensureCleanSessionForFlow(id);
-  store.dispatch(setGift(id === "react_sgbm_starting_gift"));
-
-  console.log(el.dataset);
+  // Only seed the gift flag for a fresh session. On a reload of the same flow
+  // the persisted value (e.g. the user switched to the Gift tab) must survive.
+  if (ensureCleanSessionForFlow(id)) {
+    store.dispatch(setGift(id === "react_sgbm_starting_gift"));
+  }
 
   const props = {
     topbar: el.dataset.topbar || "true",
@@ -66,6 +69,7 @@ function mountReactApp(id, initialRoute) {
     calendarInfo: el.dataset.calendarInfo || "price",
     service_id: el.dataset.serviceId || 1,
     bundle_id: el.dataset.bundleId || 0,
+    virtual_service_id: el.dataset.virtualServiceId || 0,
     categoryLabelVisibility: el.dataset.categoryLabelVisibility || "true",
     termsAndConditionLink: el.dataset.termsAndConditionLink || "",
     secondaryColor: el.dataset.secondaryColor,
@@ -94,7 +98,6 @@ function mountReactApp(id, initialRoute) {
       props.secondaryColor,
     );
   }
-  console.log("Props from data attributes:", props);
   // Prevent double mounting (important in WP)
   if (el.dataset.mounted) return;
   el.dataset.mounted = "true";

@@ -4,7 +4,13 @@ import { Sidebar } from "primereact/sidebar";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import { addLocale } from "primereact/api";
+import moment from "moment";
 import useDeviceType from "../Utils/useDeviceType";
+
+// Store dates arrive as "YYYY-MM-DD" strings, Date objects or ISO strings.
+// new Date("YYYY-MM-DD") parses as UTC midnight and shows the previous day west
+// of UTC, so parse through moment (local midnight) instead.
+const toLocalDate = (value) => (value ? moment(value).toDate() : null);
 
 addLocale("en-monday", {
   firstDayOfWeek: 1, // Monday
@@ -26,7 +32,7 @@ const CalendarPage = ({
   const isDesktop = useDeviceType();
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [viewDate, setViewDate] = useState(() => {
-    if (value) return new Date(value);
+    if (value) return toLocalDate(value);
     return new Date();
   });
   const calendarRef = useRef(null);
@@ -76,7 +82,6 @@ const CalendarPage = ({
         const monthNumber = month + 1; // 1-12 (for display/API)
         const year = e.value.getFullYear();
 
-        console.log({ month, monthNumber, year, value: e.value });
         handleMonthChange({
           month: monthNumber,
           year: year,
@@ -108,12 +113,12 @@ const CalendarPage = ({
   // Update viewDate when value prop changes
   useEffect(() => {
     if (value) {
-      setViewDate(new Date(value));
+      setViewDate(toLocalDate(value));
     }
   }, [value]);
 
   const formattedValue = value
-    ? new Date(value).toLocaleDateString("en-GB").replace(/\//g, "/")
+    ? toLocalDate(value).toLocaleDateString("en-GB").replace(/\//g, "/")
     : "";
 
   const sharedCalendarProps = {
@@ -148,7 +153,7 @@ const CalendarPage = ({
           style={{ height: "auto" }}
         >
           <Calendar
-            value={value ? new Date(value) : null}
+            value={value ? toLocalDate(value) : null}
             onChange={(e) => {
               onChange(e);
               setSidebarVisible(false);
@@ -164,7 +169,7 @@ const CalendarPage = ({
 
   return (
     <Calendar
-      value={value ? new Date(value) : null}
+      value={value ? toLocalDate(value) : null}
       onChange={onChange}
       dateTemplate={dateTemplate}
       className={className}
