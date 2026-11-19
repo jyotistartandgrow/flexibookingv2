@@ -566,7 +566,7 @@ export default function Customize() {
         </section>
 
         <aside className="fx-preview-column">
-          <h1>Live Preview</h1>
+          <h1 className="fx-right-box-heading">Live Preview</h1>
           <PreviewCard active={active} font={previewFontFamily} firstName={receiverInfo.firstName} lastName={receiverInfo.lastName} message={message} />
         </aside>
 
