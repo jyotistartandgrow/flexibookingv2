@@ -1,637 +1,711 @@
 /* Scoped Styles for Redemption Voucher Container */
 .redemption-Voucher-services-box {
-    width: 100%;
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
-    padding: 0 0 8px;
+  width: 100%;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  padding: 0 0 8px;
 }
 
 .redemption-Voucher-services-box .fx-booking-container {
-    width: 100%;
-    max-width: 850px;
-    padding: 0;
+  width: 100%;
+  max-width: 850px;
+  padding: 0;
 }
 
 .redemption-Voucher-services-box .fx-redeem-slot-heading {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .redemption-Voucher-services-box .fx-redeem-slot-heading h1 {
-    margin: 0 0 4px;
-    color: var(--darkgrey);
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 1.3;
-    width: 100%;
+  margin: 0 0 4px;
+  color: var(--darkgrey);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  width: 100%;
 }
 
 .redemption-Voucher-services-box .fx-redeem-slot-heading p {
-    margin: 0;
-    color: var(--grey);
-    font-size: 14px;
-    line-height: 1.45;
+  margin: 0;
+  color: var(--grey);
+  font-size: 14px;
+  line-height: 1.45;
 }
 
 .redemption-Voucher-services-box .fx-section-group {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .redemption-Voucher-services-box .fx-section-title {
-    margin: 0 0 10px;
-    color: var(--darkgrey);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+  margin: 0 0 10px;
+  color: var(--darkgrey);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .redemption-Voucher-services-box .fx-redeem-item-card {
-    display: flex;
-    gap: 14px;
-    margin-bottom: 10px;
-    padding: 12px;
-    overflow: hidden;
-    color: var(--darkgrey);
-    border: 1px solid var(--new-border-color);
-    border-radius: var(--fx-border-medium-radius);
-    background: var(--white);
+  display: flex;
+  gap: 14px;
+  margin-bottom: 10px;
+  padding: 12px;
+  overflow: hidden;
+  color: var(--darkgrey);
+  border: 1px solid var(--new-border-color);
+  border-radius: var(--fx-border-medium-radius);
+  background: var(--white);
 }
 
 .redemption-Voucher-services-box .fx-redeem-item-card:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .redemption-Voucher-services-box .fx-redeem-item-media {
-    position: relative;
-    flex: 0 0 88px;
-    width: 88px;
-    height: 72px;
-    overflow: hidden;
-    border-radius: 6px;
-    background: color-mix(in srgb, var(--primary-color) 8%, white);
+  position: relative;
+  flex: 0 0 88px;
+  width: 88px;
+  height: 72px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--primary-color) 8%, white);
 }
 
 .redemption-Voucher-services-box .fx-redeem-item-media img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .redemption-Voucher-services-box .fx-redeem-item-fallback {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--primary-color);
 }
 
 .redemption-Voucher-services-box .fx-redeem-item-category {
-    position: absolute;
-    left: 6px;
-    top: 6px;
-    max-width: calc(100% - 12px);
-    padding: 2px 6px;
-    overflow: hidden;
-    color: var(--darkgrey);
-    border-radius: 4px;
-    background: var(--white);
-    font-size: 10px;
-    font-weight: 600;
-    line-height: 1.3;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  max-width: calc(100% - 12px);
+  padding: 2px 6px;
+  overflow: hidden;
+  color: var(--darkgrey);
+  border-radius: 4px;
+  background: var(--white);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .redemption-Voucher-services-box .fx-redeem-item-copy {
-    display: flex;
-    min-width: 0;
-    flex: 1;
-    flex-direction: column;
-    justify-content: center;
-    gap: 4px;
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
 }
 
 .redemption-Voucher-services-box .fx-redeem-item-copy h3 {
-    margin: 0;
-    color: var(--darkgrey);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.3;
+  margin: 0;
+  color: var(--darkgrey);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .redemption-Voucher-services-box .fx-redeem-item-desc,
 .redemption-Voucher-services-box .fx-redeem-item-desc p {
-    margin: 0;
-    color: var(--grey);
-    font-size: 13px;
-    line-height: 1.45;
+  margin: 0;
+  color: var(--grey);
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .redemption-Voucher-services-box .fx-redeem-item-desc {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .redemption-Voucher-services-box .fx-scheduling-panel {
-    margin-bottom: 20px;
-    padding: 20px;
-    border: 1px solid var(--new-border-color);
-    border-radius: var(--fx-border-medium-radius);
-    background: var(--white);
-    max-height: 400px;
-    overflow: auto;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid var(--new-border-color);
+  border-radius: var(--fx-border-medium-radius);
+  background: var(--white);
+  max-height: 400px;
+  overflow: auto;
 }
 
 .redemption-Voucher-services-box .fx-label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--darkgrey);
-    font-size: 14px;
-    font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+  color: var(--darkgrey);
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .redemption-Voucher-services-box .fx-input-with-icon {
-    position: relative;
-    max-width: 100%;
+  position: relative;
+  max-width: 100%;
 }
 
 .redemption-Voucher-services-box .fx-input-with-icon .p-calendar,
 .redemption-Voucher-services-box .fx-input-with-icon input,
-.redemption-Voucher-services-box .fx-input-with-icon input.p-inputtext.p-component {
-    width: 100%;
-    max-width: 100%;
+.redemption-Voucher-services-box
+  .fx-input-with-icon
+  input.p-inputtext.p-component {
+  width: 100%;
+  max-width: 100%;
 }
 
-.redemption-Voucher-services-box .fx-input-with-icon input.p-inputtext.p-component {
-    height: 48px;
-    padding: 12px 44px 12px 14px;
-    border: 1px solid var(--new-border-color);
-    border-radius: var(--fx-border-medium-radius);
-    background: var(--white);
-    color: var(--darkgrey);
-    font-size: 15px;
-    box-shadow: none;
+.redemption-Voucher-services-box
+  .fx-input-with-icon
+  input.p-inputtext.p-component {
+  height: 48px;
+  padding: 12px 44px 12px 14px;
+  border: 1px solid var(--new-border-color);
+  border-radius: var(--fx-border-medium-radius);
+  background: var(--white);
+  color: var(--darkgrey);
+  font-size: 15px;
+  box-shadow: none;
 }
 
-.redemption-Voucher-services-box .fx-input-with-icon input.p-inputtext.p-component:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 14%, transparent);
+.redemption-Voucher-services-box
+  .fx-input-with-icon
+  input.p-inputtext.p-component:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary-color) 14%, transparent);
 }
 
 .redemption-Voucher-services-box .fx-icon {
-    position: absolute;
-    top: 50%;
-    right: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary-color);
-    pointer-events: none;
-    transform: translateY(-50%);
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  pointer-events: none;
+  transform: translateY(-50%);
 }
 
 .redemption-Voucher-services-box .fx-slot-block {
-    margin-top: 18px;
+  margin-top: 18px;
 }
 
 .redemption-Voucher-services-box .fx-availability-note {
-    margin: 0 0 12px;
-    color: var(--grey);
-    font-size: 14px;
-    line-height: 1.45;
-    margin-top: 10px;
+  margin: 0 0 12px;
+  color: var(--grey);
+  font-size: 14px;
+  line-height: 1.45;
+  margin-top: 10px;
 }
 
 .redemption-Voucher-services-box .fx-availability-note strong {
-    color: var(--darkgrey);
-    font-weight: 700;
+  color: var(--darkgrey);
+  font-weight: 700;
 }
 
 .redemption-Voucher-services-box .fx-availability-empty {
-    margin: 0;
-    padding: 14px 16px;
-    border: 1px dashed var(--new-border-color);
-    border-radius: var(--fx-border-medium-radius);
-    background: var(--greylight-bg);
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px dashed var(--new-border-color);
+  border-radius: var(--fx-border-medium-radius);
+  background: var(--greylight-bg);
 }
 
 .redemption-Voucher-services-box .fx-time-selector-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .redemption-Voucher-services-box .fx-time-btn,
 .fx-booking .redemption-Voucher-services-box .fx-time-btn,
-.fx-booking #fx-tab_nav div.selected .redemption-Voucher-services-box .fx-time-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: auto;
-    min-width: 48%;
-    min-height: 44px;
-    height: auto;
-    margin: 0;
-    padding: 10px 14px;
-    color: var(--darkgrey);
-    border: 1px solid var(--new-border-color);
-    border-radius: var(--fx-border-medium-radius);
-    background: var(--white);
-    box-shadow: none;
-    font-family: inherit;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.3;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+.fx-booking
+  #fx-tab_nav
+  div.selected
+  .redemption-Voucher-services-box
+  .fx-time-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  min-width: 48%;
+  min-height: 44px;
+  height: auto;
+  margin: 0;
+  padding: 10px 14px;
+  color: var(--darkgrey);
+  border: 1px solid var(--new-border-color);
+  border-radius: var(--fx-border-medium-radius);
+  background: var(--white);
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .redemption-Voucher-services-box .fx-time-btn:hover,
 .fx-booking .redemption-Voucher-services-box .fx-time-btn:hover {
-    color: var(--darkgrey);
-    border-color: color-mix(in srgb, var(--primary-color) 40%, var(--new-border-color));
-    background: var(--greylight-bg);
+  color: var(--darkgrey);
+  border-color: color-mix(
+    in srgb,
+    var(--primary-color) 40%,
+    var(--new-border-color)
+  );
+  background: var(--greylight-bg);
 }
 
 .redemption-Voucher-services-box .fx-time-btn.fx-selected,
 .fx-booking .redemption-Voucher-services-box .fx-time-btn.fx-selected,
 .fx-booking .redemption-Voucher-services-box .fx-time-btn.fx-selected:hover {
-    color: var(--darkgrey);
-    border-color: var(--primary-color);
-    background: color-mix(in srgb, var(--primary-color) 8%, white);
-    box-shadow: 0 0 0 1px var(--primary-color);
+  color: var(--darkgrey);
+  border-color: var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 8%, white);
+  box-shadow: 0 0 0 1px var(--primary-color);
 }
 
 .redemption-Voucher-services-box .fx-time-btn:focus,
 .redemption-Voucher-services-box .fx-time-btn:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 .redemption-Voucher-services-box .fx-footer-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .redemption-Voucher-services-box .fx-footer-primary-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .redemption-Voucher-services-box .fx-btn-back,
 .fx-booking .redemption-Voucher-services-box .fx-btn-back,
-.fx-booking #fx-tab_nav div.selected .redemption-Voucher-services-box .fx-btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    width: auto;
-    min-height: 44px;
-    height: auto;
-    margin: 0;
-    padding: 8px 4px;
-    color: var(--grey);
-    border: none;
-    border-radius: var(--fx-border-medium-radius);
-    background: transparent;
-    box-shadow: none;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
+.fx-booking
+  #fx-tab_nav
+  div.selected
+  .redemption-Voucher-services-box
+  .fx-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+  min-height: 44px;
+  height: auto;
+  margin: 0;
+  padding: 8px 4px;
+  color: var(--grey);
+  border: none;
+  border-radius: var(--fx-border-medium-radius);
+  background: transparent;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .redemption-Voucher-services-box .fx-btn-back:hover,
 .fx-booking .redemption-Voucher-services-box .fx-btn-back:hover {
-    color: var(--darkgrey);
-    background: transparent;
+  color: var(--darkgrey);
+  background: transparent;
 }
 
 .redemption-Voucher-services-box .fx-btn-secondary,
 .fx-booking .redemption-Voucher-services-box .fx-btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: auto;
-    min-height: 44px;
-    height: auto;
-    margin: 0;
-    padding: 10px 18px;
-    color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-    border-radius: 44px;
-    background: var(--white);
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-height: 44px;
+  height: auto;
+  margin: 0;
+  padding: 10px 18px;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 44px;
+  background: var(--white);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .redemption-Voucher-services-box .fx-btn-secondary:hover,
 .fx-booking .redemption-Voucher-services-box .fx-btn-secondary:hover {
-    color: var(--primary-color);
-    background: color-mix(in srgb, var(--primary-color) 6%, white);
+  color: var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 6%, white);
 }
 
 .fx-booking .redemption-Voucher-services-box .btn-primary.btn-primary-countinu,
 .fx-footer-primary-actions .btn-primary-countinu.fx-btn-disable,
 .fx-footer-primary-actions .btn-primary-countinu.btn-primary {
-    width: auto;
-    min-height: 44px;
-    height: auto;
-    margin-top: 0;
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 600;
+  width: auto;
+  min-height: 44px;
+  height: auto;
+  margin-top: 0;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .fx-booking .redemption-Voucher-services-box .fx-btn-secondary.fx-btn-disable,
-.fx-booking .redemption-Voucher-services-box .fx-btn-secondary.fx-btn-disable:hover,
+.fx-booking
+  .redemption-Voucher-services-box
+  .fx-btn-secondary.fx-btn-disable:hover,
 .fx-booking .redemption-Voucher-services-box .btn-primary.fx-btn-disable,
 .fx-booking .redemption-Voucher-services-box .btn-primary.fx-btn-disable:hover {
-    color: #6b7280;
-    border-color: #e5e7eb;
-    background: #e8ebf0;
-    box-shadow: none;
-    cursor: not-allowed;
-    opacity: 1;
+  color: #6b7280;
+  border-color: #e5e7eb;
+  background: #e8ebf0;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 1;
 }
 
+/* Scoped Container */
+.fx-voucher-purchase-success-page {
+  width: 100%;
+  max-width: 640px;
+  margin: 20px;
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 16px;
+  padding: 60px 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
+  text-align: center;
+  margin: auto;
+}
 
-        /* Scoped Container */
-        .fx-voucher-purchase-success-page {
-            width: 100%;
-            max-width: 640px;
-            margin: 20px;
-            background: #ffffff;
-            border: 1px solid #f0f0f0;
-            border-radius: 16px;
-            padding: 60px 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
-            text-align: center;
-            margin: auto;
-        }
+/* All child classes prefixed with parent class in CSS */
+.fx-voucher-purchase-success-page .fx-status-icon {
+  width: 64px;
+  height: 64px;
+  background-color: #e9faf0;
+  color: #27c06d;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
 
-        /* All child classes prefixed with parent class in CSS */
-        .fx-voucher-purchase-success-page .fx-status-icon {
-            width: 64px;
-            height: 64px;
-            background-color: #e9faf0;
-            color: #27c06d;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-        }
+.fx-voucher-purchase-success-page .fx-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #1a202c;
+  margin: 0 0 12px 0;
+  text-align: center;
+  width: 100%;
+}
 
-        .fx-voucher-purchase-success-page .fx-title {
-            font-size: 32px;
-            font-weight: 800;
-            color: #1a202c;
-            margin: 0 0 12px 0;
-            text-align: center;
-            width: 100%;
-        }
+.fx-voucher-purchase-success-page .fx-message {
+  font-size: 14px;
+  color: #718096;
+  line-height: 1.6;
+  max-width: 440px;
+  margin: 0 auto 40px auto;
+}
 
-        .fx-voucher-purchase-success-page .fx-message {
-            font-size: 14px;
-            color: #718096;
-            line-height: 1.6;
-            max-width: 440px;
-            margin: 0 auto 40px auto;
-        }
+.fx-voucher-purchase-success-page .fx-voucher-box {
+  background-color: #f4f7fa;
+  border: 1px solid #edf2f7;
+  border-radius: 12px;
+  padding: 40px 20px;
+  margin-bottom: 24px;
+}
 
-        .fx-voucher-purchase-success-page .fx-voucher-box {
-            background-color: #f4f7fa;
-            border: 1px solid #edf2f7;
-            border-radius: 12px;
-            padding: 40px 20px;
-            margin-bottom: 24px;
-        }
+.fx-voucher-purchase-success-page .fx-voucher-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #4a5568;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 12px;
+}
 
-        .fx-voucher-purchase-success-page .fx-voucher-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: #4a5568;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            display: block;
-            margin-bottom: 12px;
-        }
+.fx-voucher-purchase-success-page .fx-voucher-code {
+  font-size: 34px;
+  font-weight: 700;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  letter-spacing: 0.05em;
+}
 
-        .fx-voucher-purchase-success-page .fx-voucher-code {
-            font-size: 34px;
-            font-weight: 700;
-            color: #2d3748;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            letter-spacing: 0.05em;
-        }
+.fx-voucher-purchase-success-page .fx-copy-btn {
+  background: none;
+  border: none;
+  color: #a0aec0;
+  cursor: pointer;
+  padding: 0;
+  font-size: 30px;
+  margin-top: -9px;
+}
 
-        .fx-voucher-purchase-success-page .fx-copy-btn {
-            background: none;
-            border: none;
-            color: #a0aec0;
-            cursor: pointer;
-            padding: 0;
-            font-size: 30px;
-            margin-top: -9px;
-        }
+.fx-voucher-purchase-success-page .fx-summary-card {
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: left;
+  margin-bottom: 40px;
+}
 
-        .fx-voucher-purchase-success-page .fx-summary-card {
-            border: 1px solid #f1f5f9;
-            border-radius: 12px;
-            padding: 30px;
-            text-align: left;
-            margin-bottom: 40px;
-        }
+.fx-voucher-purchase-success-page .fx-summary-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 24px 0;
+}
 
-        .fx-voucher-purchase-success-page .fx-summary-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1a202c;
-            margin: 0 0 24px 0;
-        }
+.fx-voucher-purchase-success-page .fx-item-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
 
-        .fx-voucher-purchase-success-page .fx-item-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 18px;
-        }
+.fx-voucher-purchase-success-page .fx-item-info p {
+  margin: 0;
+}
+.fx-voucher-purchase-success-page .fx-item-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748;
+}
+.fx-voucher-purchase-success-page .fx-item-meta {
+  font-size: 12px;
+  color: #a0aec0;
+  margin-top: 2px !important;
+}
+.fx-voucher-purchase-success-page .fx-item-price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a202c;
+}
 
-        .fx-voucher-purchase-success-page .fx-item-info p { margin: 0; }
-        .fx-voucher-purchase-success-page .fx-item-name { font-size: 14px; font-weight: 600; color: #2d3748; }
-        .fx-voucher-purchase-success-page .fx-item-meta { font-size: 12px; color: #a0aec0; margin-top: 2px !important; }
-        .fx-voucher-purchase-success-page .fx-item-price { font-size: 14px; font-weight: 600; color: #1a202c; }
+.fx-voucher-purchase-success-page .fx-divider {
+  border: none;
+  border-top: 1px dashed #cbd5e0;
+  margin: 20px 0;
+}
 
-        .fx-voucher-purchase-success-page .fx-divider {
-            border: none;
-            border-top: 1px dashed #cbd5e0;
-            margin: 20px 0;
-        }
+.fx-voucher-purchase-success-page .fx-calc-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #718096;
+}
 
-        .fx-voucher-purchase-success-page .fx-calc-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: #718096;
-        }
+.fx-voucher-purchase-success-page .fx-bold-value {
+  font-weight: 600;
+  color: #1a202c;
+}
+.fx-voucher-purchase-success-page .fx-discount {
+  color: #38a169;
+  font-weight: 600;
+}
 
-        .fx-voucher-purchase-success-page .fx-bold-value { font-weight: 600; color: #1a202c; }
-        .fx-voucher-purchase-success-page .fx-discount { color: #38a169; font-weight: 600; }
+.fx-voucher-purchase-success-page .fx-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #f1f5f9;
+}
 
-        .fx-voucher-purchase-success-page .fx-total-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 1px solid #f1f5f9;
-        }
+.fx-voucher-purchase-success-page .fx-total-label {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a202c;
+}
+.fx-voucher-purchase-success-page .fx-grand-total {
+  font-size: 26px;
+  font-weight: 800;
+  color: #032060;
+  line-height: 1;
+}
+.fx-voucher-purchase-success-page .fx-payment-meta {
+  font-size: 10px;
+  color: #a0aec0;
+  text-transform: uppercase;
+  margin-top: 6px;
+  text-align: right;
+}
 
-        .fx-voucher-purchase-success-page .fx-total-label { font-size: 18px; font-weight: 800; color: #1a202c; }
-        .fx-voucher-purchase-success-page .fx-grand-total { font-size: 26px; font-weight: 800; color: #032060; line-height: 1; }
-        .fx-voucher-purchase-success-page .fx-payment-meta { font-size: 10px; color: #a0aec0; text-transform: uppercase; margin-top: 6px; text-align: right; }
+.fx-voucher-purchase-success-page .fx-btn-group {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
 
-        .fx-voucher-purchase-success-page .fx-btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
+.fx-voucher-purchase-success-page .fx-btn {
+  padding: 14px 30px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.2s;
+}
 
-        .fx-voucher-purchase-success-page .fx-btn {
-            padding: 14px 30px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: opacity 0.2s;
-        }
+.fx-voucher-purchase-success-page .fx-btn-primary {
+  background-color: #032060;
+  color: #ffffff;
+  border: none;
+}
+.fx-voucher-purchase-success-page .fx-btn-secondary {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #4a5568;
+}
 
-        .fx-voucher-purchase-success-page .fx-btn-primary { background-color: #032060; color: #ffffff; border: none; }
-        .fx-voucher-purchase-success-page .fx-btn-secondary { background-color: #ffffff; border: 1px solid #e2e8f0; color: #4a5568; }
+.fx-voucher-purchase-success-page .fx-footer-separator {
+  border: 0;
+  border-top: 1px solid #f1f5f9;
+  margin-bottom: 30px;
+}
 
-        .fx-voucher-purchase-success-page .fx-footer-separator { border: 0; border-top: 1px solid #f1f5f9; margin-bottom: 30px; }
-        
-        .fx-voucher-purchase-success-page .fx-home-link {
-            text-decoration: none;
-            color: #032060;
-            font-size: 14px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
+.fx-voucher-purchase-success-page .fx-home-link {
+  text-decoration: none;
+  color: #032060;
+  font-size: 14px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
 
-        .fx-inputgroup #checkbox-checked {
-            width: 20px;
-        }
+.fx-inputgroup #checkbox-checked {
+  width: 20px;
+}
 
-
-        /* Responsive Adjustments */
+/* Responsive Adjustments */
 @media (max-width: 600px) {
-    .redemption-Voucher-services-box .fx-scheduling-panel {
-        padding: 16px;
-    }
-    .redemption-Voucher-services-box .fx-time-btn,
-    .fx-booking .redemption-Voucher-services-box .fx-time-btn {
-        min-width: calc(50% - 4px);
-        flex: 1 1 calc(50% - 4px);
-    }
-    .redemption-Voucher-services-box .fx-footer-actions {
-        flex-direction: column-reverse;
-        align-items: stretch;
-    }
-    .redemption-Voucher-services-box .fx-footer-primary-actions,
-    .fx-booking .redemption-Voucher-services-box .fx-btn-secondary,
-    .fx-booking .redemption-Voucher-services-box .btn-primary.btn-primary-countinu {
-        width: 100%;
-    }
-    .redemption-Voucher-services-box .fx-footer-primary-actions {
-        flex-direction: column;
-    }
-    .redemption-Voucher-services-box .fx-btn-back {
-        justify-content: center;
-    }
-    .fx-voucher-purchase-success-page{
-        border-radius: 16px;
-    }
-    .fx-voucher-purchase-success-page .fx-voucher-code{
-        font-size: 18px;
-    }
-    .fx-voucher-purchase-success-page{
-        padding: 22px 22px;
-    }
-    .fx-voucher-purchase-success-page .fx-summary-card{
-        padding: 16px;  
-    }
-    .fx-voucher-purchase-success-page .fx-btn-group{
-        flex-direction: column;
-    }
+  .redemption-Voucher-services-box .fx-scheduling-panel {
+    padding: 16px;
+  }
+  .redemption-Voucher-services-box .fx-time-btn,
+  .fx-booking .redemption-Voucher-services-box .fx-time-btn {
+    min-width: calc(50% - 4px);
+    flex: 1 1 calc(50% - 4px);
+  }
+  .redemption-Voucher-services-box .fx-footer-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .redemption-Voucher-services-box .fx-footer-primary-actions,
+  .fx-booking .redemption-Voucher-services-box .fx-btn-secondary,
+  .fx-booking
+    .redemption-Voucher-services-box
+    .btn-primary.btn-primary-countinu {
+    width: 100%;
+  }
+  .redemption-Voucher-services-box .fx-footer-primary-actions {
+    flex-direction: column;
+  }
+  .redemption-Voucher-services-box .fx-btn-back {
+    justify-content: center;
+  }
+  .fx-voucher-purchase-success-page {
+    border-radius: 16px;
+  }
+  .fx-voucher-purchase-success-page .fx-voucher-code {
+    font-size: 18px;
+  }
+  .fx-voucher-purchase-success-page {
+    padding: 22px 22px;
+  }
+  .fx-voucher-purchase-success-page .fx-summary-card {
+    padding: 16px;
+  }
+  .fx-voucher-purchase-success-page .fx-btn-group {
+    flex-direction: column;
+  }
 }
 
 /* Redeem date step: "Who is coming?" in a right-hand column */
 .redemption-Voucher-services-box .fx-redeem-date-layout.fx-has-participants {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: stretch;
-    gap: 24px;
-    margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 24px;
+  margin-bottom: 20px;
 }
 
 /* Both columns end on the same line */
-.redemption-Voucher-services-box .fx-has-participants .fx-redeem-date-main > :last-child {
-    margin-bottom: 0;
+.redemption-Voucher-services-box
+  .fx-has-participants
+  .fx-redeem-date-main
+  > :last-child {
+  margin-bottom: 0;
 }
 
 .redemption-Voucher-services-box .fx-redeem-date-aside {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .redemption-Voucher-services-box .fx-redeem-date-aside-spacer {
-    display: block;
-    visibility: hidden;
+  display: block;
+  visibility: hidden;
 }
 
 .redemption-Voucher-services-box .fx-redeem-date-aside .fx-redeem-participants {
-    flex: 1;
-    margin: 0;
+  flex: 1;
+  margin: 0;
 }
 
 @media (max-width: 768px) {
-    .redemption-Voucher-services-box .fx-redeem-date-layout.fx-has-participants {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
+  .redemption-Voucher-services-box .fx-redeem-date-layout.fx-has-participants {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 
-    .redemption-Voucher-services-box .fx-redeem-date-aside-spacer {
-        display: none;
-    }
+  .redemption-Voucher-services-box .fx-redeem-date-aside-spacer {
+    display: none;
+  }
 }

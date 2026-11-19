@@ -10,7 +10,9 @@ export default function Sidebar(props) {
     <>
       <div
         className="fx-sidebar "
-        style={{ display: props.rightbar == "true" && isDesktop ? "block" : "none" }}
+        style={{
+          display: props.rightbar == "true" && isDesktop ? "block" : "none",
+        }}
       >
         <div className="logo">
           <img src={logo} className="fx-right-logo" />

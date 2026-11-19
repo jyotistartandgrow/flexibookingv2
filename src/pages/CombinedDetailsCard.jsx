@@ -20,7 +20,11 @@ export default function CombinedDetailsCard({ topbar }) {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (isOpen && cardRef.current && !cardRef.current.contains(event.target)) {
+      if (
+        isOpen &&
+        cardRef.current &&
+        !cardRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
       }
     };
@@ -35,7 +39,10 @@ export default function CombinedDetailsCard({ topbar }) {
   }, [isOpen]);
 
   return (
-    <div className="fx-top-order-details-box fx-combined-details-box" ref={cardRef}>
+    <div
+      className="fx-top-order-details-box fx-combined-details-box"
+      ref={cardRef}
+    >
       <div
         className={`fx-top-order-details-card ${isOpen ? "fx-is-open" : ""}`}
       >

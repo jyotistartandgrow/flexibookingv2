@@ -33,7 +33,9 @@ export default function Thankyou() {
     {
       online: "Online",
       cash_on_delivery: "Pay at Service / Cash on Delivery",
-    }[selectedPaymentMethod] || selectedPaymentMethod?.replaceAll("_", " ") || "Card";
+    }[selectedPaymentMethod] ||
+    selectedPaymentMethod?.replaceAll("_", " ") ||
+    "Card";
   const receiptProducts = bookingData?.product_details?.products || [];
   const bundleProducts = receiptProducts.filter(
     (product) =>
@@ -94,8 +96,7 @@ export default function Thankyou() {
         ? bundleProduct.selected_component_slots
         : []),
       ...(Array.isArray(
-        bookingData?.product_details?.selected_bundle
-          ?.selected_component_slots,
+        bookingData?.product_details?.selected_bundle?.selected_component_slots,
       )
         ? bookingData.product_details.selected_bundle.selected_component_slots
         : []),
@@ -372,8 +373,8 @@ export default function Thankyou() {
                         <strong>Package</strong>
                         <span>{bundleProduct?.name}</span>
                         <span className="fx-bundle-package-note">
-                          Original {formatReceiptAmount(originalTotal)} - Discount{" "}
-                          {formatReceiptAmount(discountAmount)}
+                          Original {formatReceiptAmount(originalTotal)} -
+                          Discount {formatReceiptAmount(discountAmount)}
                         </span>
                       </div>
                       <strong>{formatReceiptAmount(packageTotal)}</strong>
@@ -448,9 +449,9 @@ export default function Thankyou() {
                         -
                         {formatReceiptAmount(
                           bundleProducts.length > 0
-                            ? getBundlePricing(bundleProducts[0])
+                            ? (getBundlePricing(bundleProducts[0])
                                 ?.discount_applied ??
-                                bookingData?.product_details?.discount
+                                bookingData?.product_details?.discount)
                             : bookingData?.coupon_discount,
                         )}
                       </span>

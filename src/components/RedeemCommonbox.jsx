@@ -4,7 +4,10 @@ import moment from "moment";
 import { formatLikePrice } from "../Utils/redeemUpsells";
 import "../styles/redeem-upsell-services.scss";
 
-export default function RedeemCommonbox({ setVisibleBottom, hideSchedule = false }) {
+export default function RedeemCommonbox({
+  setVisibleBottom,
+  hideSchedule = false,
+}) {
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.redeemstep);
   const voucherdetail = useSelector((state) => state.step3.voucherdetail);
@@ -21,15 +24,22 @@ export default function RedeemCommonbox({ setVisibleBottom, hideSchedule = false
       ? quote.items.map((item) => ({
           name: item.name,
           quantity: item.quantity,
-          slot_label: [item.slot_from, item.slot_to].filter(Boolean).join(" - "),
+          slot_label: [item.slot_from, item.slot_to]
+            .filter(Boolean)
+            .join(" - "),
           line_total: formatLikePrice(quote.formatted_total, item.line_total),
         }))
-      : (selections || []).filter((item) => item.display).map((item) => ({ ...item.display, quantity: item.quantity }));
+      : (selections || [])
+          .filter((item) => item.display)
+          .map((item) => ({ ...item.display, quantity: item.quantity }));
   const additionsTotal = useQuote
     ? quote.formatted_total
     : formatLikePrice(
         selections?.find((item) => item.display)?.display.line_total,
-        (selections || []).reduce((sum, item) => sum + (Number(item.display?.amount) || 0), 0),
+        (selections || []).reduce(
+          (sum, item) => sum + (Number(item.display?.amount) || 0),
+          0,
+        ),
       );
 
   return (
@@ -71,7 +81,9 @@ export default function RedeemCommonbox({ setVisibleBottom, hideSchedule = false
           </div>
           {additions.length > 0 && (
             <div className="fx-servicelistbox fx-redeem-summary-additions">
-              <div className="fx-redeem-summary-additions__title">Added services</div>
+              <div className="fx-redeem-summary-additions__title">
+                Added services
+              </div>
               {additions.map((item, index) => (
                 <div className="fx-serviceitem" key={`addition-${index}`}>
                   <div className="itemname">

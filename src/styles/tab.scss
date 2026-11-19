@@ -1,6 +1,6 @@
 /* Tab Section */
 /*---------- tab nav */
-.fx-booking .leftcontentbox{
+.fx-booking .leftcontentbox {
   position: relative;
 }
 .fx-booking #fx-tab_nav {
@@ -13,8 +13,6 @@
   margin: 0px;
   padding: 0px;
   list-style: none;
-
-
 }
 
 .fx-booking #fx-tab_nav li {
@@ -37,10 +35,9 @@
   margin-right: 12px;
   height: 52px;
   display: flex;
-    align-items: center;
-    justify-content: center;
-        padding-bottom: 3px;
-
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 3px;
 }
 
 .fx-booking #fx-tab_nav li a.selected {
@@ -50,24 +47,23 @@
 
 .fx-booking #fx-tab_nav div.fx-tabcontent {
   display: none;
-  margin-top:16px;
+  margin-top: 16px;
   color: var(--grey);
 }
 
 .fx-booking #fx-tab_nav div.fx-tabcontent {
   display: none;
-  margin-top:16px;
+  margin-top: 16px;
   color: var(--grey);
-
 }
 
-.fx-booking .fx-giftbox .fx-input-wrapper input[type=text] {
-    height: 52px;
-    margin: 0px;
-    background: #fff;
+.fx-booking .fx-giftbox .fx-input-wrapper input[type="text"] {
+  height: 52px;
+  margin: 0px;
+  background: #fff;
 }
 
-.fx-booking input[type=text].fx-voucher-input{
+.fx-booking input[type="text"].fx-voucher-input {
   border-radius: var(--fx-border-medium-radius);
 }
 
@@ -75,14 +71,13 @@
   display: block;
 }
 
-.fx-booking #fx-tab_nav div.selected .elementor-kit-12 h3{
+.fx-booking #fx-tab_nav div.selected .elementor-kit-12 h3 {
   font-weight: 400;
-} 
+}
 
 .fx-booking #fx-tab_nav div p {
   margin: 0px 0px 20px 0px;
 }
-
 
 .fx-booking #fx-modaltab_nav li a.selected {
   color: var(--primary-color);
@@ -93,7 +88,6 @@
   display: none;
   margin-top: 20px;
   color: var(--grey);
-
 }
 
 .fx-booking #fx-modaltab_nav div.selected {
@@ -103,8 +97,6 @@
 .fx-booking #fx-modaltab_nav div p {
   margin: 0px 0px 20px 0px;
 }
-
-
 
 .fx-booking #fx-modaltab_nav {
   display: block;
@@ -116,8 +108,6 @@
   margin: 0px;
   padding: 0px;
   list-style: none;
-
-
 }
 
 .fx-booking #fx-modaltab_nav li {
@@ -135,19 +125,17 @@
   text-decoration: none;
   padding: 25px;
   border-radius: var(--fx-border-medium-radius);
-  border:1px solid var(--border-color) ;
+  border: 1px solid var(--border-color);
   // box-shadow: 0px 0px 2px 0px var(--box-shadow);
   background: var(--white);
   width: 146px;
   margin-right: 11px;
-
 }
 
 .fx-booking #fx-modaltab_nav div.fx-tabcontent {
   display: none;
   margin-top: 20px;
   color: var(--grey);
-
 }
 
 .fx-booking #fx-modaltab_nav div.selected {
@@ -158,14 +146,12 @@
   margin: 0px 0px 20px 0px;
 }
 
-
-
 /* Tab Icon Section */
 /*---------- tab nav */
 .fx-booking #fx-Icontab_nav {
   display: block;
   width: 100%;
-min-height: 335px;
+  min-height: 335px;
 }
 
 .fx-booking #fx-Icontab_nav ul {
@@ -174,7 +160,7 @@ min-height: 335px;
   padding: 0px;
   list-style: none;
   position: absolute;
-  top:0px;
+  top: 0px;
   right: 0px;
   background: #f9fafb;
   padding: 0px 0px 0px 6px;
@@ -199,14 +185,12 @@ min-height: 335px;
   background: var(--white);
   width: 33px;
   margin-left: 7px;
-
 }
 
 .fx-booking #fx-Icontab_nav li a.selected {
   border: 1px solid var(--primary-color);
   color: var(--primary-color);
 }
-
 
 .fx-booking #fx-Icontab_nav div.fx-tabcontent {
   display: none;
@@ -218,7 +202,7 @@ min-height: 335px;
   min-height: inherit;
 }
 
-.fx-booking #fx-Icontab_nav ul.p-carousel-indicators{
+.fx-booking #fx-Icontab_nav ul.p-carousel-indicators {
   display: none;
 }
 
@@ -243,8 +227,11 @@ min-height: 335px;
   color: var(--grey);
   cursor: pointer;
   z-index: 2;
-  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.10);
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1);
 
   .pi {
     font-size: 13px;
@@ -253,22 +240,22 @@ min-height: 335px;
   &:hover {
     border-color: var(--primary-color);
     color: var(--primary-color);
-    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.14);
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.14);
   }
 }
 
 .fx-booking .fx-dswipe-prev {
   margin-right: 10px;
-   padding-left: 0px;
-    padding-right: 0px;
-    box-shadow: none;
+  padding-left: 0px;
+  padding-right: 0px;
+  box-shadow: none;
 }
 
 .fx-booking .fx-dswipe-next {
   margin-left: 10px;
   padding-left: 0px;
-    padding-right: 0px;
-    box-shadow: none;
+  padding-right: 0px;
+  box-shadow: none;
 }
 
 .fx-booking .fx-desktop-swipe-carousel {
@@ -295,7 +282,7 @@ min-height: 335px;
   border: 1px solid #e2e4e9;
   border-radius: 10px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  border: 1px solid #F3F4F6;
+  border: 1px solid #f3f4f6;
 }
 
 .fx-booking .fx-desktop-swipe-item:hover {
@@ -310,12 +297,14 @@ min-height: 335px;
 
 .fx-booking .fx-desktop-swipe-carousel.fx-dswipe-few .fx-desktop-swipe-item {
   flex: 0 0 262px;
-  transition:var(--animation-transition);
+  transition: var(--animation-transition);
 }
 
-.fx-booking .fx-desktop-swipe-carousel.fx-dswipe-few .fx-desktop-swipe-item:hover {
-  transform:var(--translateY); /* lift */
-  box-shadow:var(--hover-shadow); /* shadow */
+.fx-booking
+  .fx-desktop-swipe-carousel.fx-dswipe-few
+  .fx-desktop-swipe-item:hover {
+  transform: var(--translateY); /* lift */
+  box-shadow: var(--hover-shadow); /* shadow */
 }
 
 /* Mobile swipe carousel — CSS scroll-snap */
@@ -402,10 +391,9 @@ min-height: 335px;
   }
 
   .fx-booking #fx-Icontab_nav div.selected {
-  display: block;
-  min-height: 333px;
-}
-
+    display: block;
+    min-height: 333px;
+  }
 }
 
 /* Filter row */
@@ -428,7 +416,10 @@ min-height: 335px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s, opacity 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    opacity 0.2s;
   box-shadow: none;
   background: none;
   font-size: 18px;
@@ -476,7 +467,10 @@ min-height: 335px;
   cursor: pointer;
   white-space: nowrap;
   line-height: 1.5;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    background 0.2s;
 
   &:hover {
     border-color: var(--primary-color);
@@ -503,15 +497,15 @@ min-height: 335px;
 }
 
 @media screen and (max-width: 480px) {
-  .fx-booking #fx-tab_nav ul{
+  .fx-booking #fx-tab_nav ul {
     display: flex;
-    gap:11px;
+    gap: 11px;
     justify-content: space-between;
   }
-  .fx-booking #fx-tab_nav li{
+  .fx-booking #fx-tab_nav li {
     width: 100%;
   }
-  .fx-booking #fx-tab_nav li a{
-    width:inherit !important;
+  .fx-booking #fx-tab_nav li a {
+    width: inherit !important;
   }
 }

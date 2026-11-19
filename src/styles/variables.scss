@@ -1,26 +1,26 @@
 :root {
-  --greylight-bg: #F9FAFB;
+  --greylight-bg: #f9fafb;
   --primary-color: #087f83;
-  --darkblue-color: #041F5A;
+  --darkblue-color: #041f5a;
   --primary-light: #00818a;
-  --muted-color: #C5C4C4;
-  --border-color: #DDE1EC;
-  --new-border-color: #DDE1EC;
+  --muted-color: #c5c4c4;
+  --border-color: #dde1ec;
+  --new-border-color: #dde1ec;
   --white: #ffffff;
-  --darkgrey: #161C2D;
-  --grey: #5A616F;
+  --darkgrey: #161c2d;
+  --grey: #5a616f;
   --lightgrey: #b2b0b0;
-  --lightblue: #3076F8;
-  --lightblue-secondary: #E1EBFF;
+  --lightblue: #3076f8;
+  --lightblue-secondary: #e1ebff;
   --box-shadow: #00000038;
   --input-icon-color: #636363;
   --disabled-backgrouncolor: #e0e0e0;
   --disabled-bordercolor: #c7c7c7;
-  --disable: #D3D3D3;
-  --secondary-bgcolor: #B8B8B8;
-  --lightblue-secondary-active: #F7F9FF;
+  --disable: #d3d3d3;
+  --secondary-bgcolor: #b8b8b8;
+  --lightblue-secondary-active: #f7f9ff;
   --error-color: #cf2929;
-  --fx-secondary-colors:color-mix(in srgb, var(--primary-color) 80%, #2bc6d1);
+  --fx-secondary-colors: color-mix(in srgb, var(--primary-color) 80%, #2bc6d1);
 }
 
 :root {
@@ -31,37 +31,33 @@
   --big-descriptionsize: 18px;
   --small-descriptionsize: 14px;
   --extrasmall-timeslotsize: 10px;
-  --main-headingsize:24px;
+  --main-headingsize: 24px;
   --tab-fontsize: 20px;
   --step-fontsize: 16px;
   --all-input-fontsize: 16px;
   --small-font-size: 14px;
   --button-fontsize: 16px;
   --all-regular-size: 16px;
-  --all-card-heading:18px;
-  --all-card-des:14px;
-  --all-sub-heading:20px;
+  --all-card-heading: 18px;
+  --all-card-des: 14px;
+  --all-sub-heading: 20px;
   --all-card-price-size: 16px;
-   --all-card-category-size: 14px;
+  --all-card-category-size: 14px;
 }
 
-:root{
-    --fx-border-small-radius: 4px;
-    --fx-border-medium-radius: 8px;
-    --fx-border-large-radius: 12px;
+:root {
+  --fx-border-small-radius: 4px;
+  --fx-border-medium-radius: 8px;
+  --fx-border-large-radius: 12px;
 }
 
-
-:root{
-    --translateY: translateY(-2px);
-    --hover-shadow:  0 2px 6px rgba(0, 0, 0, 0.1);
-    --animation-transition:  all 0.3s ease;
+:root {
+  --translateY: translateY(-2px);
+  --hover-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --animation-transition: all 0.3s ease;
 }
-
-
 
 // For All heading - Font Size 24px
 // For Card heading, Tab - Font Size 20px
 // For All description, Step, Price - Font Size 16px
 // small description, small font size - Font Size 14px
-

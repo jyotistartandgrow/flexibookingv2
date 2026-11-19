@@ -57,7 +57,10 @@ export default function SelectSlot() {
   return (
     <div
       className="fx-booking-gift-slots"
-      style={{ display: step === "slotstep" && voucherdetail?.products ? "block" : "none" }}
+      style={{
+        display:
+          step === "slotstep" && voucherdetail?.products ? "block" : "none",
+      }}
     >
       <div className="fx-treatment-card">
         <div className="fx-treatment-image">

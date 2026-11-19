@@ -20,11 +20,7 @@ import {
   setService,
   setTimeslot,
 } from "../store/step2Slice";
-import {
-  setBookingkey,
-  setExtra,
-  setExtracapacity,
-} from "../store/step3Slice";
+import { setBookingkey, setExtra, setExtracapacity } from "../store/step3Slice";
 import { sessionClear } from "../store/step4Slice";
 import {
   decodeHtml,
@@ -232,7 +228,8 @@ export default function ChooseDate(props) {
       console.error("Unable to check availability.", error);
       showToast(
         "error",
-        error?.data?.message || "Unable to check availability, please try again",
+        error?.data?.message ||
+          "Unable to check availability, please try again",
       );
     } finally {
       dispatch(setLoading(false));
@@ -573,7 +570,9 @@ export default function ChooseDate(props) {
                     )
                   }
                 />
-                {errorlist.zip && <span className="fx-errortext">Enter Zip</span>}
+                {errorlist.zip && (
+                  <span className="fx-errortext">Enter Zip</span>
+                )}
               </div>
             </div>
             <div className="fx-inputgroup fx-hidden">

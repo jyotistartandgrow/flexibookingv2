@@ -1,49 +1,49 @@
 /* Date Picker */
 .fx-booking .fx-calendar {
-  width:306px;
+  width: 306px;
   position: relative;
 }
-.fx-booking .fx-datepicker{
+.fx-booking .fx-datepicker {
   display: inherit;
 }
-.fx-datepicker{
+.fx-datepicker {
   width: 100%;
 }
-.fx-rightpopup .fx-element-box .fx-calendar{
+.fx-rightpopup .fx-element-box .fx-calendar {
   width: 330px;
 }
 
- .fx-calendaricon {
+.fx-calendaricon {
   position: absolute;
-    right:16px;
-    top: 16px;
-    width: 20px;
-    font-size: 18px;
-    color: var(--primary-color);
+  right: 16px;
+  top: 16px;
+  width: 20px;
+  font-size: 18px;
+  color: var(--primary-color);
 }
 
-.fx-rightpopup .fx-element-box .fx-calendaricon{
-  top:34px;
+.fx-rightpopup .fx-element-box .fx-calendaricon {
+  top: 34px;
 }
 
-.p-datepicker table td > span{
+.p-datepicker table td > span {
   border-radius: 0px;
 }
 
-.p-datepicker table td{
-      padding:0px;
+.p-datepicker table td {
+  padding: 0px;
 }
 
-.pecent-bar{
-background-color: #000 !important;
-height:2px !important;
+.pecent-bar {
+  background-color: #000 !important;
+  height: 2px !important;
 }
 
-.p-datepicker table td.p-datepicker-today > span{
+.p-datepicker table td.p-datepicker-today > span {
   background: transparent;
   border-radius: 0;
 }
-.p-datepicker table td > span{
+.p-datepicker table td > span {
   width: inherit;
   font-size: 16px;
   color: var(--darkgrey);
@@ -56,7 +56,8 @@ height:2px !important;
   box-shadow: 0px 0px 2px 0px var(--box-shadow);
 }
 
-.p-datepicker table th, .p-datepicker table td{
+.p-datepicker table th,
+.p-datepicker table td {
   border: none;
 }
 
@@ -102,7 +103,7 @@ height:2px !important;
 
 .ui-datepicker-prev:after,
 .ui-datepicker-next:after {
-  content: '';
+  content: "";
   position: absolute;
   display: block;
   width: 15px;
@@ -132,15 +133,15 @@ height:2px !important;
 .ui-datepicker-calendar thead tr th span {
   display: block;
   width: 68px;
-  color: #858C97;
+  color: #858c97;
   margin-bottom: 5px;
   font-size: 18px;
   font-weight: normal;
 }
 thead tr th.ui-datepicker-week-end span {
-  background: #F6FFC5;
-border-radius: 6px;
-padding: 3px;
+  background: #f6ffc5;
+  border-radius: 6px;
+  padding: 3px;
 }
 
 .ui-state-default {
@@ -155,12 +156,12 @@ padding: 3px;
 
 .ui-state-default:hover {
   color: #000;
-  background: #B4BAC5;
+  background: #b4bac5;
   transition: all 0.25s cubic-bezier(0.7, -0.12, 0.2, 1.12);
 }
 
 .ui-state-highlight {
-  background: #E1EBFF;
+  background: #e1ebff;
   border-radius: var(--fx-border-medium-radius);
 }
 
@@ -186,15 +187,20 @@ div.p-datepicker-title button.p-datepicker-year.p-link:hover,
 div.p-datepicker-title button.p-datepicker-month.p-link:hover,
 button.p-datepicker-next:hover,
 button.p-datepicker-prev:hover {
-    background:none;
+  background: none;
 }
 
-button.p-datepicker-month.p-link, button.p-datepicker-year.p-link {
-    color: var(--primary-color);
-    border-color:none;
+button.p-datepicker-month.p-link,
+button.p-datepicker-year.p-link {
+  color: var(--primary-color);
+  border-color: none;
 }
 
-div.fx-booking div.fx-commoninput div.fx-inputgroup.fx-checkboxcontainer label.checkbox-label a{
+div.fx-booking
+  div.fx-commoninput
+  div.fx-inputgroup.fx-checkboxcontainer
+  label.checkbox-label
+  a {
   color: var(--primary-color);
 }
 
@@ -202,33 +208,33 @@ div.p-datepicker-title button.p-datepicker-year.p-link,
 div.p-datepicker-title button.p-datepicker-month.p-link,
 button.p-datepicker-next,
 button.p-datepicker-prev {
-background-color: #fff;
-border-color: #fff;
-color: inherit;
-box-shadow: none;
-padding: 10px 10px;
+  background-color: #fff;
+  border-color: #fff;
+  color: inherit;
+  box-shadow: none;
+  padding: 10px 10px;
 }
 
-.p-datepicker:not(.p-datepicker-inline){
+.p-datepicker:not(.p-datepicker-inline) {
   background: #fff;
-    border: 0 none;
-    box-shadow: 0 2px 12px #0000001a;
-    width: 307px;
-    min-width:400px !important;
+  border: 0 none;
+  box-shadow: 0 2px 12px #0000001a;
+  width: 307px;
+  min-width: 400px !important;
 }
 
-.p-datepicker-header button.p-datepicker-prev{
+.p-datepicker-header button.p-datepicker-prev {
   border: none;
 }
 
 .p-datepicker-header button.p-datepicker-next {
-    border: none;
+  border: none;
 }
 
 @media screen and (max-width: 480px) {
-.fx-booking .fx-calendar{
-  width:100%;
-}
+  .fx-booking .fx-calendar {
+    width: 100%;
+  }
 }
 
 // .fx-calendar-sidebar.p-sidebar {

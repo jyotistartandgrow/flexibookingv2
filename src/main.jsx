@@ -125,14 +125,18 @@ function mountReactApp(id, initialRoute, isNewSession) {
 
   // Stale data was cleared before this point, so the store starts clean
   // unless this is a reload of the same page.
-  const hasSavedBooking = Boolean(storage.get(`persist:${PERSIST_PREFIX}${id}`));
+  const hasSavedBooking = Boolean(
+    storage.get(`persist:${PERSIST_PREFIX}${id}`),
+  );
   const { store, persistor } = createBookingStore(id);
 
   // Only seed the gift flag for a fresh session. On a reload of the same flow
   // the persisted value (e.g. the user switched to the Gift tab) must survive.
   if (isNewSession || !hasSavedBooking) {
     const isOpenDatePurchase = id === "react_sgbm_open_date_purchase";
-    store.dispatch(setGift(id === "react_sgbm_starting_gift" || isOpenDatePurchase));
+    store.dispatch(
+      setGift(id === "react_sgbm_starting_gift" || isOpenDatePurchase),
+    );
     store.dispatch(setOpenDatePurchase(isOpenDatePurchase));
   }
 

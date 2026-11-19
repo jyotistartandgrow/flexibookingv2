@@ -283,7 +283,14 @@ export default function DateTab(props) {
     return () => {
       active = false;
     };
-  }, [dispatch, loadServiceDetails, selectDate, serviceid, bundleid, visibleMonth]);
+  }, [
+    dispatch,
+    loadServiceDetails,
+    selectDate,
+    serviceid,
+    bundleid,
+    visibleMonth,
+  ]);
 
   const selectedAvailability = selectedDate
     ? availabilityByDate.get(selectedDate)
@@ -333,7 +340,7 @@ export default function DateTab(props) {
                 <span>{serviceDetails.category_name}</span>
               </span>
             )}
-            {props.showPrice == 'true' && (
+            {props.showPrice == "true" && (
               <div className="fx-total-price">{servicePrice || "-"}</div>
             )}
           </div>
@@ -502,21 +509,22 @@ export default function DateTab(props) {
               </span>
             </button>
           )}
-          {props.showGiftButton == "true" && serviceDetails?.is_gift_allowed === true && (
-            <button
-              type="button"
-              className="fx-gift-action"
-              disabled={!selectedDate || detailsLoading || calendarLoading}
-              onClick={() => {
-                dispatch(setDate(selectedDate));
-                dispatch(setService(serviceDetails?.id || serviceid));
-                dispatch(setGift(true));
-                setPopupRequest((request) => request + 1);
-              }}
-            >
-              <i class="pi pi-gift"></i> Gift
-            </button>
-          )}
+          {props.showGiftButton == "true" &&
+            serviceDetails?.is_gift_allowed === true && (
+              <button
+                type="button"
+                className="fx-gift-action"
+                disabled={!selectedDate || detailsLoading || calendarLoading}
+                onClick={() => {
+                  dispatch(setDate(selectedDate));
+                  dispatch(setService(serviceDetails?.id || serviceid));
+                  dispatch(setGift(true));
+                  setPopupRequest((request) => request + 1);
+                }}
+              >
+                <i class="pi pi-gift"></i> Gift
+              </button>
+            )}
         </div>
       </section>
       <Service

@@ -35,12 +35,14 @@ export default function SgbmDateGift(props) {
 
   return (
     <div className="fx-booking fx-container bgbody">
-      <div className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}>
+      <div
+        className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}
+      >
         <ReedemSteps redeemBooking={redeemBooking} {...props} />
         <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
           <div className="fx-seg-loader"></div>
         </div>
-        {props.topbar == "true" && voucher  && <RedeemDetailCard {...props} />}
+        {props.topbar == "true" && voucher && <RedeemDetailCard {...props} />}
         {/* Code Tabs */}
         <Code />
         {/* End Code Tabs */}
@@ -52,7 +54,7 @@ export default function SgbmDateGift(props) {
         <SelectSlot />
         {/* End Slot Tabs */}
         {/* Checkout Tabs */}
-        <ReedemCheckout {...props}/>
+        <ReedemCheckout {...props} />
         <RedeemUpsellPayment {...props} />
         {/* End Checkout Tabs */}
       </div>
