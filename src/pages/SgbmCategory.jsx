@@ -13,12 +13,16 @@ export default function SgbmCategory(props) {
   const date = useSelector((state) => state.step1.date);
   const cart = useSelector((state) => state.step2.cart);
   return (
-    <div className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}>
+    <div
+      className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}
+    >
       <Steps type="category" {...props} />
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
         <div className="fx-seg-loader"></div>
       </div>
-      {props.topbar == "true" && date && cart?.service?.length > 0 && <OrderDetailsCard {...props} />}
+      {props.topbar == "true" && date && cart?.service?.length > 0 && (
+        <OrderDetailsCard {...props} />
+      )}
 
       {/* Category Tabs */}
       <Category {...props} />
@@ -31,10 +35,10 @@ export default function SgbmCategory(props) {
       {/* End Extra Tabs */}
       <Customize {...props} />
       {/* Checkout Tabs */}
-      <Checkout {...props}/>
+      <Checkout {...props} />
       {/* End Checkout Tabs */}
       {/* Payment Tabs */}
-      <Payment {...props}/>
+      <Payment {...props} />
       {/* End Payment Tabs */}
     </div>
   );

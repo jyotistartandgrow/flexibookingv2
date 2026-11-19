@@ -11,9 +11,7 @@ const SgbmService = lazy(() => import("./pages/SgbmService"));
 const SgbmCategory = lazy(() => import("./pages/SgbmCategory"));
 const RedeemGift = lazy(() => import("./pages/RedeemGift"));
 const RedeemThankyou = lazy(() => import("./pages/RedeemThankyou"));
-const SgbmOpenDatePurchase = lazy(
-  () => import("./pages/SgbmOpenDatePurchase"),
-);
+const SgbmOpenDatePurchase = lazy(() => import("./pages/SgbmOpenDatePurchase"));
 const OpenDateThankyou = lazy(() => import("./pages/OpenDateThankyou"));
 const SgbmCheckin = lazy(() => import("./pages/SgbmCheckin"));
 const CheckinThankyou = lazy(() => import("./pages/CheckinThankyou"));
@@ -44,7 +42,10 @@ export default function App({ initialRoute = "/", ...props }) {
               path="ssopencalendar"
               element={<SgbmssOpenCalendar {...props} />}
             />
-            <Route path="singleservice" element={<SgbmSingleService {...props} />} />
+            <Route
+              path="singleservice"
+              element={<SgbmSingleService {...props} />}
+            />
             <Route path="*" element={<h1>Page Not Found</h1>} />
           </Route>
           <Route path="redeemgift" element={<RedeemGift {...props} />} />

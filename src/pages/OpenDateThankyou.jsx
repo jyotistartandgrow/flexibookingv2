@@ -83,8 +83,7 @@ export default function OpenDateThankyou() {
         ? bundleProduct.selected_component_slots
         : []),
       ...(Array.isArray(
-        bookingData?.product_details?.selected_bundle
-          ?.selected_component_slots,
+        bookingData?.product_details?.selected_bundle?.selected_component_slots,
       )
         ? bookingData.product_details.selected_bundle.selected_component_slots
         : []),
@@ -492,8 +491,8 @@ export default function OpenDateThankyou() {
                         <strong>Package</strong>
                         <span>{bundleProduct?.name}</span>
                         <span className="fx-bundle-package-note">
-                          Original {formatReceiptAmount(originalTotal)} - Discount{" "}
-                          {formatReceiptAmount(discountAmount)}
+                          Original {formatReceiptAmount(originalTotal)} -
+                          Discount {formatReceiptAmount(discountAmount)}
                         </span>
                       </div>
                       <strong>{formatReceiptAmount(packageTotal)}</strong>
@@ -568,9 +567,9 @@ export default function OpenDateThankyou() {
                         -
                         {formatReceiptAmount(
                           bundleProducts.length > 0
-                            ? getBundlePricing(bundleProducts[0])
+                            ? (getBundlePricing(bundleProducts[0])
                                 ?.discount_applied ??
-                                bookingData?.product_details?.discount
+                                bookingData?.product_details?.discount)
                             : bookingData?.coupon_discount,
                         )}
                       </span>

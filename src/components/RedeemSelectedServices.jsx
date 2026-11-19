@@ -1,20 +1,44 @@
-import { CalendarDays, ImageOff, Minus, Plus, Trash2, Wallet, X } from "lucide-react";
+import {
+  CalendarDays,
+  ImageOff,
+  Minus,
+  Plus,
+  Trash2,
+  Wallet,
+  X,
+} from "lucide-react";
 import { Dialog } from "primereact/dialog";
 import Swal from "sweetalert2";
 import TimeSlotCard from "./TimeSlotCard";
-import { choiceKey, formatLikePrice, getSelectedChoice } from "../Utils/redeemUpsells";
+import {
+  choiceKey,
+  formatLikePrice,
+  getSelectedChoice,
+} from "../Utils/redeemUpsells";
 
 const choiceLabel = (choice) =>
   choice.slot_label || [choice.from, choice.to].filter(Boolean).join(" - ");
 
 const allowedQuantities = (item, choice) => {
-  const source = choice?.allowed_quantities?.length ? choice.allowed_quantities : item.allowed_quantities;
-  return (source || []).map(Number).filter((value) => value > 0).sort((a, b) => a - b);
+  const source = choice?.allowed_quantities?.length
+    ? choice.allowed_quantities
+    : item.allowed_quantities;
+  return (source || [])
+    .map(Number)
+    .filter((value) => value > 0)
+    .sort((a, b) => a - b);
 };
 
 const needsSlot = (item) => (item.schedule_choices || []).length > 0;
 
-function SelectedServiceRow({ item, quantity, slotKey, onQuantity, onSlot, onRemove }) {
+function SelectedServiceRow({
+  item,
+  quantity,
+  slotKey,
+  onQuantity,
+  onSlot,
+  onRemove,
+}) {
   const choices = item.schedule_choices || [];
   const selectedChoice = getSelectedChoice(item, slotKey);
   const allowed = allowedQuantities(item, selectedChoice);
@@ -33,13 +57,25 @@ function SelectedServiceRow({ item, quantity, slotKey, onQuantity, onSlot, onRem
         )}
         <div className="fx-ms-details">
           <h3 className="fx-ms-name">{item.name}</h3>
-          {item.description && <p className="fx-ms-description">{item.description}</p>}
+          {item.description && (
+            <p className="fx-ms-description">{item.description}</p>
+          )}
           <div className="fx-ms-quantity">
-            <button type="button" aria-label={`Decrease quantity of ${item.name}`} disabled={lower == null} onClick={() => onQuantity(lower)}>
+            <button
+              type="button"
+              aria-label={`Decrease quantity of ${item.name}`}
+              disabled={lower == null}
+              onClick={() => onQuantity(lower)}
+            >
               <Minus size={12} />
             </button>
             <span aria-live="polite">{quantity}</span>
-            <button type="button" aria-label={`Increase quantity of ${item.name}`} disabled={higher == null} onClick={() => onQuantity(higher)}>
+            <button
+              type="button"
+              aria-label={`Increase quantity of ${item.name}`}
+              disabled={higher == null}
+              onClick={() => onQuantity(higher)}
+            >
               <Plus size={12} />
             </button>
           </div>
@@ -47,7 +83,9 @@ function SelectedServiceRow({ item, quantity, slotKey, onQuantity, onSlot, onRem
       </div>
 
       <div className="fx-ms-slots">
-        <h4 className="fx-ms-slots-title">{needsSlot(item) ? "Select time slot" : "Time slot"}</h4>
+        <h4 className="fx-ms-slots-title">
+          {needsSlot(item) ? "Select time slot" : "Time slot"}
+        </h4>
         {needsSlot(item) ? (
           <div className="fx-ms-slot-grid">
             {choices.map((choice) => {
@@ -58,7 +96,10 @@ function SelectedServiceRow({ item, quantity, slotKey, onQuantity, onSlot, onRem
                 <TimeSlotCard
                   key={key}
                   time={choiceLabel(choice)}
-                  price={choice.formatted_price || formatLikePrice(item.formatted_price, choice.price)}
+                  price={
+                    choice.formatted_price ||
+                    formatLikePrice(item.formatted_price, choice.price)
+                  }
                   left={choice.available_count ?? 0}
                   selected={isSelected}
                   disabled={!fits}
@@ -72,25 +113,54 @@ function SelectedServiceRow({ item, quantity, slotKey, onQuantity, onSlot, onRem
         )}
       </div>
 
-      <button type="button" className="fx-ms-remove" aria-label={`Remove ${item.name}`} onClick={onRemove}>
+      <button
+        type="button"
+        className="fx-ms-remove"
+        aria-label={`Remove ${item.name}`}
+        onClick={onRemove}
+      >
         <Trash2 size={22} />
       </button>
     </article>
   );
 }
 
-export default function RedeemSelectedServices({ visible, items, quantities, slots, onQuantity, onSlot, onRemove, onClose, onContinue }) {
-  const isComplete = (item) => !needsSlot(item) || Boolean(getSelectedChoice(item, slots[item.recommendation_key]));
-  const slotCount = items.filter((item) => needsSlot(item) && isComplete(item)).length;
+export default function RedeemSelectedServices({
+  visible,
+  items,
+  quantities,
+  slots,
+  onQuantity,
+  onSlot,
+  onRemove,
+  onClose,
+  onContinue,
+}) {
+  const isComplete = (item) =>
+    !needsSlot(item) ||
+    Boolean(getSelectedChoice(item, slots[item.recommendation_key]));
+  const slotCount = items.filter(
+    (item) => needsSlot(item) && isComplete(item),
+  ).length;
   const total = items.reduce((sum, item) => {
     const choice = getSelectedChoice(item, slots[item.recommendation_key]);
     const unit = Number(choice?.price ?? item.price) || 0;
-    return sum + (isComplete(item) ? unit * (quantities[item.recommendation_key] || 0) : 0);
+    return (
+      sum +
+      (isComplete(item) ? unit * (quantities[item.recommendation_key] || 0) : 0)
+    );
   }, 0);
 
   const handleContinue = () => {
     if (!items.every(isComplete)) {
-      Swal.fire({ toast: true, position: "top-end", showConfirmButton: false, timer: 3000, icon: "warning", title: "Please select a time slot for each service" });
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "warning",
+        title: "Please select a time slot for each service",
+      });
       return;
     }
     onContinue(
@@ -107,7 +177,10 @@ export default function RedeemSelectedServices({ visible, items, quantities, slo
           display: {
             name: item.name,
             slot_label: choice ? choiceLabel(choice) : "",
-            line_total: formatLikePrice(item.formatted_price, (Number(choice?.price ?? item.price) || 0) * quantity),
+            line_total: formatLikePrice(
+              item.formatted_price,
+              (Number(choice?.price ?? item.price) || 0) * quantity,
+            ),
             amount: (Number(choice?.price ?? item.price) || 0) * quantity,
           },
         };
@@ -127,8 +200,15 @@ export default function RedeemSelectedServices({ visible, items, quantities, slo
       <section className="fx-multi-services">
         <header className="fx-ms-header">
           <h2 className="fx-ms-title">Selected Services</h2>
-          <span className="fx-ms-badge">{items.length} {items.length === 1 ? "service" : "services"}</span>
-          <button type="button" className="fx-ms-close" aria-label="Close" onClick={onClose}>
+          <span className="fx-ms-badge">
+            {items.length} {items.length === 1 ? "service" : "services"}
+          </span>
+          <button
+            type="button"
+            className="fx-ms-close"
+            aria-label="Close"
+            onClick={onClose}
+          >
             <X size={28} />
           </button>
         </header>
@@ -148,18 +228,32 @@ export default function RedeemSelectedServices({ visible, items, quantities, slo
         </div>
 
         <footer className="fx-ms-footer">
-          <button type="button" className="fx-ms-cancel" onClick={onClose}>Back</button>
+          <button type="button" className="fx-ms-cancel" onClick={onClose}>
+            Back
+          </button>
           <div className="fx-ms-summary">
             <div className="fx-ms-summary-item">
-              <span className="fx-ms-summary-icon"><CalendarDays size={18} /></span>
+              <span className="fx-ms-summary-icon">
+                <CalendarDays size={18} />
+              </span>
               {slotCount} {slotCount === 1 ? "Slot" : "Slots"} selected
             </div>
             <div className="fx-ms-summary-item">
-              <span className="fx-ms-summary-icon"><Wallet size={18} /></span>
-              Total Price: <strong className="fx-ms-total">{formatLikePrice(items[0]?.formatted_price, total)}</strong>
+              <span className="fx-ms-summary-icon">
+                <Wallet size={18} />
+              </span>
+              Total Price:{" "}
+              <strong className="fx-ms-total">
+                {formatLikePrice(items[0]?.formatted_price, total)}
+              </strong>
             </div>
           </div>
-          <button type="button" className="fx-ms-continue" disabled={items.length === 0} onClick={handleContinue}>
+          <button
+            type="button"
+            className="fx-ms-continue"
+            disabled={items.length === 0}
+            onClick={handleContinue}
+          >
             CONTINUE
           </button>
         </footer>

@@ -13,14 +13,21 @@ import { setRedeemUpsellQuote } from "../store/step3Slice";
 import { callVoucherApi, getApiErrorMessage } from "../Utils/redeemUpsells";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { formatSelectedComponentSlots, toPlainText, validateEmail, validatePhoneForCountry } from "../Utils/Functions";
+import {
+  formatSelectedComponentSlots,
+  toPlainText,
+  validateEmail,
+  validatePhoneForCountry,
+} from "../Utils/Functions";
 
 export default function ReedemCheckout(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const step = useSelector((state) => state.step1.redeemstep);
   const slot = useSelector((state) => state.step3.slot);
-  const redeemParticipants = useSelector((state) => state.step3.redeemParticipants);
+  const redeemParticipants = useSelector(
+    (state) => state.step3.redeemParticipants,
+  );
   const redeemBundleSlots = useSelector(
     (state) => state.step3.redeemBundleSlots,
   );
@@ -28,7 +35,9 @@ export default function ReedemCheckout(props) {
   const date = useSelector((state) => state.step1.date);
   const voucher = useSelector((state) => state.step1.voucher);
   const isUpsell = useSelector((state) => state.step1.redeemUpsell);
-  const upsellSelections = useSelector((state) => state.step3.redeemUpsellSelections);
+  const upsellSelections = useSelector(
+    (state) => state.step3.redeemUpsellSelections,
+  );
 
   const { data: countries } = useFetch("/countries", {
     method: "get",
@@ -141,20 +150,29 @@ export default function ReedemCheckout(props) {
     // With additions, the server quotes them first; the voucher is redeemed after payment.
     if (isUpsell && upsellSelections?.length > 0) {
       try {
-        const quote = await callVoucherApi("/upsells/quote", "quote_redemption_upsells", {
-          voucher,
-          date: moment(date).format("YYYY-MM-DD"),
-          slot,
-          selected_component_slots: formatSelectedComponentSlots(redeemBundleSlots || []),
-          // Drop the summary-only display data; the quote API takes the selection fields only.
-          selections: upsellSelections.map((selection) => {
-            const apiSelection = { ...selection };
-            delete apiSelection.display;
-            return apiSelection;
-          }),
-          recipient: billdata,
-          country: { country: billdata.recipient_country, state: billdata.recipient_state },
-        });
+        const quote = await callVoucherApi(
+          "/upsells/quote",
+          "quote_redemption_upsells",
+          {
+            voucher,
+            date: moment(date).format("YYYY-MM-DD"),
+            slot,
+            selected_component_slots: formatSelectedComponentSlots(
+              redeemBundleSlots || [],
+            ),
+            // Drop the summary-only display data; the quote API takes the selection fields only.
+            selections: upsellSelections.map((selection) => {
+              const apiSelection = { ...selection };
+              delete apiSelection.display;
+              return apiSelection;
+            }),
+            recipient: billdata,
+            country: {
+              country: billdata.recipient_country,
+              state: billdata.recipient_state,
+            },
+          },
+        );
         dispatch(setRedeemUpsellQuote({ ...quote, recipient: billdata }));
         dispatch(setRedeemStep("paymentstep"));
       } catch (error) {
@@ -164,7 +182,12 @@ export default function ReedemCheckout(props) {
           showConfirmButton: false,
           timer: 4000,
           icon: "error",
-          titleText: toPlainText(getApiErrorMessage(error, "Unable to prepare your additions. Please try again.")),
+          titleText: toPlainText(
+            getApiErrorMessage(
+              error,
+              "Unable to prepare your additions. Please try again.",
+            ),
+          ),
         });
       } finally {
         dispatch(setLoading(false));
@@ -177,10 +200,13 @@ export default function ReedemCheckout(props) {
       date: moment(date).format("YYYY-MM-DD"),
       slot,
       selected_component_slots: redeemBundleSlots,
-      ...(redeemParticipants ? {
-        slot_selection: redeemParticipants.slot_selection,
-        capacity_component_guests: redeemParticipants.capacity_component_guests,
-      } : {}),
+      ...(redeemParticipants
+        ? {
+            slot_selection: redeemParticipants.slot_selection,
+            capacity_component_guests:
+              redeemParticipants.capacity_component_guests,
+          }
+        : {}),
       recipient: billdata,
     });
 
@@ -193,7 +219,9 @@ export default function ReedemCheckout(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
-        titleText: toPlainText(data?.message ?? "There is some error , please try again"),
+        titleText: toPlainText(
+          data?.message ?? "There is some error , please try again",
+        ),
       });
       dispatch(setLoading(false));
     }

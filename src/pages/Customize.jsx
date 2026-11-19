@@ -26,12 +26,60 @@ import {
 import axiosInstance from "../Utils/Interceptor";
 
 const fallbackTemplates = [
-  { id: "happy-new-year", name: "Happy New Year", year: "2026", giftType: "New Year", variant: "champagne", className: "newyear" },
-  { id: "fireworks", name: "Fireworks", year: "2028", giftType: "New Year", variant: "fireworks", className: "newyear" },
-  { id: "midnight", name: "Midnight Magic", year: "2026", giftType: "New Year", variant: "midnight", className: "newyear" },
-  { id: "anniversary", name: "Anniversary", year: "2026", giftType: "Anniversary", variant: "photo", image: "/assets/template-anniversary.jpg", title: "Happy Anniversary", className: "anniversary" },
-  { id: "blackfriday", name: "Black Friday", year: "2026", giftType: "Black Friday", variant: "photo", image: "/assets/template-blackfriday.jpg", title: "BLACK FRIDAY", className: "blackfriday" },
-  { id: "birthday", name: "Golden Birthday", year: "2026", giftType: "Birthday", variant: "photo", image: "/assets/golden-birthday.jpg", title: "Happy Birthday", className: "fx-birthday" },
+  {
+    id: "happy-new-year",
+    name: "Happy New Year",
+    year: "2026",
+    giftType: "New Year",
+    variant: "champagne",
+    className: "newyear",
+  },
+  {
+    id: "fireworks",
+    name: "Fireworks",
+    year: "2028",
+    giftType: "New Year",
+    variant: "fireworks",
+    className: "newyear",
+  },
+  {
+    id: "midnight",
+    name: "Midnight Magic",
+    year: "2026",
+    giftType: "New Year",
+    variant: "midnight",
+    className: "newyear",
+  },
+  {
+    id: "anniversary",
+    name: "Anniversary",
+    year: "2026",
+    giftType: "Anniversary",
+    variant: "photo",
+    image: "/assets/template-anniversary.jpg",
+    title: "Happy Anniversary",
+    className: "anniversary",
+  },
+  {
+    id: "blackfriday",
+    name: "Black Friday",
+    year: "2026",
+    giftType: "Black Friday",
+    variant: "photo",
+    image: "/assets/template-blackfriday.jpg",
+    title: "BLACK FRIDAY",
+    className: "blackfriday",
+  },
+  {
+    id: "birthday",
+    name: "Golden Birthday",
+    year: "2026",
+    giftType: "Birthday",
+    variant: "photo",
+    image: "/assets/golden-birthday.jpg",
+    title: "Happy Birthday",
+    className: "fx-birthday",
+  },
 ];
 
 const normalizeTemplate = (template, occasion) => ({
@@ -92,7 +140,15 @@ function Burst({ cx, cy, r, color, rays = 16 }) {
         const y2 = cy + Math.sin(angle) * r;
         return (
           <g key={index}>
-            <line x1={cx + Math.cos(angle) * r * 0.08} y1={cy + Math.sin(angle) * r * 0.08} x2={x2} y2={y2} stroke={color} strokeWidth={r > 40 ? 3.2 : 2.2} strokeLinecap="round" />
+            <line
+              x1={cx + Math.cos(angle) * r * 0.08}
+              y1={cy + Math.sin(angle) * r * 0.08}
+              x2={x2}
+              y2={y2}
+              stroke={color}
+              strokeWidth={r > 40 ? 3.2 : 2.2}
+              strokeLinecap="round"
+            />
             <circle cx={x2} cy={y2} r={r > 40 ? 2.4 : 1.7} fill="#fff6d0" />
           </g>
         );
@@ -113,8 +169,21 @@ function TemplateArt({ variant, image, alt }) {
     return (
       <div className="fx-art fx-art-champagne" aria-hidden="true">
         <svg className="fx-art-deco" viewBox="0 0 300 420">
-          <path d="M18 8 C40 26 28 58 62 46M250 6 C230 28 268 52 236 70" fill="none" stroke="#e0b44a" strokeWidth="1.6" />
-          {[28, 54, 92, 140, 188, 230, 268].map((x, index) => <circle key={x} cx={x} cy={20 + (index % 3) * 16} r="2" fill="#e6c15a" />)}
+          <path
+            d="M18 8 C40 26 28 58 62 46M250 6 C230 28 268 52 236 70"
+            fill="none"
+            stroke="#e0b44a"
+            strokeWidth="1.6"
+          />
+          {[28, 54, 92, 140, 188, 230, 268].map((x, index) => (
+            <circle
+              key={x}
+              cx={x}
+              cy={20 + (index % 3) * 16}
+              r="2"
+              fill="#e6c15a"
+            />
+          ))}
         </svg>
         <div className="fx-art-script">Hey New</div>
         <div className="fx-art-year">2026</div>
@@ -125,9 +194,23 @@ function TemplateArt({ variant, image, alt }) {
               <stop offset="1" stopColor="#c9962c" />
             </linearGradient>
           </defs>
-          <path d="M22 6 Q18 48 26 78 Q40 90 54 78 Q62 48 58 6Z" fill="rgba(255,255,255,.55)" stroke="#efe6d2" />
-          <path d="M26 34 Q24 58 30 76 Q40 84 50 76 Q56 58 54 34 Q40 42 26 34Z" fill={`url(#${uid}-liquid)`} />
-          <rect x="37.4" y="84" width="5.2" height="42" rx="1.4" fill="#f6f1e8" />
+          <path
+            d="M22 6 Q18 48 26 78 Q40 90 54 78 Q62 48 58 6Z"
+            fill="rgba(255,255,255,.55)"
+            stroke="#efe6d2"
+          />
+          <path
+            d="M26 34 Q24 58 30 76 Q40 84 50 76 Q56 58 54 34 Q40 42 26 34Z"
+            fill={`url(#${uid}-liquid)`}
+          />
+          <rect
+            x="37.4"
+            y="84"
+            width="5.2"
+            height="42"
+            rx="1.4"
+            fill="#f6f1e8"
+          />
           <ellipse cx="40" cy="128" rx="18" ry="4.2" fill="#efe6d4" />
         </svg>
         <div className="fx-art-footer">Happy New Year</div>
@@ -155,15 +238,46 @@ function TemplateArt({ variant, image, alt }) {
   return (
     <div className="fx-art fx-art-midnight" aria-hidden="true">
       <svg className="fx-clock" viewBox="0 0 200 200">
-        <circle cx="100" cy="100" r="78" fill="#0c0c0e" stroke="#e8e8ea" strokeWidth="3" />
+        <circle
+          cx="100"
+          cy="100"
+          r="78"
+          fill="#0c0c0e"
+          stroke="#e8e8ea"
+          strokeWidth="3"
+        />
         <circle cx="100" cy="100" r="72" fill="none" stroke="#bfc3c8" />
         {Array.from({ length: 12 }).map((_, index) => {
           const angle = (index / 12) * Math.PI * 2 - Math.PI / 2;
           const inner = index % 3 === 0 ? 58 : 64;
-          return <line key={index} x1={100 + Math.cos(angle) * inner} y1={100 + Math.sin(angle) * inner} x2={100 + Math.cos(angle) * 68} y2={100 + Math.sin(angle) * 68} stroke="#ececec" strokeWidth={index % 3 === 0 ? 2.4 : 1.2} />;
+          return (
+            <line
+              key={index}
+              x1={100 + Math.cos(angle) * inner}
+              y1={100 + Math.sin(angle) * inner}
+              x2={100 + Math.cos(angle) * 68}
+              y2={100 + Math.sin(angle) * 68}
+              stroke="#ececec"
+              strokeWidth={index % 3 === 0 ? 2.4 : 1.2}
+            />
+          );
         })}
-        <line x1="100" y1="100" x2="100" y2="48" stroke="#f7f7f7" strokeWidth="2.4" />
-        <line x1="100" y1="100" x2="108" y2="58" stroke="#d9d9dc" strokeWidth="3.4" />
+        <line
+          x1="100"
+          y1="100"
+          x2="100"
+          y2="48"
+          stroke="#f7f7f7"
+          strokeWidth="2.4"
+        />
+        <line
+          x1="100"
+          y1="100"
+          x2="108"
+          y2="58"
+          stroke="#d9d9dc"
+          strokeWidth="3.4"
+        />
         <circle cx="100" cy="100" r="3.5" fill="#f4f4f4" />
       </svg>
       <div className="fx-art-script">New Year!</div>
@@ -186,7 +300,10 @@ function PreviewCard({ active, font, firstName, lastName, message }) {
 
   return (
     <div className="fx-preview-card">
-      <div className={`fx-preview-art ${active.variant !== "photo" ? "fx-design-art" : ""} ${active.className}`} style={previewArtStyle}>
+      <div
+        className={`fx-preview-art ${active.variant !== "photo" ? "fx-design-art" : ""} ${active.className}`}
+        style={previewArtStyle}
+      >
         {active.variant === "photo" ? (
           <>
             <img src={active.image} alt="Selected gift template preview" />
@@ -194,26 +311,51 @@ function PreviewCard({ active, font, firstName, lastName, message }) {
               <div className="fx-art-label">{active.title}</div>
             )}
           </>
-        ) : <TemplateArt variant={active.variant} />}
+        ) : (
+          <TemplateArt variant={active.variant} />
+        )}
       </div>
       <div className="fx-preview-content" style={previewStyle}>
         <h2>{active.name}</h2>
         {active.year && <p className="fx-year">{active.year}</p>}
-        <h3>{[firstName, lastName].filter(Boolean).join(" ") || "Recipient"}</h3>
+        <h3>
+          {[firstName, lastName].filter(Boolean).join(" ") || "Recipient"}
+        </h3>
         <div className="fx-preview-divider" />
-        <p className="fx-preview-message" style={{ color: active.settings?.text_color || undefined }}>{message || "Your personal message will appear here."}</p>
+        <p
+          className="fx-preview-message"
+          style={{ color: active.settings?.text_color || undefined }}
+        >
+          {message || "Your personal message will appear here."}
+        </p>
         <p className="fx-sender">From Your Name</p>
       </div>
     </div>
   );
 }
 
-function DeliveryOption({ value, selected, icon, title, description, onChange }) {
+function DeliveryOption({
+  value,
+  selected,
+  icon,
+  title,
+  description,
+  onChange,
+}) {
   return (
     <label className="fx-delivery-option">
-      <input type="radio" name="delivery" value={value} checked={selected === value} onChange={() => onChange({ delivery: value })} />
+      <input
+        type="radio"
+        name="delivery"
+        value={value}
+        checked={selected === value}
+        onChange={() => onChange({ delivery: value })}
+      />
       <span className="fx-delivery-copy">
-        <span className="fx-delivery-title">{icon}{title}</span>
+        <span className="fx-delivery-title">
+          {icon}
+          {title}
+        </span>
         <span className="fx-delivery-desc">{description}</span>
       </span>
     </label>
@@ -225,7 +367,9 @@ export default function Customize() {
   const step = useSelector((state) => state.step1.step);
   const gift = useSelector((state) => state.step1.gift);
   const receiverInfo = useSelector((state) => state.step1.receiverInfo);
-  const customization = useSelector((state) => state.step1.giftCustomization || {});
+  const customization = useSelector(
+    (state) => state.step1.giftCustomization || {},
+  );
   const [showPreview, setShowPreview] = useState(false);
   const [occasions, setOccasions] = useState([]);
   const [availableTemplates, setAvailableTemplates] = useState([]);
@@ -341,14 +485,18 @@ export default function Customize() {
                   option.value === font ||
                   option.label === font ||
                   option.family === font,
-              )?.value || apiFonts[0]?.value || font,
+              )?.value ||
+              apiFonts[0]?.value ||
+              font,
             fontFamily:
               apiFonts.find(
                 (option) =>
                   option.value === font ||
                   option.label === font ||
                   option.family === font,
-              )?.family || apiFonts[0]?.family || font,
+              )?.family ||
+              apiFonts[0]?.family ||
+              font,
           }),
         );
       } catch (error) {
@@ -385,13 +533,25 @@ export default function Customize() {
   const active =
     availableTemplates.find(
       (template) => String(template.id) === String(selected),
-    ) || availableTemplates[0] || fallbackTemplates[0];
+    ) ||
+    availableTemplates[0] ||
+    fallbackTemplates[0];
   const visibleTemplates = availableTemplates;
   const visibleFonts = fontOptions.length
     ? fontOptions
-    : ["Roboto", "Arial", "Georgia", "Times New Roman", "Verdana", "Courier New"].map(
-        (value, index) => ({ id: String(index), label: value, value, family: value }),
-      );
+    : [
+        "Roboto",
+        "Arial",
+        "Georgia",
+        "Times New Roman",
+        "Verdana",
+        "Courier New",
+      ].map((value, index) => ({
+        id: String(index),
+        label: value,
+        value,
+        family: value,
+      }));
   const selectedFont =
     visibleFonts.find(
       (option) =>
@@ -401,7 +561,8 @@ export default function Customize() {
     ) || visibleFonts[0];
   const previewFontFamily =
     selectedFont?.family || customization.fontFamily || font;
-  const updateCustomization = (values) => dispatch(setGiftCustomization(values));
+  const updateCustomization = (values) =>
+    dispatch(setGiftCustomization(values));
   const updateRecipient = (values) => dispatch(setReceiverInfo(values));
   const chooseOccasion = async (value) => {
     const occasion = occasions.find(
@@ -463,7 +624,9 @@ export default function Customize() {
                 onChange={(event) => chooseOccasion(event.target.value)}
                 disabled={catalogLoading || occasions.length === 0}
               >
-                {occasions.length === 0 && <option value="">Select occasion</option>}
+                {occasions.length === 0 && (
+                  <option value="">Select occasion</option>
+                )}
                 {occasions.map((occasion) => (
                   <option key={occasion.id} value={String(occasion.id)}>
                     {occasion.name}
@@ -476,34 +639,132 @@ export default function Customize() {
 
           <div className="fx-panel template-panel">
             <div className="fx-step-title fx-template-step-title">
-              <span className="fx-step-number">2</span><span>Choose template</span>
-              <button type="button" className="fx-template-info" aria-label="Each template changes the card design in the preview" title="Each template changes the card design in the preview"><Info size={15} strokeWidth={1.75} /></button>
+              <span className="fx-step-number">2</span>
+              <span>Choose template</span>
+              <button
+                type="button"
+                className="fx-template-info"
+                aria-label="Each template changes the card design in the preview"
+                title="Each template changes the card design in the preview"
+              >
+                <Info size={15} strokeWidth={1.75} />
+              </button>
             </div>
-            <div className="fx-template-grid" role="radiogroup" aria-label="Choose template">
+            <div
+              className="fx-template-grid"
+              role="radiogroup"
+              aria-label="Choose template"
+            >
               {visibleTemplates.map((template) => (
-                <button key={template.id} type="button" role="radio" aria-checked={String(selected) === String(template.id)} className={`fx-template-choice ${String(selected) === String(template.id) ? "fx-active" : ""}`} onClick={() => updateCustomization({ template: template.id, templateName: template.name, templateSettings: template.settings || {} })} aria-label={`Choose ${template.name} template`}>
-                  <span className="fx-template-face"><TemplateArt variant={template.variant} image={template.thumbnail || template.image} alt={template.name} /></span>
-                  {String(selected) === String(template.id) && <span className="fx-template-check"><Check size={13} strokeWidth={3} /></span>}
+                <button
+                  key={template.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={String(selected) === String(template.id)}
+                  className={`fx-template-choice ${String(selected) === String(template.id) ? "fx-active" : ""}`}
+                  onClick={() =>
+                    updateCustomization({
+                      template: template.id,
+                      templateName: template.name,
+                      templateSettings: template.settings || {},
+                    })
+                  }
+                  aria-label={`Choose ${template.name} template`}
+                >
+                  <span className="fx-template-face">
+                    <TemplateArt
+                      variant={template.variant}
+                      image={template.thumbnail || template.image}
+                      alt={template.name}
+                    />
+                  </span>
+                  {String(selected) === String(template.id) && (
+                    <span className="fx-template-check">
+                      <Check size={13} strokeWidth={3} />
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
-            {!catalogLoading && visibleTemplates.length === 0 && <p className="fx-customize-empty">No templates are available for this occasion.</p>}
-            {catalogLoading && <p className="fx-customize-empty">Loading templates…</p>}
-            {catalogError && <p className="fx-customize-error">{catalogError}</p>}
+            {!catalogLoading && visibleTemplates.length === 0 && (
+              <p className="fx-customize-empty">
+                No templates are available for this occasion.
+              </p>
+            )}
+            {catalogLoading && (
+              <p className="fx-customize-empty">Loading templates…</p>
+            )}
+            {catalogError && (
+              <p className="fx-customize-error">{catalogError}</p>
+            )}
           </div>
 
           <div className="fx-panel message-panel">
             <StepTitle number="3">Add a message</StepTitle>
-            <label className="fx-field-label" htmlFor="gift-message">Your personal message</label>
+            <label className="fx-field-label" htmlFor="gift-message">
+              Your personal message
+            </label>
             <div className="fx-editor">
               <div className="fx-toolbar">
-                <button aria-label="Bold" type="button" onClick={() => updateCustomization({ message: message ? `**${message.replace(/^\*\*|\*\*$/g, "")}**` : message })}><Bold size={14} /></button>
-                <button aria-label="Italic" type="button" onClick={() => updateCustomization({ message: message ? `_${message.replace(/^_|_$/g, "")}_` : message })}><Italic size={14} /></button>
-                <button aria-label="Underline" type="button"><Underline size={14} /></button><i />
-                <button aria-label="Align left" type="button"><AlignLeft size={14} /></button><button aria-label="Align center" type="button"><AlignCenter size={14} /></button><button aria-label="Align right" type="button"><AlignRight size={14} /></button><i />
-                <button aria-label="Bulleted list" type="button"><List size={14} /></button><button aria-label="Numbered list" type="button"><ListOrdered size={14} /></button><i /><button aria-label="Insert link" type="button"><Link2 size={14} /></button>
+                <button
+                  aria-label="Bold"
+                  type="button"
+                  onClick={() =>
+                    updateCustomization({
+                      message: message
+                        ? `**${message.replace(/^\*\*|\*\*$/g, "")}**`
+                        : message,
+                    })
+                  }
+                >
+                  <Bold size={14} />
+                </button>
+                <button
+                  aria-label="Italic"
+                  type="button"
+                  onClick={() =>
+                    updateCustomization({
+                      message: message
+                        ? `_${message.replace(/^_|_$/g, "")}_`
+                        : message,
+                    })
+                  }
+                >
+                  <Italic size={14} />
+                </button>
+                <button aria-label="Underline" type="button">
+                  <Underline size={14} />
+                </button>
+                <i />
+                <button aria-label="Align left" type="button">
+                  <AlignLeft size={14} />
+                </button>
+                <button aria-label="Align center" type="button">
+                  <AlignCenter size={14} />
+                </button>
+                <button aria-label="Align right" type="button">
+                  <AlignRight size={14} />
+                </button>
+                <i />
+                <button aria-label="Bulleted list" type="button">
+                  <List size={14} />
+                </button>
+                <button aria-label="Numbered list" type="button">
+                  <ListOrdered size={14} />
+                </button>
+                <i />
+                <button aria-label="Insert link" type="button">
+                  <Link2 size={14} />
+                </button>
               </div>
-              <textarea id="gift-message" value={message} onChange={(event) => updateCustomization({ message: event.target.value })} placeholder="Enter your personal message..." />
+              <textarea
+                id="gift-message"
+                value={message}
+                onChange={(event) =>
+                  updateCustomization({ message: event.target.value })
+                }
+                placeholder="Enter your personal message..."
+              />
             </div>
           </div>
 
@@ -523,33 +784,105 @@ export default function Customize() {
                 }}
               >
                 {visibleFonts.map((fontOption) => (
-                  <option key={fontOption.id} value={fontOption.value}>{fontOption.label}</option>
+                  <option key={fontOption.id} value={fontOption.value}>
+                    {fontOption.label}
+                  </option>
                 ))}
-              </select><ChevronDown size={15} />
+              </select>
+              <ChevronDown size={15} />
             </div>
           </div>
 
           <div className="fx-panel fx-recipient-panel">
             <StepTitle number="5">Add recipient Details</StepTitle>
             <div className="fx-recipient-fields">
-              <input value={receiverInfo.firstName || ""} onChange={(event) => updateRecipient({ firstName: event.target.value })} placeholder="First Name" aria-label="First name" />
-              <input value={receiverInfo.lastName || ""} onChange={(event) => updateRecipient({ lastName: event.target.value })} placeholder="Last name" aria-label="Last name" />
-              <div className="fx-email-field"><input type="email" value={receiverInfo.email || ""} onChange={(event) => updateRecipient({ email: event.target.value })} placeholder="Enter email address" aria-label="Email address" /><Mail size={15} /></div>
+              <input
+                value={receiverInfo.firstName || ""}
+                onChange={(event) =>
+                  updateRecipient({ firstName: event.target.value })
+                }
+                placeholder="First Name"
+                aria-label="First name"
+              />
+              <input
+                value={receiverInfo.lastName || ""}
+                onChange={(event) =>
+                  updateRecipient({ lastName: event.target.value })
+                }
+                placeholder="Last name"
+                aria-label="Last name"
+              />
+              <div className="fx-email-field">
+                <input
+                  type="email"
+                  value={receiverInfo.email || ""}
+                  onChange={(event) =>
+                    updateRecipient({ email: event.target.value })
+                  }
+                  placeholder="Enter email address"
+                  aria-label="Email address"
+                />
+                <Mail size={15} />
+              </div>
             </div>
           </div>
 
           <div className="fx-panel fx-delivery-panel">
             <div className="fx-step-title fx-template-step-title">
-              <span className="fx-step-number">6</span><span>Voucher delivery</span>
-              <button type="button" className="fx-template-info" aria-label="Choose who receives the voucher email" title="Choose who receives the voucher email"><Info size={15} strokeWidth={1.75} /></button>
+              <span className="fx-step-number">6</span>
+              <span>Voucher delivery</span>
+              <button
+                type="button"
+                className="fx-template-info"
+                aria-label="Choose who receives the voucher email"
+                title="Choose who receives the voucher email"
+              >
+                <Info size={15} strokeWidth={1.75} />
+              </button>
             </div>
-            <div className="fx-delivery-list" role="radiogroup" aria-label="Voucher delivery">
-              <DeliveryOption value="recipient" selected={delivery} icon={<Send size={14} />} title="Email the recipient immediately" description="Send the digital voucher directly to the recipient's email." onChange={updateCustomization} />
-              <DeliveryOption value="me" selected={delivery} icon={<Mail size={14} />} title="Email me so I can deliver it" description="Send the digital voucher to your email for personal delivery." onChange={(values) => updateCustomization({ ...values, schedule: false, deliveryDate: "", deliveryTime: "" })} />
+            <div
+              className="fx-delivery-list"
+              role="radiogroup"
+              aria-label="Voucher delivery"
+            >
+              <DeliveryOption
+                value="recipient"
+                selected={delivery}
+                icon={<Send size={14} />}
+                title="Email the recipient immediately"
+                description="Send the digital voucher directly to the recipient's email."
+                onChange={updateCustomization}
+              />
+              <DeliveryOption
+                value="me"
+                selected={delivery}
+                icon={<Mail size={14} />}
+                title="Email me so I can deliver it"
+                description="Send the digital voucher to your email for personal delivery."
+                onChange={(values) =>
+                  updateCustomization({
+                    ...values,
+                    schedule: false,
+                    deliveryDate: "",
+                    deliveryTime: "",
+                  })
+                }
+              />
             </div>
             {delivery === "recipient" && (
               <>
-                <div className="fx-email-field fx-delivery-email"><input type="email" value={receiverInfo.email || ""} onChange={(event) => updateRecipient({ email: event.target.value })} placeholder="Recipient's email" aria-label="Recipient's email" /><Mail size={15} /></div>
+                <div className="fx-email-field fx-delivery-email">
+                  <input
+                    type="email"
+                    value={receiverInfo.email || ""}
+                    onChange={(event) =>
+                      updateRecipient({ email: event.target.value })
+                    }
+                    placeholder="Recipient's email"
+                    aria-label="Recipient's email"
+                  />
+                  <Mail size={15} />
+                </div>
                 {/* <label className="fx-schedule-check"><input type="checkbox" checked={schedule} onChange={(event) => updateCustomization({ schedule: event.target.checked })} /><span>Schedule the recipient email for a specific date &amp; time</span></label>
                 {schedule && (
                   <div className="fx-schedule-stack">
@@ -561,20 +894,64 @@ export default function Customize() {
             )}
           </div>
 
-          <button type="button" className="fx-preview-button" onClick={() => setShowPreview(true)}>PREVIEW</button>
-          <button type="button" className="fx-save-button" disabled={catalogLoading || visibleTemplates.length === 0} onClick={() => dispatch(setStep("checkoutstep"))}>CONTINUE</button>
+          <button
+            type="button"
+            className="fx-preview-button"
+            onClick={() => setShowPreview(true)}
+          >
+            PREVIEW
+          </button>
+          <button
+            type="button"
+            className="fx-save-button"
+            disabled={catalogLoading || visibleTemplates.length === 0}
+            onClick={() => dispatch(setStep("checkoutstep"))}
+          >
+            CONTINUE
+          </button>
         </section>
 
         <aside className="fx-preview-column">
           <h1 className="fx-right-box-heading">Live Preview</h1>
-          <PreviewCard active={active} font={previewFontFamily} firstName={receiverInfo.firstName} lastName={receiverInfo.lastName} message={message} />
+          <PreviewCard
+            active={active}
+            font={previewFontFamily}
+            firstName={receiverInfo.firstName}
+            lastName={receiverInfo.lastName}
+            message={message}
+          />
         </aside>
 
         {showPreview && (
-          <div className="fx-preview-modal" onClick={() => setShowPreview(false)}>
-            <div className="fx-preview-dialog" role="dialog" aria-modal="true" aria-label="Live Preview" onClick={(event) => event.stopPropagation()}>
-              <div className="fx-preview-modal-bar"><h2>Live Preview</h2><button type="button" className="fx-preview-close" onClick={() => setShowPreview(false)} aria-label="Close preview"><X size={18} /></button></div>
-              <PreviewCard active={active} font={previewFontFamily} firstName={receiverInfo.firstName} lastName={receiverInfo.lastName} message={message} />
+          <div
+            className="fx-preview-modal"
+            onClick={() => setShowPreview(false)}
+          >
+            <div
+              className="fx-preview-dialog"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Live Preview"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="fx-preview-modal-bar">
+                <h2>Live Preview</h2>
+                <button
+                  type="button"
+                  className="fx-preview-close"
+                  onClick={() => setShowPreview(false)}
+                  aria-label="Close preview"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              <PreviewCard
+                active={active}
+                font={previewFontFamily}
+                firstName={receiverInfo.firstName}
+                lastName={receiverInfo.lastName}
+                message={message}
+              />
             </div>
           </div>
         )}

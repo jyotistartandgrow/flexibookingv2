@@ -20,10 +20,10 @@
   -webkit-font-smoothing: antialiased;
 }
 
-.fx-booking-single-calender-card p.fx-description{
-      margin-top: 16px;
-      font-size: 16px;
-    color: #696969;
+.fx-booking-single-calender-card p.fx-description {
+  margin-top: 16px;
+  font-size: 16px;
+  color: #696969;
 }
 
 .fx-booking-single-calender-card button {
@@ -414,8 +414,8 @@
   cursor: pointer;
 }
 
-.fx-booking-single-calender-card  .fx-calendar{
- width: 100%;
+.fx-booking-single-calender-card .fx-calendar {
+  width: 100%;
 }
 
 .fx-booking-single-calender-card .fx-calendar-actions {
@@ -465,10 +465,10 @@
   opacity: 0.55;
 }
 
-.fx-booking-single-calender-card .fx-gift-action i{
+.fx-booking-single-calender-card .fx-gift-action i {
   font-size: 16px;
   line-height: 1;
-      margin-right: 4px;
+  margin-right: 4px;
 }
 
 @media (max-width: 460px) {
@@ -480,9 +480,6 @@
     width: 100%;
   }
 }
-
-
-
 
 .fx-single-service-page {
   --fx-service-teal: #078783;
@@ -680,7 +677,10 @@
       font-size: 14px;
       font-weight: 400;
       cursor: pointer;
-      transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
+      transition:
+        background-color 160ms ease,
+        color 160ms ease,
+        transform 160ms ease;
 
       &:disabled {
         cursor: not-allowed;
@@ -724,10 +724,9 @@
   }
 
   @media (max-width: 600px) {
-
-     .fx-service-card{
-        flex-direction: column;
-     }
+    .fx-service-card {
+      flex-direction: column;
+    }
 
     padding: 16px 12px;
 

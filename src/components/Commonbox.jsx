@@ -103,7 +103,9 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
           : 0;
     let extraid = remainingExtras.map((item) => item.id).join(",");
     let extracapacity = remainingExtras.map((item) => item.capacity).join(",");
-    const extraTypeStr = remainingExtras.map((item) => item.extra_type || "local").join(",");
+    const extraTypeStr = remainingExtras
+      .map((item) => item.extra_type || "local")
+      .join(",");
     const { data } = await axiosInstance(
       `/price-format?service_id=${serviceid}&capacity=${servicecapacity}&date=${moment(
         date,
@@ -229,7 +231,9 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                             <div>Participants:</div>
                             <ul aria-label="Selected participants">
                               {participantSummary.map((participant) => (
-                                <li key={participant.key}>{participant.name} × {participant.quantity}</li>
+                                <li key={participant.key}>
+                                  {participant.name} × {participant.quantity}
+                                </li>
                               ))}
                             </ul>
                           </div>
@@ -308,7 +312,9 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                                       </td>
                                       <td>{component.quantity}</td>
                                       <td>{component.date || "-"}</td>
-                                      {!gift && <td>{formatBundleSlot(component)}</td>}
+                                      {!gift && (
+                                        <td>{formatBundleSlot(component)}</td>
+                                      )}
                                       <td>
                                         {component.line_total_formatted
                                           ? decodeHtml(

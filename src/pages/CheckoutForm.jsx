@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
-import { decodeHtml, formatSelectedComponentSlots, toPlainText } from "../Utils/Functions";
+import {
+  decodeHtml,
+  formatSelectedComponentSlots,
+  toPlainText,
+} from "../Utils/Functions";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
 import { setStep, setLoading } from "../store/step1Slice";
@@ -66,7 +70,9 @@ export default function CheckoutForm() {
   const redeemBundleSlots = useSelector(
     (state) => state.step3.redeemBundleSlots,
   );
-  const redeemParticipants = useSelector((state) => state.step3.redeemParticipants);
+  const redeemParticipants = useSelector(
+    (state) => state.step3.redeemParticipants,
+  );
   const voucherDetail = useSelector((state) => state.step3.voucherdetail);
   const billingDetails = useSelector((state) => state.step4.billingDetails);
 
@@ -223,8 +229,7 @@ export default function CheckoutForm() {
             const recipient = hasVoucherRecipientData
               ? voucherRecipient
               : {
-                  recipient_first_name:
-                    billingDetails?.sgbm_field_1 || "",
+                  recipient_first_name: billingDetails?.sgbm_field_1 || "",
                   recipient_last_name: billingDetails?.sgbm_field_2 || "",
                   recipient_email: billingDetails?.sgbm_field_3 || "",
                   recipient_contact: billingDetails?.sgbm_field_4 || "",
@@ -237,10 +242,13 @@ export default function CheckoutForm() {
                 };
             const redeemResponse = await axiosInstance.post(`/voucher-redeem`, {
               voucher,
-              ...(redeemParticipants ? {
-                slot_selection: redeemParticipants.slot_selection,
-                capacity_component_guests: redeemParticipants.capacity_component_guests,
-              } : {}),
+              ...(redeemParticipants
+                ? {
+                    slot_selection: redeemParticipants.slot_selection,
+                    capacity_component_guests:
+                      redeemParticipants.capacity_component_guests,
+                  }
+                : {}),
               date: moment(date).format("YYYY-MM-DD"),
               slot,
               selected_component_slots:

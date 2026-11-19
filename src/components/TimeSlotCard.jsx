@@ -1,4 +1,11 @@
-export default function TimeSlotCard({ time, price, left, selected, disabled, onSelect }) {
+export default function TimeSlotCard({
+  time,
+  price,
+  left,
+  selected,
+  disabled,
+  onSelect,
+}) {
   return (
     <button
       type="button"

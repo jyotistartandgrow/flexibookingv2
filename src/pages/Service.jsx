@@ -6,7 +6,11 @@ import "primeicons/primeicons.css";
 import { Sidebar as Calendarsidebar } from "primereact/sidebar";
 import axiosInstance from "../Utils/Interceptor";
 import moment from "moment";
-import { decodeHtml, formatExtrasTimeSlot, toPlainText } from "../Utils/Functions";
+import {
+  decodeHtml,
+  formatExtrasTimeSlot,
+  toPlainText,
+} from "../Utils/Functions";
 import { Dialog } from "primereact/dialog";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { setDate, setStep, setLoading } from "../store/step1Slice";
@@ -32,7 +36,11 @@ import {
   useComponentParticipants,
 } from "../Utils/bundleParticipants";
 import "../styles/service-participants.scss";
-import { getParticipantSlotStart, getParticipantSelection, normalizeParticipantGroups } from "../Utils/participants";
+import {
+  getParticipantSlotStart,
+  getParticipantSelection,
+  normalizeParticipantGroups,
+} from "../Utils/participants";
 
 export default function Service(props) {
   const dispatch = useDispatch();
@@ -124,21 +132,44 @@ export default function Service(props) {
   };
 
   const detailCapacity = productDetails?.svc_total_cap_left;
-  const hasNoServiceCapacity = detailCapacity !== null &&
-    detailCapacity !== undefined && String(detailCapacity).trim() !== "" &&
+  const hasNoServiceCapacity =
+    detailCapacity !== null &&
+    detailCapacity !== undefined &&
+    String(detailCapacity).trim() !== "" &&
     Number(detailCapacity) === 0;
-  const isPopupBookingDisabled = !gift && (
-    detailsPending || detailsDate !== moment(date).format("YYYY-MM-DD") ||
-    hasNoServiceCapacity
-  );
+  const isPopupBookingDisabled =
+    !gift &&
+    (detailsPending ||
+      detailsDate !== moment(date).format("YYYY-MM-DD") ||
+      hasNoServiceCapacity);
 
-  const selectedSlotCapacity = Math.max(0, Number(currentitem.capacity_left) || 0);
+  const selectedSlotCapacity = Math.max(
+    0,
+    Number(currentitem.capacity_left) || 0,
+  );
   const participantStart = getParticipantSlotStart(currentitem);
-  const participantRequestKey = JSON.stringify([serviceid, moment(date).format("YYYY-MM-DD"), participantStart, selectedServiceOptionId, slot]);
-  const participantConfigReady = participantConfigKey === participantRequestKey && Boolean(participantConfig) && !participantLoading && !participantError;
+  const participantRequestKey = JSON.stringify([
+    serviceid,
+    moment(date).format("YYYY-MM-DD"),
+    participantStart,
+    selectedServiceOptionId,
+    slot,
+  ]);
+  const participantConfigReady =
+    participantConfigKey === participantRequestKey &&
+    Boolean(participantConfig) &&
+    !participantLoading &&
+    !participantError;
   const participantGroups = normalizeParticipantGroups(participantConfig);
-  const participantSelection = getParticipantSelection(participantConfig, participantGroups, participants, selectedSlotCapacity, detailCapacity);
-  const validParticipantQuantity = participantConfigReady && participantSelection.valid;
+  const participantSelection = getParticipantSelection(
+    participantConfig,
+    participantGroups,
+    participants,
+    selectedSlotCapacity,
+    detailCapacity,
+  );
+  const validParticipantQuantity =
+    participantConfigReady && participantSelection.valid;
   const canContinueToParticipants =
     !isPopupBookingDisabled &&
     selectedSlotCapacity > 0 &&
@@ -155,15 +186,24 @@ export default function Service(props) {
     0,
     Math.min(
       selectedSlotCapacity,
-      Number(currentitem.max_capacity) > 0 ? Number(currentitem.max_capacity) : Infinity,
-      detailCapacity !== null && detailCapacity !== undefined && String(detailCapacity).trim() !== ""
+      Number(currentitem.max_capacity) > 0
+        ? Number(currentitem.max_capacity)
+        : Infinity,
+      detailCapacity !== null &&
+        detailCapacity !== undefined &&
+        String(detailCapacity).trim() !== ""
         ? Number(detailCapacity)
         : Infinity,
     ),
   );
-  const virtualQuantityValid = book >= virtualMinQuantity && book <= virtualMaxQuantity;
+  const virtualQuantityValid =
+    book >= virtualMinQuantity && book <= virtualMaxQuantity;
   const virtualParticipants = useComponentParticipants(
-    isVirtualSelection && visible && showParticipantStep && canContinueToParticipants && virtualQuantityValid
+    isVirtualSelection &&
+      visible &&
+      showParticipantStep &&
+      canContinueToParticipants &&
+      virtualQuantityValid
       ? buildVirtualParticipantsRequest({
           serviceId: serviceid,
           virtualServiceId,
@@ -182,8 +222,12 @@ export default function Service(props) {
     (virtualParticipants.required && !virtualParticipants.valid);
 
   const canContinueService = isVirtualSelection
-    ? canContinueToParticipants && virtualQuantityValid && !virtualParticipantsBlocking
-    : canContinueToParticipants && validParticipantQuantity && book === participantSelection.total;
+    ? canContinueToParticipants &&
+      virtualQuantityValid &&
+      !virtualParticipantsBlocking
+    : canContinueToParticipants &&
+      validParticipantQuantity &&
+      book === participantSelection.total;
   const participantQuantityMessage = participantSelection.message;
 
   const serviceOptionList = serviceOptionChoices
@@ -350,7 +394,15 @@ export default function Service(props) {
       prevDate.currentCategory = category;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date, step, serviceid, category, bundleId, virtualServiceId, props.popupOnly]);
+  }, [
+    date,
+    step,
+    serviceid,
+    category,
+    bundleId,
+    virtualServiceId,
+    props.popupOnly,
+  ]);
 
   const fetchProductsByDateRequest = async (selectedDate) => {
     setLoadingske(true);
@@ -358,7 +410,9 @@ export default function Service(props) {
     allService = all ? true : allService;
     // data-service-ids="1,2,3" limits the list to those services. The API
     // rejects anything but positive IDs, so drop blanks/invalid entries.
-    const serviceIdsFilter = (Array.isArray(props.serviceIds) ? props.serviceIds : [])
+    const serviceIdsFilter = (
+      Array.isArray(props.serviceIds) ? props.serviceIds : []
+    )
       .map((id) => String(id).trim())
       .filter((id) => /^[1-9][0-9]*$/.test(id))
       .join(",");
@@ -382,7 +436,9 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        titleText: toPlainText(data?.message || "No services found for the selected date"),
+        titleText: toPlainText(
+          data?.message || "No services found for the selected date",
+        ),
       });
     }
   };
@@ -390,15 +446,25 @@ export default function Service(props) {
   const getVirtualServiceId = (product) =>
     product?.product_type === "virtual_service"
       ? normalizeBundleId(
-          product.virtual_service_id ?? product.selected_virtual_service_id ?? product.product_id,
+          product.virtual_service_id ??
+            product.selected_virtual_service_id ??
+            product.product_id,
         )
       : 0;
 
   const openProductDetails = (product) => {
-    servicedetail(product.id, product.bundle_id ?? 0, getVirtualServiceId(product));
+    servicedetail(
+      product.id,
+      product.bundle_id ?? 0,
+      getVirtualServiceId(product),
+    );
   };
 
-  const servicedetailRequest = async (id, selectedBundleId = 0, selectedVirtualId = 0) => {
+  const servicedetailRequest = async (
+    id,
+    selectedBundleId = 0,
+    selectedVirtualId = 0,
+  ) => {
     participantDefaultsKey.current = null;
     setShowParticipantStep(false);
     setParticipants({});
@@ -410,7 +476,8 @@ export default function Service(props) {
     const requestDate = moment(date).format("YYYY-MM-DD");
     setDetailsPending(true);
     const normalizedVirtualId = normalizeBundleId(selectedVirtualId);
-    const normalizedBundleId = normalizedVirtualId > 0 ? 0 : normalizeBundleId(selectedBundleId);
+    const normalizedBundleId =
+      normalizedVirtualId > 0 ? 0 : normalizeBundleId(selectedBundleId);
     setShowBundleSlots(false);
     setBundleSchedule(null);
     setBundleSelectedSlots([]);
@@ -421,7 +488,8 @@ export default function Service(props) {
       setServiceOptionsConfirmed(false);
     }
     const isSameDetailContext =
-      serviceid === id && normalizeBundleId(bundleId) === normalizedBundleId &&
+      serviceid === id &&
+      normalizeBundleId(bundleId) === normalizedBundleId &&
       virtualServiceId === normalizedVirtualId;
     if (!visible || !isSameDetailContext || !participantLineKey.current) {
       participantLineKey.current = `v1:${crypto.randomUUID()}`;
@@ -447,7 +515,11 @@ export default function Service(props) {
       setSlot("");
       setBook(0);
       setCurrentItem({});
-      setSelectedSlotContext({ serviceId: null, bundleId: 0, virtualServiceId: 0 });
+      setSelectedSlotContext({
+        serviceId: null,
+        bundleId: 0,
+        virtualServiceId: 0,
+      });
       if (serviceid !== id || virtualServiceId !== normalizedVirtualId) {
         setServiceOptionChoices(null);
         setSelectedServiceOptionId(0);
@@ -532,8 +604,12 @@ export default function Service(props) {
       }
       setProductDetails(data?.data);
       const capacityLeft = data?.data?.svc_total_cap_left;
-      if (capacityLeft !== null && capacityLeft !== undefined &&
-          String(capacityLeft).trim() !== "" && Number(capacityLeft) === 0) {
+      if (
+        capacityLeft !== null &&
+        capacityLeft !== undefined &&
+        String(capacityLeft).trim() !== "" &&
+        Number(capacityLeft) === 0
+      ) {
         setSlot("");
         setBook(0);
         setCurrentItem({});
@@ -560,13 +636,21 @@ export default function Service(props) {
 
       if (!gift && normalizedVirtualId > 0) {
         setCalendarslots(
-          (data.data.date_slots || []).map((item) => ({ ...item, ...item.slots })),
+          (data.data.date_slots || []).map((item) => ({
+            ...item,
+            ...item.slots,
+          })),
         );
         setDisabledDates([]);
         dispatch(setLoading(false));
       } else if (!gift) {
         const monthYear = moment().format("YYYY-MM");
-        getslotavailabilitycalendar(monthYear, id, normalizedBundleId, normalizedVirtualId);
+        getslotavailabilitycalendar(
+          monthYear,
+          id,
+          normalizedBundleId,
+          normalizedVirtualId,
+        );
       } else {
         dispatch(setLoading(false));
       }
@@ -579,7 +663,9 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000,
         icon: "error",
-        titleText: toPlainText(data?.message || "Unable to load service details"),
+        titleText: toPlainText(
+          data?.message || "Unable to load service details",
+        ),
       });
     }
   };
@@ -603,9 +689,13 @@ export default function Service(props) {
 
     if (dataa?.data) {
       const datedarr = [];
-      const calendarDays = selectedVirtualId > 0
-        ? (dataa.data.date_slots || []).map((item) => ({ ...item, ...item.slots }))
-        : dataa.data;
+      const calendarDays =
+        selectedVirtualId > 0
+          ? (dataa.data.date_slots || []).map((item) => ({
+              ...item,
+              ...item.slots,
+            }))
+          : dataa.data;
       setCalendarslots(calendarDays);
       calendarDays.forEach((dateItem) => {
         if (dateItem.is_bookable === false) {
@@ -620,18 +710,24 @@ export default function Service(props) {
   };
 
   useEffect(() => {
-    if (
-      !props.popupOnly ||
-      !props.openRequest ||
-      !props.requestedServiceId
-    ) {
+    if (!props.popupOnly || !props.openRequest || !props.requestedServiceId) {
       return;
     }
 
-    servicedetail(props.requestedServiceId, props.requestedBundleId ?? 0, props.requestedVirtualServiceId ?? 0);
+    servicedetail(
+      props.requestedServiceId,
+      props.requestedBundleId ?? 0,
+      props.requestedVirtualServiceId ?? 0,
+    );
     // The request counter deliberately controls each external popup launch.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.openRequest, props.popupOnly, props.requestedServiceId, props.requestedBundleId, props.requestedVirtualServiceId]);
+  }, [
+    props.openRequest,
+    props.popupOnly,
+    props.requestedServiceId,
+    props.requestedBundleId,
+    props.requestedVirtualServiceId,
+  ]);
 
   useEffect(() => {
     if (props.popupOnly && visible && serviceid) {
@@ -644,7 +740,16 @@ export default function Service(props) {
   }, [date]);
 
   useEffect(() => {
-    if (!showParticipantStep || !visible || gift || bundleId > 0 || virtualServiceId > 0 || !serviceid || !participantStart) return;
+    if (
+      !showParticipantStep ||
+      !visible ||
+      gift ||
+      bundleId > 0 ||
+      virtualServiceId > 0 ||
+      !serviceid ||
+      !participantStart
+    )
+      return;
 
     const controller = new AbortController();
     let active = true;
@@ -653,18 +758,25 @@ export default function Service(props) {
 
     const loadParticipants = async () => {
       try {
-        const { data: response } = await axiosInstance.get(`/services/${serviceid}/participants`, {
-          params: {
-            date: moment(date).format("YYYY-MM-DD"),
-            start: participantStart,
-            line_key: participantLineKey.current,
-            option_value_ids: selectedServiceOptionId > 0 ? selectedServiceOptionId : "",
+        const { data: response } = await axiosInstance.get(
+          `/services/${serviceid}/participants`,
+          {
+            params: {
+              date: moment(date).format("YYYY-MM-DD"),
+              start: participantStart,
+              line_key: participantLineKey.current,
+              option_value_ids:
+                selectedServiceOptionId > 0 ? selectedServiceOptionId : "",
+            },
+            signal: controller.signal,
           },
-          signal: controller.signal,
-        });
+        );
         if (!active) return;
         if (response?.status !== 200 || !response?.data?.categories) {
-          throw new Error(response?.message || "Participant options are unavailable for this slot.");
+          throw new Error(
+            response?.message ||
+              "Participant options are unavailable for this slot.",
+          );
         }
         setParticipantConfig(response.data);
         setParticipantConfigKey(participantRequestKey);
@@ -679,14 +791,34 @@ export default function Service(props) {
       } catch (error) {
         if (!active) return;
         setParticipantConfig(null);
-        setParticipantError(error?.data?.message || error?.response?.data?.message || error?.message || "Unable to load participant options. Please try again.");
+        setParticipantError(
+          error?.data?.message ||
+            error?.response?.data?.message ||
+            error?.message ||
+            "Unable to load participant options. Please try again.",
+        );
       } finally {
         if (active) setParticipantLoading(false);
       }
     };
     loadParticipants();
-    return () => { active = false; controller.abort(); };
-  }, [showParticipantStep, visible, gift, bundleId, virtualServiceId, serviceid, date, participantStart, selectedServiceOptionId, participantRequestKey, participantRetry]);
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [
+    showParticipantStep,
+    visible,
+    gift,
+    bundleId,
+    virtualServiceId,
+    serviceid,
+    date,
+    participantStart,
+    selectedServiceOptionId,
+    participantRequestKey,
+    participantRetry,
+  ]);
 
   const handleMonthChange = (e) => {
     if (e.month < 0) {
@@ -925,46 +1057,51 @@ export default function Service(props) {
         onImageLoad={() => markServiceImageLoaded(product.id)}
         description={decodeHtml(product.svc_short_desc)}
       >
-          <p className="price">
-            <span
-              className="fx-price-form"
-              style={{ display: gift ? "none" : "inline" }}
-            >
-              from
+        <p className="price">
+          <span
+            className="fx-price-form"
+            style={{ display: gift ? "none" : "inline" }}
+          >
+            from
+          </span>
+          <span className="fx-price-one">
+            {decodeHtml(product.svc_price).split(",")[0]}
+          </span>
+          {parsePriceToNumber(product.svc_default_price) >
+            parsePriceToNumber(product.svc_price) && (
+            <span className="fx-price-two">
+              {decodeHtml(product.svc_default_price).split(",")[0]}
             </span>
-            <span className="fx-price-one">
-              {decodeHtml(product.svc_price).split(",")[0]}
-            </span>
-            {parsePriceToNumber(product.svc_default_price) >
-              parsePriceToNumber(product.svc_price) && (
-              <span className="fx-price-two">
-                {decodeHtml(product.svc_default_price).split(",")[0]}
-              </span>
-            )}
-            {props.showBookNowButton !== "true" && (
-              <i className="pi pi-chevron-right"></i>
-            )}
-          </p>
-          {props.showBookNowButton == "true" && (
-            <div
-              className="booknowbtn"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                openProductDetails(product);
-              }}
-            >
-              <a href="#" onClick={(e) => e.preventDefault()}>
-                {gift ? "Select Gift" : "Book Now"}
-              </a>
-            </div>
           )}
+          {props.showBookNowButton !== "true" && (
+            <i className="pi pi-chevron-right"></i>
+          )}
+        </p>
+        {props.showBookNowButton == "true" && (
+          <div
+            className="booknowbtn"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              openProductDetails(product);
+            }}
+          >
+            <a href="#" onClick={(e) => e.preventDefault()}>
+              {gift ? "Select Gift" : "Book Now"}
+            </a>
+          </div>
+        )}
       </ServiceCard>
     );
   };
 
   const selectServiceTimeSlot = (item) => {
-    if (isPopupBookingDisabled || item?.slot_type !== "active" || Number(item.capacity_left) <= 0) return;
+    if (
+      isPopupBookingDisabled ||
+      item?.slot_type !== "active" ||
+      Number(item.capacity_left) <= 0
+    )
+      return;
     if (slot !== item.time_slot) {
       participantDefaultsKey.current = null;
       setParticipants({});
@@ -988,8 +1125,19 @@ export default function Service(props) {
     const nextCount = (participants[group] || 0) + delta;
     if (nextCount < 0) return;
     const nextParticipants = { ...participants, [group]: nextCount };
-    const nextSelection = getParticipantSelection(participantConfig, participantGroups, nextParticipants, selectedSlotCapacity, detailCapacity);
-    if (delta > 0 && (nextSelection.total > nextSelection.maximum || nextSelection.counting > nextSelection.physicalCapacity)) return;
+    const nextSelection = getParticipantSelection(
+      participantConfig,
+      participantGroups,
+      nextParticipants,
+      selectedSlotCapacity,
+      detailCapacity,
+    );
+    if (
+      delta > 0 &&
+      (nextSelection.total > nextSelection.maximum ||
+        nextSelection.counting > nextSelection.physicalCapacity)
+    )
+      return;
     setParticipants(nextParticipants);
     setBook(nextSelection.total);
   };
@@ -1211,8 +1359,16 @@ export default function Service(props) {
     if (isVirtualSelection) {
       if (!virtualQuantityValid || virtualParticipantsBlocking) return;
       // Re-check the chosen visitors against live capacity before pricing.
-      if (virtualParticipants.required && !(await virtualParticipants.validate())) return;
-    } else if (book < (participantConfig?.quantity_rules?.minimum_quantity ?? currentitem.min_capacity)) {
+      if (
+        virtualParticipants.required &&
+        !(await virtualParticipants.validate())
+      )
+        return;
+    } else if (
+      book <
+      (participantConfig?.quantity_rules?.minimum_quantity ??
+        currentitem.min_capacity)
+    ) {
       Swal.fire({
         toast: true,
         position: "top-end", // or 'bottom-end', 'top-start', etc.
@@ -1387,8 +1543,10 @@ export default function Service(props) {
         selected_virtual_service_id: virtualServiceId || null,
         components: virtualServiceId > 0 ? productDetails.components || [] : [],
         participants: gift || isVirtualSelection ? null : { ...participants },
-        participant_guests: gift || isVirtualSelection ? [] : participantSelection.guests,
-        participant_configuration: gift || isVirtualSelection ? null : participantConfig,
+        participant_guests:
+          gift || isVirtualSelection ? [] : participantSelection.guests,
+        participant_configuration:
+          gift || isVirtualSelection ? null : participantConfig,
         capacity_component_guests:
           isVirtualSelection && virtualParticipants.required
             ? virtualParticipants.guests
@@ -1485,7 +1643,10 @@ export default function Service(props) {
   const addtocartRequest = async () => {
     dispatch(setLoading(true));
     const { data } = await axiosInstance.post(`/addtocart`, {
-      ...(!gift && bundleId === 0 && virtualServiceId === 0 && participantSelection.guests.length > 0
+      ...(!gift &&
+      bundleId === 0 &&
+      virtualServiceId === 0 &&
+      participantSelection.guests.length > 0
         ? {
             capacity_line_key: participantLineKey.current,
             capacity_guests: participantSelection.guests,
@@ -1521,7 +1682,9 @@ export default function Service(props) {
     });
     if (data && data.status == 200 && data.data.booking_string) {
       dispatch(setBookingkey(data.data.booking_string));
-      dispatch(setStep(gift && !opendatepurchase ? "customizestep" : "checkoutstep"));
+      dispatch(
+        setStep(gift && !opendatepurchase ? "customizestep" : "checkoutstep"),
+      );
       dispatch(setLoading(false));
     } else {
       Swal.fire({
@@ -1530,7 +1693,9 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
-        titleText: toPlainText(data?.message ?? "There is some error , please try again"),
+        titleText: toPlainText(
+          data?.message ?? "There is some error , please try again",
+        ),
       });
       dispatch(setLoading(false));
     }
@@ -1554,18 +1719,40 @@ export default function Service(props) {
           showConfirmButton: false,
           timer: 3000,
           icon: "error",
-          titleText: toPlainText(error?.data?.message || error?.response?.data?.message || fallbackMessage),
+          titleText: toPlainText(
+            error?.data?.message ||
+              error?.response?.data?.message ||
+              fallbackMessage,
+          ),
         });
         return undefined;
       }
     };
-  const fetchProductsByDate = guardRequest(fetchProductsByDateRequest, "Unable to load services for the selected date");
-  const servicedetail = guardRequest(servicedetailRequest, "Unable to load service details");
-  const getslotavailabilitycalendar = guardRequest(getslotavailabilitycalendarRequest, "Unable to load slot availability");
-  const bookservice = guardRequest(bookserviceRequest, "Unable to calculate the price");
-  const giftbookservice = guardRequest(giftbookserviceRequest, "Unable to calculate the price");
+  const fetchProductsByDate = guardRequest(
+    fetchProductsByDateRequest,
+    "Unable to load services for the selected date",
+  );
+  const servicedetail = guardRequest(
+    servicedetailRequest,
+    "Unable to load service details",
+  );
+  const getslotavailabilitycalendar = guardRequest(
+    getslotavailabilitycalendarRequest,
+    "Unable to load slot availability",
+  );
+  const bookservice = guardRequest(
+    bookserviceRequest,
+    "Unable to calculate the price",
+  );
+  const giftbookservice = guardRequest(
+    giftbookserviceRequest,
+    "Unable to calculate the price",
+  );
   const hasExtra = guardRequest(hasExtraRequest, "Failed to fetch extras");
-  const addtocart = guardRequest(addtocartRequest, "Unable to add the service to the cart");
+  const addtocart = guardRequest(
+    addtocartRequest,
+    "Unable to add the service to the cart",
+  );
 
   const displayedProducts =
     selectedCategory === "all"
@@ -1586,12 +1773,14 @@ export default function Service(props) {
     bundleTimeSlots.selected_component_slots.length > 0
       ? bundleTimeSlots.selected_component_slots
       : bundleSelectedSlots;
-  const bundleAllSelected = !isPopupBookingDisabled && Boolean(
-    bundleTimeSlots?.bookable ||
-    (Number(bundleTimeSlots?.total_count) > 0 &&
-      selectedBundleComponentSlots.length >=
-        Number(bundleTimeSlots?.total_count)),
-  );
+  const bundleAllSelected =
+    !isPopupBookingDisabled &&
+    Boolean(
+      bundleTimeSlots?.bookable ||
+      (Number(bundleTimeSlots?.total_count) > 0 &&
+        selectedBundleComponentSlots.length >=
+          Number(bundleTimeSlots?.total_count)),
+    );
   const maxBundleQuantity = Math.max(
     1,
     Number(bundleTimeSlots?.bundle_capacity_left) || 1,
@@ -1847,53 +2036,47 @@ export default function Service(props) {
                     product={product}
                     className={getServiceCardClassName(product)}
                     key={p1}
-                    onClick={() =>
-                      openProductDetails(product)
-                    }
+                    onClick={() => openProductDetails(product)}
                     decoration={renderBundleTooltip(product)}
                     showCategory={props.categoryLabelVisibility == "true"}
                     imageLoaded={Boolean(loadedServiceImages[product.id])}
                     onImageLoad={() => markServiceImageLoaded(product.id)}
                   >
-                      <p className="price">
-                        <span
-                          className="fx-price-form"
-                          style={{ display: gift ? "none" : "block" }}
-                        >
-                          from
+                    <p className="price">
+                      <span
+                        className="fx-price-form"
+                        style={{ display: gift ? "none" : "block" }}
+                      >
+                        from
+                      </span>
+                      <span className="fx-price-one">
+                        {decodeHtml(product.svc_price).split(",")[0]}
+                      </span>
+                      {parsePriceToNumber(product.svc_default_price) >
+                        parsePriceToNumber(product.svc_price) && (
+                        <span className="fx-price-two">
+                          {decodeHtml(product.svc_default_price).split(",")[0]}
                         </span>
-                        <span className="fx-price-one">
-                          {decodeHtml(product.svc_price).split(",")[0]}
-                        </span>
-                        {parsePriceToNumber(product.svc_default_price) >
-                          parsePriceToNumber(product.svc_price) && (
-                          <span className="fx-price-two">
-                            {
-                              decodeHtml(product.svc_default_price).split(
-                                ",",
-                              )[0]
-                            }
-                          </span>
-                        )}
-                        {props.showBookNowButton !== "true" && (
-                          <i className="pi pi-chevron-right"></i>
-                        )}
-                      </p>
-
-                      {props.showBookNowButton == "true" && (
-                        <div
-                          className="booknowbtn"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            openProductDetails(product);
-                          }}
-                        >
-                          <a href="#" onClick={(e) => e.preventDefault()}>
-                            {gift ? "Select Gift" : "Book Now"}
-                          </a>
-                        </div>
                       )}
+                      {props.showBookNowButton !== "true" && (
+                        <i className="pi pi-chevron-right"></i>
+                      )}
+                    </p>
+
+                    {props.showBookNowButton == "true" && (
+                      <div
+                        className="booknowbtn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          openProductDetails(product);
+                        }}
+                      >
+                        <a href="#" onClick={(e) => e.preventDefault()}>
+                          {gift ? "Select Gift" : "Book Now"}
+                        </a>
+                      </div>
+                    )}
                   </ServiceCard>
                 );
               })}
@@ -1912,9 +2095,7 @@ export default function Service(props) {
                 <div
                   className={getListCardClassName(product)}
                   key={p2}
-                  onClick={() =>
-                    openProductDetails(product)
-                  }
+                  onClick={() => openProductDetails(product)}
                 >
                   <div className="fx-servicepicboxlist">
                     <div className="fx-list-img-box">
@@ -1923,7 +2104,7 @@ export default function Service(props) {
                       )}
                       <img
                         src={product.svc_img}
-                        alt={product.service_name}
+                        alt={product.service_title || product.service_name}
                         onLoad={() => markServiceImageLoaded(product.id)}
                         onError={() => markServiceImageLoaded(product.id)}
                       />
@@ -1937,7 +2118,8 @@ export default function Service(props) {
                   </div>
                   <div className="fx-servicecontentboxlist">
                     <div className="list-view-text-content">
-                      <h4>{product.service_name}</h4>
+                      {/* List view has room for the full name (service_name is truncated by the API). */}
+                      <h4>{product.service_title || product.service_name}</h4>
                       <p>{product.svc_short_desc}</p>
                     </div>
                     <p className="price">
@@ -2246,177 +2428,227 @@ export default function Service(props) {
                                   </span>
                                 )}
                             </p>{" "}
-                            <div style={{ display: showParticipantStep ? "none" : undefined }}>
-                            <p className="datetext">
-                              {moment(date).format("MMM YYYY")}
-                            </p>
-                            <div className="calendarboxbar">
-                              {dateslot &&
-                                dateslot.map((slot, k) => (
-                                  <div
-                                    key={k}
-                                    className={
-                                      moment(
-                                        moment(date).format("YYYY-MM-DD"),
-                                      ).isSame(slot.date)
-                                        ? "calendarbox active"
-                                        : "calendarbox"
+                            <div
+                              style={{
+                                display: showParticipantStep
+                                  ? "none"
+                                  : undefined,
+                              }}
+                            >
+                              <p className="datetext">
+                                {moment(date).format("MMM YYYY")}
+                              </p>
+                              <div className="calendarboxbar">
+                                {dateslot &&
+                                  dateslot.map((slot, k) => (
+                                    <div
+                                      key={k}
+                                      className={
+                                        moment(
+                                          moment(date).format("YYYY-MM-DD"),
+                                        ).isSame(slot.date)
+                                          ? "calendarbox active"
+                                          : "calendarbox"
+                                      }
+                                      onClick={() => getslotbydate(slot.date)}
+                                    >
+                                      {moment(slot.date).format("ddd")}
+                                      <br />
+                                      <span>
+                                        {moment(slot.date).format("DD")}
+                                      </span>
+                                      <div className="fx-date-progress-bar"></div>
+                                    </div>
+                                  ))}
+                                <div className="calendarbox">
+                                  <i
+                                    className="pi pi-calendar"
+                                    alt="Open Calendar"
+                                    id="fx-openCalendar"
+                                    onClick={(e) =>
+                                      isDesktop
+                                        ? op.current.toggle(e)
+                                        : setCalendarVisible(true)
                                     }
-                                    onClick={() => getslotbydate(slot.date)}
-                                  >
-                                    {moment(slot.date).format("ddd")}
-                                    <br />
-                                    <span>
-                                      {moment(slot.date).format("DD")}
-                                    </span>
-                                    <div className="fx-date-progress-bar"></div>
-                                  </div>
-                                ))}
-                              <div className="calendarbox">
-                                <i
-                                  className="pi pi-calendar"
-                                  alt="Open Calendar"
-                                  id="fx-openCalendar"
-                                  onClick={(e) =>
-                                    isDesktop
-                                      ? op.current.toggle(e)
-                                      : setCalendarVisible(true)
-                                  }
-                                ></i>
+                                  ></i>
 
-                                <div id="fx-calendarContainer">
-                                  {isDesktop ? (
-                                    <OverlayPanel
-                                      ref={op}
-                                      className="fx-calendar-box"
+                                  <div id="fx-calendarContainer">
+                                    {isDesktop ? (
+                                      <OverlayPanel
+                                        ref={op}
+                                        className="fx-calendar-box"
+                                      >
+                                        <CalendarPage
+                                          inline
+                                          value={date}
+                                          onChange={(e) => {
+                                            dispatch(setDate(e.value));
+                                            op.current.hide();
+                                          }}
+                                          dateTemplate={dateTemplate}
+                                          disabledDates={disabledDates}
+                                          handleMonthChange={handleMonthChange}
+                                        />
+                                      </OverlayPanel>
+                                    ) : (
+                                      <Calendarsidebar
+                                        visible={calendarVisible}
+                                        onHide={() => setCalendarVisible(false)}
+                                        position="bottom"
+                                        className="fx-calendar-sidebar"
+                                      >
+                                        <CalendarPage
+                                          inline
+                                          value={date}
+                                          onChange={(e) => {
+                                            dispatch(setDate(e.value));
+                                            setCalendarVisible(false);
+                                          }}
+                                          dateTemplate={dateTemplate}
+                                          disabledDates={disabledDates}
+                                          handleMonthChange={handleMonthChange}
+                                        />
+                                      </Calendarsidebar>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                              {bundleId > 0 && (
+                                <div className="fx-bundle-box">
+                                  <div className="fx-bundle-title">
+                                    <svg
+                                      className="fx-bundle-icon"
+                                      viewBox="0 0 24 24"
+                                      fill="currentColor"
                                     >
-                                      <CalendarPage
-                                        inline
-                                        value={date}
-                                        onChange={(e) => {
-                                          dispatch(setDate(e.value));
-                                          op.current.hide();
-                                        }}
-                                        dateTemplate={dateTemplate}
-                                        disabledDates={disabledDates}
-                                        handleMonthChange={handleMonthChange}
-                                      />
-                                    </OverlayPanel>
-                                  ) : (
-                                    <Calendarsidebar
-                                      visible={calendarVisible}
-                                      onHide={() => setCalendarVisible(false)}
-                                      position="bottom"
-                                      className="fx-calendar-sidebar"
+                                      <path d="M20 7h-3.17l-1.41-1.41A1.98 1.98 0 0 0 14 5h-4c-.7 0-1.3.3-1.42.59L7.17 7H4a2 2 0 0 0-2 2v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2Zm-8 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+                                    </svg>
+
+                                    <span>What's included in this bundle</span>
+                                  </div>
+
+                                  {bundleComponents.map((component, index) => (
+                                    <div
+                                      className="fx-bundle-item"
+                                      key={
+                                        component?.bundle_item_id ??
+                                        `${component?.service_id ?? "component"}-${index}`
+                                      }
                                     >
-                                      <CalendarPage
-                                        inline
-                                        value={date}
-                                        onChange={(e) => {
-                                          dispatch(setDate(e.value));
-                                          setCalendarVisible(false);
-                                        }}
-                                        dateTemplate={dateTemplate}
-                                        disabledDates={disabledDates}
-                                        handleMonthChange={handleMonthChange}
-                                      />
-                                    </Calendarsidebar>
+                                      <h3 className="fx-bundle-item-title">
+                                        {decodeHtml(
+                                          component?.component_label || "",
+                                        )}
+                                      </h3>
+                                      <p className="fx-bundle-item-description">
+                                        <span>
+                                          {decodeHtml(
+                                            component?.service_name || "",
+                                          )}
+                                        </span>
+                                        <span>
+                                          {decodeHtml(
+                                            component?.quantity_label || "",
+                                          )}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              {bundleId == 0 && (
+                                <ServiceSlotSelection
+                                  availability={slotObj?.slots}
+                                  selectedSlot={slot}
+                                  tab={slotVisible}
+                                  onTabChange={setSlotVisible}
+                                  onSelect={selectServiceTimeSlot}
+                                  disabled={isPopupBookingDisabled}
+                                  fallbackPrice={productDetails.svc_price}
+                                />
+                              )}
+                            </div>
+                            {showParticipantStep &&
+                              bundleId === 0 &&
+                              isVirtualSelection && (
+                                <VirtualServiceParticipants
+                                  slot={slot}
+                                  price={decodeHtml(
+                                    String(
+                                      currentitem.slot_price_formatted ||
+                                        currentitem.formatted_price ||
+                                        productDetails.svc_price ||
+                                        "",
+                                    ),
                                   )}
-                                </div>
-                              </div>
-                            </div>
-                            {bundleId > 0 && (
-                              <div className="fx-bundle-box">
-                                <div className="fx-bundle-title">
-                                  <svg
-                                    className="fx-bundle-icon"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                  >
-                                    <path d="M20 7h-3.17l-1.41-1.41A1.98 1.98 0 0 0 14 5h-4c-.7 0-1.3.3-1.42.59L7.17 7H4a2 2 0 0 0-2 2v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2Zm-8 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
-                                  </svg>
-
-                                  <span>What's included in this bundle</span>
-                                </div>
-
-                                {bundleComponents.map((component, index) => (
-                                  <div
-                                    className="fx-bundle-item"
-                                    key={
-                                      component?.bundle_item_id ??
-                                      `${component?.service_id ?? "component"}-${index}`
-                                    }
-                                  >
-                                    <h3 className="fx-bundle-item-title">
-                                      {decodeHtml(
-                                        component?.component_label || "",
-                                      )}
-                                    </h3>
-                                    <p className="fx-bundle-item-description">
-                                      <span>
-                                        {decodeHtml(
-                                          component?.service_name || "",
-                                        )}
-                                      </span>
-                                      <span>
-                                        {decodeHtml(
-                                          component?.quantity_label || "",
-                                        )}
-                                      </span>
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                            {bundleId == 0 && (
-                              <ServiceSlotSelection
-                                availability={slotObj?.slots}
-                                selectedSlot={slot}
-                                tab={slotVisible}
-                                onTabChange={setSlotVisible}
-                                onSelect={selectServiceTimeSlot}
-                                disabled={isPopupBookingDisabled}
-                                fallbackPrice={productDetails.svc_price}
-                              />
-                            )}
-                            </div>
-                            {showParticipantStep && bundleId === 0 && isVirtualSelection && (
-                              <VirtualServiceParticipants
-                                slot={slot}
-                                price={decodeHtml(String(currentitem.slot_price_formatted || currentitem.formatted_price || productDetails.svc_price || ""))}
-                                quantity={book}
-                                minQuantity={virtualMinQuantity}
-                                maxQuantity={virtualMaxQuantity}
-                                onQuantityChange={(next) =>
-                                  setBook(Math.min(virtualMaxQuantity, Math.max(virtualMinQuantity, next)))
-                                }
-                                onBack={() => setShowParticipantStep(false)}
-                                disabled={isPopupBookingDisabled}
-                                selection={virtualParticipants}
-                              />
-                            )}
-                            {showParticipantStep && bundleId === 0 && !isVirtualSelection && (
-                              <ServiceParticipants
-                                slot={slot}
-                                price={decodeHtml(String(currentitem.slot_price_formatted || currentitem.formatted_price || productDetails.svc_price || ""))}
-                                counts={participants}
-                                groups={participantGroups}
-                                onChange={changeParticipantCount}
-                                onBack={() => setShowParticipantStep(false)}
-                                disabled={isPopupBookingDisabled || !participantConfigReady}
-                                loading={participantLoading || (!participantConfigReady && !participantError)}
-                                error={participantError}
-                                onRetry={() => setParticipantRetry((retry) => retry + 1)}
-                                maxQuantity={participantSelection.maximum}
-                                counting={participantSelection.counting}
-                                physicalCapacity={participantSelection.physicalCapacity}
-                                formatPrice={(value) => formatCalculatedPrice(value, productDetails.svc_price, 1)}
-                                totalPrice={formatCalculatedPrice(participantSelection.price, productDetails.svc_price, 1)}
-                                total={book}
-                                validQuantity={validParticipantQuantity}
-                                quantityMessage={participantQuantityMessage}
-                              />
-                            )}
+                                  quantity={book}
+                                  minQuantity={virtualMinQuantity}
+                                  maxQuantity={virtualMaxQuantity}
+                                  onQuantityChange={(next) =>
+                                    setBook(
+                                      Math.min(
+                                        virtualMaxQuantity,
+                                        Math.max(virtualMinQuantity, next),
+                                      ),
+                                    )
+                                  }
+                                  onBack={() => setShowParticipantStep(false)}
+                                  disabled={isPopupBookingDisabled}
+                                  selection={virtualParticipants}
+                                />
+                              )}
+                            {showParticipantStep &&
+                              bundleId === 0 &&
+                              !isVirtualSelection && (
+                                <ServiceParticipants
+                                  slot={slot}
+                                  price={decodeHtml(
+                                    String(
+                                      currentitem.slot_price_formatted ||
+                                        currentitem.formatted_price ||
+                                        productDetails.svc_price ||
+                                        "",
+                                    ),
+                                  )}
+                                  counts={participants}
+                                  groups={participantGroups}
+                                  onChange={changeParticipantCount}
+                                  onBack={() => setShowParticipantStep(false)}
+                                  disabled={
+                                    isPopupBookingDisabled ||
+                                    !participantConfigReady
+                                  }
+                                  loading={
+                                    participantLoading ||
+                                    (!participantConfigReady &&
+                                      !participantError)
+                                  }
+                                  error={participantError}
+                                  onRetry={() =>
+                                    setParticipantRetry((retry) => retry + 1)
+                                  }
+                                  maxQuantity={participantSelection.maximum}
+                                  counting={participantSelection.counting}
+                                  physicalCapacity={
+                                    participantSelection.physicalCapacity
+                                  }
+                                  formatPrice={(value) =>
+                                    formatCalculatedPrice(
+                                      value,
+                                      productDetails.svc_price,
+                                      1,
+                                    )
+                                  }
+                                  totalPrice={formatCalculatedPrice(
+                                    participantSelection.price,
+                                    productDetails.svc_price,
+                                    1,
+                                  )}
+                                  total={book}
+                                  validQuantity={validParticipantQuantity}
+                                  quantityMessage={participantQuantityMessage}
+                                />
+                              )}
                           </>
                         )}
                       </div>
@@ -2427,7 +2659,8 @@ export default function Service(props) {
                             className={`continuebtn fx-bundle-cnt${isPopupBookingDisabled ? " fx-disable-button" : ""}`}
                             aria-disabled={isPopupBookingDisabled}
                             onClick={() => {
-                              if (!isPopupBookingDisabled) setShowBundleSlots(true);
+                              if (!isPopupBookingDisabled)
+                                setShowBundleSlots(true);
                             }}
                           >
                             Continue
@@ -2437,21 +2670,37 @@ export default function Service(props) {
                       {bundleId == 0 && !gift && (
                         <div className="fx-popup-rightslot-continuebtn fx-service-step-footer">
                           {showParticipantStep && (
-                            <button type="button" className="fx-service-back-to-slots" onClick={() => setShowParticipantStep(false)}>
+                            <button
+                              type="button"
+                              className="fx-service-back-to-slots"
+                              onClick={() => setShowParticipantStep(false)}
+                            >
                               Back to Slots
                             </button>
                           )}
                           <button
                             type="button"
-                            disabled={showParticipantStep ? !canContinueService : !canContinueToParticipants}
+                            disabled={
+                              showParticipantStep
+                                ? !canContinueService
+                                : !canContinueToParticipants
+                            }
                             className={`continuebtn${(showParticipantStep ? canContinueService : canContinueToParticipants) ? "" : " fx-disable-button"}`}
                             onClick={() => {
                               if (showParticipantStep) {
                                 bookservice();
                               } else if (canContinueToParticipants) {
                                 // Virtual services start at the slot's minimum quantity.
-                                if (isVirtualSelection && !virtualQuantityValid) {
-                                  setBook(Math.min(virtualMaxQuantity, virtualMinQuantity));
+                                if (
+                                  isVirtualSelection &&
+                                  !virtualQuantityValid
+                                ) {
+                                  setBook(
+                                    Math.min(
+                                      virtualMaxQuantity,
+                                      virtualMinQuantity,
+                                    ),
+                                  );
                                 }
                                 setShowParticipantStep(true);
                               }

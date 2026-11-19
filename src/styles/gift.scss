@@ -95,7 +95,7 @@
 
 /* All children scoped to .fx-booking */
 .fx-booking .fx-redeem-container {
-  max-width:300px;
+  max-width: 300px;
   padding: 20px;
   padding-left: 0px;
 }
@@ -114,23 +114,23 @@
 }
 
 div.fx-booking input.fx-voucher-input[type="text"] {
-    flex-grow: 1;
-    border: 1px solid #dde1ec;
-    padding: 0px 16px;
-    font-size: 15px;
-    outline: none;
-    color: var(--fx-dark-navy);
-    transition: border-color .2s ease;
-    border-radius: var(--fx-border-medium-radius);
-    height: 44px;
-    background: #fff;
+  flex-grow: 1;
+  border: 1px solid #dde1ec;
+  padding: 0px 16px;
+  font-size: 15px;
+  outline: none;
+  color: var(--fx-dark-navy);
+  transition: border-color 0.2s ease;
+  border-radius: var(--fx-border-medium-radius);
+  height: 44px;
+  background: #fff;
 }
 
 .fx-booking .fx-voucher-input:focus {
   border-color: var(--fx-primary-blue);
 }
 
-.fx-booking button.fx-btn-verify{
+.fx-booking button.fx-btn-verify {
   background-color: var(--fx-inactive-gray);
   color: white;
   border: none;
@@ -162,8 +162,11 @@ div.fx-booking input.fx-voucher-input[type="text"] {
   display: flex;
   justify-content: center;
   padding: 16px;
-  font-family: 'Inter', -apple-system, sans-serif;
-  margin-top:10px;
+  font-family:
+    "Inter",
+    -apple-system,
+    sans-serif;
+  margin-top: 10px;
 }
 
 .fx-booking-gift-slots .fx-treatment-card {
@@ -173,7 +176,7 @@ div.fx-booking input.fx-voucher-input[type="text"] {
   max-width: 850px;
   width: 100%;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* Desktop Image (45% width) */
@@ -214,8 +217,8 @@ div.fx-booking input.fx-voucher-input[type="text"] {
   flex-direction: column;
   gap: 12px;
   margin-bottom: 24px;
-      height: 200px;
-    overflow: auto;
+  height: 200px;
+  overflow: auto;
 }
 
 .fx-booking-gift-slots .fx-slot-item {
@@ -270,13 +273,13 @@ div.fx-booking input.fx-voucher-input[type="text"] {
   .fx-booking-gift-slots button.fx-btn-continue {
     width: 100%;
   }
-  .fx-booking-gift-slots{
+  .fx-booking-gift-slots {
     margin-top: 50px;
   }
-  .fx-booking .fx-redeem-container{
-        padding:0px;
+  .fx-booking .fx-redeem-container {
+    padding: 0px;
   }
-  button.btn-primary.fx-redeem-btn-primary{
-    width:100%;
+  button.btn-primary.fx-redeem-btn-primary {
+    width: 100%;
   }
 }

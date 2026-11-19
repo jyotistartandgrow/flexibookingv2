@@ -22,7 +22,11 @@ const RedeemDetailCard = (props) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (isOpenn && cardRef.current && !cardRef.current.contains(event.target)) {
+      if (
+        isOpenn &&
+        cardRef.current &&
+        !cardRef.current.contains(event.target)
+      ) {
         setIsOpenn(false);
       }
     };

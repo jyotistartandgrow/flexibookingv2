@@ -1,78 +1,78 @@
 /* right sidebar panel */
 .fx-booking .fx-sidebar {
-    background: var(--white);
-    max-height: 100%;
-    z-index: 99;
-    right: 0px;
-    min-width: 370px;
-    max-width: 370px;
-    overflow: hidden;
-    overflow-y: auto;
-    box-shadow: -2px 0px 2px 0px rgba(0, 0, 0, 0.04);
-    position: absolute;
-    height: 100%;
-    top:0px;
-    border-radius:0px 8px 8px 0px;
+  background: var(--white);
+  max-height: 100%;
+  z-index: 99;
+  right: 0px;
+  min-width: 370px;
+  max-width: 370px;
+  overflow: hidden;
+  overflow-y: auto;
+  box-shadow: -2px 0px 2px 0px rgba(0, 0, 0, 0.04);
+  position: absolute;
+  height: 100%;
+  top: 0px;
+  border-radius: 0px 8px 8px 0px;
 }
 
-.fx-booking .fx-sidebar .logo .fx-right-logo{
-  width:140px;
+.fx-booking .fx-sidebar .logo .fx-right-logo {
+  width: 140px;
 }
 
 .fx-booking .fx-sidebar .logo {
-    text-align: center;
-    margin-top: 40px;
+  text-align: center;
+  margin-top: 40px;
 }
 .fx-booking .fx-bookingdatebar {
-    padding: 16px 20px;
+  padding: 16px 20px;
 }
 
 .fx-booking .fx-bookingdate {
-    font-size: 17px;
-    font-weight: 300;
-    color: var(--darkgrey);
-    line-height: 24px;
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--darkgrey);
+  line-height: 24px;
 }
-.fx-booking .fx-sidebar .giftmessagebox{
-    font-size:28px;
-    padding: 35px;
-    line-height: 1.7;
-    font-weight: 300;
-    text-align: center;
-    margin-top:150px;
+.fx-booking .fx-sidebar .giftmessagebox {
+  font-size: 28px;
+  padding: 35px;
+  line-height: 1.7;
+  font-weight: 300;
+  text-align: center;
+  margin-top: 150px;
 }
 
-.fx-booking .fx-servicelistbox{
-  padding:16px 20px;
-  border-top: 1px solid var(--border-color);;
+.fx-booking .fx-servicelistbox {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
 }
-.fx-booking .fx-servicelistbox .fx-serviceitem{
+.fx-booking .fx-servicelistbox .fx-serviceitem {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
 }
-.fx-booking .fx-servicelistbox .fx-serviceitem.time{
-  font-size:18px;
+.fx-booking .fx-servicelistbox .fx-serviceitem.time {
+  font-size: 18px;
   font-weight: 400;
   color: var(--grey);
 }
-.fx-booking .fx-servicelistbox .fx-serviceitem .itemname{
+.fx-booking .fx-servicelistbox .fx-serviceitem .itemname {
   font-size: 18px;
   font-weight: 300;
   color: var(--darkgrey);
   max-width: 70%;
-  line-height:26px;
+  line-height: 26px;
 }
-.fx-booking .fx-servicelistbox .fx-serviceitem .itemname span{
-  font-size:14px;
+.fx-booking .fx-servicelistbox .fx-serviceitem .itemname span {
+  font-size: 14px;
   color: var(--darkgrey);
   text-decoration: underline;
   float: left;
   margin-right: 15px;
   margin-top: 5px;
 }
-.fx-booking .fx-servicelistbox .fx-serviceitem .price{
-  font-size:18px;
+.fx-booking .fx-servicelistbox .fx-serviceitem .price {
+  font-size: 18px;
   font-weight: 400;
   color: var(--dark-blue-color);
 }
@@ -147,54 +147,63 @@
   margin-top: 4px;
   color: var(--grey);
 }
-.fx-booking .fx-totalbar{
-  border-top:1px solid #D5D5D5;
+.fx-booking .fx-totalbar {
+  border-top: 1px solid #d5d5d5;
   padding: 12px 20px;
 }
 
-.fx-booking .fx-right-bottom-bar, .p-sidebar-content .fx-right-bottom-bar{
+.fx-booking .fx-right-bottom-bar,
+.p-sidebar-content .fx-right-bottom-bar {
   position: absolute;
   bottom: 0px;
-  left:0px;
-  right:0px;
+  left: 0px;
+  right: 0px;
 }
 
-.fx-booking .fx-subtotalbar, .fx-booking .fx-discountbar, .p-sidebar-content .fx-subtotalbar, .p-sidebar-content .fx-discountbar{
+.fx-booking .fx-subtotalbar,
+.fx-booking .fx-discountbar,
+.p-sidebar-content .fx-subtotalbar,
+.p-sidebar-content .fx-discountbar {
   padding: 8px 20px;
 }
 
-.fx-booking .fx-subtotalbar p, .fx-booking .fx-discountbar p, .p-sidebar-content .fx-subtotalbar p, .p-sidebar-content .fx-discountbar p{
-  margin:0px;
+.fx-booking .fx-subtotalbar p,
+.fx-booking .fx-discountbar p,
+.p-sidebar-content .fx-subtotalbar p,
+.p-sidebar-content .fx-discountbar p {
+  margin: 0px;
   color: var(--grey);
-  font-size:16px;
+  font-size: 16px;
   font-weight: 400;
 }
 
-.fx-booking .fx-discountbar p span,  .p-sidebar-content .fx-discountbar p span{
+.fx-booking .fx-discountbar p span,
+.p-sidebar-content .fx-discountbar p span {
   color: var(--darkgrey);
   font-size: var(--normal-descriptionsize);
   font-weight: 700;
   float: right;
 }
 
-.fx-booking .fx-subtotalbar p span,.p-sidebar-content .fx-subtotalbar p span{
+.fx-booking .fx-subtotalbar p span,
+.p-sidebar-content .fx-subtotalbar p span {
   color: var(--darkgrey);
   font-size: var(--big-descriptionsize);
   float: right;
 }
 
-.fx-booking .fx-totalbar p{
-  margin:0px;
+.fx-booking .fx-totalbar p {
+  margin: 0px;
   color: var(--grey);
-  font-size:18px;
+  font-size: 18px;
   font-weight: 600;
 }
 
-.fx-subtotal-discount-bar{
+.fx-subtotal-discount-bar {
   margin-bottom: 10px;
 }
 
-.fx-booking .fx-totalbar p span{
+.fx-booking .fx-totalbar p span {
   color: var(--darkgrey);
   font-size: var(--big-descriptionsize);
   font-weight: 600;
@@ -206,164 +215,166 @@
   display: inline-block;
 }
 
-.fx-sidebar .fx-bookingdatebar .fx-coupon-box{
+.fx-sidebar .fx-bookingdatebar .fx-coupon-box {
   width: 100%;
 }
 
- .fx-booking .fx-mobilesidebar{
+.fx-booking .fx-mobilesidebar {
   display: none;
- }
- .fx-mob-footer-order-details h3{
-    display: none;
-  }
-  .fx-mob-footer-order-details .fx-mob-down-arrow{
-
-  }
+}
+.fx-mob-footer-order-details h3 {
+  display: none;
+}
+.fx-mob-footer-order-details .fx-mob-down-arrow {
+}
 
 @media screen and (max-width: 1200px) {
   // .p-sidebar-bottom .p-sidebar{
   //   height:auto;
   // }
-  .fx-mob-footer-order-details .logo{
+  .fx-mob-footer-order-details .logo {
     display: none;
   }
-  .fx-mob-footer-order-details .fx-mob-down-arrow{
+  .fx-mob-footer-order-details .fx-mob-down-arrow {
     position: absolute;
-    top:10px;
-    left:50%;
+    top: 10px;
+    left: 50%;
   }
-  .fx-mob-footer-order-details h3{
+  .fx-mob-footer-order-details h3 {
     display: block;
     margin: 0px;
     position: absolute;
-    top:20px;
+    top: 20px;
   }
   .fx-mob-footer-order-details .fx-bookingdatebar {
-      padding: 0px;
+    padding: 0px;
   }
   .fx-mob-footer-order-details .fx-coupon-box {
-  display: flex;
-  align-items: center;
-  background: var(--white);
-  border: 1px solid var(--new-border-color);
-  border-radius: 5px;
-  margin-bottom: 10px;
-  width: 95%;
-}
- .fx-mob-footer-order-details .fx-coupon-box input[type="text"] {
-  flex: 1;
-  border: none !important;
-  outline: none;
-  font-size: var(--small-descriptionsize);
-  margin-bottom: 0px;
-}
- .fx-mob-footer-order-details .fx-coupon-box input:focus{
-  border:none;
-}
-.fx-mob-footer-order-details input[type="text"],
- .fx-mob-footer-order-details input[type="email"] {
-  width: 100%;
-  padding: 16px 12px;
-  border-radius: var(--fx-border-medium-radius);
-  border: 1px solid var(--new-border-color);
-  /* box-sizing: border-box; */
-  font-size: var(--normal-descriptionsize);
-  font-weight: 400;
-  cursor: pointer;
-  margin-bottom: 15px;
-}
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border: 1px solid var(--new-border-color);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 95%;
+  }
+  .fx-mob-footer-order-details .fx-coupon-box input[type="text"] {
+    flex: 1;
+    border: none !important;
+    outline: none;
+    font-size: var(--small-descriptionsize);
+    margin-bottom: 0px;
+  }
+  .fx-mob-footer-order-details .fx-coupon-box input:focus {
+    border: none;
+  }
+  .fx-mob-footer-order-details input[type="text"],
+  .fx-mob-footer-order-details input[type="email"] {
+    width: 100%;
+    padding: 16px 12px;
+    border-radius: var(--fx-border-medium-radius);
+    border: 1px solid var(--new-border-color);
+    /* box-sizing: border-box; */
+    font-size: var(--normal-descriptionsize);
+    font-weight: 400;
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
 
-.fx-mob-footer-order-details .fx-apply-btn {
-  background: none;
-  border: none;
-  color: var(--grey);
-  font-size: var(--small-descriptionsize);
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 0px !important;
-  height:inherit !important;
-  width:auto !important;
-}
-.fx-mob-footer-order-details .fx-apply-btn:hover {
-  color: var(--grey);
-}
-.fx-mob-footer-order-details .fx-bookingdate {
+  .fx-mob-footer-order-details .fx-apply-btn {
+    background: none;
+    border: none;
+    color: var(--grey);
+    font-size: var(--small-descriptionsize);
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 0px !important;
+    height: inherit !important;
+    width: auto !important;
+  }
+  .fx-mob-footer-order-details .fx-apply-btn:hover {
+    color: var(--grey);
+  }
+  .fx-mob-footer-order-details .fx-bookingdate {
     font-size: 17px;
     font-weight: 500;
     color: var(--darkgrey);
     padding-bottom: 16px;
-}
-.fx-mob-footer-order-details .fx-bookingdate span {
+  }
+  .fx-mob-footer-order-details .fx-bookingdate span {
     font-weight: 200;
-}
-.fx-mob-footer-order-details .fx-servicelistbox {
+  }
+  .fx-mob-footer-order-details .fx-servicelistbox {
     padding: 16px 0px;
     border-top: 1px solid var(--border-color);
-}
-.fx-mob-footer-order-details .fx-servicelistbox .fx-serviceitem{
+  }
+  .fx-mob-footer-order-details .fx-servicelistbox .fx-serviceitem {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-}
-.fx-mob-footer-order-details .fx-servicelistbox .fx-serviceitem .itemname{
+  }
+  .fx-mob-footer-order-details .fx-servicelistbox .fx-serviceitem .itemname {
     font-size: 18px;
     font-weight: 300;
     color: var(--darkgrey);
     max-width: 70%;
-}
-.fx-mob-footer-order-details .fx-servicelistbox .fx-serviceitem .itemname span {
+  }
+  .fx-mob-footer-order-details
+    .fx-servicelistbox
+    .fx-serviceitem
+    .itemname
+    span {
     font-size: 14px;
     color: var(--darkgrey);
     text-decoration: underline;
     float: left;
-    margin-right:15px;
-    margin-top:5px;
-}
-.fx-mob-footer-order-details .time {
+    margin-right: 15px;
+    margin-top: 5px;
+  }
+  .fx-mob-footer-order-details .time {
     font-weight: 400;
     font-size: var(--normal-descriptionsize);
     color: var(--grey);
     display: flex;
     gap: 20px;
-}
-.fx-mob-footer-order-details .fx-servicelistbox .fx-serviceitem .price {
+  }
+  .fx-mob-footer-order-details .fx-servicelistbox .fx-serviceitem .price {
     font-size: 18px;
     font-weight: 400;
     color: var(--dark-blue-color);
-}
+  }
 
-.fx-mob-footer-order-details .fx-totalbar {
-    border-top: 1px solid #D5D5D5;
+  .fx-mob-footer-order-details .fx-totalbar {
+    border-top: 1px solid #d5d5d5;
     padding: 12px 20px;
-}
+  }
 
-
-.fx-mob-footer-order-details .fx-totalbar p {
+  .fx-mob-footer-order-details .fx-totalbar p {
     margin: 0px;
     color: var(--grey);
     font-size: 18px;
     font-weight: 400;
-}
+  }
 
-.fx-mob-footer-order-details .fx-totalbar p span {
+  .fx-mob-footer-order-details .fx-totalbar p span {
     color: var(--darkgrey);
     font-size: var(--big-descriptionsize);
     font-weight: 700;
     float: right;
-}
+  }
 
-  .fx-booking .fx-mobilesidebar{
-    width:100%;
-    height:auto;
+  .fx-booking .fx-mobilesidebar {
+    width: 100%;
+    height: auto;
     position: fixed;
-    bottom:-2px;
-    padding:15px;
+    bottom: -2px;
+    padding: 15px;
     font-size: var(--card-headingsize);
     background: var(--white);
-    display:block;
+    display: block;
     box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.3);
-    z-index:999;
+    z-index: 999;
     left: 0px;
   }
 
@@ -373,104 +384,108 @@
   //    height: 82px;
   // }
 
-  .fx-booking .fx-mobilesidebar p{
-    margin-top:5px;
+  .fx-booking .fx-mobilesidebar p {
+    margin-top: 5px;
     color: var(--grey);
   }
-  .fx-booking .fx-mobilesidebar p span{
+  .fx-booking .fx-mobilesidebar p span {
     color: var(--darkgrey);
     font-size: var(--card-headingsize);
     font-weight: 800;
   }
-   .fx-down-icon-botttom{
-      width:100%;
-      text-align: center;
-      padding: 6px 0px;
-    }
+  .fx-down-icon-botttom {
+    width: 100%;
+    text-align: center;
+    padding: 6px 0px;
+  }
 }
 
+.fx-booking .fx-mobilesidebar .fx-bottombar-top-details {
+  display: inline-block;
+  width: 100%;
+}
+.fx-booking .fx-mobilesidebar .fx-bottombar-bottom-details {
+  display: inline-block;
+  width: 100%;
+}
+.fx-booking .fx-mobilesidebar .fx-order-details {
+  font-size: 18px;
+  float: left;
+}
 
- .fx-booking .fx-mobilesidebar .fx-bottombar-top-details{
-            display: inline-block;
-            width:100%;
-        }
-        .fx-booking .fx-mobilesidebar .fx-bottombar-bottom-details{
-            display: inline-block;
-            width:100%;
-        }
-        .fx-booking .fx-mobilesidebar .fx-order-details{
-            font-size:18px;
-            float: left;
-        }
-
-        .fx-booking .fx-mobilesidebar .fx-bottombar-top-details i{
-            font-size:18px;
-            float: right;
-        }
-        .fx-booking .fx-mobilesidebar .fx-bottombar-bottom-details .fx-left-content-date{
-            font-size: 18px;
-            display: inline-block;
-            color: var(--grey);
-        }
-         .fx-booking .fx-mobilesidebar .fx-bottombar-bottom-details .fx-left-content-service{
-            display: inline-block;
-            font-size: 18px;
-            margin-left: 8px;
-            vertical-align: middle;
-            color: var(--grey);
-        }
-        .fx-booking .fx-mobilesidebar .fx-bottombar-bottom-details .fx-price{
-            font-size:18px;
-            float: right;
-            margin-top: 8px;
-        }
-        .fx-booking .fx-mobilesidebar .fx-bottom-date{
-            margin-left: 4px;
-        }
+.fx-booking .fx-mobilesidebar .fx-bottombar-top-details i {
+  font-size: 18px;
+  float: right;
+}
+.fx-booking
+  .fx-mobilesidebar
+  .fx-bottombar-bottom-details
+  .fx-left-content-date {
+  font-size: 18px;
+  display: inline-block;
+  color: var(--grey);
+}
+.fx-booking
+  .fx-mobilesidebar
+  .fx-bottombar-bottom-details
+  .fx-left-content-service {
+  display: inline-block;
+  font-size: 18px;
+  margin-left: 8px;
+  vertical-align: middle;
+  color: var(--grey);
+}
+.fx-booking .fx-mobilesidebar .fx-bottombar-bottom-details .fx-price {
+  font-size: 18px;
+  float: right;
+  margin-top: 8px;
+}
+.fx-booking .fx-mobilesidebar .fx-bottom-date {
+  margin-left: 4px;
+}
 @media (min-width: 768px) and (max-width: 1200px) {
-
-.fx-mob-footer-order-details .fx-coupon-box {
-        display: flex;
-        align-items: center;
-        background: var(--white);
-        border: 1px solid var(--new-border-color);
-        border-radius: 5px;
-        margin-bottom: 10px;
-        width: 95%;
-    }
-    .fx-mob-footer-order-details .fx-coupon-box input[type=text] {
-        flex: 1;
-        border: none !important;
-        outline: none;
-        font-size: var(--small-descriptionsize);
-        margin-bottom: 0px;
-    }
-    .fx-mob-footer-order-details input[type=text], .fx-mob-footer-order-details input[type=email] {
-        width: 100%;
-        padding: 16px 12px;
-        border-radius: var(--fx-border-medium-radius);
-        border: 1px solid var(--new-border-color);
-        /* box-sizing: border-box; */
-        font-size: var(--normal-descriptionsize);
-        font-weight: 400;
-        cursor: pointer;
-        margin-bottom: 15px;
-    }
-    .fx-mob-footer-order-details .fx-apply-btn {
-        background: none;
-        border: none;
-        color: var(--grey);
-        font-size: var(--small-descriptionsize);
-        font-weight: bold;
-        cursor: pointer;
-        margin-bottom: 0px !important;
-        height: inherit !important;
-        width: auto !important;
-    }
-    .fx-mob-footer-order-details .fx-mob-down-arrow {
-        position: absolute;
-        top: 10px;
-        left: 50%;
-    }
-   
+  .fx-mob-footer-order-details .fx-coupon-box {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border: 1px solid var(--new-border-color);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 95%;
+  }
+  .fx-mob-footer-order-details .fx-coupon-box input[type="text"] {
+    flex: 1;
+    border: none !important;
+    outline: none;
+    font-size: var(--small-descriptionsize);
+    margin-bottom: 0px;
+  }
+  .fx-mob-footer-order-details input[type="text"],
+  .fx-mob-footer-order-details input[type="email"] {
+    width: 100%;
+    padding: 16px 12px;
+    border-radius: var(--fx-border-medium-radius);
+    border: 1px solid var(--new-border-color);
+    /* box-sizing: border-box; */
+    font-size: var(--normal-descriptionsize);
+    font-weight: 400;
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
+  .fx-mob-footer-order-details .fx-apply-btn {
+    background: none;
+    border: none;
+    color: var(--grey);
+    font-size: var(--small-descriptionsize);
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 0px !important;
+    height: inherit !important;
+    width: auto !important;
+  }
+  .fx-mob-footer-order-details .fx-mob-down-arrow {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+  }
 }

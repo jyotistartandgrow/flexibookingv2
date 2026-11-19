@@ -1,4 +1,5 @@
-.fx-multi-services, .fx-service-slot-flow {
+.fx-multi-services,
+.fx-service-slot-flow {
   .fx-ms-slots {
     min-width: 0;
     padding-left: 32px;
@@ -67,8 +68,8 @@
     }
   }
 
-  .fx-booking .fx-popup .fx-rightpopup .fx-service-selected-slot-value strong{
-          font-weight: 400;
+  .fx-booking .fx-popup .fx-rightpopup .fx-service-selected-slot-value strong {
+    font-weight: 400;
   }
 
   @media (max-width: 1024px) {

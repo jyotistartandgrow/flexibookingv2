@@ -259,9 +259,7 @@ export default function Checkout(props) {
       if (!String(receiverInfo.city || "").trim()) {
         errors.city = true;
       }
-      if (
-        !String(receiverInfo.postcode || receiverInfo.zip || "").trim()
-      ) {
+      if (!String(receiverInfo.postcode || receiverInfo.zip || "").trim()) {
         errors.postcode = true;
       }
 
@@ -304,11 +302,17 @@ export default function Checkout(props) {
         return;
       }
     }
-    if (!String(billdata.sgbm_field_5 || "").trim() && visibleField.sgbm_field_5) {
+    if (
+      !String(billdata.sgbm_field_5 || "").trim() &&
+      visibleField.sgbm_field_5
+    ) {
       setErrorlist({ sgbm_field_5: true });
       return;
     }
-    if (!String(billdata.sgbm_field_6 || "").trim() && visibleField.sgbm_field_6) {
+    if (
+      !String(billdata.sgbm_field_6 || "").trim() &&
+      visibleField.sgbm_field_6
+    ) {
       setErrorlist({ sgbm_field_6: true });
       return;
     }
@@ -320,7 +324,10 @@ export default function Checkout(props) {
       setErrorlist({ sgbm_field_7: true });
       return;
     }
-    if (!String(billdata.sgbm_field_9 || "").trim() && visibleField.sgbm_field_9) {
+    if (
+      !String(billdata.sgbm_field_9 || "").trim() &&
+      visibleField.sgbm_field_9
+    ) {
       setErrorlist({ sgbm_field_9: true });
       return;
     }
@@ -366,16 +373,18 @@ export default function Checkout(props) {
 
     dispatch(setLoading(true));
     const gift_info = {
-      recipient_first_name:
-        opendatepurchase
-          ? (billdata.sgbm_field_1 ?? "")
-          : gift ? (receiverInfo.firstName ?? "") : "",
+      recipient_first_name: opendatepurchase
+        ? (billdata.sgbm_field_1 ?? "")
+        : gift
+          ? (receiverInfo.firstName ?? "")
+          : "",
       recipient_last_name:
         gift && !opendatepurchase ? (receiverInfo.lastName ?? "") : "",
-      recipient_email:
-        opendatepurchase
-          ? (billdata.sgbm_field_3 ?? "")
-          : gift ? (receiverInfo.email ?? "") : "",
+      recipient_email: opendatepurchase
+        ? (billdata.sgbm_field_3 ?? "")
+        : gift
+          ? (receiverInfo.email ?? "")
+          : "",
       recipient_contact:
         gift && !opendatepurchase
           ? formatInternationalPhone(receiverInfo.phoneNumber)
@@ -394,26 +403,26 @@ export default function Checkout(props) {
           : "",
     };
 
-    const giftCustomizationData = gift && !opendatepurchase
-      ? {
-          occasion_id: giftCustomization.occasionId ?? "",
-          template_id: giftCustomization.template ?? "",
-          personal_message: giftCustomization.message ?? "",
-          font_key: giftCustomization.font ?? "",
-        }
-      : {};
+    const giftCustomizationData =
+      gift && !opendatepurchase
+        ? {
+            occasion_id: giftCustomization.occasionId ?? "",
+            template_id: giftCustomization.template ?? "",
+            personal_message: giftCustomization.message ?? "",
+            font_key: giftCustomization.font ?? "",
+          }
+        : {};
     const voucherDelivery =
       giftCustomization.delivery === "me" ? "me" : "recipient";
-    const giftDeliveryData = gift && !opendatepurchase
-      ? {
-          channel: "email",
-          target:
-            voucherDelivery === "me"
-              ? "purchaser_email"
-              : "recipient_email",
-          timing: "immediate",
-        }
-      : {};
+    const giftDeliveryData =
+      gift && !opendatepurchase
+        ? {
+            channel: "email",
+            target:
+              voucherDelivery === "me" ? "purchaser_email" : "recipient_email",
+            timing: "immediate",
+          }
+        : {};
 
     const billingDataForRequest = {
       ...billdata,
@@ -468,7 +477,11 @@ export default function Checkout(props) {
 
     if (data && data.status == 200 && data.data.status == "success") {
       dispatch(setBillingDetails(billingDataForRequest));
-      if (selectedPaymentCard.method === "offline" || selectedPaymentCard.method === "cash_on_delivery" || selectedPaymentCard.method === "payment_link") {
+      if (
+        selectedPaymentCard.method === "offline" ||
+        selectedPaymentCard.method === "cash_on_delivery" ||
+        selectedPaymentCard.method === "payment_link"
+      ) {
         if (redeemBooking) {
           dispatch(setLoading(false));
           navigate(`/redeem-thankyou`);
@@ -492,7 +505,9 @@ export default function Checkout(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
-        titleText: toPlainText(data?.message ?? "There is some error , please try again"),
+        titleText: toPlainText(
+          data?.message ?? "There is some error , please try again",
+        ),
       });
       if (data?.message == "Error Fetching Booking Information !!") {
         Swal.fire({
@@ -519,14 +534,24 @@ export default function Checkout(props) {
           showConfirmButton: false,
           timer: 3000,
           icon: "error",
-          titleText: toPlainText(error?.data?.message || error?.response?.data?.message || fallbackMessage),
+          titleText: toPlainText(
+            error?.data?.message ||
+              error?.response?.data?.message ||
+              fallbackMessage,
+          ),
         });
         return undefined;
       }
     };
-  const getFields = guardRequest(getFieldsRequest, "Unable to load checkout fields");
+  const getFields = guardRequest(
+    getFieldsRequest,
+    "Unable to load checkout fields",
+  );
   const getState = guardRequest(getStateRequest, "Unable to load states");
-  const checkout = guardRequest(checkoutRequest, "Unable to complete checkout, please try again");
+  const checkout = guardRequest(
+    checkoutRequest,
+    "Unable to complete checkout, please try again",
+  );
 
   return (
     <div
@@ -535,7 +560,8 @@ export default function Checkout(props) {
     >
       {props.stepsVisibility?.step_4_title_visible == "true" && (
         <h1 className="fx-all-main-heading">
-          {props.stepTitles?.step_4_title || (redeemBooking ? "Information" : "Checkout")}
+          {props.stepTitles?.step_4_title ||
+            (redeemBooking ? "Information" : "Checkout")}
         </h1>
       )}
       <div className="fx-commoninput">
@@ -677,7 +703,9 @@ export default function Checkout(props) {
               <option value="">Select Country</option>
               {countries &&
                 Object.keys(countries.data).map((code) => (
-                  <option key={code} value={code}>{countries.data[code]}</option>
+                  <option key={code} value={code}>
+                    {countries.data[code]}
+                  </option>
                 ))}
             </select>
             {errorlist.sgbm_field_8 && (
@@ -698,7 +726,9 @@ export default function Checkout(props) {
               <option value="">Select State</option>
               {states.length > 0 &&
                 Object.keys(states).map((key) => (
-                  <option key={states[key].code} value={states[key].code}>{states[key].name}</option>
+                  <option key={states[key].code} value={states[key].code}>
+                    {states[key].name}
+                  </option>
                 ))}
             </select>
             {errorlist.sgbm_field_7 && (
@@ -923,9 +953,7 @@ export default function Checkout(props) {
                           : "bigtextbox"
                       }
                       onChange={(e) =>
-                        dispatch(
-                          setReceiverInfo({ address: e.target.value }),
-                        )
+                        dispatch(setReceiverInfo({ address: e.target.value }))
                       }
                     />
                     {receiverErrors.address && (
@@ -1010,9 +1038,7 @@ export default function Checkout(props) {
                       placeholder="Postcode"
                       type="text"
                       value={receiverInfo.postcode || receiverInfo.zip || ""}
-                      className={
-                        receiverErrors.postcode ? "fx-invalid" : ""
-                      }
+                      className={receiverErrors.postcode ? "fx-invalid" : ""}
                       onChange={(e) =>
                         dispatch(
                           setReceiverInfo({

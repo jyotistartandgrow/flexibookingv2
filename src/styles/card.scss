@@ -1,4 +1,3 @@
-
 /* service card section */
 .fx-booking .fx-extra-product-title {
   display: flex;
@@ -18,33 +17,35 @@
   line-height: 1.4;
 }
 
- .fx-booking .fx-servicecontainer {
+.fx-booking .fx-servicecontainer {
   display: flex;
   gap: 16px;
   margin-bottom: 24px;
   flex-wrap: wrap;
 }
-.fx-leftcontentbox{
+.fx-leftcontentbox {
   position: relative;
 }
- .fx-booking .fx-servicecontainer .fx-servicebox {
-    width: 271px;
-    height: auto;
-    border-radius:8px;
-    font-size: 20px;
-    cursor: pointer;
-     transition: all 0.3s ease; /* smooth animation */
-     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+.fx-booking .fx-servicecontainer .fx-servicebox {
+  width: 271px;
+  height: auto;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease; /* smooth animation */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .fx-booking .fx-servicecontainer .fx-servicebox:hover {
-  transform:var(--translateY); /* lift */
-  box-shadow:var(--hover-shadow); /* shadow */
+  transform: var(--translateY); /* lift */
+  box-shadow: var(--hover-shadow); /* shadow */
 }
 
 .fx-booking .fx-servicebox.fx-servicebox-selected {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(8, 63, 180, 0.14), 0 10px 26px rgba(8, 63, 180, 0.15);
+  box-shadow:
+    0 0 0 2px rgba(8, 63, 180, 0.14),
+    0 10px 26px rgba(8, 63, 180, 0.15);
 }
 
 .fx-booking .fx-servicebox.fx-servicebox-bundle-highlight {
@@ -64,13 +65,13 @@
 }
 .fx-booking .fx-servicebox .fx-servicepicbox img {
   display: block;
-    width: 100%;
-    max-width: 100%;
-    height: 100% !important;
-    object-fit: cover;
-    object-position: center;
-    transition: transform .2s;
-    border-radius:8px 8px 0px 0px;
+  width: 100%;
+  max-width: 100%;
+  height: 100% !important;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.2s;
+  border-radius: 8px 8px 0px 0px;
 }
 .fx-booking .fx-servicepiccontentbox {
   width: auto;
@@ -86,7 +87,7 @@
   color: var(--darkgrey);
 }
 
-.fx-booking .fx-pricebox{
+.fx-booking .fx-pricebox {
   background: var(--white);
   position: absolute;
   padding: 8px 12px;
@@ -95,29 +96,32 @@
   font-size: var(--normal-descriptionsize);
   font-weight: 400;
   margin: 0px;
-  border-radius:0px 4px 0px 0px;
+  border-radius: 0px 4px 0px 0px;
   font-size: var(--all-card-price-size);
   font-weight: 500;
   color: var(--primary-color);
 }
-
 
 .fx-booking .fx-servicebox .fx-servicecontentbox {
   width: 100%;
   height: auto;
   padding: 16px;
   background: var(--white);
-  border-radius:0px 0px 8px 8px;
+  border-radius: 0px 0px 8px 8px;
   position: relative;
 }
 
+/* Grid / slider cards: one line, "…" when the name doesn't fit (full name on hover via title). */
 .fx-booking .fx-servicebox .fx-servicecontentbox h4 {
   font-size: var(--all-card-heading);
   font-weight: 400;
   margin: 0px;
   margin-bottom: 0px;
   height: 24px;
+  line-height: 24px;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   color: var(--darkgrey);
 }
 
@@ -132,9 +136,6 @@
   line-height: 22px;
 }
 
-
-
-
 .fx-booking .fx-servicebox .fx-servicecontentbox .price span {
   font-size: 16px;
 }
@@ -148,21 +149,15 @@
   text-align: center;
   border-radius: 33px;
   color: var(--primary-color);
-  margin-top:6px;
+  margin-top: 6px;
   background: var(--white);
-  float:inherit;
+  float: inherit;
 }
 
 .fx-booking .fx-servicebox .fx-servicecontentbox .booknowbtn a {
- text-decoration: none;
- color: var(--primary-color);
+  text-decoration: none;
+  color: var(--primary-color);
 }
-
-
-
-
-
-
 
 /* service section list view */
 
@@ -172,21 +167,21 @@
   display: flex;
   background: var(--white);
   margin-bottom: 12px;
-  border: 1px solid #F3F4F6;
+  border: 1px solid #f3f4f6;
   border-radius: 8px;
   cursor: pointer;
-    transition:var(--animation-transition);
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: var(--animation-transition);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
-.fx-booking .fx-tabcontent .fx-serviceboxlist:hover{
-  transform:var(--translateY); /* lift */
-  box-shadow:var(--hover-shadow); /* shadow */
+.fx-booking .fx-tabcontent .fx-serviceboxlist:hover {
+  transform: var(--translateY); /* lift */
+  box-shadow: var(--hover-shadow); /* shadow */
 }
 
 .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist {
-  width:120px;
-  height:94px;
+  width: 120px;
+  height: 94px;
   position: relative;
 }
 
@@ -198,58 +193,62 @@
   margin-bottom: 16px;
   border: 1px solid #e2e4e9;
   border-radius: 8px;
-    transition:var(--animation-transition);
+  transition: var(--animation-transition);
 }
 
-.fx-booking .fx-tabcontent .fx-extraboxlist:hover{
-  transform:var(--translateY); /* lift */
-  box-shadow:var(--hover-shadow); /* shadow */
+.fx-booking .fx-tabcontent .fx-extraboxlist:hover {
+  transform: var(--translateY); /* lift */
+  box-shadow: var(--hover-shadow); /* shadow */
 }
 
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist {
   width: 120px;
-  height:122px;
+  height: 122px;
   position: relative;
-  overflow:hidden;
+  overflow: hidden;
   border-radius: 8px 0px 0px 8px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist img {
-    height:143px;
-    border-radius: 8px 0px 0px 8px;
+  height: 143px;
+  border-radius: 8px 0px 0px 8px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist {
-    width: calc(100% - 120px);
-    height: auto;
-    padding: 16px 16px;
-    background: var(--white);
-    position: relative;
-    border-radius: 0px 8px 8px 0px;
+  width: calc(100% - 120px);
+  height: auto;
+  padding: 16px 16px;
+  background: var(--white);
+  position: relative;
+  border-radius: 0px 8px 8px 0px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist h4 {
-    font-size: var(--all-card-heading);
-    font-weight: 400;
-    margin: 0px;
-    color: var(--darkgrey) !important;
+  font-size: var(--all-card-heading);
+  font-weight: 400;
+  margin: 0px;
+  color: var(--darkgrey) !important;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist p {
-    height: 22px;
-    font-size: var(--normal-descriptionsize);
-    font-weight: 300;
-    color: var(--grey);
-    margin-top: 6px;
-    margin-bottom:6px;
+  height: 22px;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 300;
+  color: var(--grey);
+  margin-top: 6px;
+  margin-bottom: 6px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price {
-    height: 29px;
-    font-size: var(--normal-descriptionsize);
-    color: var(--darkblue-color);
+  height: 29px;
+  font-size: var(--normal-descriptionsize);
+  color: var(--darkblue-color);
 }
-.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price span {
-     font-size: 16px;
-    font-weight: 500;
-    color: var(--primary-color);
+.fx-booking
+  .fx-tabcontent
+  .fx-extraboxlist
+  .fx-extracontentboxlist
+  .price
+  span {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary-color);
 }
-
 
 /* 
 .servicepictextboxlist {
@@ -297,30 +296,30 @@
   color: var(--grey);
   margin-top: 10px;
   margin-bottom: 12px;
-
 }
 
-
-
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .booknowbtn {
-    width: 116px;
-    padding: 0px 4px 0px 4px;
-    font-size: var(--normal-descriptionsize);
-    font-weight: 400;
-    border: 1px solid var(--primary-color);
-    text-align: center;
-    border-radius: 33px;
-    color: var(--primary-color);
-    float: right;
-    position: absolute;
-    right: 16px;
-    bottom: 12px;
-    background: #fff;
-    cursor: pointer;
-    line-height: 32px;
-    height: 36px;
+.fx-booking
+  .fx-tabcontent
+  .fx-serviceboxlist
+  .fx-servicecontentboxlist
+  .booknowbtn {
+  width: 116px;
+  padding: 0px 4px 0px 4px;
+  font-size: var(--normal-descriptionsize);
+  font-weight: 400;
+  border: 1px solid var(--primary-color);
+  text-align: center;
+  border-radius: 33px;
+  color: var(--primary-color);
+  float: right;
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  background: #fff;
+  cursor: pointer;
+  line-height: 32px;
+  height: 36px;
 }
-
 
 /* extra card section */
 .fx-booking .fx-extracontainer {
@@ -330,57 +329,55 @@
   gap: 16px;
 }
 
-.fx-booking .fx-extracontainer .fx-extrabox{
- width: 272px;
-    height: auto;
-    border: 1px solid #e2e4e9;
-    border-radius: 8px;
-    font-size: 20px;
-    transition:var(--animation-transition);
+.fx-booking .fx-extracontainer .fx-extrabox {
+  width: 272px;
+  height: auto;
+  border: 1px solid #e2e4e9;
+  border-radius: 8px;
+  font-size: 20px;
+  transition: var(--animation-transition);
 }
 
-.fx-booking .fx-extracontainer .fx-extrabox:hover{
-  transform:var(--translateY); /* lift */
-  box-shadow:var(--hover-shadow); /* shadow */
+.fx-booking .fx-extracontainer .fx-extrabox:hover {
+  transform: var(--translateY); /* lift */
+  box-shadow: var(--hover-shadow); /* shadow */
 }
 
-.fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox{
-   width: 100%;
+.fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox {
+  width: 100%;
   height: 190px;
   position: relative;
 }
 
-.fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox img{
-   width: 100%;
+.fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox img {
+  width: 100%;
   height: 190px;
-  border-radius:8px 8px 0px 0px;
+  border-radius: 8px 8px 0px 0px;
 }
 .fx-booking .fx-extracontainer .fx-extrabox .fx-extracontentbox {
-   width: 100%;
+  width: 100%;
   height: auto;
   padding: 16px;
   background: var(--white);
-  border-radius:0px 0px 8px 8px;
+  border-radius: 0px 0px 8px 8px;
 }
-
-
 
 .fx-booking .fx-extracontainer .fx-extrabox .fx-extracontentbox p {
   height: 42px;
   font-size: var(--all-card-des);
   font-weight: 300;
   color: var(--grey);
-  padding-top:0px;
+  padding-top: 0px;
   margin-bottom: 0px;
   margin-top: 0px;
 }
 
- .fx-booking .fx-extrabox .fx-extracontentbox p.fx-extrapicpriceboxright {
+.fx-booking .fx-extrabox .fx-extracontentbox p.fx-extrapicpriceboxright {
   height: auto;
-  font-size:var(--all-card-price-size);
+  font-size: var(--all-card-price-size);
   font-weight: 500;
   color: var(--primary-color);
-  margin-top:6px;
+  margin-top: 6px;
 }
 .fx-booking .fx-extracontainer .fx-extrabox .fx-extracontentbox .price {
   height: 29px;
@@ -390,7 +387,11 @@
 /* .fx-extracontentbox .price .rightside{
   
 } */
-.fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox .fx-extrapicpricebox {
+.fx-booking
+  .fx-extracontainer
+  .fx-extrabox
+  .fx-extrapicbox
+  .fx-extrapicpricebox {
   width: 70px;
   height: 29px;
   position: absolute;
@@ -406,7 +407,7 @@
   margin-bottom: 0px;
 }
 
-.fx-booking .fx-extrabox .fx-extrapicbox .fx-extrapicpriceboxright{
+.fx-booking .fx-extrabox .fx-extrapicbox .fx-extrapicpriceboxright {
   width: 74px;
   height: 37px;
   position: absolute;
@@ -437,7 +438,7 @@
   object-fit: cover;
   border-radius: 8px 8px 0 0;
 }
-.fx-booking .fx-extracontentbox .fx-common{
+.fx-booking .fx-extracontentbox .fx-common {
   display: flex;
   justify-content: space-between;
   margin-top: 8px;
@@ -447,7 +448,7 @@
   float: left;
 }
 
-.fx-booking .fx-extracontentbox .fx-common .fx-quantitybox button{
+.fx-booking .fx-extracontentbox .fx-common .fx-quantitybox button {
   width: 27px;
   height: 27px;
   color: var(--darkgrey);
@@ -459,7 +460,11 @@
   padding: 0px;
 }
 
-.fx-booking .fx-extracontentbox .fx-common .fx-quantitybox input[type="number"] {
+.fx-booking
+  .fx-extracontentbox
+  .fx-common
+  .fx-quantitybox
+  input[type="number"] {
   width: 30px;
   height: 26px;
   text-align: center;
@@ -470,8 +475,16 @@
   margin: 0px;
 }
 
-.fx-booking .fx-extracontentbox .fx-common .fx-quantitybox input[type="number"]::-webkit-inner-spin-button,
-.fx-booking .fx-extracontentbox .fx-common .fx-quantitybox input[type="number"]::-webkit-outer-spin-button {
+.fx-booking
+  .fx-extracontentbox
+  .fx-common
+  .fx-quantitybox
+  input[type="number"]::-webkit-inner-spin-button,
+.fx-booking
+  .fx-extracontentbox
+  .fx-common
+  .fx-quantitybox
+  input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -486,173 +499,177 @@
   margin-bottom: 0px;
 }
 
- .p-carousel-items-container .fx-servicebox {
-    max-width: 262px;
-    height: auto;
-    border: 1px solid #e2e4e9;
-    border-radius: 8px;
+.p-carousel-items-container .fx-servicebox {
+  max-width: 262px;
+  height: auto;
+  border: 1px solid #e2e4e9;
+  border-radius: 8px;
 }
 
 .fx-booking .fx-desktop-swipe-item .fx-servicebox,
 .fx-booking .fx-desktop-swipe-item .fx-extrabox {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
   border-radius: 8px;
-    font-size: var(--all-sub-heading);
-    cursor: pointer;
-    transition: var(--animation-transition);
+  font-size: var(--all-sub-heading);
+  cursor: pointer;
+  transition: var(--animation-transition);
 }
 
 .fx-booking .fx-desktop-swipe-item .fx-servicebox:hover {
-    transform: var(--translateY);
-    box-shadow: var(--hover-shadow);
+  transform: var(--translateY);
+  box-shadow: var(--hover-shadow);
 }
-
-
-
 
 @media screen and (max-width: 580px) {
-.fx-booking .fx-servicecontainer{
-  display: inline-block;
-  padding-bottom: 60px;
-  width: 100%;
-}
-.fx-booking .fx-extracontainer{
-  display: inline-block;
-}
-.fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox img{
-  height:auto;
-}
-.fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox{
-  height:auto;
-}
-.fx-booking .fx-servicecontainer .fx-servicebox{
-  max-width: 100%;
-  margin-bottom: 24px;
-  width: auto;
-}
-.fx-booking .fx-servicecontainer .fx-servicebox:last-child{
-  margin-bottom: 0px;
-}
-.fx-booking .fx-tabcontent .fx-serviceboxlist{
-  height: auto;
-}
+  .fx-booking .fx-servicecontainer {
+    display: inline-block;
+    padding-bottom: 60px;
+    width: 100%;
+  }
+  .fx-booking .fx-extracontainer {
+    display: inline-block;
+  }
+  .fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox img {
+    height: auto;
+  }
+  .fx-booking .fx-extracontainer .fx-extrabox .fx-extrapicbox {
+    height: auto;
+  }
+  .fx-booking .fx-servicecontainer .fx-servicebox {
+    max-width: 100%;
+    margin-bottom: 24px;
+    width: auto;
+  }
+  .fx-booking .fx-servicecontainer .fx-servicebox:last-child {
+    margin-bottom: 0px;
+  }
+  .fx-booking .fx-tabcontent .fx-serviceboxlist {
+    height: auto;
+  }
 
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist h4{
-  font-size:18px;
-  height: 24px;
-  overflow: hidden;
-}
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist p{
-  font-size: var(--all-card-des);
-  overflow: hidden;
-  height: 43px;
-  margin: 0px;
-  margin-top: 6px;
-  line-height: 22px;
-}
+  /* List view: show the full name, wrapping when needed. */
+  .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist h4 {
+    font-size: 18px;
+    height: auto;
+    line-height: 24px;
+    overflow: visible;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist p {
+    font-size: var(--all-card-des);
+    overflow: hidden;
+    height: 43px;
+    margin: 0px;
+    margin-top: 6px;
+    line-height: 22px;
+  }
 
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .booknowbtn{
-  position: inherit;
-  margin-top: 6px;
-  float: initial;
-  margin-left: 12px;
-  display: inline-block;
-}
-.fx-booking .fx-servicebox .fx-servicepicbox img{
-  height:auto;
-}
-.fx-booking .fx-servicebox .fx-servicepicbox{
-  height:180px;
-}
-.fx-booking .fx-extracontainer .fx-extrabox{
-  width: 100%;
-  margin-bottom: 24px;
-}
-.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist h4{
-  font-size: 20px;
-  height: 31px;
-  overflow: hidden;
-}
-.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price{
+  .fx-booking
+    .fx-tabcontent
+    .fx-serviceboxlist
+    .fx-servicecontentboxlist
+    .booknowbtn {
+    position: inherit;
+    margin-top: 6px;
+    float: initial;
+    margin-left: 12px;
+    display: inline-block;
+  }
+  .fx-booking .fx-servicebox .fx-servicepicbox img {
+    height: auto;
+  }
+  .fx-booking .fx-servicebox .fx-servicepicbox {
+    height: 180px;
+  }
+  .fx-booking .fx-extracontainer .fx-extrabox {
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist h4 {
+    font-size: 20px;
+    height: 31px;
+    overflow: hidden;
+  }
+  .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist .price {
     width: 50px;
-}
-.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist p{
+  }
+  .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist p {
     margin-top: 3px;
     margin-bottom: 0px;
-}
-.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist p{
-  height: 39px;
-  overflow: hidden;
-}
+  }
+  .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist p {
+    height: 39px;
+    overflow: hidden;
+  }
 
- .p-carousel-items-container .fx-servicebox {
+  .p-carousel-items-container .fx-servicebox {
     max-width: 100%;
     height: auto;
     box-shadow: 0px 0px 3px 0px var(--box-shadow);
-}
+  }
 
-.fx-extraboxlist .fx-extracontentboxlist div.fx-common{
-  position: inherit;
-  bottom: 5px;
-  margin-left: 13px;
-}
-.fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist img{
-  height: 134px;
-  
-}
+  .fx-extraboxlist .fx-extracontentboxlist div.fx-common {
+    position: inherit;
+    bottom: 5px;
+    margin-left: 13px;
+  }
+  .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist img {
+    height: 134px;
+  }
 
-.fx-booking .fx-tabcontent .fx-extraboxlist{
-  height: auto;
-}
+  .fx-booking .fx-tabcontent .fx-extraboxlist {
+    height: auto;
+  }
 
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img{
+  .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist img {
     max-width: inherit;
-}
-
+  }
 }
 
 .p-carousel .p-carousel-item {
   padding: 0 8px;
 }
 
-
- .p-carousel-items-container{
+.p-carousel-items-container {
   padding: 3px 0px;
- }
+}
 
- button[type=button].p-carousel-next{
-      padding: 10px 2px;
- }
+button[type="button"].p-carousel-next {
+  padding: 10px 2px;
+}
 
- .p-carousel-container button[type=button].p-carousel-next, .p-carousel-container button[type=button].p-carousel-prev{
+.p-carousel-container button[type="button"].p-carousel-next,
+.p-carousel-container button[type="button"].p-carousel-prev {
   padding: 12px 0px;
 }
 
-.fx-booking .fx-tabcontent .fx-extraboxlist .fx-servicepiccontentbox{
+.fx-booking .fx-tabcontent .fx-extraboxlist .fx-servicepiccontentbox {
   display: none;
 }
 
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist .fx-servicepiccontentbox{
-    display: none;
+.fx-booking
+  .fx-tabcontent
+  .fx-serviceboxlist
+  .fx-servicepicboxlist
+  .fx-servicepiccontentbox {
+  display: none;
 }
 
- 
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist{
-    width: auto;
-    height: auto;
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicepicboxlist {
+  width: auto;
+  height: auto;
 }
 
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist{
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist {
   width: 100%;
   height: auto;
   display: flex;
   padding: 10px 12px;
-  gap:4px;
+  gap: 4px;
   border-radius: 0px 8px 8px 0px;
 }
-
-
 
 // grid view card
 
@@ -661,102 +678,113 @@
   font-size: var(--normal-descriptionsize);
   font-weight: 400;
   color: var(--darkblue-color);
-  margin:0px;
+  margin: 0px;
   margin-top: 12px;
 }
 
-.fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-form{
-  font-size:var(--small-font-size);
+.fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-form {
+  font-size: var(--small-font-size);
   margin-right: 4px;
   color: var(--grey);
 }
 
-.fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-one{
+.fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-one {
   font-size: var(--all-card-price-size);
   font-weight: 500;
   color: var(--primary-color);
 }
 
-.fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-two{
-    font-size:var(--small-font-size);
-    font-weight: 400;
-    text-decoration: line-through;
-    color: var(--grey);
-    margin-left: 4px;
+.fx-booking .fx-servicebox .fx-servicecontentbox .price .fx-price-two {
+  font-size: var(--small-font-size);
+  font-weight: 400;
+  text-decoration: line-through;
+  color: var(--grey);
+  margin-left: 4px;
 }
-
-
 
 // list view card
 
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .price{
-    font-size: var(--normal-descriptionsize);
-    color: var(--darkblue-color);
-    height: auto;
-    margin:0px;
-    text-align: right;
-    width:96px;
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .price {
+  font-size: var(--normal-descriptionsize);
+  color: var(--darkblue-color);
+  height: auto;
+  margin: 0px;
+  text-align: right;
+  width: 96px;
 }
 
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .fx-price-form{
-    font-size:var(--small-font-size);
-    font-weight: 400;
-    color: var(--grey);
-    margin-top:0px;
-    display: block;
+.fx-booking
+  .fx-tabcontent
+  .fx-serviceboxlist
+  .fx-servicecontentboxlist
+  .fx-price-form {
+  font-size: var(--small-font-size);
+  font-weight: 400;
+  color: var(--grey);
+  margin-top: 0px;
+  display: block;
 }
 
-
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .fx-price-one{
-    font-size: var(--all-card-price-size);
-    font-weight: 500;
-    color: var(--primary-color);
-    margin-top: 0px;
-    display: block;
+.fx-booking
+  .fx-tabcontent
+  .fx-serviceboxlist
+  .fx-servicecontentboxlist
+  .fx-price-one {
+  font-size: var(--all-card-price-size);
+  font-weight: 500;
+  color: var(--primary-color);
+  margin-top: 0px;
+  display: block;
 }
 
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .fx-price-two{
-    font-size: var(--small-font-size);
-    font-weight: 400;
-    display: block;
-    text-decoration: line-through;
-    color: var(--grey);
-    margin-top: 2px;
+.fx-booking
+  .fx-tabcontent
+  .fx-serviceboxlist
+  .fx-servicecontentboxlist
+  .fx-price-two {
+  font-size: var(--small-font-size);
+  font-weight: 400;
+  display: block;
+  text-decoration: line-through;
+  color: var(--grey);
+  margin-top: 2px;
 }
 
-.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist .price .pi-chevron-right{
-    font-size: 12px;
-    float: right;
-    margin-top: 8px;
-    color: var(--grey);
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-  }
+.fx-booking
+  .fx-tabcontent
+  .fx-serviceboxlist
+  .fx-servicecontentboxlist
+  .price
+  .pi-chevron-right {
+  font-size: 12px;
+  float: right;
+  margin-top: 8px;
+  color: var(--grey);
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
 
+// Extra list view card
 
+.fx-extraboxlist .fx-extracontentboxlist .fx-extra-main-contentbox {
+  display: flex;
+}
 
-  // Extra list view card
+.fx-extraboxlist .fx-extra-contentbox {
+  width: 100%;
+}
 
-  .fx-extraboxlist .fx-extracontentboxlist .fx-extra-main-contentbox{
-    display: flex;
-  }
+.fx-extraboxlist .fx-extrapicboxlist .fx-extra-main-img {
+  width: 121px;
+  height: 128px;
+  justify-content: center;
+  display: flex;
+}
 
-  .fx-extraboxlist .fx-extra-contentbox{
-    width: 100%;
-  }
-
-  .fx-extraboxlist .fx-extrapicboxlist .fx-extra-main-img{
-    width: 121px;
-    height: 128px;
-    justify-content: center;
-    display: flex;
-  }
-
-.fx-tooltip-wrapper i.pi.pi-gift{
+.fx-tooltip-wrapper i.pi.pi-gift {
   font-size: 12px;
 }
-
 
 // bundle-content css
 .fx-booking .fx-bundle-content {
@@ -765,7 +793,7 @@
 
 .fx-booking .fx-tabcontent .fx-servicebox-has-tooltip {
   overflow: visible;
-  border: 2px solid var(--primary-color);;
+  border: 2px solid var(--primary-color);
 }
 
 .fx-booking .fx-servicebox-has-tooltip:hover {
@@ -784,15 +812,15 @@
 }
 
 .fx-servicebox-has-tooltip .fx-top-icon {
-      width: 24px;
-    height: 24px;
-    border-radius: 0px 0px 0px 8px;
-    background: var(--primary-color);
-    color: #fff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
+  width: 24px;
+  height: 24px;
+  border-radius: 0px 0px 0px 8px;
+  background: var(--primary-color);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
 }
 
 .fx-servicebox-has-tooltip .fx-bundle-chip {
@@ -847,11 +875,11 @@
 }
 
 .fx-servicebox-selected.fx-servicebox-has-tooltip .fx-top-icon {
-  background:var(--primary-color);
+  background: var(--primary-color);
 }
 
-.fx-tooltip-wrapper i.pi.pi-info-circle{
- font-size: 12px;
+.fx-tooltip-wrapper i.pi.pi-info-circle {
+  font-size: 12px;
 }
 
 @media screen and (max-width: 767px) {
@@ -906,4 +934,18 @@
     bottom: auto;
     left: -7px;
   }
+}
+
+/* List view, all screen sizes: show the full service name (wrapping if needed)
+   and let the text block grow instead of clipping at a fixed 94px. */
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist {
+  height: auto;
+  min-height: 94px;
+}
+.fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist h4 {
+  height: auto;
+  line-height: 24px;
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }

@@ -317,7 +317,6 @@ export default function CheckinThankyou() {
           </div>
 
           <hr className="fx-footer-separator"></hr>
-
         </div>
       </div>
     </>

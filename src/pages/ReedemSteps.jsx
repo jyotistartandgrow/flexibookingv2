@@ -19,7 +19,9 @@ export default function ReedemSteps(props) {
   const [visibleBottom, setVisibleBottom] = useState(false);
   const isRedeemBooking = props.redeemBooking === true;
   const isUpsell = useSelector((state) => state.step1.redeemUpsell);
-  const hasAdditions = useSelector((state) => state.step3.redeemUpsellSelections?.length > 0);
+  const hasAdditions = useSelector(
+    (state) => state.step3.redeemUpsellSelections?.length > 0,
+  );
 
   // "Add more services" adds a Service step and a Payment step for the paid additions.
   const redeemSteps = isUpsell
@@ -36,7 +38,10 @@ export default function ReedemSteps(props) {
         ["datestep", "DATE & SLOT", "SELECT DATE & SLOT"],
         ["checkoutstep", "CHECKOUT", "CHECKOUT"],
       ];
-  const activeIndex = Math.max(0, redeemSteps.findIndex(([key]) => key === step));
+  const activeIndex = Math.max(
+    0,
+    redeemSteps.findIndex(([key]) => key === step),
+  );
 
   // Only completed steps before payment can be revisited from the bar.
   const goToStep = (key, index) => {
@@ -79,7 +84,11 @@ export default function ReedemSteps(props) {
       <div className="fx-step-top-fixed-box">
         <div
           className={`fx-stepper-tabstyle step-for-redeem ${
-            isUpsell ? "fx-redeem-upsell-step" : isRedeemBooking ? "fx-redeem-booking-step" : ""
+            isUpsell
+              ? "fx-redeem-upsell-step"
+              : isRedeemBooking
+                ? "fx-redeem-booking-step"
+                : ""
           }`}
         >
           {redeemSteps.map(([key, shortLabel, label], index) => (
@@ -89,7 +98,8 @@ export default function ReedemSteps(props) {
               onClick={() => goToStep(key, index)}
             >
               <div>
-                {index + 1} <span>{isRedeemBooking || isUpsell ? shortLabel : label}</span>
+                {index + 1}{" "}
+                <span>{isRedeemBooking || isUpsell ? shortLabel : label}</span>
               </div>
             </div>
           ))}
@@ -103,7 +113,9 @@ export default function ReedemSteps(props) {
               : "fx-mobilesidebar fx-mobilesidebar-top"
           }
           onClick={() => setVisibleBottom(true)}
-          style={{ display: props.bottombar == "true" && !isDesktop ? "block" : "none" }}
+          style={{
+            display: props.bottombar == "true" && !isDesktop ? "block" : "none",
+          }}
         >
           <div className="fx-bottombar-top-details">
             <span className="fx-order-details">Order Details </span>

@@ -39,7 +39,7 @@
 }
 
 .fx-booking .fx-line {
-  width:60px;
+  width: 60px;
   height: 3px;
   background: var(--border-color);
   margin-right: 13px;
@@ -54,17 +54,15 @@
   align-items: center;
 }
 
-.fx-booking .fx-step-container.active .fx-step-label{
- display: block;
+.fx-booking .fx-step-container.active .fx-step-label {
+  display: block;
 }
-
-
 
 .fx-stepper-tabstyle {
   position: relative;
   width: 100%;
   padding: 20px 0;
-  height:46px;
+  height: 46px;
   /* enough height for steps to show */
 }
 
@@ -79,7 +77,7 @@
   background: #f8f8f8;
   color: var(--primary-color);
   text-align: right;
-  padding-right:34px;
+  padding-right: 34px;
   transition: 0.3s;
   cursor: pointer;
   font-size: 16px;
@@ -91,7 +89,7 @@
 }
 
 .fx-stepper-tabstyle .servicesstep {
-  width:49%;
+  width: 49%;
   z-index: 4;
 }
 
@@ -169,7 +167,6 @@
   text-align: center;
   left: 65%;
   padding-right: 0px;
-
 }
 
 .fx-stepper-tabstyle .datestep.complete {
@@ -177,7 +174,7 @@
   width: 20%;
   z-index: 5;
   padding: 10px 0px;
-  text-align:center;
+  text-align: center;
 }
 
 .fx-stepper-tabstyle .codestep.complete {
@@ -185,9 +182,8 @@
   width: 20%;
   z-index: 5;
   padding: 10px 0px;
-  text-align:center;
+  text-align: center;
 }
-
 
 .fx-stepper-tabstyle .servicesstep.complete {
   background: #fff;
@@ -212,13 +208,13 @@
   z-index: 6;
 }
 
-.fx-stepper-tabstyle.fx-gift-step .step{
-  padding-right:22px;
+.fx-stepper-tabstyle.fx-gift-step .step {
+  padding-right: 22px;
 }
 
 .fx-stepper-tabstyle.fx-gift-step .step.servicesstep {
   width: 39%;
-    z-index: 5;
+  z-index: 5;
 }
 
 .fx-stepper-tabstyle.fx-gift-step .step.extrastep {
@@ -256,8 +252,8 @@
 
 .fx-stepper-tabstyle.fx-gift-step .step.datestep.complete {
   width: 20%;
-    z-index: 6;
-    padding-left: 2%;
+  z-index: 6;
+  padding-left: 2%;
 }
 
 .fx-stepper-tabstyle.fx-gift-step .step.datestep.active {
@@ -266,7 +262,7 @@
 
 .fx-stepper-tabstyle.fx-gift-step .step.servicesstep.active {
   left: 14%;
-    padding-left: 4%;
+  padding-left: 4%;
 }
 
 .fx-stepper-tabstyle.fx-gift-step .step.extrastep.active {
@@ -287,90 +283,89 @@
   left: 70%;
 }
 
-.fx-stepper-tabstyle.fx-gift-step .step.complete{
+.fx-stepper-tabstyle.fx-gift-step .step.complete {
   width: 28%;
 }
 
-.fx-stepper-tabstyle.fx-gift-step .servicesstep.complete{
+.fx-stepper-tabstyle.fx-gift-step .servicesstep.complete {
   width: 27%;
 }
-.fx-stepper-tabstyle.fx-gift-step .step.extrastep.complete{
+.fx-stepper-tabstyle.fx-gift-step .step.extrastep.complete {
   width: 42%;
 }
 
-.fx-stepper-tabstyle.fx-gift-step .step.customizestep.complete{
+.fx-stepper-tabstyle.fx-gift-step .step.customizestep.complete {
   width: 64%;
 }
 
-.fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.active{
+.fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.active {
   left: 58%;
-    width: 27%;
-    padding-left: 4%;
+  width: 27%;
+  padding-left: 4%;
 }
 
-.fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.complete{
-      width: 59%;
+.fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.complete {
+  width: 59%;
 }
 
-.fx-stepper-tabstyle.fx-gift-step .step.paymentstep.active{
-    left: 0px;
-    padding-right: 5%;
-    width: 100%;
-    text-align: right;
+.fx-stepper-tabstyle.fx-gift-step .step.paymentstep.active {
+  left: 0px;
+  padding-right: 5%;
+  width: 100%;
+  text-align: right;
 }
 
 @media screen and (max-width: 768px) {
   .fx-stepper-tabstyle.fx-gift-step .step.datestep.active {
     width: 37%;
   }
-  .fx-stepper-tabstyle.fx-gift-step .step.servicesstep{
+  .fx-stepper-tabstyle.fx-gift-step .step.servicesstep {
     width: 19%;
     left: 30%;
   }
-  .fx-stepper-tabstyle.fx-gift-step .step.extrastep{
+  .fx-stepper-tabstyle.fx-gift-step .step.extrastep {
     width: 30%;
   }
-  .fx-stepper-tabstyle.fx-gift-step .step.customizestep{
+  .fx-stepper-tabstyle.fx-gift-step .step.customizestep {
     width: 75%;
   }
-  .fx-stepper-tabstyle.fx-gift-step .step.checkoutstep{
+  .fx-stepper-tabstyle.fx-gift-step .step.checkoutstep {
     width: 62%;
   }
-  .fx-stepper-tabstyle.fx-gift-step .step.paymentstep{
+  .fx-stepper-tabstyle.fx-gift-step .step.paymentstep {
     width: 100%;
     z-index: 1;
     left: 0px;
   }
-  .fx-stepper-tabstyle.fx-gift-step .step.servicesstep.active{
+  .fx-stepper-tabstyle.fx-gift-step .step.servicesstep.active {
     left: 9%;
     width: 40%;
     padding-left: 7%;
   }
-     .fx-stepper-tabstyle.fx-gift-step .servicesstep.complete{
+  .fx-stepper-tabstyle.fx-gift-step .servicesstep.complete {
     width: 32%;
-        left: 4%;
-        padding-right: 21px;
+    left: 4%;
+    padding-right: 21px;
   }
-  .fx-stepper-tabstyle.fx-gift-step .step.extrastep.active{
+  .fx-stepper-tabstyle.fx-gift-step .step.extrastep.active {
     left: 28%;
     padding-left: 6%;
     width: 34%;
   }
-  .fx-stepper-tabstyle.fx-gift-step .step.customizestep.active{
+  .fx-stepper-tabstyle.fx-gift-step .step.customizestep.active {
     width: 37%;
     left: 40%;
   }
-  .fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.active{
-       width: 36%;
-        left: 54%;
+  .fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.active {
+    width: 36%;
+    left: 54%;
   }
-  .fx-stepper-tabstyle.fx-gift-step .step.customizestep.complete{
-     width: 61%;
+  .fx-stepper-tabstyle.fx-gift-step .step.customizestep.complete {
+    width: 61%;
   }
-  .fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.complete{
+  .fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.complete {
     width: 46%;
   }
-  
 }
 
 .fx-stepper-tabstyle .checkoutstep.complete {
@@ -379,63 +374,64 @@
   left: 20%;
 }
 
-.step-for-redeem .slotstep.complete{
+.step-for-redeem .slotstep.complete {
   background: #fff;
 }
 
-.step-for-redeem .checkoutstep{
+.step-for-redeem .checkoutstep {
   padding-left: 16%;
 }
 
-.step-for-redeem .codestep{
+.step-for-redeem .codestep {
   width: 42%;
-    z-index: 999;
-    text-align: center;
-    padding-right: 0px;
+  z-index: 999;
+  text-align: center;
+  padding-right: 0px;
 }
 
-.step-for-redeem .complete.codestep, .step-for-redeem .complete.datestep{
-      background: #fff;
+.step-for-redeem .complete.codestep,
+.step-for-redeem .complete.datestep {
+  background: #fff;
 }
 
-.step-for-redeem .datestep{
-   width: 76%;
-    z-index: 99;
-    padding-right: 6%;
+.step-for-redeem .datestep {
+  width: 76%;
+  z-index: 99;
+  padding-right: 6%;
 }
 
-.step-for-redeem .slotstep{
-     width: 67%;
-    z-index: 9;
+.step-for-redeem .slotstep {
+  width: 67%;
+  z-index: 9;
 }
 
-.step-for-redeem .checkoutstep{
-    width: 100%;
-    z-index: 1;
-    padding-right: 8%;
+.step-for-redeem .checkoutstep {
+  width: 100%;
+  z-index: 1;
+  padding-right: 8%;
 }
 
-.step-for-redeem .active{
+.step-for-redeem .active {
   background: #fff;
   border: 1px solid var(--primary-color);
 }
 
-.step-for-redeem .datestep.active{
-    width: 74%;
-    padding-left: 31%;
+.step-for-redeem .datestep.active {
+  width: 74%;
+  padding-left: 31%;
 }
 
-.fx-gift-date-box .btn-primary{
+.fx-gift-date-box .btn-primary {
   margin-top: 16px;
 }
 
-.fx-gift-date-box .redemption-Voucher-services-box .btn-primary{
+.fx-gift-date-box .redemption-Voucher-services-box .btn-primary {
   margin-top: 0;
 }
 
-.step-for-redeem .codestep.complete{
+.step-for-redeem .codestep.complete {
   width: 33%;
-      z-index: 999;
+  z-index: 999;
 }
 
 // Combined redeem + new-service flow uses six equal, navigable steps.
@@ -443,135 +439,130 @@
 .fx-stepper-tabstyle.fx-redeem-booking-step .step:first-child {
   margin-left: 0;
 }
-.fx-stepper-tabstyle.fx-redeem-booking-step .step.codestep{
-    width: 14%;
-    left: 0px;
-    padding-left: 3%;
-    padding-right: 3%;
-    z-index: 9;
+.fx-stepper-tabstyle.fx-redeem-booking-step .step.codestep {
+  width: 14%;
+  left: 0px;
+  padding-left: 3%;
+  padding-right: 3%;
+  z-index: 9;
 }
-.fx-stepper-tabstyle.fx-redeem-booking-step .step.datestep{
-    width: 23%;
-    left: 11%;
-    padding-left: 4%;
-    padding-right: 3%;
+.fx-stepper-tabstyle.fx-redeem-booking-step .step.datestep {
+  width: 23%;
+  left: 11%;
+  padding-left: 4%;
+  padding-right: 3%;
 }
-.fx-stepper-tabstyle.fx-redeem-booking-step .active.datestep{
+.fx-stepper-tabstyle.fx-redeem-booking-step .active.datestep {
   width: 25%;
-    left: 10%;
+  left: 10%;
 }
-.fx-stepper-tabstyle.fx-redeem-booking-step .step.servicesstep{
-    width: 22%;
-    left: 29%;
-    padding-left: 4%;
-    padding-right: 3%;
+.fx-stepper-tabstyle.fx-redeem-booking-step .step.servicesstep {
+  width: 22%;
+  left: 29%;
+  padding-left: 4%;
+  padding-right: 3%;
 }
-.fx-stepper-tabstyle.fx-redeem-booking-step .step.extrastep{
-    width: 40%;
-    left: 25%;
-    padding-left: 2%;
-    padding-right: 3%;
+.fx-stepper-tabstyle.fx-redeem-booking-step .step.extrastep {
+  width: 40%;
+  left: 25%;
+  padding-left: 2%;
+  padding-right: 3%;
 }
-.fx-stepper-tabstyle.fx-redeem-booking-step .step.checkoutstep{
-   width: 40%;
-    left: 43%;
-    padding-left: 2%;
-    padding-right: 3%;
+.fx-stepper-tabstyle.fx-redeem-booking-step .step.checkoutstep {
+  width: 40%;
+  left: 43%;
+  padding-left: 2%;
+  padding-right: 3%;
 }
 
-.fx-stepper-tabstyle.fx-redeem-booking-step .checkoutstep.active{
-      width: 42%;
-    left: 43%;
-    padding-left: 23%;
-    padding-right: 3%;
+.fx-stepper-tabstyle.fx-redeem-booking-step .checkoutstep.active {
+  width: 42%;
+  left: 43%;
+  padding-left: 23%;
+  padding-right: 3%;
 }
-.fx-stepper-tabstyle.fx-redeem-booking-step .step.paymentstep{
-     width: 26%;
-    left: 74%;
-    padding-left: 2%;
-    padding-right: 3%;
-    z-index: 0;
-  }
-  .fx-stepper-tabstyle.fx-redeem-booking-step .active.paymentstep{
-        padding-left: 10%;
-  }
+.fx-stepper-tabstyle.fx-redeem-booking-step .step.paymentstep {
+  width: 26%;
+  left: 74%;
+  padding-left: 2%;
+  padding-right: 3%;
+  z-index: 0;
+}
+.fx-stepper-tabstyle.fx-redeem-booking-step .active.paymentstep {
+  padding-left: 10%;
+}
 .fx-stepper-tabstyle.fx-redeem-booking-step .codestep.active {
- width: 14%;
-    z-index: 999;
-}
-
-.fx-stepper-tabstyle.fx-redeem-booking-step .extrastep.active {
-    width: 42%;
-
-    padding-left: 28%;
-}
-
-.fx-stepper-tabstyle.fx-redeem-booking-step .codestep.complete{
+  width: 14%;
   z-index: 999;
 }
 
+.fx-stepper-tabstyle.fx-redeem-booking-step .extrastep.active {
+  width: 42%;
+
+  padding-left: 28%;
+}
+
+.fx-stepper-tabstyle.fx-redeem-booking-step .codestep.complete {
+  z-index: 999;
+}
 
 // fx-singleservice-step Step
 
-.fx-singleservice-step .extrastep{
+.fx-singleservice-step .extrastep {
   width: 60%;
-    z-index: 3;
+  z-index: 3;
 }
 
-.fx-singleservice-step.fx-stepper-tabstyle .datestep.active{
+.fx-singleservice-step.fx-stepper-tabstyle .datestep.active {
   width: 42%;
 }
 
-.fx-singleservice-step.fx-stepper-tabstyle .extrastep.complete{
-          width: 34%;
-    padding-right: 52px;
-} 
-
-.fx-singleservice-step.fx-stepper-tabstyle .checkoutstep.active{
-       width: 46%;
-    left: 33%;
-    padding-left: 6%;
+.fx-singleservice-step.fx-stepper-tabstyle .extrastep.complete {
+  width: 34%;
+  padding-right: 52px;
 }
 
-.fx-singleservice-step.fx-stepper-tabstyle .paymentstep.active{
+.fx-singleservice-step.fx-stepper-tabstyle .checkoutstep.active {
+  width: 46%;
+  left: 33%;
+  padding-left: 6%;
+}
+
+.fx-singleservice-step.fx-stepper-tabstyle .paymentstep.active {
   width: 40%;
-      left: 59%;
-} 
-
-.fx-singleservice-step.fx-stepper-tabstyle .checkoutstep.complete{
-     width: 44%;
-    padding-right: 54px;
+  left: 59%;
 }
 
-.fx-singleservice-step.fx-stepper-tabstyle .extrastep.active{
+.fx-singleservice-step.fx-stepper-tabstyle .checkoutstep.complete {
+  width: 44%;
+  padding-right: 54px;
+}
+
+.fx-singleservice-step.fx-stepper-tabstyle .extrastep.active {
   width: 40%;
   left: 15%;
 }
-.fx-singleservice-step.fx-singleservice-step .checkoutstep{
+.fx-singleservice-step.fx-singleservice-step .checkoutstep {
   width: 78%;
-    padding-right: 6%;
+  padding-right: 6%;
 }
 
-.fx-singleservice-step .checkoutstep{
+.fx-singleservice-step .checkoutstep {
   width: 81%;
 }
 
 @media screen and (max-width: 768px) {
-.fx-singleservice-step.fx-stepper-tabstyle .datestep.active{
-  width:56%;
-}
+  .fx-singleservice-step.fx-stepper-tabstyle .datestep.active {
+    width: 56%;
+  }
 
-.fx-singleservice-step.fx-stepper-tabstyle .checkoutstep.active{
-  width: 56%;
+  .fx-singleservice-step.fx-stepper-tabstyle .checkoutstep.active {
+    width: 56%;
     left: 30%;
-}
-
+  }
 }
 
 // fx-singleservice-step Step End
-
-
-
 
 // .fx-stepper-tabstyle.fx-redeem-booking-step .step.complete {
 //   left: auto;
@@ -594,108 +585,108 @@
   //   left: 26%;
   // }
 
-    .fx-stepper-tabstyle.fx-redeem-booking-step .active.paymentstep {
-     width: 60%;
-        padding: 10px 2px;
-        flex-grow: 2.5;
-        left: 37%;
-        padding-left: 25%;
-    }
+  .fx-stepper-tabstyle.fx-redeem-booking-step .active.paymentstep {
+    width: 60%;
+    padding: 10px 2px;
+    flex-grow: 2.5;
+    left: 37%;
+    padding-left: 25%;
+  }
 
-  .fx-stepper-tabstyle.fx-redeem-booking-step .step.servicesstep{
+  .fx-stepper-tabstyle.fx-redeem-booking-step .step.servicesstep {
     width: 23%;
     left: 45%;
     padding-left: 4%;
     padding-right: 3%;
   }
 
-  .fx-stepper-tabstyle.fx-redeem-booking-step .complete.servicesstep{
-        width: 24%;
-        left: 17%;
-        padding-left: 5%;
-        padding-right: 5%;
+  .fx-stepper-tabstyle.fx-redeem-booking-step .complete.servicesstep {
+    width: 24%;
+    left: 17%;
+    padding-left: 5%;
+    padding-right: 5%;
   }
 
-  .fx-stepper-tabstyle.fx-redeem-booking-step .active.servicesstep{
+  .fx-stepper-tabstyle.fx-redeem-booking-step .active.servicesstep {
     width: 48%;
     left: 20%;
     padding-left: 7%;
   }
 
-  .fx-stepper-tabstyle.fx-redeem-booking-step .step.extrastep{
+  .fx-stepper-tabstyle.fx-redeem-booking-step .step.extrastep {
     left: 39%;
     padding-right: 4%;
   }
 
-   .fx-stepper-tabstyle.fx-redeem-booking-step .complete.extrastep{
+  .fx-stepper-tabstyle.fx-redeem-booking-step .complete.extrastep {
     left: 11%;
   }
 
-  .fx-stepper-tabstyle.fx-redeem-booking-step .active.extrastep{
+  .fx-stepper-tabstyle.fx-redeem-booking-step .active.extrastep {
     left: 30%;
-        padding-left: 10%;
-        width: 45%;
+    padding-left: 10%;
+    width: 45%;
   }
 
- .fx-stepper-tabstyle.fx-redeem-booking-step .active.codestep{
+  .fx-stepper-tabstyle.fx-redeem-booking-step .active.codestep {
     width: 45%;
     left: 0px;
- }
-  
-  .fx-stepper-tabstyle.fx-redeem-booking-step .step.checkoutstep{
+  }
+
+  .fx-stepper-tabstyle.fx-redeem-booking-step .step.checkoutstep {
     left: 49%;
     padding-right: 4%;
   }
 
-   .fx-stepper-tabstyle.fx-redeem-booking-step .complete.checkoutstep{
+  .fx-stepper-tabstyle.fx-redeem-booking-step .complete.checkoutstep {
     left: 24%;
     padding-right: 4%;
   }
 
-  .fx-stepper-tabstyle.fx-redeem-booking-step .active.checkoutstep{
-        left: 44%;
-        padding-left: 6%;
-        width: 49%;
+  .fx-stepper-tabstyle.fx-redeem-booking-step .active.checkoutstep {
+    left: 44%;
+    padding-left: 6%;
+    width: 49%;
   }
 
-  .fx-stepper-tabstyle.fx-redeem-booking-step .step.datestep{
+  .fx-stepper-tabstyle.fx-redeem-booking-step .step.datestep {
     width: 29%;
     left: 28%;
     padding-left: 4%;
     padding-right: 3%;
   }
-  .fx-booking .fx-step{
+  .fx-booking .fx-step {
     width: 30px;
     height: 30px;
   }
-    .fx-stepper-tabstyle.fx-redeem-booking-step .complete.datestep{
+  .fx-stepper-tabstyle.fx-redeem-booking-step .complete.datestep {
     width: 24%;
     left: 5%;
     padding-left: 11%;
   }
 
-  .fx-booking .fx-step-label{
+  .fx-booking .fx-step-label {
     margin-left: 8px;
-    margin-right:6px;
+    margin-right: 6px;
   }
-  .fx-booking .fx-line{
-        margin-right: 3px;
-        margin-left: 3px;
+  .fx-booking .fx-line {
+    margin-right: 3px;
+    margin-left: 3px;
   }
   .fx-stepper-tabstyle .step.checkoutstep {
-           width:61%;
-        z-index: 2;
-        left:26%;
-        padding-right: 16px;
+    width: 61%;
+    z-index: 2;
+    left: 26%;
+    padding-right: 16px;
   }
-    .step-for-redeem .step.checkoutstep {
-           width: 71%;
+  .step-for-redeem .step.checkoutstep {
+    width: 71%;
   }
-  .fx-stepper-tabstyle.fx-redeem-booking-step .datestep.active{
-      width:53%;
-        left: 5%;
-        padding-left: 4%;
-        padding-right: 3%;
+  .fx-stepper-tabstyle.fx-redeem-booking-step .datestep.active {
+    width: 53%;
+    left: 5%;
+    padding-left: 4%;
+    padding-right: 3%;
   }
 
   .fx-stepper-tabstyle .step.paymentstep {
@@ -705,7 +696,6 @@
     padding-right: 14px;
   }
 }
-
 
 @media screen and (max-width: 768px) {
   .fx-booking .fx-step-label {
@@ -726,241 +716,231 @@
   }
 
   .fx-stepper-tabstyle .step.active span {
-    display:inline-block;
+    display: inline-block;
   }
 
   .fx-stepper-tabstyle .datestep.active {
-    width:42%;
+    width: 42%;
   }
-  .fx-stepper-tabstyle .servicesstep{
-    width:25%;
-    left:32%;
-    padding-right:20px;
+  .fx-stepper-tabstyle .servicesstep {
+    width: 25%;
+    left: 32%;
+    padding-right: 20px;
   }
-  .fx-stepper-tabstyle .extrastep{
-    width:40%;
-    left:32%;
-    padding-right:20px;
+  .fx-stepper-tabstyle .extrastep {
+    width: 40%;
+    left: 32%;
+    padding-right: 20px;
   }
 
-  .fx-stepper-tabstyle .step{
-        padding-right: 20px;
+  .fx-stepper-tabstyle .step {
+    padding-right: 20px;
   }
-  .fx-stepper-tabstyle .servicesstep.complete{
-   width: 35%;
-        left: 4%;
-        padding-right: 28px;
+  .fx-stepper-tabstyle .servicesstep.complete {
+    width: 35%;
+    left: 4%;
+    padding-right: 28px;
   }
-   .fx-stepper-tabstyle.fx-date-step .servicesstep.complete{
+  .fx-stepper-tabstyle.fx-date-step .servicesstep.complete {
     width: 29%;
-        left: 4%;
-        padding-right: 21px;
+    left: 4%;
+    padding-right: 21px;
   }
-  .fx-stepper-tabstyle.fx-date-step .extrastep.complete{
+  .fx-stepper-tabstyle.fx-date-step .extrastep.complete {
     width: 46%;
     padding-right: 22px;
   }
-//   .fx-step-top-fixed-box{
-//     display: block;
-//     position: absolute;
-//     width: 100%;
-//     z-index: 99;
-//     background:none;
-//     left: 0px;
-//     top: 0px;
-//     padding: 16px;
-// }
-  .fx-stepper-tabstyle .servicesstep.active{
-          width: 50%;
-        left: 8%;
-        padding-right: 0;
-        padding-left: 26px;
+  //   .fx-step-top-fixed-box{
+  //     display: block;
+  //     position: absolute;
+  //     width: 100%;
+  //     z-index: 99;
+  //     background:none;
+  //     left: 0px;
+  //     top: 0px;
+  //     padding: 16px;
+  // }
+  .fx-stepper-tabstyle .servicesstep.active {
+    width: 50%;
+    left: 8%;
+    padding-right: 0;
+    padding-left: 26px;
   }
 
-
-  .fx-stepper-tabstyle .extrastep.active{
+  .fx-stepper-tabstyle .extrastep.active {
     left: 29%;
-        width: 43%;
-        padding-left: 3%;
+    width: 43%;
+    padding-left: 3%;
   }
-  .fx-stepper-tabstyle .checkoutstep.active{
-       width: 50%;
-        left: 41%;
-        padding-left: 9%;
+  .fx-stepper-tabstyle .checkoutstep.active {
+    width: 50%;
+    left: 41%;
+    padding-left: 9%;
   }
-  .fx-stepper-tabstyle .paymentstep.active{
-        width: 45%;
-        left: 55%;
-        padding-left: 20px;
+  .fx-stepper-tabstyle .paymentstep.active {
+    width: 45%;
+    left: 55%;
+    padding-left: 20px;
   }
-  .fx-stepper-tabstyle .checkoutstep.complete{
-        width: 48%;
-           
+  .fx-stepper-tabstyle .checkoutstep.complete {
+    width: 48%;
   }
-   .fx-stepper-tabstyle.fx-date-step .checkoutstep.complete{
-        width: 38%;
-           
+  .fx-stepper-tabstyle.fx-date-step .checkoutstep.complete {
+    width: 38%;
   }
 }
 
-
-
 // step for redeem mobile
-@media screen and (max-width: 768px) {  
-  .step-for-redeem .codestep.active{
+@media screen and (max-width: 768px) {
+  .step-for-redeem .codestep.active {
     width: 64%;
   }
-  .step-for-redeem .codestep{
+  .step-for-redeem .codestep {
     width: 15%;
-            padding-right: 0px;
+    padding-right: 0px;
   }
 
   .step-for-redeem .datestep.active {
-        width: 85%;
-        padding-left:16%;
-    }
+    width: 85%;
+    padding-left: 16%;
+  }
 
-  .step-for-redeem .datestep{
-    width:83%;
+  .step-for-redeem .datestep {
+    width: 83%;
   }
-  .step-for-redeem .slotstep{
-    width:85%;
+  .step-for-redeem .slotstep {
+    width: 85%;
   }
-   .step-for-redeem .active.slotstep{
-    width:84%;
+  .step-for-redeem .active.slotstep {
+    width: 84%;
     padding-right: 60px;
   }
-  .step-for-redeem .checkoutstep{
+  .step-for-redeem .checkoutstep {
     width: 100%;
   }
 
-  .step-for-redeem .slotstep.complete{
+  .step-for-redeem .slotstep.complete {
     background: #fff;
     width: 42%;
   }
 
   .fx-stepper-tabstyle .datestep.complete {
-  // background: #fff;
-  width: 20%;
+    // background: #fff;
+    width: 20%;
+    text-align: center;
+    padding-right: 0px;
+  }
+
+  .step-for-redeem .codestep.complete {
+    width: 21%;
+  }
+}
+
+// Step For Starting From Redeem
+.step-for-redeem .complete.datestep {
+  width: 64%;
+  z-index: 99;
+  padding-left: 32%;
+}
+
+.step-for-redeem .checkoutstep.active {
+  width: 50%;
+}
+@media screen and (max-width: 768px) {
+  .step-for-redeem .complete.datestep {
+    width: 44%;
+    padding-left: 14%;
+  }
+
+  .step-for-redeem .checkoutstep.active {
+    width: 67%;
+    left: 32%;
+  }
+}
+
+// Step For Starting From Services
+.fx-service-step .servicesstep.active {
+  left: 0px;
+}
+
+.fx-service-step .step {
+  padding-right: 54px;
+}
+
+.fx-service-step .extrastep {
+  width: 55%;
+}
+
+.fx-service-step .checkoutstep {
+  width: 79%;
+}
+
+.fx-service-step .servicesstep.complete {
+  left: 0px;
   text-align: center;
   padding-right: 0px;
 }
 
-.step-for-redeem .codestep.complete{
-  width: 21%;
-}
-
-}
-
-
-
-// Step For Starting From Redeem
-.step-for-redeem .complete.datestep{
-    width: 64%;
-    z-index: 99;
-    padding-left: 32%;
-}
-
-.step-for-redeem .checkoutstep.active{
-      width: 50%;
-}
-@media screen and (max-width:768px) {
- .step-for-redeem .complete.datestep{
-    width:44%;
-    padding-left: 14%;
-  }
-
-    .step-for-redeem .checkoutstep.active{
-        width: 67%;
-        left: 32%;
-  }
-}
-
-
-// Step For Starting From Services
-.fx-service-step .servicesstep.active{
-  left:0px;
-}
-
-.fx-service-step .step{
-  padding-right:54px;
-}
-
-.fx-service-step .extrastep{
-  width: 55%;
-}
-
-.fx-service-step .checkoutstep{
-  width: 79%;
-}
-
-.fx-service-step .servicesstep.complete{
-  left:0px;
-  text-align: center;
-    padding-right: 0px;
-}
-
-.fx-service-step .extrastep.active{
+.fx-service-step .extrastep.active {
   left: 21%;
   padding-left: 55px;
 }
 
-.fx-service-step .checkoutstep.active{
+.fx-service-step .checkoutstep.active {
   width: 30%;
 }
 
-.fx-service-step .extrastep.complete{
+.fx-service-step .extrastep.complete {
   padding-right: 63px;
 }
 
-.fx-service-step  .checkoutstep.complete{
+.fx-service-step .checkoutstep.complete {
   left: 25%;
 }
 
-.fx-service-step .paymentstep.active{
+.fx-service-step .paymentstep.active {
   padding-left: 72px;
 }
 
-
-@media screen and (max-width:768px) {
-.fx-service-step .servicesstep.complete{
-  width: 24%;
-}
-.fx-service-step .extrastep.complete{
-          width: 42%;
-      padding-right: 42px;
-}
-.fx-service-step .checkoutstep.complete{
-          width: 42%;
-      padding-right: 42px;
-}
-.fx-service-step .paymentstep.active{
-  padding-left:16px;
-}
-.fx-service-step .extrastep{
-  width: 31%;
+@media screen and (max-width: 768px) {
+  .fx-service-step .servicesstep.complete {
+    width: 24%;
+  }
+  .fx-service-step .extrastep.complete {
+    width: 42%;
+    padding-right: 42px;
+  }
+  .fx-service-step .checkoutstep.complete {
+    width: 42%;
+    padding-right: 42px;
+  }
+  .fx-service-step .paymentstep.active {
+    padding-left: 16px;
+  }
+  .fx-service-step .extrastep {
+    width: 31%;
     padding-right: 40px;
-}
-.fx-service-step .checkoutstep{
-  width: 82%;
-  padding-right:37px;
-}
-.fx-service-step .step{
-  padding-right: 32px;
-        left: 39%;
-}
-.fx-service-step .extrastep.active{
-  left: 16%;
-  width:48%;
-  padding-left:20px;
-}
-.fx-service-step .checkoutstep.active{
-  width: 42%;
-  left:40%;
-}
-  .fx-leftbar .fx-booking .fx-redeem-container{
+  }
+  .fx-service-step .checkoutstep {
+    width: 82%;
+    padding-right: 37px;
+  }
+  .fx-service-step .step {
+    padding-right: 32px;
+    left: 39%;
+  }
+  .fx-service-step .extrastep.active {
+    left: 16%;
+    width: 48%;
+    padding-left: 20px;
+  }
+  .fx-service-step .checkoutstep.active {
+    width: 42%;
+    left: 40%;
+  }
+  .fx-leftbar .fx-booking .fx-redeem-container {
     max-width: 100%;
-    margin-top:0px;
+    margin-top: 0px;
     padding: 20px 0px;
   }
 }
@@ -986,64 +966,88 @@
     text-overflow: ellipsis;
   }
 
-  .step.step:first-child { margin-left: 0; padding-left: 8px; }
-  .step.step:nth-child(1) { z-index: 5; }
-  .step.step:nth-child(2) { z-index: 4; }
-  .step.step:nth-child(3) { z-index: 3; }
-  .step.step:nth-child(4) { z-index: 2; }
-  .step.step:nth-child(5) { z-index: 1; }
-  .step.step.complete { background: #fff; }
-  .step.step.active { background: #fff; border-color: var(--primary-color); }
+  .step.step:first-child {
+    margin-left: 0;
+    padding-left: 8px;
+  }
+  .step.step:nth-child(1) {
+    z-index: 5;
+  }
+  .step.step:nth-child(2) {
+    z-index: 4;
+  }
+  .step.step:nth-child(3) {
+    z-index: 3;
+  }
+  .step.step:nth-child(4) {
+    z-index: 2;
+  }
+  .step.step:nth-child(5) {
+    z-index: 1;
+  }
+  .step.step.complete {
+    background: #fff;
+  }
+  .step.step.active {
+    background: #fff;
+    border-color: var(--primary-color);
+  }
 }
 
 @media screen and (max-width: 768px) {
   .fx-stepper-tabstyle.fx-redeem-upsell-step {
-    .step.step { font-size: 13px; margin-left: -20px; padding-left: 26px; }
-    .step.step:first-child { padding-left: 8px; }
-    .step.step.active { flex-grow: 2.5; }
+    .step.step {
+      font-size: 13px;
+      margin-left: -20px;
+      padding-left: 26px;
+    }
+    .step.step:first-child {
+      padding-left: 8px;
+    }
+    .step.step.active {
+      flex-grow: 2.5;
+    }
   }
 }
 
 // redeem-upsell-step
 
-.fx-stepper-tabstyle.fx-redeem-upsell-step .codestep.active{
-width:18%;
+.fx-stepper-tabstyle.fx-redeem-upsell-step .codestep.active {
+  width: 18%;
 }
 
-.fx-stepper-tabstyle.fx-redeem-upsell-step .step.datestep, 
+.fx-stepper-tabstyle.fx-redeem-upsell-step .step.datestep,
 .fx-stepper-tabstyle.fx-redeem-upsell-step .step.checkoutstep,
-.fx-stepper-tabstyle.fx-redeem-upsell-step .step.paymentstep{
-width:22%;
+.fx-stepper-tabstyle.fx-redeem-upsell-step .step.paymentstep {
+  width: 22%;
 }
 
-.fx-stepper-tabstyle.fx-redeem-upsell-step .step.upsellstep{
-width:31%;
+.fx-stepper-tabstyle.fx-redeem-upsell-step .step.upsellstep {
+  width: 31%;
 }
 
-.fx-stepper-tabstyle.fx-redeem-upsell-step .upsellstep.complete{
-margin-left: -30px;
+.fx-stepper-tabstyle.fx-redeem-upsell-step .upsellstep.complete {
+  margin-left: -30px;
 }
 .fx-stepper-tabstyle.fx-redeem-upsell-step .codestep.complete {
-    width:18%;
+  width: 18%;
 }
 .fx-stepper-tabstyle.fx-redeem-upsell-step .datestep.complete {
-    width:22%;
+  width: 22%;
 }
 .fx-stepper-tabstyle.fx-redeem-upsell-step .upsellstep.active {
-    width:33%;
+  width: 33%;
 }
-.fx-stepper-tabstyle.fx-redeem-upsell-step .checkoutstep.active{
-    width:22%;
-}
-
-
-.fx-stepper-tabstyle.fx-redeem-upsell-step .upsellstep.complete{
-    width:32%;
-}
-.fx-stepper-tabstyle.fx-redeem-upsell-step .checkoutstep.complete{
-    width:20%;
-}
-.fx-stepper-tabstyle.fx-redeem-upsell-step .paymentstep.step{
-    width:20%;
+.fx-stepper-tabstyle.fx-redeem-upsell-step .checkoutstep.active {
+  width: 22%;
 }
 
+.fx-stepper-tabstyle.fx-redeem-upsell-step .upsellstep.complete {
+  width: 32%;
+}
+.fx-stepper-tabstyle.fx-redeem-upsell-step .checkoutstep.complete {
+  width: 20%;
+}
+.fx-stepper-tabstyle.fx-redeem-upsell-step .paymentstep.step {
+  width: 20%;
+}

@@ -20,70 +20,260 @@
     font-weight: 500;
   }
 
-  .fx-multi-services .fx-ms-slot.is-selected, .fx-service-slot-flow .fx-ms-slot.is-selected .fx-ms-slot-meta strong{
-     color:#fff;
+  .fx-multi-services .fx-ms-slot.is-selected,
+  .fx-service-slot-flow .fx-ms-slot.is-selected .fx-ms-slot-meta strong {
+    color: #fff;
   }
 
-  .fx-service-slot-flow:disabled { opacity: .5; }
-  .fx-service-slot-flow .fx-ms-slot-grid { gap: 12px; }
-  .fx-service-slot-flow .fx-ms-slot { min-width: 0; gap: 8px; padding: 12px; cursor: pointer; }
-  .fx-service-slot-flow .fx-ms-slot:disabled { cursor: default; opacity: .6; }
-  .fx-service-slot-flow .fx-ms-slot-time { font-size: 16px; }
-  .fx-service-slot-flow .fx-ms-slot-meta strong { font-size: 14px; font-weight: 600;
-    color: var(--grey); }
+  .fx-service-slot-flow:disabled {
+    opacity: 0.5;
+  }
+  .fx-service-slot-flow .fx-ms-slot-grid {
+    gap: 12px;
+  }
+  .fx-service-slot-flow .fx-ms-slot {
+    min-width: 0;
+    gap: 8px;
+    padding: 12px;
+    cursor: pointer;
+  }
+  .fx-service-slot-flow .fx-ms-slot:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+  .fx-service-slot-flow .fx-ms-slot-time {
+    font-size: 16px;
+  }
+  .fx-service-slot-flow .fx-ms-slot-meta strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--grey);
+  }
 
   #fx-modaltab_nav.fx-service-slot-tabs {
     margin-bottom: 12px;
-    ul { display: table; table-layout: fixed; width: 100%; }
-    li { width: 33.333%; }
-    li a { width: 100%;  font-size: 16px; }
-    li a.selected { border-color: var(--primary-color); }
+    ul {
+      display: table;
+      table-layout: fixed;
+      width: 100%;
+    }
+    li {
+      width: 33.333%;
+    }
+    li a {
+      width: 100%;
+      font-size: 16px;
+    }
+    li a.selected {
+      border-color: var(--primary-color);
+    }
   }
 
-  p.fx-service-slot-empty { margin: 8px 0; font-size: 14px; }
-  .fx-service-participants { margin-top: 14px; }
-  .fx-service-selected-slot { padding: 12px; border: 1px solid #edf0f4; 
-    border-radius: 12px;     border-color: var(--primary-color); background-color: 
-color-mix(in srgb, var(--primary-color) 4%, white);}
-  .fx-service-selected-slot h3 { display: flex; align-items: center; 
-    gap: 7px; margin: 0 0 12px; color: var(--darkgrey); font-size: 18px; 
-    font-weight: 500; }
-  .fx-service-selected-slot h3 svg { color: var(--primary-color); }
-  .fx-service-selected-slot-row { display: flex; align-items: center; gap: 16px; }
-  .fx-service-selected-slot-value { display: flex; align-items: center; flex: 1; min-width: 0; gap: 10px; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; color: var(--darkgrey); font-size: 16px; }
-  .fx-service-selected-slot-value strong:last-child { margin-left: auto; white-space: nowrap; }
-  .fx-service-selected-slot-value svg { flex-shrink: 0; color: var(--grey); }
-  .fx-service-selected-slot-row > button { display: flex; align-items: center; flex-shrink: 0; gap: 7px; padding: 0; border: 0; background: transparent; color: var(--primary-color); font: inherit; font-size: 12px; text-decoration: underline; cursor: pointer; }
-  .fx-service-participant-panel > p { margin: 0 0 14px; font-size: 16px; line-height: 1.5; }
-  .fx-service-participant-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 12px; }
-  .fx-service-participant-row > div:first-child { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-  .fx-service-participant-row strong { font-size: 16px; font-weight: 600; }
-  .fx-service-participant-row small { color: var(--grey); font-size: 16px; }
-  .fx-service-participant-row.is-disabled { opacity: .4; }
-  .fx-service-participant-total { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color); color: var(--darkgrey); font-size: 16px; }
-  .fx-service-participant-total strong { color: var(--primary-color); }
-  p.fx-service-participant-status { padding: 20px 12px; font-size: 13px; }
-  .fx-service-participant-error { padding: 12px; margin-top: 12px; border: 1px solid var(--error-color); border-radius: 10px; }
-  .fx-service-participant-error p { margin: 0 0 8px; color: var(--error-color); font-size: 13px; }
-  .fx-service-participant-error button { padding: 6px 10px; border: 1px solid var(--primary-color); border-radius: 6px; background: white; color: var(--primary-color); cursor: pointer; }
-  .fx-service-participant-quantity { display: flex; align-items: center; gap: 10px; }
-  .fx-service-participant-quantity button { display: grid; place-items: center; width: 25px; height: 25px; padding: 0; border: 1px solid var(--border-color); border-radius: 50%; background: white; color: var(--darkgrey); cursor: pointer; }
-  .fx-service-participant-quantity button:disabled { opacity: .35; cursor: default; }
-  .fx-service-participant-quantity output { min-width: 14px; color: var(--darkgrey); font-size: 13px; text-align: center; }
-  p.fx-service-participant-message { margin: 10px 0 0; font-size: 11px; }
-  p.fx-service-participant-message.is-invalid { color: var(--error-color); }
+  p.fx-service-slot-empty {
+    margin: 8px 0;
+    font-size: 14px;
+  }
+  .fx-service-participants {
+    margin-top: 14px;
+  }
+  .fx-service-selected-slot {
+    padding: 12px;
+    border: 1px solid #edf0f4;
+    border-radius: 12px;
+    border-color: var(--primary-color);
+    background-color: color-mix(in srgb, var(--primary-color) 4%, white);
+  }
+  .fx-service-selected-slot h3 {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0 0 12px;
+    color: var(--darkgrey);
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .fx-service-selected-slot h3 svg {
+    color: var(--primary-color);
+  }
+  .fx-service-selected-slot-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .fx-service-selected-slot-value {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--darkgrey);
+    font-size: 16px;
+  }
+  .fx-service-selected-slot-value strong:last-child {
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .fx-service-selected-slot-value svg {
+    flex-shrink: 0;
+    color: var(--grey);
+  }
+  .fx-service-selected-slot-row > button {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 7px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--primary-color);
+    font: inherit;
+    font-size: 12px;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .fx-service-participant-panel > p {
+    margin: 0 0 14px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .fx-service-participant-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+  }
+  .fx-service-participant-row > div:first-child {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .fx-service-participant-row strong {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .fx-service-participant-row small {
+    color: var(--grey);
+    font-size: 16px;
+  }
+  .fx-service-participant-row.is-disabled {
+    opacity: 0.4;
+  }
+  .fx-service-participant-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+    color: var(--darkgrey);
+    font-size: 16px;
+  }
+  .fx-service-participant-total strong {
+    color: var(--primary-color);
+  }
+  p.fx-service-participant-status {
+    padding: 20px 12px;
+    font-size: 13px;
+  }
+  .fx-service-participant-error {
+    padding: 12px;
+    margin-top: 12px;
+    border: 1px solid var(--error-color);
+    border-radius: 10px;
+  }
+  .fx-service-participant-error p {
+    margin: 0 0 8px;
+    color: var(--error-color);
+    font-size: 13px;
+  }
+  .fx-service-participant-error button {
+    padding: 6px 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 6px;
+    background: white;
+    color: var(--primary-color);
+    cursor: pointer;
+  }
+  .fx-service-participant-quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .fx-service-participant-quantity button {
+    display: grid;
+    place-items: center;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    background: white;
+    color: var(--darkgrey);
+    cursor: pointer;
+  }
+  .fx-service-participant-quantity button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .fx-service-participant-quantity output {
+    min-width: 14px;
+    color: var(--darkgrey);
+    font-size: 13px;
+    text-align: center;
+  }
+  p.fx-service-participant-message {
+    margin: 10px 0 0;
+    font-size: 11px;
+  }
+  p.fx-service-participant-message.is-invalid {
+    color: var(--error-color);
+  }
 
-  .fx-service-step-footer { display: flex; align-items: center; gap: 16px; }
-  .fx-service-step-footer .continuebtn { flex: 1; width: auto; margin: 0; }
-  .fx-service-back-to-slots { flex-shrink: 0; padding: 9px 12px; border: 1px solid var(--primary-color); border-radius: 30px; background: white; color: var(--primary-color); 
-    font: inherit; font-size: 16px; cursor: pointer; }
+  .fx-service-step-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .fx-service-step-footer .continuebtn {
+    flex: 1;
+    width: auto;
+    margin: 0;
+  }
+  .fx-service-back-to-slots {
+    flex-shrink: 0;
+    padding: 9px 12px;
+    border: 1px solid var(--primary-color);
+    border-radius: 30px;
+    background: white;
+    color: var(--primary-color);
+    font: inherit;
+    font-size: 16px;
+    cursor: pointer;
+  }
 }
 
 @media (max-width: 480px) {
   .fx-booking .fx-popup .fx-rightpopup {
-    .fx-service-selected-slot-row { align-items: stretch; flex-direction: column; gap: 10px; }
-    .fx-service-selected-slot-row > button { align-self: flex-end; }
-    .fx-service-slot-flow .fx-ms-slot-time { white-space: normal; }
+    .fx-service-selected-slot-row {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .fx-service-selected-slot-row > button {
+      align-self: flex-end;
+    }
+    .fx-service-slot-flow .fx-ms-slot-time {
+      white-space: normal;
+    }
   }
 }
 
@@ -91,7 +281,9 @@ color-mix(in srgb, var(--primary-color) 4%, white);}
 // step). Status copy is neutral: no error colour for "choose N visitors" guidance.
 .fx-booking .fx-popup .fx-slot-bundle-modal-box,
 .fx-booking .fx-popup .fx-rightpopup {
-  .fx-bundle-participants { margin-top: 16px; }
+  .fx-bundle-participants {
+    margin-top: 16px;
+  }
   .fx-bundle-participant-component + .fx-bundle-participant-component {
     margin-top: 16px;
     padding-top: 14px;
@@ -104,9 +296,23 @@ color-mix(in srgb, var(--primary-color) 4%, white);}
     gap: 12px;
     margin-bottom: 10px;
   }
-  .fx-bundle-participant-services { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-  .fx-bundle-participant-services span { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-  .fx-bundle-participant-services strong { color: var(--darkgrey); font-size: 16px; font-weight: 600; }
+  .fx-bundle-participant-services {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .fx-bundle-participant-services span {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .fx-bundle-participant-services strong {
+    color: var(--darkgrey);
+    font-size: 16px;
+    font-weight: 600;
+  }
   .fx-bundle-participant-services small,
   .fx-bundle-participant-required {
     display: inline-flex;
@@ -123,9 +329,17 @@ color-mix(in srgb, var(--primary-color) 4%, white);}
     border-radius: 30px;
   }
   .fx-bundle-participant-required svg,
-  .fx-bundle-participant-services svg { color: var(--primary-color); }
-  p.fx-bundle-participant-note { margin: 4px 0 0; color: var(--grey); font-size: 13px; }
-  p.fx-bundle-participant-note.is-complete { color: var(--primary-color); }
+  .fx-bundle-participant-services svg {
+    color: var(--primary-color);
+  }
+  p.fx-bundle-participant-note {
+    margin: 4px 0 0;
+    color: var(--grey);
+    font-size: 13px;
+  }
+  p.fx-bundle-participant-note.is-complete {
+    color: var(--primary-color);
+  }
   p.fx-bundle-participant-footnote {
     margin: 14px 0 0;
     padding: 10px 12px;
@@ -135,8 +349,12 @@ color-mix(in srgb, var(--primary-color) 4%, white);}
     font-size: 13px;
     line-height: 1.5;
   }
-  .fx-bundle-participant-error { border-color: var(--border-color); }
-  .fx-bundle-participant-error p { color: var(--darkgrey); }
+  .fx-bundle-participant-error {
+    border-color: var(--border-color);
+  }
+  .fx-bundle-participant-error p {
+    color: var(--darkgrey);
+  }
 }
 
 // Service bundle modal layout: fill the popup and scroll the middle section so
@@ -147,7 +365,9 @@ color-mix(in srgb, var(--primary-color) 4%, white);}
   min-height: 0;
 
   .fx-booking-modal-header,
-  .fx-booking-modal-footer { flex-shrink: 0; }
+  .fx-booking-modal-footer {
+    flex-shrink: 0;
+  }
 
   .fx-booking-modal-content {
     flex: 1 1 auto;
@@ -161,5 +381,7 @@ color-mix(in srgb, var(--primary-color) 4%, white);}
     overflow: visible;
   }
 
-  .fx-bundle-participants { margin-top: 8px; }
+  .fx-bundle-participants {
+    margin-top: 8px;
+  }
 }

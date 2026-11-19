@@ -10,7 +10,6 @@ const GiftCardPreview = ({
 }) => {
   return (
     <div className="fx-gift-card-container">
-
       {/* Gift Card Container */}
       <div className="fx-gift-card">
         {/* Decorative corner elements */}
@@ -52,7 +51,10 @@ const GiftCardPreview = ({
           {/* Services List */}
           <div className="fx-gift-card-services">
             {services?.service?.map((service, index) => (
-              <div key={`service-${index}`} className="fx-gift-card-service-item">
+              <div
+                key={`service-${index}`}
+                className="fx-gift-card-service-item"
+              >
                 <span>{service.name}</span>
               </div>
             ))}
@@ -72,14 +74,12 @@ const GiftCardPreview = ({
           <p className="fx-gift-card-brand-text">FLEXI BOOKING</p>
         </div>
 
-         <p className="fx-gift-card-info-text">
-        The recipient will receive this gift card via email
-      </p>
-      
+        <p className="fx-gift-card-info-text">
+          The recipient will receive this gift card via email
+        </p>
       </div>
 
       {/* Info text below card */}
-      
     </div>
   );
 };

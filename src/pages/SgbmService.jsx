@@ -12,7 +12,9 @@ export default function SgbmService(props) {
   const date = useSelector((state) => state.step1.date);
   const cart = useSelector((state) => state.step2.cart);
   return (
-    <div className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}>
+    <div
+      className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}
+    >
       <Steps type="service" {...props} />
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
         <div className="fx-seg-loader"></div>
@@ -28,10 +30,10 @@ export default function SgbmService(props) {
       {/* End Extra Tabs */}
       <Customize {...props} />
       {/* Checkout Tabs */}
-      <Checkout {...props}/>
+      <Checkout {...props} />
       {/* End Checkout Tabs */}
       {/* Payment Tabs */}
-      <Payment {...props}/>
+      <Payment {...props} />
       {/* End Payment Tabs */}
     </div>
   );

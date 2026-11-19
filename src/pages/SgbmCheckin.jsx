@@ -159,7 +159,7 @@ export default function SgbmCheckin() {
   const [apiStatus, setApiStatus] = useState("idle"); // idle | verifying | checking-in | success | error | invalid | already-checked-in
   const [apiMessage, setApiMessage] = useState("");
 
-   const getSettings = async () => {
+  const getSettings = async () => {
     try {
       const response = await axiosInstance.get("/settings");
       const settings = response.data;
@@ -325,9 +325,14 @@ export default function SgbmCheckin() {
             sourceCanvas.height,
           );
 
-          const firstTry = jsQR(frame.data, sourceCanvas.width, sourceCanvas.height, {
-            inversionAttempts: "attemptBoth",
-          });
+          const firstTry = jsQR(
+            frame.data,
+            sourceCanvas.width,
+            sourceCanvas.height,
+            {
+              inversionAttempts: "attemptBoth",
+            },
+          );
           if (firstTry?.data) return firstTry.data;
 
           const secondTry = jsQR(

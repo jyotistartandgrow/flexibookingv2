@@ -24,10 +24,14 @@ export default function Thankyou() {
   const [voucher] = useState(() => reduxVoucher);
   const [redeemBooking] = useState(() => reduxRedeemBooking);
   const [bookingkey] = useState(() => reduxBookingKey);
-  const reduxUpsellQuote = useSelector((state) => state.step3.redeemUpsellQuote);
+  const reduxUpsellQuote = useSelector(
+    (state) => state.step3.redeemUpsellQuote,
+  );
   const reduxRedeemUpsell = useSelector((state) => state.step1.redeemUpsell);
   // Paid additions only exist when this redemption went through the Service + Payment steps.
-  const [upsellOrderKey] = useState(() => (reduxRedeemUpsell ? reduxUpsellQuote?.order_key || "" : ""));
+  const [upsellOrderKey] = useState(() =>
+    reduxRedeemUpsell ? reduxUpsellQuote?.order_key || "" : "",
+  );
   const [additionsData, setAdditionsData] = useState(null);
   const loading = useSelector((state) => state.step1.loading);
   const [bookingData, setBookingData] = useState(null);
@@ -66,8 +70,7 @@ export default function Thankyou() {
         ? bundleProduct.selected_component_slots
         : []),
       ...(Array.isArray(
-        bookingData?.product_details?.selected_bundle
-          ?.selected_component_slots,
+        bookingData?.product_details?.selected_bundle?.selected_component_slots,
       )
         ? bookingData.product_details.selected_bundle.selected_component_slots
         : []),
@@ -89,25 +92,26 @@ export default function Thankyou() {
         : "-")
     );
   };
-  
+
   const bookingdetail = useCallback(async () => {
     dispatch(setLoading(true));
     try {
-      const [redeemResponse, serviceResponse, additionsResponse] = await Promise.all([
-        axiosInstance.post(`/redeem-thankyou`, {
-          redeem_code: voucher,
-        }),
-        redeemBooking && bookingkey
-          ? axiosInstance.post(`/thankyou`, {
-              booking_key: bookingkey,
-            })
-          : Promise.resolve(null),
-        upsellOrderKey
-          ? callVoucherApi("/upsells/status", "redemption_upsell_status", {
-              order_key: upsellOrderKey,
-            }).catch(() => null)
-          : Promise.resolve(null),
-      ]);
+      const [redeemResponse, serviceResponse, additionsResponse] =
+        await Promise.all([
+          axiosInstance.post(`/redeem-thankyou`, {
+            redeem_code: voucher,
+          }),
+          redeemBooking && bookingkey
+            ? axiosInstance.post(`/thankyou`, {
+                booking_key: bookingkey,
+              })
+            : Promise.resolve(null),
+          upsellOrderKey
+            ? callVoucherApi("/upsells/status", "redemption_upsell_status", {
+                order_key: upsellOrderKey,
+              }).catch(() => null)
+            : Promise.resolve(null),
+        ]);
 
       if (redeemResponse?.data?.status == 200) {
         setBookingData(redeemResponse.data?.data);
@@ -296,7 +300,9 @@ export default function Thankyou() {
               </h3>
 
               {additionsData && (
-                <h3 className="fx-order-title fx-redeem-details-title">Redemption Details</h3>
+                <h3 className="fx-order-title fx-redeem-details-title">
+                  Redemption Details
+                </h3>
               )}
 
               <div className="fx-order-row">
@@ -357,8 +363,7 @@ export default function Thankyou() {
                   <section
                     className="fx-bundle-package fx-redeem-bundle-package"
                     key={
-                      bundleProduct?.bundle_id ||
-                      `redeem-bundle-${bundleIndex}`
+                      bundleProduct?.bundle_id || `redeem-bundle-${bundleIndex}`
                     }
                   >
                     <div className="fx-bundle-package-summary">
@@ -444,84 +449,102 @@ export default function Thankyou() {
                 </table>
               )}
 
-              {additionsData && (() => {
-                const money = (value) => formatLikePrice(additionsData.formatted_total, value);
-                const discount =
-                  Number(additionsData.rule_discount || 0) + Number(additionsData.coupon_discount || 0);
-                const confirmed = ["finalized", "paid", "finalizing"].includes(additionsData.status);
-                return (
-                  <section className="fx-combined-booking-confirmation fx-redeem-paid-additions">
-                    <h3 className="fx-order-title">Paid Additions</h3>
+              {additionsData &&
+                (() => {
+                  const money = (value) =>
+                    formatLikePrice(additionsData.formatted_total, value);
+                  const discount =
+                    Number(additionsData.rule_discount || 0) +
+                    Number(additionsData.coupon_discount || 0);
+                  const confirmed = [
+                    "finalized",
+                    "paid",
+                    "finalizing",
+                  ].includes(additionsData.status);
+                  return (
+                    <section className="fx-combined-booking-confirmation fx-redeem-paid-additions">
+                      <h3 className="fx-order-title">Paid Additions</h3>
 
-                    <div className="fx-order-row">
-                      <div>
-                        Payment via: <br />
-                        <span>Card</span>
-                      </div>
-                      {additionsData.payment_reference && (
+                      <div className="fx-order-row">
                         <div>
-                          Payment Ref:
-                          <br />
-                          <span>{additionsData.payment_reference}</span>
+                          Payment via: <br />
+                          <span>Card</span>
                         </div>
-                      )}
-                    </div>
-
-                    {!confirmed && (
-                      <p className="fx-order-row">
-                        <span>Your additions payment is still being confirmed. You will receive an email once it is complete.</span>
-                      </p>
-                    )}
-
-                    <table className="fx-order-table">
-                      <thead>
-                        <tr>
-                          <th>Product</th>
-                          <th>Date &amp; Time</th>
-                          <th>Qty</th>
-                          <th>Total</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {additionsData.items.map((item, index) => (
-                          <tr key={`addition-${item.product_type}-${item.product_id}-${index}`}>
-                            <td>{item.name}</td>
-                            <td>
-                              {item.booking_date && moment(item.booking_date).isValid()
-                                ? moment(item.booking_date).format("MMM DD, YYYY")
-                                : ""}
-                              {item.slot_from
-                                ? ` ${[item.slot_from, item.slot_to].filter(Boolean).join(" - ")}`
-                                : ""}
-                            </td>
-                            <td>{item.quantity}</td>
-                            <td>{money(item.line_total)}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-
-                    <div className="fx-summary">
-                      {discount > 0 && (
-                        <>
+                        {additionsData.payment_reference && (
                           <div>
-                            Subtotal
-                            <span>{money(additionsData.subtotal)}</span>
+                            Payment Ref:
+                            <br />
+                            <span>{additionsData.payment_reference}</span>
                           </div>
-                          <div>
-                            Discount
-                            <span>-{money(discount)}</span>
-                          </div>
-                        </>
-                      )}
-                      <div>
-                        Total Paid
-                        <span>{additionsData.formatted_total || money(additionsData.total)}</span>
+                        )}
                       </div>
-                    </div>
-                  </section>
-                );
-              })()}
+
+                      {!confirmed && (
+                        <p className="fx-order-row">
+                          <span>
+                            Your additions payment is still being confirmed. You
+                            will receive an email once it is complete.
+                          </span>
+                        </p>
+                      )}
+
+                      <table className="fx-order-table">
+                        <thead>
+                          <tr>
+                            <th>Product</th>
+                            <th>Date &amp; Time</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {additionsData.items.map((item, index) => (
+                            <tr
+                              key={`addition-${item.product_type}-${item.product_id}-${index}`}
+                            >
+                              <td>{item.name}</td>
+                              <td>
+                                {item.booking_date &&
+                                moment(item.booking_date).isValid()
+                                  ? moment(item.booking_date).format(
+                                      "MMM DD, YYYY",
+                                    )
+                                  : ""}
+                                {item.slot_from
+                                  ? ` ${[item.slot_from, item.slot_to].filter(Boolean).join(" - ")}`
+                                  : ""}
+                              </td>
+                              <td>{item.quantity}</td>
+                              <td>{money(item.line_total)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+
+                      <div className="fx-summary">
+                        {discount > 0 && (
+                          <>
+                            <div>
+                              Subtotal
+                              <span>{money(additionsData.subtotal)}</span>
+                            </div>
+                            <div>
+                              Discount
+                              <span>-{money(discount)}</span>
+                            </div>
+                          </>
+                        )}
+                        <div>
+                          Total Paid
+                          <span>
+                            {additionsData.formatted_total ||
+                              money(additionsData.total)}
+                          </span>
+                        </div>
+                      </div>
+                    </section>
+                  );
+                })()}
 
               {redeemBooking && serviceBookingData && (
                 <section className="fx-combined-booking-confirmation">
@@ -597,9 +620,7 @@ export default function Thankyou() {
                     <div>
                       Total
                       <span>
-                        {decodeHtml(
-                          serviceBookingData?.product_details?.total,
-                        )}
+                        {decodeHtml(serviceBookingData?.product_details?.total)}
                       </span>
                     </div>
                   </div>
@@ -626,7 +647,6 @@ export default function Thankyou() {
                         </tbody>
                       </table>
                     )}
-
                 </section>
               )}
 

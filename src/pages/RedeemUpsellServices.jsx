@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { ArrowLeft, ArrowRight, Minus, Plus } from "lucide-react";
 import { setRedeemStep } from "../store/step1Slice";
-import { setRedeemUpsellQuote, setRedeemUpsellSelections } from "../store/step3Slice";
+import {
+  setRedeemUpsellQuote,
+  setRedeemUpsellSelections,
+} from "../store/step3Slice";
 import axiosInstance from "../Utils/Interceptor";
 import { formatSelectedComponentSlots } from "../Utils/Functions";
 import ServiceCard from "../components/ServiceCard";
@@ -56,7 +59,10 @@ export default function RedeemUpsellServices() {
           date: bookingDate,
           slot,
           ...(componentSlots.length > 0
-            ? { selected_component_slots: formatSelectedComponentSlots(componentSlots) }
+            ? {
+                selected_component_slots:
+                  formatSelectedComponentSlots(componentSlots),
+              }
             : {}),
         },
         { signal: controller.signal },
@@ -106,11 +112,16 @@ export default function RedeemUpsellServices() {
     let next;
     if (direction > 0) {
       if (!current && limitReached) return;
-      next = current ? allowed.find((value) => value > current) ?? current : allowed[0];
+      next = current
+        ? (allowed.find((value) => value > current) ?? current)
+        : allowed[0];
     } else {
       next = [...allowed].reverse().find((value) => value < current) ?? 0;
     }
-    setQuantities((previous) => ({ ...previous, [item.recommendation_key]: next }));
+    setQuantities((previous) => ({
+      ...previous,
+      [item.recommendation_key]: next,
+    }));
   };
 
   const toggleItem = (item) => {
@@ -128,7 +139,8 @@ export default function RedeemUpsellServices() {
       const next = { ...previous };
       selectedItems.forEach((item) => {
         const choices = item.schedule_choices || [];
-        if (!next[item.recommendation_key] && choices.length === 1) next[item.recommendation_key] = choiceKey(choices[0]);
+        if (!next[item.recommendation_key] && choices.length === 1)
+          next[item.recommendation_key] = choiceKey(choices[0]);
       });
       return next;
     });
@@ -137,15 +149,27 @@ export default function RedeemUpsellServices() {
 
   // A quantity the chosen slot cannot take clears that slot so the customer picks again.
   const changePopupQuantity = (item, quantity) => {
-    setQuantities((previous) => ({ ...previous, [item.recommendation_key]: quantity }));
+    setQuantities((previous) => ({
+      ...previous,
+      [item.recommendation_key]: quantity,
+    }));
     const choice = getSelectedChoice(item, slots[item.recommendation_key]);
-    if (choice?.allowed_quantities?.length && !choice.allowed_quantities.map(Number).includes(quantity)) {
-      setSlots((previous) => ({ ...previous, [item.recommendation_key]: null }));
+    if (
+      choice?.allowed_quantities?.length &&
+      !choice.allowed_quantities.map(Number).includes(quantity)
+    ) {
+      setSlots((previous) => ({
+        ...previous,
+        [item.recommendation_key]: null,
+      }));
     }
   };
 
   const removeFromPopup = (item) => {
-    setQuantities((previous) => ({ ...previous, [item.recommendation_key]: 0 }));
+    setQuantities((previous) => ({
+      ...previous,
+      [item.recommendation_key]: 0,
+    }));
     setSlots((previous) => ({ ...previous, [item.recommendation_key]: null }));
     if (selectedItems.length <= 1) setPopupVisible(false);
   };
@@ -166,7 +190,10 @@ export default function RedeemUpsellServices() {
   };
 
   return (
-    <section className="fx-redemption-upsells" aria-labelledby="fx-upsell-heading">
+    <section
+      className="fx-redemption-upsells"
+      aria-labelledby="fx-upsell-heading"
+    >
       <header className="fx-redemption-upsells__heading">
         <div>
           <p className="fx-redemption-upsells__eyebrow">Optional additions</p>
@@ -192,9 +219,16 @@ export default function RedeemUpsellServices() {
       )}
 
       {!loading && error && (
-        <div className="fx-redemption-upsells__status fx-redemption-upsells__error" role="alert">
+        <div
+          className="fx-redemption-upsells__status fx-redemption-upsells__error"
+          role="alert"
+        >
           <p>{error}</p>
-          <button type="button" className="fx-upsell-back" onClick={() => setRetry((value) => value + 1)}>
+          <button
+            type="button"
+            className="fx-upsell-back"
+            onClick={() => setRetry((value) => value + 1)}
+          >
             Try again
           </button>
         </div>
@@ -242,20 +276,35 @@ export default function RedeemUpsellServices() {
                   <p className="price">
                     <span className="fx-price-one">{item.formatted_price}</span>
                   </p>
-                  <div className="fx-upsell-service__quantity" role="group" aria-label={`${item.name} quantity`}>
+                  <div
+                    className="fx-upsell-service__quantity"
+                    role="group"
+                    aria-label={`${item.name} quantity`}
+                  >
                     <button
                       type="button"
                       disabled={!selected}
-                      onClick={(event) => { event.stopPropagation(); stepQuantity(item, -1); }}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        stepQuantity(item, -1);
+                      }}
                       aria-label={`Decrease ${item.name} quantity`}
                     >
                       <Minus size={13} aria-hidden="true" />
                     </button>
-                    <output aria-live="polite" aria-label={`${item.name} selected quantity`}>{quantity}</output>
+                    <output
+                      aria-live="polite"
+                      aria-label={`${item.name} selected quantity`}
+                    >
+                      {quantity}
+                    </output>
                     <button
                       type="button"
                       disabled={blocked || atMax}
-                      onClick={(event) => { event.stopPropagation(); stepQuantity(item, 1); }}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        stepQuantity(item, 1);
+                      }}
                       aria-label={`Increase ${item.name} quantity`}
                     >
                       <Plus size={13} aria-hidden="true" />
@@ -269,15 +318,28 @@ export default function RedeemUpsellServices() {
       )}
 
       <footer className="fx-redemption-upsells__actions">
-        <button type="button" className="fx-upsell-back" onClick={() => dispatch(setRedeemStep("datestep"))}>
+        <button
+          type="button"
+          className="fx-upsell-back"
+          onClick={() => dispatch(setRedeemStep("datestep"))}
+        >
           <ArrowLeft size={16} aria-hidden="true" /> Back
         </button>
         <div className="fx-redemption-upsells__continue">
-          <button type="button" className="fx-upsell-skip" onClick={skipAdditions}>
+          <button
+            type="button"
+            className="fx-upsell-skip"
+            onClick={skipAdditions}
+          >
             Skip
           </button>
           {!loading && !error && recommendations.length > 0 && (
-            <button type="button" className="fx-upsell-continue" onClick={openPopup} disabled={selectedItems.length === 0}>
+            <button
+              type="button"
+              className="fx-upsell-continue"
+              onClick={openPopup}
+              disabled={selectedItems.length === 0}
+            >
               Continue <ArrowRight size={17} aria-hidden="true" />
             </button>
           )}
@@ -290,7 +352,12 @@ export default function RedeemUpsellServices() {
         quantities={quantities}
         slots={slots}
         onQuantity={changePopupQuantity}
-        onSlot={(item, key) => setSlots((previous) => ({ ...previous, [item.recommendation_key]: key }))}
+        onSlot={(item, key) =>
+          setSlots((previous) => ({
+            ...previous,
+            [item.recommendation_key]: key,
+          }))
+        }
         onRemove={removeFromPopup}
         onClose={() => setPopupVisible(false)}
         onContinue={confirmSelections}

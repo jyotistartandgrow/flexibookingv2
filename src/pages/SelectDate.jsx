@@ -131,9 +131,12 @@ export default function SelectDate(props) {
   );
   const scheduleIncomplete =
     !date || (isBundleVoucher ? !bundleSelectionComplete : !selectedSlot);
-  const primaryLabel = isBundleVoucher ? selectedBundleSlots[0]?.slot_label : selectedSlot;
-  const primarySlot = isBundleVoucher ? selectedBundleSlots[0] :
-    voucherdetail?.slots?.find((item) => getSlotLabel(item) === selectedSlot);
+  const primaryLabel = isBundleVoucher
+    ? selectedBundleSlots[0]?.slot_label
+    : selectedSlot;
+  const primarySlot = isBundleVoucher
+    ? selectedBundleSlots[0]
+    : voucherdetail?.slots?.find((item) => getSlotLabel(item) === selectedSlot);
   const [fromLabel, toLabel] = String(primaryLabel || "").split(/\s*[-–—]\s*/);
   const formatTime = (value) => {
     const time = moment(value, ["HH:mm", "H:mm", "HH:mm:ss", "h:mm A"], true);
@@ -146,15 +149,23 @@ export default function SelectDate(props) {
     label: primaryLabel,
     preflight_valid: true,
   };
-  const participants = useRedeemParticipants(!scheduleIncomplete &&
-    moment(date).format("YYYY-MM-DD") === moment(voucherdetail?.date).format("YYYY-MM-DD") ? {
-      voucher,
-      date: moment(date).format("YYYY-MM-DD"),
-      slot: primaryLabel,
-      slot_selection: slotSelection,
-      ...(isBundleVoucher ? { selected_component_slots: selectedBundleSlots } : {}),
-    } : null);
-  const isContinueDisabled = scheduleIncomplete || !participants.valid || participants.checking;
+  const participants = useRedeemParticipants(
+    !scheduleIncomplete &&
+      moment(date).format("YYYY-MM-DD") ===
+        moment(voucherdetail?.date).format("YYYY-MM-DD")
+      ? {
+          voucher,
+          date: moment(date).format("YYYY-MM-DD"),
+          slot: primaryLabel,
+          slot_selection: slotSelection,
+          ...(isBundleVoucher
+            ? { selected_component_slots: selectedBundleSlots }
+            : {}),
+        }
+      : null,
+  );
+  const isContinueDisabled =
+    scheduleIncomplete || !participants.valid || participants.checking;
 
   const slotset = (slot) => {
     setSelectedSlot(slot);
@@ -179,9 +190,12 @@ export default function SelectDate(props) {
         savedBundleSlots.length > 0 &&
         savedBundleSchedule?.components?.length > 0;
       setVoucherdetail(data.data);
-      const restoredSlot = !restoreBundleSelection &&
+      const restoredSlot =
+        !restoreBundleSelection &&
         savedVoucherDetail?.date === data.data.date &&
-        data.data.slots?.some((item) => getSlotLabel(item) === savedSlot) ? savedSlot : null;
+        data.data.slots?.some((item) => getSlotLabel(item) === savedSlot)
+          ? savedSlot
+          : null;
       setSelectedSlot(restoredSlot);
       setBundleSlotTabs({});
       if (restoreBundleSelection) {
@@ -412,11 +426,8 @@ export default function SelectDate(props) {
           <div className="fx-content-body">
             <div className="fx-redeem-slot-heading">
               {props.stepsVisibility?.step_2_title_visible == "true" && (
-                <h1
-                  className="fx-all-main-heading"
-                >
-                  {props.stepTitles?.step_2_title ||
-                    "Select Date & Time"}{" "}
+                <h1 className="fx-all-main-heading">
+                  {props.stepTitles?.step_2_title || "Select Date & Time"}{" "}
                 </h1>
               )}
               <p>Choose when you’d like to use this voucher.</p>
@@ -520,12 +531,14 @@ export default function SelectDate(props) {
                     <div className="fx-slot-bundle-modal-box fx-redeem-bundle-slots">
                       <div className="fx-booking-modal-header">
                         <div className="fx-bundle-modal-heading">
-                          <h2 className="fx-booking-modal-title">Bundle slots</h2>
+                          <h2 className="fx-booking-modal-title">
+                            Bundle slots
+                          </h2>
                           <p>Pick slots for each package component in order.</p>
                         </div>
                         <span className="fx-bundle-progress">
-                          {selectedBundleSlots.length} of {bundleComponents.length}{" "}
-                          selected
+                          {selectedBundleSlots.length} of{" "}
+                          {bundleComponents.length} selected
                         </span>
                       </div>
 
@@ -541,7 +554,8 @@ export default function SelectDate(props) {
                               componentIndex > selectedBundleSlots.length;
                             const isSelected = Boolean(selectedComponentSlot);
                             const isExpanded =
-                              !isWaiting && expandedBundleIndex === componentIndex;
+                              !isWaiting &&
+                              expandedBundleIndex === componentIndex;
                             const activeTab =
                               bundleSlotTabs[position] ||
                               getDefaultBundleTab(component);
@@ -563,13 +577,16 @@ export default function SelectDate(props) {
                                   voucherComponent?.quantity ??
                                   component?.component_quantity_per_bundle ??
                                   component?.quantity,
-                              ) || 1) * (Number(bundleProduct?.quantity) || 1) ||
+                              ) || 1) *
+                                (Number(bundleProduct?.quantity) || 1) ||
                               1;
 
                             return (
                               <div
                                 className={`fx-massage-card${isExpanded ? " fx-expanded" : ""}${isWaiting ? " fx-waiting" : ""}${isSelected ? " fx-component-selected" : ""}`}
-                                key={component?.bundle_item_id || componentIndex}
+                                key={
+                                  component?.bundle_item_id || componentIndex
+                                }
                               >
                                 <div
                                   className="fx-massage-card-header"
@@ -626,16 +643,20 @@ export default function SelectDate(props) {
                                       ].map(([tabKey, tabLabel]) => (
                                         <button
                                           className={
-                                            activeTab === tabKey ? "fx-active" : ""
+                                            activeTab === tabKey
+                                              ? "fx-active"
+                                              : ""
                                           }
                                           key={tabKey}
                                           type="button"
                                           onClick={(event) => {
                                             event.stopPropagation();
-                                            setBundleSlotTabs((previousTabs) => ({
-                                              ...previousTabs,
-                                              [position]: tabKey,
-                                            }));
+                                            setBundleSlotTabs(
+                                              (previousTabs) => ({
+                                                ...previousTabs,
+                                                [position]: tabKey,
+                                              }),
+                                            );
                                           }}
                                         >
                                           {tabLabel}

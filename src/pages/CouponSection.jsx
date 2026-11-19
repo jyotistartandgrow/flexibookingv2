@@ -89,7 +89,10 @@ export default function CouponSection() {
                     onChange={(e) => {
                       if (!field.applied) {
                         const newFields = [...fields];
-                        newFields[index] = { ...newFields[index], code: e.target.value };
+                        newFields[index] = {
+                          ...newFields[index],
+                          code: e.target.value,
+                        };
                         setFields(newFields);
                       }
                     }}

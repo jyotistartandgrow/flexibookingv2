@@ -8,7 +8,7 @@
 
 .fx-preview-button {
   background-color: transparent;
-  color:var(--primary-color);
+  color: var(--primary-color);
   border: 2px solid var(--primary-color);
   padding: 0.75rem 1.5rem;
   font-weight: 600;
@@ -21,26 +21,24 @@
 }
 
 .fx-preview-button:hover {
-  background-color:var(--primary-color);
+  background-color: var(--primary-color);
   color: white;
-  border-color:var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .fx-preview-button i {
   font-size: 1.125rem;
 }
 
-.fx-gift-card-dialog{
-  box-shadow:none;
-  border-radius:0px;
+.fx-gift-card-dialog {
+  box-shadow: none;
+  border-radius: 0px;
 }
 
 .fx-gift-card-dialog .p-dialog-header {
-  background-color:inherit;
+  background-color: inherit;
   border-bottom: 1px solid #e5e7eb;
 }
-
-
 
 .fx-gift-card-dialog .p-dialog-content {
   padding: 2rem 1rem;
@@ -48,16 +46,16 @@
 
 /* Override PrimeReact dialog styles with fx- prefix specificity */
 .fx-gift-card-dialog.p-dialog .p-dialog-header {
-  background-color:inherit;
+  background-color: inherit;
   border-bottom: 0px;
   padding: 0px;
-  right:86px;
-  top:10px;
+  right: 86px;
+  top: 10px;
 }
 
 .fx-gift-card-dialog.p-dialog .p-dialog-content {
   padding: 0px;
-  background-color:inherit;
+  background-color: inherit;
 }
 
 .fx-gift-card-dialog.p-dialog .p-dialog-header-close {
@@ -75,7 +73,7 @@
     width: 100%;
     justify-content: center;
   }
-  
+
   .fx-gift-card-dialog.p-dialog .p-dialog-content {
     padding: 1rem;
   }
@@ -97,7 +95,9 @@
   position: relative;
   background: white;
   border-radius: 1.5rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
   border: 4px solid var(--primary-color);
   overflow: hidden;
   aspect-ratio: 3 / 4;
@@ -158,7 +158,7 @@
   font-weight: 500;
   color: var(--darkgrey);
   margin-bottom: 2rem;
-  display:none;
+  display: none;
 }
 
 .fx-gift-card-recipient {
@@ -215,7 +215,7 @@
 }
 
 .fx-gift-card-footer {
-  padding:0px;
+  padding: 0px;
   text-align: center;
   border-top: 1px solid #fce7f3;
 }
@@ -239,60 +239,59 @@
   .fx-gift-card-main-message {
     font-size: 2rem;
   }
-  
+
   .fx-gift-card-total {
     font-size: 2.5rem;
   }
-  
+
   .fx-gift-card-content {
     padding: 2rem;
   }
 }
 
-.fx-gift-receiver-header{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
+.fx-gift-receiver-header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 
-.fx-gift-receiver-header h3{
-  width:50%;
+.fx-gift-receiver-header h3 {
+  width: 50%;
   font-size: 20px;
-  font-weight:400;
+  font-weight: 400;
   margin: 0px;
   color: var(--darkgrey);
 }
 
-.fx-gift-receiver-header .fx-preview-button-container{
-    float: right;
-    width: 50%;
+.fx-gift-receiver-header .fx-preview-button-container {
+  float: right;
+  width: 50%;
 }
 
-.fx-gift-receiver-header .fx-preview-button-container .fx-preview-button{
- float: right;
+.fx-gift-receiver-header .fx-preview-button-container .fx-preview-button {
+  float: right;
 }
 
 @media (max-width: 768px) {
-  .fx-gift-receiver-header{
+  .fx-gift-receiver-header {
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     width: 100%;
-}
+  }
 
-.fx-gift-receiver-header .fx-preview-button-container{
-  width:100%;
-}
+  .fx-gift-receiver-header .fx-preview-button-container {
+    width: 100%;
+  }
 
-.fx-gift-receiver-header h3{
-  width:100%;
-}
+  .fx-gift-receiver-header h3 {
+    width: 100%;
+  }
 
-.fx-gift-card-dialog.p-dialog .p-dialog-header{
-  right: 26px;
+  .fx-gift-card-dialog.p-dialog .p-dialog-header {
+    right: 26px;
     top: 26px;
-}
-.fx-gift-receiver-header h3{
-  margin-bottom: 20px;
-}
-
+  }
+  .fx-gift-receiver-header h3 {
+    margin-bottom: 20px;
+  }
 }

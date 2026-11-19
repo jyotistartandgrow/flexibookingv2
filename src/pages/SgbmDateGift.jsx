@@ -45,9 +45,9 @@ export default function SgbmDateGift(props) {
       {props.redeemBooking && props.topbar == "true" && !loading && voucher ? (
         <CombinedDetailsCard {...props} />
       ) : props.topbar == "true" &&
-      !loading &&
-      ((gift && cart?.service?.length > 0) ||
-        (!gift && date && step !== "datestep")) ? (
+        !loading &&
+        ((gift && cart?.service?.length > 0) ||
+          (!gift && date && step !== "datestep")) ? (
         <OrderDetailsCard {...props} />
       ) : null}
       {/* Booking and Gift Tabs */}
