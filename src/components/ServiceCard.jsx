@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { ImageOff } from "lucide-react";
 
 export default function ServiceCard({
@@ -14,6 +15,13 @@ export default function ServiceCard({
 }) {
   // service_name comes back cut to 20 characters by the API; service_title is the full name.
   const fullName = product.service_title || product.service_name;
+  const nameRef = useRef(null);
+  const [nameCut, setNameCut] = useState(false);
+  // Only offer the tooltip when the heading is actually cut off with "…".
+  const checkNameCut = () => {
+    const el = nameRef.current;
+    setNameCut(Boolean(el) && el.scrollWidth > el.clientWidth);
+  };
   return (
     <div className={className} onClick={onClick}>
       {decoration}
@@ -39,7 +47,14 @@ export default function ServiceCard({
         {imageControl}
       </div>
       <div className="fx-servicecontentbox">
-        <h4 title={fullName}>{fullName}</h4>
+        <div className="fx-service-name" onMouseEnter={checkNameCut}>
+          <h4 ref={nameRef}>{fullName}</h4>
+          {nameCut && (
+            <span className="fx-service-name-tooltip" aria-hidden="true">
+              {fullName}
+            </span>
+          )}
+        </div>
         <p>{description}</p>
         {children}
       </div>

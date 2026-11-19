@@ -253,12 +253,13 @@
   display: flex;
   flex-direction: row;
   width: 100%;
+  margin-bottom: 8px;
 }
 
 .fx-gift-receiver-header h3 {
   width: 50%;
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 600;
   margin: 0px;
   color: var(--darkgrey);
 }
@@ -292,6 +293,6 @@
     top: 26px;
   }
   .fx-gift-receiver-header h3 {
-    margin-bottom: 20px;
+    margin-bottom: 8px;
   }
 }

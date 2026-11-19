@@ -949,3 +949,49 @@ button[type="button"].p-carousel-next {
   white-space: normal;
   overflow-wrap: anywhere;
 }
+
+// Service card name: full-name tooltip when the heading is cut off with "…"
+.fx-booking .fx-servicebox .fx-service-name {
+  position: relative;
+}
+
+.fx-booking .fx-servicebox .fx-service-name-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: -4px;
+  z-index: 5;
+  width: max-content;
+  max-width: calc(100% + 8px);
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--white);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.16);
+  color: var(--darkgrey);
+  font-size: var(--small-font-size);
+  font-weight: 500;
+  line-height: 1.45;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+}
+
+.fx-booking .fx-servicebox .fx-service-name-tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 18px;
+  width: 12px;
+  height: 12px;
+  background: var(--white);
+  transform: rotate(45deg);
+}
+
+.fx-booking .fx-servicebox .fx-service-name:hover .fx-service-name-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
