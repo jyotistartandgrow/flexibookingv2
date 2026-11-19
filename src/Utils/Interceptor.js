@@ -12,7 +12,6 @@ const nonceClient = axios.create({
   baseURL: apiBaseUrl,
 });
 
-let store;
 let cachedNonce = null;
 let nonceRequest = null;
 
@@ -76,10 +75,6 @@ const getErrorCode = (response) =>
 
 export const initializeBookingNonce = () => getNonce();
 
-export const injectStore = (_store) => {
-  store = _store;
-};
-
 axiosInstance.interceptors.request.use(
   async (config) => {
     const nonce = await getNonce();
@@ -131,9 +126,6 @@ axiosInstance.interceptors.response.use(
       }
     }
 
-    if (response?.status === 401) {
-      store?.dispatch({ type: "LOGOUT" });
-    }
     return Promise.reject(response || error);
   },
 );

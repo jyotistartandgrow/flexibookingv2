@@ -32,7 +32,6 @@ export default function CheckinThankyou() {
       booking_key: bookingkey,
     });
     if (data && data.status == 200) {
-      console.log(data);
       setBookingData(data?.data);
       dispatch(setLoading(false));
     }
@@ -106,7 +105,6 @@ export default function CheckinThankyou() {
       email,
     });
     if (data && data.status == 200) {
-      console.log(data);
       if (data.data.status) {
         setEmail("");
         Swal.fire({

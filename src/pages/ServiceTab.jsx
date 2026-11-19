@@ -1,3 +1,4 @@
+import MissingServiceId from "../components/MissingServiceId";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axiosInstance from "../Utils/Interceptor";
@@ -12,7 +13,9 @@ export default function ServiceTab(props) {
   const [serviceDetails, setServiceDetails] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [popupRequest, setPopupRequest] = useState(0);
-  const serviceid = String(props.service_id ?? "").trim();
+  // 0 / missing means the shortcode has no data-service-id: show an error.
+  const serviceid =
+    Number(props.service_id) > 0 ? String(props.service_id).trim() : "";
   const virtualserviceid =
     Number(props.virtual_service_id) > 0 ? Number(props.virtual_service_id) : 0;
   // A virtual service is never a bundle: when virtual_service_id is set, ignore bundle_id.
@@ -103,6 +106,9 @@ export default function ServiceTab(props) {
   const description =
     serviceDetails?.svc_long_desc || serviceDetails?.svc_short_desc;
   const duration = serviceDetails?.duration;
+
+  if (!serviceid) return <MissingServiceId />;
+
   return (
     <>
       <div

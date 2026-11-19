@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
-import { decodeHtml, formatSelectedComponentSlots } from "../Utils/Functions";
+import { decodeHtml, formatSelectedComponentSlots, toPlainText } from "../Utils/Functions";
 import axiosInstance from "../Utils/Interceptor";
 import Swal from "sweetalert2";
 import { setStep, setLoading } from "../store/step1Slice";
@@ -310,7 +310,7 @@ export default function CheckoutForm() {
             showConfirmButton: false,
             timer: 4000,
             icon: "error",
-            title: completionMessage,
+            titleText: toPlainText(completionMessage),
           });
         }
       }
@@ -327,7 +327,7 @@ export default function CheckoutForm() {
         showConfirmButton: false,
         timer: 4000,
         icon: "error",
-        title: submitMessage,
+        titleText: toPlainText(submitMessage),
       });
     } finally {
       dispatch(setLoading(false));

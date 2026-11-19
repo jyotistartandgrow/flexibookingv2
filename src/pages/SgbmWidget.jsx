@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import axiosInstance from "../Utils/Interceptor";
-import { darkenHex } from "../Utils/Functions";
+import { darkenHex, escapeHtml, toSafeUrl } from "../Utils/Functions";
 
 /* ── Constants ───────────────────────────────────────────── */
 const API_BASE = import.meta.env.VITE_API_URL;
@@ -115,11 +115,11 @@ function CalendarPreview({ accentColor, redirectUrl }) {
   const handleDateClick = (dateStr, bookable) => {
     if (!bookable) return;
     setSelectedDate(dateStr);
-    window.open(
-      redirectUrl || DEFAULT_REDIRECT_URL,
-      "_blank",
-      "noopener,noreferrer",
-    );
+    // redirectUrl can come from the ?redirect= query string or user input:
+    // only open http(s) URLs so a javascript: URL can't run in this origin.
+    const target = toSafeUrl(redirectUrl || DEFAULT_REDIRECT_URL);
+    if (!target) return;
+    window.open(target, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -250,11 +250,11 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
   }, [services]);
 
   const handleCardClick = () => {
-    window.open(
-      redirectUrl || DEFAULT_REDIRECT_URL,
-      "_blank",
-      "noopener,noreferrer",
-    );
+    // redirectUrl can come from the ?redirect= query string or user input:
+    // only open http(s) URLs so a javascript: URL can't run in this origin.
+    const target = toSafeUrl(redirectUrl || DEFAULT_REDIRECT_URL);
+    if (!target) return;
+    window.open(target, "_blank", "noopener,noreferrer");
   };
 
   if (loading)
@@ -441,15 +441,15 @@ export default function WidgetBuilder() {
     `<div\n` +
     `  data-fx-widget="1"\n` +
     `  data-widget="${tab}"\n` +
-    `  data-api-base="${API_BASE || ""}"\n` +
-    `  data-accent="${accentColor}"\n` +
-    `  data-redirect="${redirectUrl || DEFAULT_REDIRECT_URL}"\n` +
+    `  data-api-base="${escapeHtml(API_BASE || "")}"\n` +
+    `  data-accent="${escapeHtml(accentColor)}"\n` +
+    `  data-redirect="${escapeHtml(toSafeUrl(redirectUrl || DEFAULT_REDIRECT_URL))}"\n` +
     `  data-cols="${cols}"\n` +
     `  data-show-category="${showCategory}"\n` +
     `  data-width="${widgetWidth}"\n` +
     `  data-height="${widgetHeight}">\n` +
     `</div>\n` +
-    `<script src="${widgetScriptUrl}" defer></script>`;
+    `<script src="${escapeHtml(widgetScriptUrl)}" defer></script>`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(embedCode).then(() => {

@@ -8,7 +8,7 @@ import axiosInstance from "../Utils/Interceptor";
 import { setCart } from "../store/step2Slice";
 import { setLoading } from "../store/step1Slice";
 import moment from "moment";
-import { decodeHtml } from "../Utils/Functions";
+import { decodeHtml, toPlainText } from "../Utils/Functions";
 import CheckoutForm from "../pages/CheckoutForm";
 import useDeviceType from "../Utils/useDeviceType";
 import { Elements } from "@stripe/react-stripe-js";
@@ -103,7 +103,7 @@ export default function Payment(props) {
         } else {
           Swal.fire({
             iconHtml: `<img class="fx-coupon-close-icon" src="${closeicon}">`,
-            title: `${couponcode[i]} Coupon Error`,
+            titleText: toPlainText(`${couponcode[i]} Coupon Error`),
             text:
               decodeHtml(coupondata?.data?.error) || "Failed to apply coupon",
             customClass: {

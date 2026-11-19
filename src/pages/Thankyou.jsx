@@ -123,7 +123,6 @@ export default function Thankyou() {
       booking_key: bookingkey,
     });
     if (data && data.status == 200) {
-      console.log(data);
       setBookingData(data?.data);
       dispatch(setLoading(false));
     }
@@ -207,7 +206,6 @@ export default function Thankyou() {
       email,
     });
     if (data && data.status == 200) {
-      console.log(data);
       if (data.data.status) {
         setEmail("");
         Swal.fire({

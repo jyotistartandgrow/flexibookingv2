@@ -2,15 +2,98 @@ import moment from "moment";
 import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 
+// Escapes text for safe interpolation into HTML (element content or quoted attributes).
+export const escapeHtml = (value) =>
+  String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+// Turns an API message (which may carry entities or markup) into plain text.
+// Use with SweetAlert's `titleText`, never `title`, which renders HTML.
+export const toPlainText = (value) => {
+  if (value === null || value === undefined) return "";
+  const doc = new DOMParser().parseFromString(String(value), "text/html");
+  return doc.body.textContent || "";
+};
+
+// Returns the URL only if it is an absolute http(s) URL (or relative to the
+// current page); blocks javascript:, data: and other script-capable schemes.
+export const toSafeUrl = (value, { allowMailto = false } = {}) => {
+  if (typeof value !== "string" || !value.trim()) return "";
+  try {
+    const url = new URL(value.trim(), window.location.href);
+    const allowed = ["http:", "https:", ...(allowMailto ? ["mailto:", "tel:"] : [])];
+    return allowed.includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+};
+
+const ALLOWED_TAGS = new Set([
+  "a", "b", "br", "div", "em", "h1", "h2", "h3", "h4", "h5", "h6", "hr", "i",
+  "li", "ol", "p", "small", "span", "strong", "sub", "sup", "u", "ul",
+]);
+const DROP_WITH_CONTENT = new Set([
+  "script", "style", "iframe", "object", "embed", "template", "noscript",
+  "svg", "math", "form", "input", "textarea", "select", "button", "link", "meta",
+]);
+
+// Allowlist sanitizer for rich text coming from the API before it is rendered
+// with dangerouslySetInnerHTML. Keeps basic formatting and safe links only.
+export const sanitizeHtml = (html) => {
+  const doc = new DOMParser().parseFromString(String(html ?? ""), "text/html");
+
+  const clean = (node) => {
+    [...node.childNodes].forEach((child) => {
+      if (child.nodeType === Node.TEXT_NODE) return;
+      if (child.nodeType !== Node.ELEMENT_NODE) {
+        child.remove();
+        return;
+      }
+      const tag = child.tagName.toLowerCase();
+      if (DROP_WITH_CONTENT.has(tag)) {
+        child.remove();
+        return;
+      }
+      clean(child);
+      if (!ALLOWED_TAGS.has(tag)) {
+        child.replaceWith(...child.childNodes);
+        return;
+      }
+      [...child.attributes].forEach(({ name }) => {
+        if (name !== "class" && !(tag === "a" && name === "href")) {
+          child.removeAttribute(name);
+        }
+      });
+      if (tag === "a") {
+        const href = toSafeUrl(child.getAttribute("href") || "", { allowMailto: true });
+        if (href) {
+          child.setAttribute("href", href);
+          child.setAttribute("target", "_blank");
+          child.setAttribute("rel", "noopener noreferrer");
+        } else {
+          child.removeAttribute("href");
+        }
+      }
+    });
+  };
+
+  clean(doc.body);
+  return doc.body.innerHTML;
+};
+
 const swalError = (error) => {
-  let errorMessage = "";
+  const parts = [];
 
   for (const key in error?.data?.error) {
-    errorMessage += `${error?.data?.error[key]}
-<br>`;
+    parts.push(escapeHtml(toPlainText(error?.data?.error[key])));
   }
-  errorMessage += error?.data?.message;
-  console.log(errorMessage);
+  if (error?.data?.message) parts.push(escapeHtml(toPlainText(error.data.message)));
+  // Each part is escaped, so only our own <br> separators are rendered as HTML.
+  const errorMessage = parts.join("<br>");
   if (errorMessage) {
     Swal.fire({
       toast: true,

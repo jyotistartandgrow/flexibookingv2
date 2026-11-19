@@ -13,7 +13,7 @@ import { setRedeemUpsellQuote } from "../store/step3Slice";
 import { callVoucherApi, getApiErrorMessage } from "../Utils/redeemUpsells";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { formatSelectedComponentSlots, validateEmail, validatePhoneForCountry } from "../Utils/Functions";
+import { formatSelectedComponentSlots, toPlainText, validateEmail, validatePhoneForCountry } from "../Utils/Functions";
 
 export default function ReedemCheckout(props) {
   const navigate = useNavigate();
@@ -164,7 +164,7 @@ export default function ReedemCheckout(props) {
           showConfirmButton: false,
           timer: 4000,
           icon: "error",
-          title: getApiErrorMessage(error, "Unable to prepare your additions. Please try again."),
+          titleText: toPlainText(getApiErrorMessage(error, "Unable to prepare your additions. Please try again.")),
         });
       } finally {
         dispatch(setLoading(false));
@@ -193,7 +193,7 @@ export default function ReedemCheckout(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
-        title: data?.message ?? "There is some error , please try again",
+        titleText: toPlainText(data?.message ?? "There is some error , please try again"),
       });
       dispatch(setLoading(false));
     }
