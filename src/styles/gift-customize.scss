@@ -24,7 +24,9 @@ body {
   gap: 24px;
   align-items: start;
 }
-.fx-form-column h1 {
+
+
+.fx-customize-layout .fx-form-column h1 {
   font-size: 22px;
   font-weight: 500;
   margin: 0 0 17px;
@@ -257,7 +259,9 @@ body {
 .fx-preview-column {
   padding-top: 0;
 }
-.fx-preview-column h1 {
+
+
+.fx-preview-column h1.fx-right-box-heading {
   font-size: 22px;
   font-weight: 500;
   margin: 0 0 17px;
