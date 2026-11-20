@@ -509,7 +509,7 @@ h2 {
 //   display: none;
 // }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width:680px) {
   .fx-booking .fx-popup {
     width: 100%;
     height: 100%;
@@ -556,9 +556,9 @@ h2 {
   }
   .fx-booking .fx-popup .fx-rightpopup .continuebtn {
     position: fixed;
-    width: 94%;
-    left: 3%;
-    bottom: 5px;
+    width:40%;
+    right: 3%;
+    bottom: 12px;
   }
   .fx-booking .fx-popup .fx-rightpopup {
     padding: 0px;
@@ -606,6 +606,15 @@ h2 {
   .fx-booking .fx-popup #fx-modaltab_nav button {
     width: 30px;
     height: 30px;
+  }
+  .fx-popup-rightslot-continuebtn button.fx-service-back-to-slots{
+    position: fixed;
+    bottom: 12px;
+    left: 3%;
+  }
+  .fx-rightpopup .fx-right-box-detsila{
+    height: auto;
+    padding-bottom: 47px;
   }
 }
 @media (min-width: 768px) and (max-width: 1200px) {
