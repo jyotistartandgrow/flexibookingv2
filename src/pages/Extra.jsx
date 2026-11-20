@@ -12,11 +12,26 @@ import {
   toPlainText,
 } from "../Utils/Functions";
 import extra from "../assets/extra1.jpg";
+
 import { setExtracapacity, setExtra, setBookingkey } from "../store/step3Slice";
 import { setStep, setLoading } from "../store/step1Slice";
 import { setCart } from "../store/step2Slice";
 import Swal from "sweetalert2";
 import useDeviceType from "../Utils/useDeviceType";
+
+// Use the extra's own image from /extras when the API sends one; otherwise
+// (or if that URL fails to load) fall back to the default extra image.
+const getExtraImage = (product) =>
+  typeof product?.extra_image === "string" && product.extra_image.trim()
+    ? product.extra_image.trim()
+    : extra;
+const fallbackToDefaultExtraImage = (event) => {
+  const img = event.currentTarget;
+  // Swap only once, so a failing default image can't loop.
+  if (img.dataset.fallback) return;
+  img.dataset.fallback = "true";
+  img.src = extra;
+};
 
 function ExtraProductTitle({ product }) {
   const typeLabel = String(product.type_label ?? "").trim();
@@ -276,7 +291,11 @@ export default function Extra(props) {
       return (
         <div className="fx-extrabox" key={pp}>
           <div className="fx-extrapicbox">
-            <img src={extra} alt={product.extra_name} />
+            <img
+              src={getExtraImage(product)}
+              alt={product.extra_name}
+              onError={fallbackToDefaultExtraImage}
+            />
             {/* <p className="fx-extrapicpriceboxright">
               {decodeHtml(product.price)}
             </p> */}
@@ -591,7 +610,11 @@ export default function Extra(props) {
                         return (
                           <div className="fx-extrabox" key={p1}>
                             <div className="fx-extrapicbox">
-                              <img src={extra} alt={product.extra_name} />
+                              <img
+                                src={getExtraImage(product)}
+                                alt={product.extra_name}
+                                onError={fallbackToDefaultExtraImage}
+                              />
                               {/* <p className="fx-extrapicpriceboxright">
                                 {decodeHtml(product.price)}
                               </p> */}
@@ -665,7 +688,11 @@ export default function Extra(props) {
                         <div className="fx-extraboxlist" key={p2}>
                           <div className="fx-extrapicboxlist">
                             <div className="fx-extra-main-img">
-                              <img src={extra} alt={product.extra_name} />
+                              <img
+                                src={getExtraImage(product)}
+                                alt={product.extra_name}
+                                onError={fallbackToDefaultExtraImage}
+                              />
                             </div>
                             <span className="fx-servicepiccontentbox">
                               {product.extra_name}

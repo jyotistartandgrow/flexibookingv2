@@ -38,9 +38,12 @@ import {
 import "../styles/service-participants.scss";
 import {
   getParticipantSlotStart,
-  getParticipantSelection,
-  normalizeParticipantGroups,
+  getBreakdownTotal,
+  getCategoryBandCounts,
+  getCategoryParticipantSelection,
+  normalizeParticipantCategories,
 } from "../Utils/participants";
+import { useParticipantQuote } from "../Utils/participantQuote";
 
 export default function Service(props) {
   const dispatch = useDispatch();
@@ -80,7 +83,10 @@ export default function Service(props) {
   const [serviceid, setServiceId] = useState(null);
   const [book, setBook] = useState(0);
   const [showParticipantStep, setShowParticipantStep] = useState(false);
+  // Visitors per age category (adult, children, …) and, for categories that
+  // need an age breakdown, per age band (e.g. senior:41-100).
   const [participants, setParticipants] = useState({});
+  const [participantBreakdown, setParticipantBreakdown] = useState({});
   const [participantConfig, setParticipantConfig] = useState(null);
   const [participantConfigKey, setParticipantConfigKey] = useState("");
   const [participantLoading, setParticipantLoading] = useState(false);
@@ -160,11 +166,13 @@ export default function Service(props) {
     Boolean(participantConfig) &&
     !participantLoading &&
     !participantError;
-  const participantGroups = normalizeParticipantGroups(participantConfig);
-  const participantSelection = getParticipantSelection(
+  const participantCategories =
+    normalizeParticipantCategories(participantConfig);
+  const participantSelection = getCategoryParticipantSelection(
     participantConfig,
-    participantGroups,
+    participantCategories,
     participants,
+    participantBreakdown,
     selectedSlotCapacity,
     detailCapacity,
   );
@@ -177,6 +185,30 @@ export default function Service(props) {
     selectedSlotContext.serviceId === serviceid &&
     selectedSlotContext.bundleId === normalizeBundleId(bundleId) &&
     selectedSlotContext.virtualServiceId === virtualServiceId;
+
+  // Live price for the chosen participants (group rates, age bands).
+  const participantQuote = useParticipantQuote(
+    showParticipantStep &&
+      visible &&
+      !gift &&
+      bundleId === 0 &&
+      virtualServiceId === 0 &&
+      participantConfigReady &&
+      participantSelection.valid &&
+      participantSelection.guests.length > 0
+      ? {
+          serviceId: serviceid,
+          body: {
+            date: moment(date).format("YYYY-MM-DD"),
+            start: participantStart,
+            guests: participantSelection.guests,
+            line_key: participantLineKey.current,
+            option_value_ids:
+              selectedServiceOptionId > 0 ? selectedServiceOptionId : "",
+          },
+        }
+      : null,
+  );
 
   // Virtual services: the booking quantity is chosen directly, and visitors per
   // included service come from the component-participants API (as for bundles).
@@ -227,7 +259,8 @@ export default function Service(props) {
       !virtualParticipantsBlocking
     : canContinueToParticipants &&
       validParticipantQuantity &&
-      book === participantSelection.total;
+      book === participantSelection.total &&
+      participantQuote.ready;
   const participantQuantityMessage = participantSelection.message;
 
   const serviceOptionList = serviceOptionChoices
@@ -468,6 +501,7 @@ export default function Service(props) {
     participantDefaultsKey.current = null;
     setShowParticipantStep(false);
     setParticipants({});
+    setParticipantBreakdown({});
     setParticipantConfig(null);
     setParticipantError("");
     setBook(0);
@@ -781,10 +815,11 @@ export default function Service(props) {
         setParticipantConfig(response.data);
         setParticipantConfigKey(participantRequestKey);
         if (participantDefaultsKey.current !== participantRequestKey) {
-          const adult = normalizeParticipantGroups(response.data).find(
-            (group) => group.category === "adult" && !group.disabled,
+          const adult = normalizeParticipantCategories(response.data).find(
+            (category) => category.category === "adult" && !category.disabled,
           );
           setParticipants(adult ? { [adult.key]: 1 } : {});
+          setParticipantBreakdown({});
           setBook(adult ? 1 : 0);
           participantDefaultsKey.current = participantRequestKey;
         }
@@ -1105,6 +1140,7 @@ export default function Service(props) {
     if (slot !== item.time_slot) {
       participantDefaultsKey.current = null;
       setParticipants({});
+      setParticipantBreakdown({});
       setParticipantConfig(null);
       setParticipantError("");
       setBook(0);
@@ -1118,17 +1154,37 @@ export default function Service(props) {
     });
   };
 
-  const changeParticipantCount = (group, delta) => {
+  const changeParticipantCount = (categoryKey, delta) => {
     if (isPopupBookingDisabled || !participantConfigReady) return;
-    const policy = participantGroups.find((item) => item.key === group);
-    if (!policy || policy.disabled) return;
-    const nextCount = (participants[group] || 0) + delta;
+    const category = participantCategories.find(
+      (item) => item.key === categoryKey,
+    );
+    if (!category || category.disabled) return;
+    const nextCount = (Number(participants[categoryKey]) || 0) + delta;
     if (nextCount < 0) return;
-    const nextParticipants = { ...participants, [group]: nextCount };
-    const nextSelection = getParticipantSelection(
+    const nextParticipants = { ...participants, [categoryKey]: nextCount };
+    let nextBreakdown = participantBreakdown;
+    // Removing a visitor from a broken-down category also removes them from
+    // the last age band that has someone, so the breakdown never exceeds it.
+    if (
+      category.needsBreakdown &&
+      getBreakdownTotal(category, participantBreakdown) > nextCount
+    ) {
+      const band = [...category.bands]
+        .reverse()
+        .find((item) => (Number(participantBreakdown[item.key]) || 0) > 0);
+      if (band) {
+        nextBreakdown = {
+          ...participantBreakdown,
+          [band.key]: Number(participantBreakdown[band.key]) - 1,
+        };
+      }
+    }
+    const nextSelection = getCategoryParticipantSelection(
       participantConfig,
-      participantGroups,
+      participantCategories,
       nextParticipants,
+      nextBreakdown,
       selectedSlotCapacity,
       detailCapacity,
     );
@@ -1139,7 +1195,24 @@ export default function Service(props) {
     )
       return;
     setParticipants(nextParticipants);
+    setParticipantBreakdown(nextBreakdown);
     setBook(nextSelection.total);
+  };
+
+  // Assign a visitor of a broken-down category to one of its age bands.
+  const changeParticipantBand = (category, bandKey, delta) => {
+    if (isPopupBookingDisabled || !participantConfigReady) return;
+    const band = category.bands.find((item) => item.key === bandKey);
+    if (!band || band.disabled) return;
+    const nextValue = (Number(participantBreakdown[bandKey]) || 0) + delta;
+    if (nextValue < 0) return;
+    if (
+      delta > 0 &&
+      getBreakdownTotal(category, participantBreakdown) >=
+        (Number(participants[category.key]) || 0)
+    )
+      return;
+    setParticipantBreakdown({ ...participantBreakdown, [bandKey]: nextValue });
   };
 
   const getBundleScheduleFromResponse = (responseData) => {
@@ -1542,7 +1615,15 @@ export default function Service(props) {
         virtual_service_id: virtualServiceId || null,
         selected_virtual_service_id: virtualServiceId || null,
         components: virtualServiceId > 0 ? productDetails.components || [] : [],
-        participants: gift || isVirtualSelection ? null : { ...participants },
+        // Band-level counts (e.g. "senior:41-100") for the order summary.
+        participants:
+          gift || isVirtualSelection
+            ? null
+            : getCategoryBandCounts(
+                participantCategories,
+                participants,
+                participantBreakdown,
+              ),
         participant_guests:
           gift || isVirtualSelection ? [] : participantSelection.guests,
         participant_configuration:
@@ -2609,9 +2690,11 @@ export default function Service(props) {
                                         "",
                                     ),
                                   )}
+                                  categories={participantCategories}
                                   counts={participants}
-                                  groups={participantGroups}
-                                  onChange={changeParticipantCount}
+                                  breakdown={participantBreakdown}
+                                  onCategoryChange={changeParticipantCount}
+                                  onBandChange={changeParticipantBand}
                                   onBack={() => setShowParticipantStep(false)}
                                   disabled={
                                     isPopupBookingDisabled ||
@@ -2631,18 +2714,7 @@ export default function Service(props) {
                                   physicalCapacity={
                                     participantSelection.physicalCapacity
                                   }
-                                  formatPrice={(value) =>
-                                    formatCalculatedPrice(
-                                      value,
-                                      productDetails.svc_price,
-                                      1,
-                                    )
-                                  }
-                                  totalPrice={formatCalculatedPrice(
-                                    participantSelection.price,
-                                    productDetails.svc_price,
-                                    1,
-                                  )}
+                                  quote={participantQuote}
                                   total={book}
                                   validQuantity={validParticipantQuantity}
                                   quantityMessage={participantQuantityMessage}
