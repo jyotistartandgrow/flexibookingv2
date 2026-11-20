@@ -283,9 +283,8 @@ export default function Extra(props) {
           </div>
           <div className="fx-extracontentbox">
             <ExtraProductTitle product={product} />
-            {product.extra_desc?.trim() && (
-              <p>{decodeHtml(product.extra_desc)}</p>
-            )}
+            {/* Always render the description slot so cards keep the same layout. */}
+            <p>{decodeHtml(product.extra_desc?.trim() || "")}</p>
 
             <div className="fx-common">
               <p className="fx-extrapicpriceboxright">
@@ -599,9 +598,10 @@ export default function Extra(props) {
                             </div>
                             <div className="fx-extracontentbox">
                               <ExtraProductTitle product={product} />
-                              {product.extra_desc?.trim() && (
-                                <p>{decodeHtml(product.extra_desc)}</p>
-                              )}
+                              {/* Always render the description slot so cards keep the same layout. */}
+                              <p>
+                                {decodeHtml(product.extra_desc?.trim() || "")}
+                              </p>
 
                               <div className="fx-common">
                                 <p className="fx-extrapicpriceboxright">
@@ -675,9 +675,10 @@ export default function Extra(props) {
                             <div className="fx-extra-main-contentbox">
                               <div className="fx-extra-contentbox">
                                 <ExtraProductTitle product={product} />
-                                {product.extra_desc?.trim() && (
-                                  <p>{decodeHtml(product.extra_desc)}</p>
-                                )}
+                                {/* Always render the description slot so cards keep the same layout. */}
+                                <p>
+                                  {decodeHtml(product.extra_desc?.trim() || "")}
+                                </p>
                               </div>
                               <p className="price">
                                 {" "}
