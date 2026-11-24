@@ -6,6 +6,8 @@ import {
   setGift,
   setRedeemStep,
   setStripeKey,
+  setViewSettings,
+  setRegionalPreferences,
 } from "../store/step1Slice";
 import moment from "moment";
 import { decodeHtml, darkenHex } from "../Utils/Functions";
@@ -69,6 +71,25 @@ export default function Steps({ type = "date", ...props }) {
       if (settings.data.stripe_public_key) {
         dispatch(setStripeKey(settings.data.stripe_public_key));
       }
+      // Country / phone country / timezone / currency used across the forms.
+      dispatch(
+        setRegionalPreferences(settings.data.regional_preferences || null),
+      );
+      // Service / extra page view: when show_grid_list_button is false, the
+      // pages always use default_view_type and hide the view buttons.
+      const viewType = String(settings.data.default_view_type || "")
+        .trim()
+        .toLowerCase();
+      dispatch(
+        setViewSettings({
+          showGridListButton: ![false, 0, "0", "false"].includes(
+            settings.data.show_grid_list_button,
+          ),
+          defaultViewType: ["grid", "list", "slider"].includes(viewType)
+            ? viewType
+            : "grid",
+        }),
+      );
     } catch (error) {
       console.error("Error fetching settings:", error);
     }

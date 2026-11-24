@@ -324,6 +324,14 @@ export default function Service(props) {
     setIsVisible(type);
   };
 
+  // /settings: show_grid_list_button false → always default_view_type, no
+  // view buttons, and the automatic rule below is skipped.
+  const viewSettings = useSelector((state) => state.step1.viewSettings);
+  const fixedViewType =
+    viewSettings && viewSettings.showGridListButton === false
+      ? viewSettings.defaultViewType
+      : null;
+
   const updateCategoryScrollState = () => {
     const el = categoryPillsRef.current;
     if (!el) {
@@ -354,6 +362,10 @@ export default function Service(props) {
 
   // Auto-set default view based on service count and device type
   useEffect(() => {
+    if (fixedViewType) {
+      setIsVisible(fixedViewType);
+      return;
+    }
     if (products.length === 0) return;
     if (isDesktop) {
       if (products.length === 1) setIsVisible("list");
@@ -365,7 +377,7 @@ export default function Service(props) {
       else if (products.length <= 5) setIsVisible("slider");
       else setIsVisible("slider");
     }
-  }, [products, isDesktop]);
+  }, [products, isDesktop, fixedViewType]);
 
   // Extract unique categories from products
   useEffect(() => {
@@ -2083,7 +2095,9 @@ export default function Service(props) {
         <ul
           style={{
             display:
-              props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+              fixedViewType || (props.mobileHeading == "false" && !isDesktop)
+                ? "none"
+                : "block",
           }}
         >
           <li className="selected">

@@ -19,8 +19,11 @@ import {
   validateEmail,
   validatePhoneForCountry,
 } from "../Utils/Functions";
+import { useRegionalPreferences } from "../Utils/regionalPreferences";
 
 export default function ReedemCheckout(props) {
+  // Default phone country from /settings regional_preferences.
+  const { phoneCountry } = useRegionalPreferences();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const step = useSelector((state) => state.step1.redeemstep);
@@ -307,7 +310,9 @@ export default function ReedemCheckout(props) {
             <label>Mobile</label>
             <div className="fx-phone-input">
               <PhoneInput
-                country={billdata.recipient_country?.toLowerCase() || "in"}
+                country={
+                  billdata.recipient_country?.toLowerCase() || phoneCountry
+                }
                 value={billdata.recipient_contact}
                 className={errorlist.recipient_contact ? "fx-invalid" : ""}
                 onChange={(phone, country) => {

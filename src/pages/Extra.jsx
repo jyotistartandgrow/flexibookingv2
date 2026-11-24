@@ -119,7 +119,19 @@ export default function Extra(props) {
     setIsVisible(type);
   };
 
+  // /settings: show_grid_list_button false → always default_view_type, no
+  // view buttons, and the automatic rule below is skipped.
+  const viewSettings = useSelector((state) => state.step1.viewSettings);
+  const fixedViewType =
+    viewSettings && viewSettings.showGridListButton === false
+      ? viewSettings.defaultViewType
+      : null;
+
   useEffect(() => {
+    if (fixedViewType) {
+      setIsVisible(fixedViewType);
+      return;
+    }
     if (isDesktop) {
       if (products.length === 1) setIsVisible("list");
       else if (products.length <= 8) setIsVisible("grid");
@@ -130,7 +142,7 @@ export default function Extra(props) {
       else if (products.length <= 5) setIsVisible("slider");
       else setIsVisible("list");
     }
-  }, [products, isDesktop]);
+  }, [products, isDesktop, fixedViewType]);
 
   useEffect(() => {
     if (isVisible !== "slider" || !isDesktop) return;
@@ -505,7 +517,9 @@ export default function Extra(props) {
           <ul
             style={{
               display:
-                props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+                fixedViewType || (props.mobileHeading == "false" && !isDesktop)
+                  ? "none"
+                  : "block",
             }}
           >
             <li className="selected">

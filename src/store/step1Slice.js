@@ -42,6 +42,12 @@ const initialState = {
   opendatepurchase: false,
   redeemBooking: false,
   redeemUpsell: false,
+  // From /settings: null = not loaded (use the automatic view rule).
+  // { showGridListButton, defaultViewType } once loaded.
+  viewSettings: null,
+  // /settings regional_preferences: { country, timezone, currency,
+  // default_phone_country }. null until loaded.
+  regionalPreferences: null,
 };
 
 const step1Slice = createSlice({
@@ -96,6 +102,12 @@ const step1Slice = createSlice({
     setRedeemBooking: (state, action) => {
       state.redeemBooking = action.payload;
     },
+    setRegionalPreferences: (state, action) => {
+      state.regionalPreferences = action.payload;
+    },
+    setViewSettings: (state, action) => {
+      state.viewSettings = action.payload;
+    },
     setRedeemUpsell: (state, action) => {
       state.redeemUpsell = action.payload;
     },
@@ -119,5 +131,7 @@ export const {
   setOpenDatePurchase,
   setRedeemBooking,
   setRedeemUpsell,
+  setViewSettings,
+  setRegionalPreferences,
 } = step1Slice.actions;
 export default step1Slice.reducer;
