@@ -188,7 +188,7 @@ function mountReactApp(id, initialRoute, isNewSession) {
       pageSecondaryColorSet = true;
     }
   }
-
+console.log("Mounting booking shortcode", id, "with props:", props);
   createRoot(el).render(
     <StrictMode>
       <Provider store={store}>

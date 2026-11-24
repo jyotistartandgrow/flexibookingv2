@@ -1,11 +1,26 @@
 import { useState, useId } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import iconapplied from "../assets/icons8-confirm.svg";
+import closeicon from "../assets/close2.svg";
 import Swal from "sweetalert2";
-import { setCouponlist } from "../store/step1Slice";
+import {
+  setBookingCoupons,
+  setCouponlist,
+  setLoading,
+} from "../store/step1Slice";
+import { setCart } from "../store/step2Slice";
+import { applyCouponToBooking } from "../Utils/coupons";
+import { toPlainText } from "../Utils/Functions";
 
-export default function CouponSection() {
+/**
+ * bookingKey given (checkout page): Apply calls /apply-coupon right away and
+ * updates the order details. Without it (date screen): coupons are saved and
+ * applied on the payment step.
+ */
+export default function CouponSection({ bookingKey = null }) {
   const dispatch = useDispatch();
+  const cart = useSelector((state) => state.step2.cart);
+  const bookingCoupons = useSelector((state) => state.step1.bookingCoupons);
   const uid = useId();
   const [isVisibleGift, setIsVisibleGift] = useState(false);
   const [fields, setFields] = useState([{ code: "", applied: false }]);
@@ -36,6 +51,56 @@ export default function CouponSection() {
       });
       return;
     }
+
+    if (bookingKey) {
+      const code = fields[key].code.trim();
+      dispatch(setLoading(true));
+      try {
+        const result = await applyCouponToBooking(bookingKey, code, cart);
+        if (!result.ok) {
+          Swal.fire({
+            iconHtml: `<img class="fx-coupon-close-icon" src="${closeicon}">`,
+            titleText: toPlainText(`${code} Coupon Error`),
+            text: result.error,
+            customClass: { popup: "fx-coupon-box-popup" },
+          });
+          return;
+        }
+        dispatch(setCart(result.cart));
+        const previous =
+          bookingCoupons?.bookingKey === bookingKey ? bookingCoupons.codes : [];
+        dispatch(
+          setBookingCoupons({
+            bookingKey,
+            codes: [...new Set([...previous, code])],
+          }),
+        );
+        setFields((prev) =>
+          prev.map((item, i) =>
+            i === key ? { ...item, applied: true, onBooking: true } : item,
+          ),
+        );
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          icon: "success",
+          title: "Coupon applied",
+        });
+      } catch (error) {
+        Swal.fire({
+          iconHtml: `<img class="fx-coupon-close-icon" src="${closeicon}">`,
+          titleText: toPlainText(`${code} Coupon Error`),
+          text: error?.data?.message || "Failed to apply coupon",
+          customClass: { popup: "fx-coupon-box-popup" },
+        });
+      } finally {
+        dispatch(setLoading(false));
+      }
+      return;
+    }
+
     Swal.fire({
       toast: true,
       position: "top-end",
@@ -113,12 +178,15 @@ export default function CouponSection() {
                     </button>
                   )}
                 </div>
-                <div className="fx-delete-coupon">
-                  <i
-                    className="pi pi-trash"
-                    onClick={() => removeCoupon(index)}
-                  ></i>
-                </div>
+                {/* Applied to the booking already: there is no API to remove it. */}
+                {!field.onBooking && (
+                  <div className="fx-delete-coupon">
+                    <i
+                      className="pi pi-trash"
+                      onClick={() => removeCoupon(index)}
+                    ></i>
+                  </div>
+                )}
               </div>
             ))}
             <div className="fx-element-box" onClick={() => addmoreCoupon()}>

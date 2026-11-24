@@ -1095,6 +1095,8 @@
 
 // EXTRA tab when the booked service has no extras.
 .fx-stepper-tabstyle .step.extrastep.is-disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
+    cursor: not-allowed;
+    color: #cae9ed;
+    background: #fbfbfb;
+    border: 1px solid #f1f1f1;
 }

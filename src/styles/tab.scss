@@ -485,8 +485,13 @@
 }
 
 @media screen and (min-width: 769px) {
+  // View buttons shown: leave room for them on the right.
   .fx-booking .fx-category-pills-row {
     max-width: calc(100% - 140px);
+  }
+  // View buttons hidden (show_grid_list_button false): use the full width.
+  .fx-booking .fx-view-toggle-hidden .fx-category-pills-row {
+    max-width: calc(100% - 0px);
   }
 }
 

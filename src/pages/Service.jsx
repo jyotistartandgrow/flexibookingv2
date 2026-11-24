@@ -383,13 +383,25 @@ export default function Service(props) {
     }
   }, [products, isDesktop, fixedViewType]);
 
-  // Extract unique categories from products
+  // Category pills: unique names from each service's category_names (/services).
+  // A service can be in several categories; an empty list means it is only
+  // shown under "All". Older responses without category_names fall back to
+  // category_name.
+  const usesCategoryNames = products.some((p) =>
+    Array.isArray(p?.category_names),
+  );
+  const getProductCategoryNames = (product) =>
+    (usesCategoryNames
+      ? Array.isArray(product?.category_names)
+        ? product.category_names
+        : []
+      : [product?.category_name || product?.category]
+    )
+      .map((name) => String(name ?? "").trim())
+      .filter(Boolean);
+
   useEffect(() => {
-    const cats = [
-      ...new Set(
-        products.map((p) => p.category_name || p.category).filter(Boolean),
-      ),
-    ];
+    const cats = [...new Set(products.flatMap(getProductCategoryNames))];
     setCategories(cats);
     setSelectedCategory("all");
   }, [products]);
@@ -1911,8 +1923,8 @@ export default function Service(props) {
   const displayedProducts =
     selectedCategory === "all"
       ? products
-      : products.filter(
-          (p) => (p.category_name || p.category) === selectedCategory,
+      : products.filter((p) =>
+          getProductCategoryNames(p).includes(selectedCategory),
         );
 
   const selectedDate = moment(date).format("YYYY-MM-DD");

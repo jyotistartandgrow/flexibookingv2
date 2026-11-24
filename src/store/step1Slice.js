@@ -17,6 +17,10 @@ const initialState = {
   step: "datestep",
   redeemstep: "codestep",
   couponcode: [],
+  // Coupons already applied to a booking via /apply-coupon (checkout page):
+  // { bookingKey, codes }. The payment step skips these so they aren't
+  // applied twice.
+  bookingCoupons: { bookingKey: null, codes: [] },
   loading: false,
   category: "",
   gift: false,
@@ -65,6 +69,9 @@ const step1Slice = createSlice({
     },
     setRedeemStep: (state, action) => {
       state.redeemstep = action.payload;
+    },
+    setBookingCoupons: (state, action) => {
+      state.bookingCoupons = action.payload;
     },
     setCouponlist: (state, action) => {
       state.couponcode = action.payload;
@@ -120,6 +127,7 @@ export const {
   setStep,
   setRedeemStep,
   setCouponlist,
+  setBookingCoupons,
   setLoading,
   setCategory,
   setGift,
