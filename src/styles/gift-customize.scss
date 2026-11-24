@@ -742,7 +742,7 @@ body {
 }
 .fx-preview-dialog {
   width: min(100%, 420px);
-  max-height: min(88vh, 760px);
+  max-height: min(73vh, 760px);
   overflow: auto;
   background: #f7f9fc;
   border-radius: 16px;
@@ -755,10 +755,10 @@ body {
   justify-content: space-between;
   margin: 0 0 12px;
 }
-.fx-preview-modal-bar h2 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 500;
+.fx-preview-dialog .fx-preview-modal-bar h2 {
+ margin: 0;
+    font-size: 20px;
+    font-weight: 500;
 }
 .fx-preview-close,
 .fx-preview-modal-bar .fx-preview-close[type="button"] {

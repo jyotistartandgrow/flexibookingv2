@@ -121,7 +121,7 @@
   width: 32%;
   left: 0%;
   padding-right: 0px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .fx-stepper-tabstyle .servicesstep.active {
@@ -366,8 +366,9 @@
   .fx-stepper-tabstyle.fx-gift-step .step.checkoutstep.complete {
     width: 46%;
   }
-  .fx-stepper-tabstyle .step{
-    font-size: 14px;
+  .fx-stepper-tabstyle .step, .fx-stepper-tabstyle .step.active {
+    font-size: 12px;
+    font-weight: 600;
   }
 }
 
@@ -771,9 +772,9 @@
   }
 
   .fx-stepper-tabstyle .extrastep.active {
-    left: 29%;
-    width: 43%;
-    padding-left: 3%;
+    left: 26%;
+        width: 47%;
+        padding-left: 0%;
   }
   .fx-stepper-tabstyle .checkoutstep.active {
     width: 50%;
