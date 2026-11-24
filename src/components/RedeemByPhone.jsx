@@ -47,10 +47,25 @@ export default function RedeemByPhone({ detail, onBack, onSelectDate }) {
             )}
           </div>
           <h2>{serviceName}</h2>
-          <dl>
-            {voucherCode && (<><dt>Voucher</dt><dd>{voucherCode}</dd></>)}
-            {quantity > 0 && (<><dt>Quantity</dt><dd>{quantity}</dd></>)}
-            {expiry.isValid() && (<><dt>Valid until</dt><dd>{expiry.format("MMMM D, YYYY")}</dd></>)}
+          <dl className="fx-redeem-phone__details">
+            {voucherCode && (
+              <div>
+                <dt>Voucher</dt>
+                <dd><code className="fx-redeem-phone__code">{voucherCode}</code></dd>
+              </div>
+            )}
+            {quantity > 0 && (
+              <div>
+                <dt>Quantity</dt>
+                <dd>{quantity}</dd>
+              </div>
+            )}
+            {expiry.isValid() && (
+              <div>
+                <dt>Valid until</dt>
+                <dd>{expiry.format("MMM D, YYYY")}</dd>
+              </div>
+            )}
           </dl>
         </article>
 
