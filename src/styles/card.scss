@@ -207,18 +207,19 @@
   position: relative;
   overflow: hidden;
   border-radius: 8px 0px 0px 8px;
+  display: none;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extrapicboxlist img {
   height: 143px;
   border-radius: 8px 0px 0px 8px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist {
-  width: calc(100% - 120px);
+  width: calc(100% - 0px);
   height: auto;
   padding: 16px 16px;
   background: var(--white);
   position: relative;
-  border-radius: 0px 8px 8px 0px;
+  border-radius: 8px;
 }
 .fx-booking .fx-tabcontent .fx-extraboxlist .fx-extracontentboxlist h4 {
   font-size: var(--all-card-heading);
