@@ -1055,3 +1055,46 @@
 .fx-stepper-tabstyle.fx-redeem-upsell-step .paymentstep.step {
   width: 20%;
 }
+
+// Phone-only redemption: two full-width pills (Enter your code, Voucher details).
+.fx-stepper-tabstyle.fx-redeem-two-step {
+  display: flex;
+  height: auto;
+  padding: 0;
+
+  .step.step {
+    position: relative;
+    top: auto;
+    left: auto;
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    padding: 10px 12px;
+    overflow: hidden;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .step.step:first-child {
+    z-index: 2;
+  }
+  .step.step:last-child {
+    z-index: 1;
+    margin-left: -30px;
+    padding-left: 42px;
+  }
+  .step.step.complete {
+    background: #fff;
+  }
+  .step.step.active {
+    background: #fff;
+    border-color: var(--primary-color);
+  }
+}
+
+// EXTRA tab when the booked service has no extras.
+.fx-stepper-tabstyle .step.extrastep.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

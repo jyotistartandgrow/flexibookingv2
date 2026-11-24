@@ -17,7 +17,8 @@ export default function TimeSlotCard({
       <span className="fx-ms-slot-time">{time}</span>
       <span className="fx-ms-slot-meta">
         <strong>{price}</strong>
-        <small>{left} left</small>
+        {/* Hidden when service-details sets show_cap_left_text to false. */}
+        {left !== null && left !== undefined && <small>{left} left</small>}
       </span>
     </button>
   );

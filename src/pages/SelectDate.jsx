@@ -27,6 +27,8 @@ import axiosInstance from "../Utils/Interceptor";
 import { decodeEntities, sanitizeHtml } from "../Utils/Functions";
 import { useRedeemParticipants } from "../Utils/redeemParticipants";
 import RedeemParticipants from "../components/RedeemParticipants";
+import RedeemByPhone from "../components/RedeemByPhone";
+import { isPhoneOnlyRedemption } from "../Utils/redeemByPhone";
 
 addLocale("en-monday", {
   firstDayOfWeek: 1, // Monday
@@ -424,6 +426,18 @@ export default function SelectDate(props) {
       <div className="redemption-Voucher-services-box">
         <div className="fx-booking-container">
           <div className="fx-content-body">
+            {isPhoneOnlyRedemption(voucherdetail) ? (
+              <RedeemByPhone
+                detail={voucherdetail}
+                onBack={() => dispatch(setRedeemStep("codestep"))}
+                onSelectDate={(value) => {
+                  setSelectedSlot(null);
+                  dispatch(setSlot(null));
+                  dispatch(setDate(value));
+                }}
+              />
+            ) : (
+            <>
             <div className="fx-redeem-slot-heading">
               {props.stepsVisibility?.step_2_title_visible == "true" && (
                 <h1 className="fx-all-main-heading">
@@ -795,6 +809,8 @@ export default function SelectDate(props) {
                 </button>
               </div>
             </div>
+            </>
+            )}
           </div>
         </div>
       </div>

@@ -14,7 +14,12 @@ import {
 import { Dialog } from "primereact/dialog";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { setDate, setStep, setLoading } from "../store/step1Slice";
-import { setBookingkey } from "../store/step3Slice";
+import {
+  setBookingkey,
+  setExtra,
+  setExtracapacity,
+  setHasExtras,
+} from "../store/step3Slice";
 import {
   setTimeslot,
   setCapacity,
@@ -26,6 +31,7 @@ import useDeviceType from "../Utils/useDeviceType";
 import CalendarPage from "./CalendarPage";
 import ServiceCard from "../components/ServiceCard";
 import ServiceSlotSelection from "../components/ServiceSlotSelection";
+import ServiceSlotQuantity from "../components/ServiceSlotQuantity";
 import ServiceParticipants from "../components/ServiceParticipants";
 import BundleParticipants from "../components/BundleParticipants";
 import VirtualServiceParticipants from "../components/VirtualServiceParticipants";
@@ -38,9 +44,12 @@ import {
 import "../styles/service-participants.scss";
 import {
   getParticipantSlotStart,
-  getParticipantSelection,
-  normalizeParticipantGroups,
+  getBreakdownTotal,
+  getCategoryBandCounts,
+  getCategoryParticipantSelection,
+  normalizeParticipantCategories,
 } from "../Utils/participants";
+import { useParticipantQuote } from "../Utils/participantQuote";
 
 export default function Service(props) {
   const dispatch = useDispatch();
@@ -53,20 +62,8 @@ export default function Service(props) {
   const all = useSelector((state) => state.step1.all);
   const category = useSelector((state) => state.step1.category);
   const serviceID = useSelector((state) => state.step2.service);
-  const extraid = useSelector((state) => state.step3.extra);
-  const extracapacity = useSelector((state) => state.step3.extracapacity);
   const cart = useSelector((state) => state.step2.cart);
   const redeemBooking = useSelector((state) => state.step1.redeemBooking);
-  const extraTypeStr = extraid
-    ? String(extraid)
-        .split(",")
-        .map(
-          (id) =>
-            cart.extra?.find((item) => String(item.id) === id.trim())
-              ?.extra_type || "local",
-        )
-        .join(",")
-    : "";
   const [products, setProductsArr] = useState([]);
   const [visible, setVisible] = useState(false);
   const [productDetails, setProductDetails] = useState({});
@@ -80,7 +77,10 @@ export default function Service(props) {
   const [serviceid, setServiceId] = useState(null);
   const [book, setBook] = useState(0);
   const [showParticipantStep, setShowParticipantStep] = useState(false);
+  // Visitors per age category (adult, children, …) and, for categories that
+  // need an age breakdown, per age band (e.g. senior:41-100).
   const [participants, setParticipants] = useState({});
+  const [participantBreakdown, setParticipantBreakdown] = useState({});
   const [participantConfig, setParticipantConfig] = useState(null);
   const [participantConfigKey, setParticipantConfigKey] = useState("");
   const [participantLoading, setParticipantLoading] = useState(false);
@@ -132,6 +132,18 @@ export default function Service(props) {
   };
 
   const detailCapacity = productDetails?.svc_total_cap_left;
+  // service-details flags. Missing → current behaviour: capacity text shown,
+  // age-wise participant step.
+  const showCapacityLeft = ![false, 0, "0", "false"].includes(
+    productDetails?.show_cap_left_text,
+  );
+  // "total_guests": the original design — pick a quantity per slot and book,
+  // without the age-wise participant step.
+  const isTotalGuestsMode =
+    productDetails?.participant_input_mode === "total_guests" &&
+    !gift &&
+    bundleId === 0 &&
+    virtualServiceId === 0;
   const hasNoServiceCapacity =
     detailCapacity !== null &&
     detailCapacity !== undefined &&
@@ -160,11 +172,13 @@ export default function Service(props) {
     Boolean(participantConfig) &&
     !participantLoading &&
     !participantError;
-  const participantGroups = normalizeParticipantGroups(participantConfig);
-  const participantSelection = getParticipantSelection(
+  const participantCategories =
+    normalizeParticipantCategories(participantConfig);
+  const participantSelection = getCategoryParticipantSelection(
     participantConfig,
-    participantGroups,
+    participantCategories,
     participants,
+    participantBreakdown,
     selectedSlotCapacity,
     detailCapacity,
   );
@@ -177,6 +191,30 @@ export default function Service(props) {
     selectedSlotContext.serviceId === serviceid &&
     selectedSlotContext.bundleId === normalizeBundleId(bundleId) &&
     selectedSlotContext.virtualServiceId === virtualServiceId;
+
+  // Live price for the chosen participants (group rates, age bands).
+  const participantQuote = useParticipantQuote(
+    showParticipantStep &&
+      visible &&
+      !gift &&
+      bundleId === 0 &&
+      virtualServiceId === 0 &&
+      participantConfigReady &&
+      participantSelection.valid &&
+      participantSelection.guests.length > 0
+      ? {
+          serviceId: serviceid,
+          body: {
+            date: moment(date).format("YYYY-MM-DD"),
+            start: participantStart,
+            guests: participantSelection.guests,
+            line_key: participantLineKey.current,
+            option_value_ids:
+              selectedServiceOptionId > 0 ? selectedServiceOptionId : "",
+          },
+        }
+      : null,
+  );
 
   // Virtual services: the booking quantity is chosen directly, and visitors per
   // included service come from the component-participants API (as for bundles).
@@ -221,13 +259,19 @@ export default function Service(props) {
     Boolean(virtualParticipants.error) ||
     (virtualParticipants.required && !virtualParticipants.valid);
 
-  const canContinueService = isVirtualSelection
+  const totalGuestsMinimum = Math.max(1, Number(currentitem.min_capacity) || 1);
+  const canContinueService = isTotalGuestsMode
     ? canContinueToParticipants &&
-      virtualQuantityValid &&
-      !virtualParticipantsBlocking
-    : canContinueToParticipants &&
-      validParticipantQuantity &&
-      book === participantSelection.total;
+      book >= totalGuestsMinimum &&
+      book <= selectedSlotCapacity
+    : isVirtualSelection
+      ? canContinueToParticipants &&
+        virtualQuantityValid &&
+        !virtualParticipantsBlocking
+      : canContinueToParticipants &&
+        validParticipantQuantity &&
+        book === participantSelection.total &&
+        participantQuote.ready;
   const participantQuantityMessage = participantSelection.message;
 
   const serviceOptionList = serviceOptionChoices
@@ -280,6 +324,14 @@ export default function Service(props) {
     setIsVisible(type);
   };
 
+  // /settings: show_grid_list_button false → always default_view_type, no
+  // view buttons, and the automatic rule below is skipped.
+  const viewSettings = useSelector((state) => state.step1.viewSettings);
+  const fixedViewType =
+    viewSettings && viewSettings.showGridListButton === false
+      ? viewSettings.defaultViewType
+      : null;
+
   const updateCategoryScrollState = () => {
     const el = categoryPillsRef.current;
     if (!el) {
@@ -310,6 +362,10 @@ export default function Service(props) {
 
   // Auto-set default view based on service count and device type
   useEffect(() => {
+    if (fixedViewType) {
+      setIsVisible(fixedViewType);
+      return;
+    }
     if (products.length === 0) return;
     if (isDesktop) {
       if (products.length === 1) setIsVisible("list");
@@ -321,7 +377,7 @@ export default function Service(props) {
       else if (products.length <= 5) setIsVisible("slider");
       else setIsVisible("slider");
     }
-  }, [products, isDesktop]);
+  }, [products, isDesktop, fixedViewType]);
 
   // Extract unique categories from products
   useEffect(() => {
@@ -468,6 +524,7 @@ export default function Service(props) {
     participantDefaultsKey.current = null;
     setShowParticipantStep(false);
     setParticipants({});
+    setParticipantBreakdown({});
     setParticipantConfig(null);
     setParticipantError("");
     setBook(0);
@@ -538,7 +595,7 @@ export default function Service(props) {
       axiosInstance(
         `/service-details?date=${moment(date).format(
           "YYYY-MM-DD",
-        )}&service_id=${id}${normalizedVirtualId > 0 ? `&virtual_service_id=${normalizedVirtualId}` : ""}&all=${allService}&is_bundle=${normalizedBundleId > 0 ? true : false}&bundle_id=${normalizedBundleId}`,
+        )}&service_id=${id}${normalizedVirtualId > 0 ? `&virtual_service_id=${normalizedVirtualId}` : ""}&all=${allService}&is_bundle=${normalizedBundleId > 0 ? true : false}&bundle_id=${normalizedBundleId}&gift=${gift ? true : false}`,
         {
           method: "get",
         },
@@ -680,7 +737,7 @@ export default function Service(props) {
     /* Slot availability calendar */
     const { data: dataa } = await axiosInstance(
       selectedVirtualId > 0
-        ? `/service-details?service_id=${id}&virtual_service_id=${selectedVirtualId}&date=${moment.max(moment(`${monthYear}-01`), moment().startOf("day")).format("YYYY-MM-DD")}`
+        ? `/service-details?service_id=${id}&virtual_service_id=${selectedVirtualId}&date=${moment.max(moment(`${monthYear}-01`), moment().startOf("day")).format("YYYY-MM-DD")}&gift=${gift ? true : false}`
         : `/slot-availability-calendar?month=${monthYear}&service_id=${id}&is_bundle=${normalizedBundleId > 0 ? true : false}&bundle_id=${normalizedBundleId}`,
       {
         method: "get",
@@ -781,10 +838,11 @@ export default function Service(props) {
         setParticipantConfig(response.data);
         setParticipantConfigKey(participantRequestKey);
         if (participantDefaultsKey.current !== participantRequestKey) {
-          const adult = normalizeParticipantGroups(response.data).find(
-            (group) => group.category === "adult" && !group.disabled,
+          const adult = normalizeParticipantCategories(response.data).find(
+            (category) => category.category === "adult" && !category.disabled,
           );
           setParticipants(adult ? { [adult.key]: 1 } : {});
+          setParticipantBreakdown({});
           setBook(adult ? 1 : 0);
           participantDefaultsKey.current = participantRequestKey;
         }
@@ -1095,6 +1153,46 @@ export default function Service(props) {
     );
   };
 
+  // total_guests mode: − / + on a slot row sets the guest count and selects
+  // that slot (switching slots starts again from 0).
+  const changeSlotQuantity = (item, delta) => {
+    if (
+      isPopupBookingDisabled ||
+      item?.slot_type !== "active" ||
+      Number(item.capacity_left) <= 0
+    )
+      return;
+    const current = slot === item.time_slot ? Number(book) || 0 : 0;
+    const next = current + delta;
+    if (next < 0) return;
+    if (next > Number(item.capacity_left)) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "warning",
+        title: "Maximum capacity reached",
+      });
+      return;
+    }
+    if (slot !== item.time_slot) {
+      participantDefaultsKey.current = null;
+      setParticipants({});
+      setParticipantBreakdown({});
+      setParticipantConfig(null);
+      setParticipantError("");
+    }
+    setCurrentItem(item);
+    setSlot(item.time_slot);
+    setBook(next);
+    setSelectedSlotContext({
+      serviceId: serviceid,
+      bundleId: normalizeBundleId(bundleId),
+      virtualServiceId,
+    });
+  };
+
   const selectServiceTimeSlot = (item) => {
     if (
       isPopupBookingDisabled ||
@@ -1105,6 +1203,7 @@ export default function Service(props) {
     if (slot !== item.time_slot) {
       participantDefaultsKey.current = null;
       setParticipants({});
+      setParticipantBreakdown({});
       setParticipantConfig(null);
       setParticipantError("");
       setBook(0);
@@ -1118,17 +1217,37 @@ export default function Service(props) {
     });
   };
 
-  const changeParticipantCount = (group, delta) => {
+  const changeParticipantCount = (categoryKey, delta) => {
     if (isPopupBookingDisabled || !participantConfigReady) return;
-    const policy = participantGroups.find((item) => item.key === group);
-    if (!policy || policy.disabled) return;
-    const nextCount = (participants[group] || 0) + delta;
+    const category = participantCategories.find(
+      (item) => item.key === categoryKey,
+    );
+    if (!category || category.disabled) return;
+    const nextCount = (Number(participants[categoryKey]) || 0) + delta;
     if (nextCount < 0) return;
-    const nextParticipants = { ...participants, [group]: nextCount };
-    const nextSelection = getParticipantSelection(
+    const nextParticipants = { ...participants, [categoryKey]: nextCount };
+    let nextBreakdown = participantBreakdown;
+    // Removing a visitor from a broken-down category also removes them from
+    // the last age band that has someone, so the breakdown never exceeds it.
+    if (
+      category.needsBreakdown &&
+      getBreakdownTotal(category, participantBreakdown) > nextCount
+    ) {
+      const band = [...category.bands]
+        .reverse()
+        .find((item) => (Number(participantBreakdown[item.key]) || 0) > 0);
+      if (band) {
+        nextBreakdown = {
+          ...participantBreakdown,
+          [band.key]: Number(participantBreakdown[band.key]) - 1,
+        };
+      }
+    }
+    const nextSelection = getCategoryParticipantSelection(
       participantConfig,
-      participantGroups,
+      participantCategories,
       nextParticipants,
+      nextBreakdown,
       selectedSlotCapacity,
       detailCapacity,
     );
@@ -1139,7 +1258,24 @@ export default function Service(props) {
     )
       return;
     setParticipants(nextParticipants);
+    setParticipantBreakdown(nextBreakdown);
     setBook(nextSelection.total);
+  };
+
+  // Assign a visitor of a broken-down category to one of its age bands.
+  const changeParticipantBand = (category, bandKey, delta) => {
+    if (isPopupBookingDisabled || !participantConfigReady) return;
+    const band = category.bands.find((item) => item.key === bandKey);
+    if (!band || band.disabled) return;
+    const nextValue = (Number(participantBreakdown[bandKey]) || 0) + delta;
+    if (nextValue < 0) return;
+    if (
+      delta > 0 &&
+      getBreakdownTotal(category, participantBreakdown) >=
+        (Number(participants[category.key]) || 0)
+    )
+      return;
+    setParticipantBreakdown({ ...participantBreakdown, [bandKey]: nextValue });
   };
 
   const getBundleScheduleFromResponse = (responseData) => {
@@ -1319,7 +1455,7 @@ export default function Service(props) {
           date,
         ).format(
           "YYYY-MM-DD",
-        )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_types=${encodeURIComponent(extraTypeStr)}&is_bundle=true&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_component_slots=${encodedComponentSlots}`,
+        )}&extra_id=null&extra_capacity=0&extra_types=&is_bundle=true&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_component_slots=${encodedComponentSlots}&gift=${gift ? true : false}`,
         { method: "get" },
       );
       cartupdate(data);
@@ -1384,7 +1520,7 @@ export default function Service(props) {
     const { data } = await axiosInstance(
       `/price-format?service_id=${
         productDetails.id
-      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&time_slot=${encodeURIComponent(slot)}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_types=${encodeURIComponent(extraTypeStr)}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_virtual_service_id=${virtualServiceId}`,
+      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&time_slot=${encodeURIComponent(slot)}&extra_id=null&extra_capacity=0&extra_types=&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_virtual_service_id=${virtualServiceId}&gift=${gift ? true : false}`,
       {
         method: "get",
       },
@@ -1542,11 +1678,23 @@ export default function Service(props) {
         virtual_service_id: virtualServiceId || null,
         selected_virtual_service_id: virtualServiceId || null,
         components: virtualServiceId > 0 ? productDetails.components || [] : [],
-        participants: gift || isVirtualSelection ? null : { ...participants },
+        // Band-level counts (e.g. "senior:41-100") for the order summary.
+        participants:
+          gift || isVirtualSelection || isTotalGuestsMode
+            ? null
+            : getCategoryBandCounts(
+                participantCategories,
+                participants,
+                participantBreakdown,
+              ),
         participant_guests:
-          gift || isVirtualSelection ? [] : participantSelection.guests,
+          gift || isVirtualSelection || isTotalGuestsMode
+            ? []
+            : participantSelection.guests,
         participant_configuration:
-          gift || isVirtualSelection ? null : participantConfig,
+          gift || isVirtualSelection || isTotalGuestsMode
+            ? null
+            : participantConfig,
         capacity_component_guests:
           isVirtualSelection && virtualParticipants.required
             ? virtualParticipants.guests
@@ -1554,15 +1702,16 @@ export default function Service(props) {
         line_key: participantLineKey.current,
       };
     }
-    let extraobj = cart.extra ? cart.extra : [];
-    if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
-      extraobj = [];
-    }
+    // A newly priced service starts with no extras (chosen on the next step),
+    // so a previous extra selection can't stay in the cart or be pre-filled.
+    dispatch(setExtra(null));
+    dispatch(setExtracapacity(0));
+    dispatch(setHasExtras(null));
     dispatch(
       setCart({
         ...cart,
         service: [cartobj],
-        extra: extraobj,
+        extra: [],
         total: data?.data?.total,
         total_formatted: data?.data?.total_formated,
         discount: 0,
@@ -1590,7 +1739,7 @@ export default function Service(props) {
         date,
       ).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_types=${encodeURIComponent(extraTypeStr)}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_virtual_service_id=${virtualServiceId}`,
+      )}&extra_id=null&extra_capacity=0&extra_types=&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_virtual_service_id=${virtualServiceId}&gift=${gift ? true : false}`,
       {
         method: "get",
       },
@@ -1621,6 +1770,7 @@ export default function Service(props) {
       },
     );
     if (data && data.status == 200) {
+      dispatch(setHasExtras(Boolean(data.has_extra)));
       if (data.has_extra) {
         dispatch(setStep("extrastep"));
         dispatch(setLoading(false));
@@ -1945,7 +2095,9 @@ export default function Service(props) {
         <ul
           style={{
             display:
-              props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+              fixedViewType || (props.mobileHeading == "false" && !isDesktop)
+                ? "none"
+                : "block",
           }}
         >
           <li className="selected">
@@ -2555,7 +2707,20 @@ export default function Service(props) {
                                   ))}
                                 </div>
                               )}
-                              {bundleId == 0 && (
+                              {bundleId == 0 && isTotalGuestsMode && (
+                                <ServiceSlotQuantity
+                                  availability={slotObj?.slots}
+                                  selectedSlot={slot}
+                                  quantity={book}
+                                  tab={slotVisible}
+                                  onTabChange={setSlotVisible}
+                                  onChange={changeSlotQuantity}
+                                  disabled={isPopupBookingDisabled}
+                                  showCapacityLeft={showCapacityLeft}
+                                  fallbackPrice={productDetails.svc_price}
+                                />
+                              )}
+                              {bundleId == 0 && !isTotalGuestsMode && (
                                 <ServiceSlotSelection
                                   availability={slotObj?.slots}
                                   selectedSlot={slot}
@@ -2564,6 +2729,7 @@ export default function Service(props) {
                                   onSelect={selectServiceTimeSlot}
                                   disabled={isPopupBookingDisabled}
                                   fallbackPrice={productDetails.svc_price}
+                                  showCapacityLeft={showCapacityLeft}
                                 />
                               )}
                             </div>
@@ -2609,9 +2775,11 @@ export default function Service(props) {
                                         "",
                                     ),
                                   )}
+                                  categories={participantCategories}
                                   counts={participants}
-                                  groups={participantGroups}
-                                  onChange={changeParticipantCount}
+                                  breakdown={participantBreakdown}
+                                  onCategoryChange={changeParticipantCount}
+                                  onBandChange={changeParticipantBand}
                                   onBack={() => setShowParticipantStep(false)}
                                   disabled={
                                     isPopupBookingDisabled ||
@@ -2631,18 +2799,7 @@ export default function Service(props) {
                                   physicalCapacity={
                                     participantSelection.physicalCapacity
                                   }
-                                  formatPrice={(value) =>
-                                    formatCalculatedPrice(
-                                      value,
-                                      productDetails.svc_price,
-                                      1,
-                                    )
-                                  }
-                                  totalPrice={formatCalculatedPrice(
-                                    participantSelection.price,
-                                    productDetails.svc_price,
-                                    1,
-                                  )}
+                                  quote={participantQuote}
                                   total={book}
                                   validQuantity={validParticipantQuantity}
                                   quantityMessage={participantQuantityMessage}
@@ -2680,13 +2837,14 @@ export default function Service(props) {
                           <button
                             type="button"
                             disabled={
-                              showParticipantStep
+                              showParticipantStep || isTotalGuestsMode
                                 ? !canContinueService
                                 : !canContinueToParticipants
                             }
-                            className={`continuebtn${(showParticipantStep ? canContinueService : canContinueToParticipants) ? "" : " fx-disable-button"}`}
+                            className={`continuebtn${(showParticipantStep || isTotalGuestsMode ? canContinueService : canContinueToParticipants) ? "" : " fx-disable-button"}`}
                             onClick={() => {
-                              if (showParticipantStep) {
+                              // total_guests: book straight from the slot list.
+                              if (showParticipantStep || isTotalGuestsMode) {
                                 bookservice();
                               } else if (canContinueToParticipants) {
                                 // Virtual services start at the slot's minimum quantity.

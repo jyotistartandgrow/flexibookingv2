@@ -2,16 +2,19 @@ import React from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { formatLikePrice } from "../Utils/redeemUpsells";
+import { isPhoneOnlyRedemption } from "../Utils/redeemByPhone";
 import "../styles/redeem-upsell-services.scss";
 
 export default function RedeemCommonbox({
   setVisibleBottom,
-  hideSchedule = false,
+  hideSchedule: hideScheduleProp = false,
 }) {
   const date = useSelector((state) => state.step1.date);
   const step = useSelector((state) => state.step1.redeemstep);
   const voucherdetail = useSelector((state) => state.step3.voucherdetail);
   const slot = useSelector((state) => state.step3.slot);
+  // Phone-only vouchers are scheduled with the venue, so no online date/time applies.
+  const hideSchedule = hideScheduleProp || isPhoneOnlyRedemption(voucherdetail);
   const isUpsell = useSelector((state) => state.step1.redeemUpsell);
   const selections = useSelector((state) => state.step3.redeemUpsellSelections);
   const quote = useSelector((state) => state.step3.redeemUpsellQuote);

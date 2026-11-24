@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "primereact/resources/themes/saga-blue/theme.css";
@@ -21,13 +21,13 @@ import {
 } from "../store/step4Slice";
 import GiftCardPreviewButton from "./Giftcardpreviewbutton";
 import {
-  decodeHtml,
   toPlainText,
   toSafeUrl,
   validateEmail,
   validatePhoneForCountry,
 } from "../Utils/Functions";
 import CouponSection from "./CouponSection";
+import { useRegionalPreferences } from "../Utils/regionalPreferences";
 
 const formatInternationalPhone = (value) => {
   const digits = String(value ?? "").replace(/\D/g, "");
@@ -45,7 +45,6 @@ export default function Checkout(props) {
   const giftCustomization = useSelector(
     (state) => state.step1.giftCustomization || { message: "" },
   );
-  const cart = useSelector((state) => state.step2.cart);
   const opendatepurchase = useSelector((state) => state.step1.opendatepurchase);
   const voucherDetail = useSelector((state) => state.step3.voucherdetail);
   const redeemBooking = useSelector((state) => state.step1.redeemBooking);
@@ -73,7 +72,9 @@ export default function Checkout(props) {
         sgbm_field_9: true,
       }
     : configuredFields;
-  const [selectedCountry, setSelectedCountry] = useState({ dialCode: "91" });
+  // Defaults from /settings regional_preferences (country, phone country).
+  const { country: siteCountry, phoneCountry } = useRegionalPreferences();
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const [paymentGroups, setPaymentGroups] = useState([]);
   const [selectedPaymentCard, setSelectedPaymentCard] = useState(null);
   const [paymentMethodsLoading, setPaymentMethodsLoading] = useState(false);
@@ -121,6 +122,35 @@ export default function Checkout(props) {
       getState(recipient.recipient_country);
     }
   }, [step, props.redeemBooking, voucherDetail]);
+
+  // Pre-select the site country (/settings regional_preferences) in an empty,
+  // visible billing Country field — once per booking, so a visitor who clears
+  // it isn't overridden. A voucher recipient's own country takes priority.
+  const countryPrefilledFor = useRef(null);
+  useEffect(() => {
+    if (step !== "checkoutstep" || !siteCountry || !visibleField.sgbm_field_8)
+      return;
+    if (billdata.sgbm_field_8 || countryPrefilledFor.current === bookingkey)
+      return;
+    if (props.redeemBooking && voucherDetail?.recepient_data?.recipient_country)
+      return;
+    countryPrefilledFor.current = bookingkey;
+    setBilldata((current) =>
+      current.sgbm_field_8
+        ? current
+        : { ...current, sgbm_field_8: siteCountry, sgbm_field_7: "" },
+    );
+    getState(siteCountry);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    step,
+    siteCountry,
+    visibleField.sgbm_field_8,
+    billdata.sgbm_field_8,
+    bookingkey,
+    props.redeemBooking,
+    voucherDetail,
+  ]);
 
   const getFieldsRequest = async () => {
     dispatch(setLoading(true));
@@ -442,7 +472,7 @@ export default function Checkout(props) {
         shipping_email: "",
         shipping_contact: "",
         shipping_address: "",
-        shipping_country: "IN",
+        shipping_country: siteCountry,
         shipping_state: "",
         shipping_city: "",
         shipping_postcode: "",
@@ -628,7 +658,7 @@ export default function Checkout(props) {
             <label className="fx-mobile-input">Mobile</label>
             <div className="fx-phone-input">
               <PhoneInput
-                country={billdata.sgbm_field_8?.toLowerCase() || "in"}
+                country={billdata.sgbm_field_8?.toLowerCase() || phoneCountry}
                 value={billdata.sgbm_field_4}
                 className={errorlist.sgbm_field_4 ? "fx-invalid" : ""}
                 onChange={(phone, country) => {
@@ -880,7 +910,11 @@ export default function Checkout(props) {
                     <label>Phone Number</label>
                     <div className="fx-phone-input">
                       <PhoneInput
-                        country={"in"}
+                        key={phoneCountry || "default"}
+                        country={phoneCountry}
+                        onMount={(_value, countryData) =>
+                          setSelectedCountry(countryData)
+                        }
                         value={receiverInfo.phoneNumber}
                         className={
                           receiverErrors.phoneNumber ? "fx-invalid" : ""

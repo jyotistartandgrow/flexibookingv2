@@ -20,7 +20,12 @@ import {
   setService,
   setTimeslot,
 } from "../store/step2Slice";
-import { setBookingkey, setExtra, setExtracapacity } from "../store/step3Slice";
+import {
+  setBookingkey,
+  setExtra,
+  setExtracapacity,
+  setHasExtras,
+} from "../store/step3Slice";
 import { sessionClear } from "../store/step4Slice";
 import {
   decodeHtml,
@@ -28,6 +33,7 @@ import {
   validatePhoneForCountry,
 } from "../Utils/Functions";
 import CalendarPage from "./CalendarPage";
+import { useRegionalPreferences } from "../Utils/regionalPreferences";
 import CouponSection from "./CouponSection";
 
 const DATE_FORMAT = "YYYY-MM-DD";
@@ -59,7 +65,10 @@ export default function ChooseDate(props) {
   const [responsearr, setResponsear] = useState([]);
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
   const [errorlist, setErrorlist] = useState({});
-  const [selectedCountry, setSelectedCountry] = useState({ dialCode: "91" });
+  // Phone country comes from /settings regional_preferences; the field
+  // reports its dial code on mount (used for validation on blur / submit).
+  const { phoneCountry } = useRegionalPreferences();
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
   const handleFlowSwitch = async (type) => {
     if (isVisible === type) return;
@@ -100,6 +109,7 @@ export default function ChooseDate(props) {
     dispatch(setBookingkey(null));
     dispatch(setExtra(null));
     dispatch(setExtracapacity(0));
+    dispatch(setHasExtras(null));
     dispatch(sessionClear());
   };
 
@@ -490,7 +500,11 @@ export default function ChooseDate(props) {
               <div className="fx-input-wrapper">
                 <div className="fx-phone-input">
                   <PhoneInput
-                    country={"in"}
+                    key={phoneCountry || "default"}
+                    country={phoneCountry}
+                    onMount={(_value, countryData) =>
+                      setSelectedCountry(countryData)
+                    }
                     value={receiverInfo.phoneNumber}
                     className={errorlist.phoneNumber ? "fx-invalid" : ""}
                     onChange={(phone, country) => {

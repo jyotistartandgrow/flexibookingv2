@@ -111,7 +111,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
         date,
       ).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_type=${encodeURIComponent(extraTypeStr)}&selected_virtual_service_id=${type === "service" ? 0 : Number(cart.service?.[0]?.virtual_service_id) || 0}`,
+      )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_type=${encodeURIComponent(extraTypeStr)}&selected_virtual_service_id=${type === "service" ? 0 : Number(cart.service?.[0]?.virtual_service_id) || 0}&gift=${gift ? true : false}`,
       {
         method: "get",
       },

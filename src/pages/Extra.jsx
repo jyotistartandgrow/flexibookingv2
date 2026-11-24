@@ -12,11 +12,31 @@ import {
   toPlainText,
 } from "../Utils/Functions";
 import extra from "../assets/extra1.jpg";
-import { setExtracapacity, setExtra, setBookingkey } from "../store/step3Slice";
+
+import {
+  setExtracapacity,
+  setExtra,
+  setBookingkey,
+  setHasExtras,
+} from "../store/step3Slice";
 import { setStep, setLoading } from "../store/step1Slice";
 import { setCart } from "../store/step2Slice";
 import Swal from "sweetalert2";
 import useDeviceType from "../Utils/useDeviceType";
+
+// Use the extra's own image from /extras when the API sends one; otherwise
+// (or if that URL fails to load) fall back to the default extra image.
+const getExtraImage = (product) =>
+  typeof product?.extra_image === "string" && product.extra_image.trim()
+    ? product.extra_image.trim()
+    : extra;
+const fallbackToDefaultExtraImage = (event) => {
+  const img = event.currentTarget;
+  // Swap only once, so a failing default image can't loop.
+  if (img.dataset.fallback) return;
+  img.dataset.fallback = "true";
+  img.src = extra;
+};
 
 function ExtraProductTitle({ product }) {
   const typeLabel = String(product.type_label ?? "").trim();
@@ -66,8 +86,6 @@ export default function Extra(props) {
   const cart = useSelector((state) => state.step2.cart);
   const gift = useSelector((state) => state.step1.gift);
   const openDatePurchase = useSelector((state) => state.step1.opendatepurchase);
-  const extracapacity = useSelector((state) => state.step3.extracapacity);
-  const extraID = useSelector((state) => state.step3.extra);
 
   const [products, setProductsArr] = useState([]);
   const [isVisible, setIsVisible] = useState("grid");
@@ -101,7 +119,19 @@ export default function Extra(props) {
     setIsVisible(type);
   };
 
+  // /settings: show_grid_list_button false → always default_view_type, no
+  // view buttons, and the automatic rule below is skipped.
+  const viewSettings = useSelector((state) => state.step1.viewSettings);
+  const fixedViewType =
+    viewSettings && viewSettings.showGridListButton === false
+      ? viewSettings.defaultViewType
+      : null;
+
   useEffect(() => {
+    if (fixedViewType) {
+      setIsVisible(fixedViewType);
+      return;
+    }
     if (isDesktop) {
       if (products.length === 1) setIsVisible("list");
       else if (products.length <= 8) setIsVisible("grid");
@@ -112,7 +142,7 @@ export default function Extra(props) {
       else if (products.length <= 5) setIsVisible("slider");
       else setIsVisible("list");
     }
-  }, [products, isDesktop]);
+  }, [products, isDesktop, fixedViewType]);
 
   useEffect(() => {
     if (isVisible !== "slider" || !isDesktop) return;
@@ -134,27 +164,9 @@ export default function Extra(props) {
 
   useEffect(() => {
     if (step !== "extrastep") return;
-    const initQ = {};
-    if (extraID && extracapacity) {
-      const ids = String(extraID)
-        .split(",")
-        .map((id) => id.trim())
-        .filter(Boolean);
-      const caps = String(extracapacity)
-        .split(",")
-        .map((c) => parseInt(c.trim()))
-        .filter(Boolean);
-      ids.forEach((id, i) => {
-        if (caps[i] > 0) initQ[parseInt(id)] = caps[i];
-      });
-    } else if (Array.isArray(cart.extra) && cart.extra.length > 0) {
-      cart.extra.forEach((item) => {
-        if (item?.id && item?.capacity > 0) {
-          initQ[item.id] = item.capacity;
-        }
-      });
-    }
-    setQuantities(initQ);
+    // Every extra starts at 0. Pre-filling from an earlier selection showed a
+    // quantity (e.g. 1 on the first extra) that was then kept even on Skip.
+    setQuantities({});
     if (date && service) {
       setLoadingske(true);
       const showExtraError = (title) =>
@@ -182,6 +194,7 @@ export default function Extra(props) {
               : Array.isArray(data?.data?.extras)
                 ? data.data.extras
                 : [];
+            dispatch(setHasExtras(extraList.length > 0));
 
             setProductsArr(
               extraList.map((product) => ({
@@ -259,8 +272,6 @@ export default function Extra(props) {
     gift,
     openDatePurchase,
     step,
-    extraID,
-    extracapacity,
     cart,
     selectedServiceOptionId,
     selectedBundleId,
@@ -276,7 +287,11 @@ export default function Extra(props) {
       return (
         <div className="fx-extrabox" key={pp}>
           <div className="fx-extrapicbox">
-            <img src={extra} alt={product.extra_name} />
+            <img
+              src={getExtraImage(product)}
+              alt={product.extra_name}
+              onError={fallbackToDefaultExtraImage}
+            />
             {/* <p className="fx-extrapicpriceboxright">
               {decodeHtml(product.price)}
             </p> */}
@@ -389,7 +404,7 @@ export default function Extra(props) {
         cart.service[0].capacity
       }&date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&extra_types=${encodeURIComponent(extraTypeStr)}&bundle_id=${selectedBundleId}&service_option_id=${selectedServiceOptionId > 0 ? selectedServiceOptionId : null}&selected_component_slots=${encodedComponentSlots}&selected_virtual_service_id=${selectedVirtualServiceId}`,
+      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&extra_types=${encodeURIComponent(extraTypeStr)}&bundle_id=${selectedBundleId}&service_option_id=${selectedServiceOptionId > 0 ? selectedServiceOptionId : null}&selected_component_slots=${encodedComponentSlots}&selected_virtual_service_id=${selectedVirtualServiceId}&gift=${gift ? true : false}`,
       {
         method: "get",
       },
@@ -502,7 +517,9 @@ export default function Extra(props) {
           <ul
             style={{
               display:
-                props.mobileHeading == "false" && !isDesktop ? "none" : "block",
+                fixedViewType || (props.mobileHeading == "false" && !isDesktop)
+                  ? "none"
+                  : "block",
             }}
           >
             <li className="selected">
@@ -591,7 +608,11 @@ export default function Extra(props) {
                         return (
                           <div className="fx-extrabox" key={p1}>
                             <div className="fx-extrapicbox">
-                              <img src={extra} alt={product.extra_name} />
+                              <img
+                                src={getExtraImage(product)}
+                                alt={product.extra_name}
+                                onError={fallbackToDefaultExtraImage}
+                              />
                               {/* <p className="fx-extrapicpriceboxright">
                                 {decodeHtml(product.price)}
                               </p> */}
@@ -665,7 +686,11 @@ export default function Extra(props) {
                         <div className="fx-extraboxlist" key={p2}>
                           <div className="fx-extrapicboxlist">
                             <div className="fx-extra-main-img">
-                              <img src={extra} alt={product.extra_name} />
+                              <img
+                                src={getExtraImage(product)}
+                                alt={product.extra_name}
+                                onError={fallbackToDefaultExtraImage}
+                              />
                             </div>
                             <span className="fx-servicepiccontentbox">
                               {product.extra_name}

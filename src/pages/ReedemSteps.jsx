@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setRedeemStep, setStripeKey } from "../store/step1Slice";
+import {
+  setRedeemStep,
+  setStripeKey,
+  setRegionalPreferences,
+} from "../store/step1Slice";
 import moment from "moment";
 import { decodeHtml, darkenHex } from "../Utils/Functions";
 import { Sidebar as Sidebarpanel } from "primereact/sidebar";
@@ -8,6 +12,7 @@ import logo from "../assets/logo.png";
 import RedeemCommonbox from "../components/RedeemCommonbox";
 import axiosInstance from "../Utils/Interceptor";
 import useDeviceType from "../Utils/useDeviceType";
+import { isPhoneOnlyRedemption } from "../Utils/redeemByPhone";
 
 export default function ReedemSteps(props) {
   const dispatch = useDispatch();
@@ -23,21 +28,29 @@ export default function ReedemSteps(props) {
     (state) => state.step3.redeemUpsellSelections?.length > 0,
   );
 
+  // Vouchers that must be redeemed by phone end at the voucher details step: no checkout.
+  const phoneOnly = isPhoneOnlyRedemption(voucherdetail);
+
   // "Add more services" adds a Service step and a Payment step for the paid additions.
-  const redeemSteps = isUpsell
+  const redeemSteps = phoneOnly
     ? [
         ["codestep", "CODE", "ENTER YOUR CODE"],
-        ["datestep", "DATE & SLOT", "SELECT DATE & SLOT"],
-        ["upsellstep", "OPTIONAL ADDITIONS", "OPTIONAL ADDITIONS"],
-        ["checkoutstep", "DETAILS", "DETAILS"],
-        // Payment only applies when additions were chosen; skipping redeems the gift directly.
-        ...(hasAdditions ? [["paymentstep", "PAYMENT", "PAYMENT"]] : []),
+        ["datestep", "VOUCHER DETAILS", "VOUCHER DETAILS"],
       ]
-    : [
-        ["codestep", "CODE", "ENTER YOUR CODE"],
-        ["datestep", "DATE & SLOT", "SELECT DATE & SLOT"],
-        ["checkoutstep", "CHECKOUT", "CHECKOUT"],
-      ];
+    : isUpsell
+      ? [
+          ["codestep", "CODE", "ENTER YOUR CODE"],
+          ["datestep", "DATE & SLOT", "SELECT DATE & SLOT"],
+          ["upsellstep", "OPTIONAL ADDITIONS", "OPTIONAL ADDITIONS"],
+          ["checkoutstep", "DETAILS", "DETAILS"],
+          // Payment only applies when additions were chosen; skipping redeems the gift directly.
+          ...(hasAdditions ? [["paymentstep", "PAYMENT", "PAYMENT"]] : []),
+        ]
+      : [
+          ["codestep", "CODE", "ENTER YOUR CODE"],
+          ["datestep", "DATE & SLOT", "SELECT DATE & SLOT"],
+          ["checkoutstep", "CHECKOUT", "CHECKOUT"],
+        ];
   const activeIndex = Math.max(
     0,
     redeemSteps.findIndex(([key]) => key === step),
@@ -59,6 +72,9 @@ export default function ReedemSteps(props) {
       if (settings.data.stripe_public_key) {
         dispatch(setStripeKey(settings.data.stripe_public_key));
       }
+      dispatch(
+        setRegionalPreferences(settings.data.regional_preferences || null),
+      );
       if (settings.data.primary_color) {
         document.documentElement.style.setProperty(
           "--primary-color",
@@ -84,11 +100,13 @@ export default function ReedemSteps(props) {
       <div className="fx-step-top-fixed-box">
         <div
           className={`fx-stepper-tabstyle step-for-redeem ${
-            isUpsell
-              ? "fx-redeem-upsell-step"
-              : isRedeemBooking
-                ? "fx-redeem-booking-step"
-                : ""
+            phoneOnly
+              ? "fx-redeem-two-step"
+              : isUpsell
+                ? "fx-redeem-upsell-step"
+                : isRedeemBooking
+                  ? "fx-redeem-booking-step"
+                  : ""
           }`}
         >
           {redeemSteps.map(([key, shortLabel, label], index) => (

@@ -6,6 +6,8 @@ import {
   setGift,
   setRedeemStep,
   setStripeKey,
+  setViewSettings,
+  setRegionalPreferences,
 } from "../store/step1Slice";
 import moment from "moment";
 import { decodeHtml, darkenHex } from "../Utils/Functions";
@@ -29,7 +31,17 @@ export default function Steps({ type = "date", ...props }) {
   const openDatePurchase = useSelector((state) => state.step1.opendatepurchase);
   const serviceid = useSelector((state) => state.step2.service);
   const extra = useSelector((state) => state.step3.extra);
+  const hasExtras = useSelector((state) => state.step3.hasExtras);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
+  // EXTRA tab: clickable when the booked service has extras (or extras were
+  // chosen). Once a service is booked and it can't be opened (no extras, or a
+  // session saved before this was tracked), show it disabled so it doesn't
+  // look broken. Shared by every flow that uses this step bar.
+  const canOpenExtras =
+    hasExtras !== false &&
+    (Boolean(extra) || (hasExtras === true && Boolean(serviceid)));
+  const extrasUnavailable =
+    hasExtras === false || (!canOpenExtras && Boolean(bookingkey));
   const checkoutkey = useSelector((state) => state.step4.checkoutkey);
   const cart = useSelector((state) => state.step2.cart);
   const topbar = useSelector((state) => state.step1.topbar);
@@ -59,6 +71,25 @@ export default function Steps({ type = "date", ...props }) {
       if (settings.data.stripe_public_key) {
         dispatch(setStripeKey(settings.data.stripe_public_key));
       }
+      // Country / phone country / timezone / currency used across the forms.
+      dispatch(
+        setRegionalPreferences(settings.data.regional_preferences || null),
+      );
+      // Service / extra page view: when show_grid_list_button is false, the
+      // pages always use default_view_type and hide the view buttons.
+      const viewType = String(settings.data.default_view_type || "")
+        .trim()
+        .toLowerCase();
+      dispatch(
+        setViewSettings({
+          showGridListButton: ![false, 0, "0", "false"].includes(
+            settings.data.show_grid_list_button,
+          ),
+          defaultViewType: ["grid", "list", "slider"].includes(viewType)
+            ? viewType
+            : "grid",
+        }),
+      );
     } catch (error) {
       console.error("Error fetching settings:", error);
     }
@@ -221,9 +252,15 @@ export default function Steps({ type = "date", ...props }) {
             </div>
           )}
           <div
-            className={extrastepclass}
+            className={`${extrastepclass}${extrasUnavailable ? " is-disabled" : ""}`}
+            aria-disabled={extrasUnavailable || !canOpenExtras}
+            title={
+              extrasUnavailable
+                ? "No extras available for this service"
+                : undefined
+            }
             onClick={() => {
-              if (extra) dispatch(setStep("extrastep"));
+              if (canOpenExtras) dispatch(setStep("extrastep"));
             }}
           >
             <div>
