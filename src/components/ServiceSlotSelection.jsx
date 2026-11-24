@@ -45,8 +45,13 @@ export default function ServiceSlotSelection({
   disabled,
   fallbackPrice,
   showCapacityLeft = true,
+  hideTabs = false,
 }) {
-  const { uniqueSlots, visibleSlots } = getServiceSlotLists(availability, tab);
+  // hideTabs: no tab bar, always the "All" list.
+  const { uniqueSlots, visibleSlots } = getServiceSlotLists(
+    availability,
+    hideTabs ? "all" : tab,
+  );
 
   return (
     <fieldset
@@ -56,7 +61,7 @@ export default function ServiceSlotSelection({
     >
       <h3>Choose the Slot</h3>
       <ServiceSlotTabs
-        show={uniqueSlots.length > 1}
+        show={!hideTabs && uniqueSlots.length > 1}
         tab={tab}
         onTabChange={onTabChange}
         disabled={disabled}

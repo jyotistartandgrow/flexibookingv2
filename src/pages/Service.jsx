@@ -137,6 +137,10 @@ export default function Service(props) {
   const showCapacityLeft = ![false, 0, "0", "false"].includes(
     productDetails?.show_cap_left_text,
   );
+  // Shortcode data-hide-slotbar: hide the Morning / Afternoon / All tabs in
+  // the popup (service and bundle slots) and always list all slots.
+  const hideSlotbar =
+    props.hideSlotbar === true || props.hideSlotbar === "true";
   // "total_guests": the original design — pick a quantity per slot and book,
   // without the age-wise participant step.
   const isTotalGuestsMode =
@@ -1999,7 +2003,9 @@ export default function Service(props) {
   useEffect(() => {
     if (!slotObj) return;
     const slots = slotObj?.slots;
-    if (slots?.single_time_slot?.slot_type) {
+    if (hideSlotbar) {
+      setSlotVisible("all");
+    } else if (slots?.single_time_slot?.slot_type) {
       setSlotVisible("all");
     } else if (slots?.morning && slots.morning.length > 0) {
       setSlotVisible("morning");
@@ -2008,7 +2014,7 @@ export default function Service(props) {
     } else {
       setSlotVisible("all");
     }
-  }, [slotObj]);
+  }, [slotObj, hideSlotbar]);
 
   useEffect(() => {
     setBundleQuantity((quantity) =>
@@ -2027,7 +2033,9 @@ export default function Service(props) {
             : "none",
       }}
     >
-      <div className="fx-top-box-tab-content">
+      <div
+        className={`fx-top-box-tab-content${fixedViewType ? " fx-view-toggle-hidden" : ""}`}
+      >
         {!redeemBooking &&
           props.stepsVisibility?.step_2_title_visible == "true" && (
             <h1
@@ -2714,9 +2722,9 @@ export default function Service(props) {
                                   quantity={book}
                                   tab={slotVisible}
                                   onTabChange={setSlotVisible}
+                                  hideTabs={hideSlotbar}
                                   onChange={changeSlotQuantity}
                                   disabled={isPopupBookingDisabled}
-                                  showCapacityLeft={showCapacityLeft}
                                   fallbackPrice={productDetails.svc_price}
                                 />
                               )}
@@ -2726,6 +2734,7 @@ export default function Service(props) {
                                   selectedSlot={slot}
                                   tab={slotVisible}
                                   onTabChange={setSlotVisible}
+                                  hideTabs={hideSlotbar}
                                   onSelect={selectServiceTimeSlot}
                                   disabled={isPopupBookingDisabled}
                                   fallbackPrice={productDetails.svc_price}
@@ -2932,14 +2941,10 @@ export default function Service(props) {
                       const isWaiting = component?.state === "waiting";
                       const isExpanded =
                         !isWaiting && openBundlePosition === position;
-                      const activeTab =
-                        bundleSlotTabs[position] ||
-                        getDefaultBundleTab(component);
-                      const componentSlots = Array.isArray(
-                        component?.available_slots?.[activeTab],
-                      )
-                        ? component.available_slots[activeTab]
-                        : [];
+                      const activeTab = hideSlotbar
+                        ? "all"
+                        : bundleSlotTabs[position] ||
+                          getDefaultBundleTab(component);
                       const allComponentSlots = Array.isArray(
                         component?.available_slots?.all,
                       )
@@ -2955,6 +2960,12 @@ export default function Service(props) {
                                     slotItem?.slot_label,
                                 ) === slotIndex,
                             );
+                      // Tabs hidden: list every slot (merged if there's no "all").
+                      const componentSlots = hideSlotbar
+                        ? allComponentSlots
+                        : Array.isArray(component?.available_slots?.[activeTab])
+                          ? component.available_slots[activeTab]
+                          : [];
 
                       return (
                         <div
@@ -3007,7 +3018,7 @@ export default function Service(props) {
 
                           {isExpanded && (
                             <div className="fx-massage-card-content">
-                              {allComponentSlots.length > 1 && (
+                              {!hideSlotbar && allComponentSlots.length > 1 && (
                                 <div className="fx-bundle-slot-tabs">
                                   {[
                                     ["morning", "Morning"],

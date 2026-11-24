@@ -497,7 +497,9 @@ export default function Extra(props) {
         className="fx-leftcontentbox"
         style={{ display: step === "extrastep" ? "block" : "none" }}
       >
-        <div className="fx-top-box-tab-content">
+        <div
+          className={`fx-top-box-tab-content${fixedViewType ? " fx-view-toggle-hidden" : ""}`}
+        >
           {props.stepsVisibility?.step_3_title_visible == "true" && (
             <h1
               className="fx-all-main-heading"
