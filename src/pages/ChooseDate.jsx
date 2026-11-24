@@ -20,7 +20,12 @@ import {
   setService,
   setTimeslot,
 } from "../store/step2Slice";
-import { setBookingkey, setExtra, setExtracapacity } from "../store/step3Slice";
+import {
+  setBookingkey,
+  setExtra,
+  setExtracapacity,
+  setHasExtras,
+} from "../store/step3Slice";
 import { sessionClear } from "../store/step4Slice";
 import {
   decodeHtml,
@@ -100,6 +105,7 @@ export default function ChooseDate(props) {
     dispatch(setBookingkey(null));
     dispatch(setExtra(null));
     dispatch(setExtracapacity(0));
+    dispatch(setHasExtras(null));
     dispatch(sessionClear());
   };
 

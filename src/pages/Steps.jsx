@@ -29,7 +29,17 @@ export default function Steps({ type = "date", ...props }) {
   const openDatePurchase = useSelector((state) => state.step1.opendatepurchase);
   const serviceid = useSelector((state) => state.step2.service);
   const extra = useSelector((state) => state.step3.extra);
+  const hasExtras = useSelector((state) => state.step3.hasExtras);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
+  // EXTRA tab: clickable when the booked service has extras (or extras were
+  // chosen). Once a service is booked and it can't be opened (no extras, or a
+  // session saved before this was tracked), show it disabled so it doesn't
+  // look broken. Shared by every flow that uses this step bar.
+  const canOpenExtras =
+    hasExtras !== false &&
+    (Boolean(extra) || (hasExtras === true && Boolean(serviceid)));
+  const extrasUnavailable =
+    hasExtras === false || (!canOpenExtras && Boolean(bookingkey));
   const checkoutkey = useSelector((state) => state.step4.checkoutkey);
   const cart = useSelector((state) => state.step2.cart);
   const topbar = useSelector((state) => state.step1.topbar);
@@ -221,9 +231,15 @@ export default function Steps({ type = "date", ...props }) {
             </div>
           )}
           <div
-            className={extrastepclass}
+            className={`${extrastepclass}${extrasUnavailable ? " is-disabled" : ""}`}
+            aria-disabled={extrasUnavailable || !canOpenExtras}
+            title={
+              extrasUnavailable
+                ? "No extras available for this service"
+                : undefined
+            }
             onClick={() => {
-              if (extra) dispatch(setStep("extrastep"));
+              if (canOpenExtras) dispatch(setStep("extrastep"));
             }}
           >
             <div>

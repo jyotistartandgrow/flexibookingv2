@@ -14,7 +14,12 @@ import {
 import { Dialog } from "primereact/dialog";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { setDate, setStep, setLoading } from "../store/step1Slice";
-import { setBookingkey } from "../store/step3Slice";
+import {
+  setBookingkey,
+  setExtra,
+  setExtracapacity,
+  setHasExtras,
+} from "../store/step3Slice";
 import {
   setTimeslot,
   setCapacity,
@@ -26,6 +31,7 @@ import useDeviceType from "../Utils/useDeviceType";
 import CalendarPage from "./CalendarPage";
 import ServiceCard from "../components/ServiceCard";
 import ServiceSlotSelection from "../components/ServiceSlotSelection";
+import ServiceSlotQuantity from "../components/ServiceSlotQuantity";
 import ServiceParticipants from "../components/ServiceParticipants";
 import BundleParticipants from "../components/BundleParticipants";
 import VirtualServiceParticipants from "../components/VirtualServiceParticipants";
@@ -56,20 +62,8 @@ export default function Service(props) {
   const all = useSelector((state) => state.step1.all);
   const category = useSelector((state) => state.step1.category);
   const serviceID = useSelector((state) => state.step2.service);
-  const extraid = useSelector((state) => state.step3.extra);
-  const extracapacity = useSelector((state) => state.step3.extracapacity);
   const cart = useSelector((state) => state.step2.cart);
   const redeemBooking = useSelector((state) => state.step1.redeemBooking);
-  const extraTypeStr = extraid
-    ? String(extraid)
-        .split(",")
-        .map(
-          (id) =>
-            cart.extra?.find((item) => String(item.id) === id.trim())
-              ?.extra_type || "local",
-        )
-        .join(",")
-    : "";
   const [products, setProductsArr] = useState([]);
   const [visible, setVisible] = useState(false);
   const [productDetails, setProductDetails] = useState({});
@@ -138,6 +132,18 @@ export default function Service(props) {
   };
 
   const detailCapacity = productDetails?.svc_total_cap_left;
+  // service-details flags. Missing → current behaviour: capacity text shown,
+  // age-wise participant step.
+  const showCapacityLeft = ![false, 0, "0", "false"].includes(
+    productDetails?.show_cap_left_text,
+  );
+  // "total_guests": the original design — pick a quantity per slot and book,
+  // without the age-wise participant step.
+  const isTotalGuestsMode =
+    productDetails?.participant_input_mode === "total_guests" &&
+    !gift &&
+    bundleId === 0 &&
+    virtualServiceId === 0;
   const hasNoServiceCapacity =
     detailCapacity !== null &&
     detailCapacity !== undefined &&
@@ -253,14 +259,19 @@ export default function Service(props) {
     Boolean(virtualParticipants.error) ||
     (virtualParticipants.required && !virtualParticipants.valid);
 
-  const canContinueService = isVirtualSelection
+  const totalGuestsMinimum = Math.max(1, Number(currentitem.min_capacity) || 1);
+  const canContinueService = isTotalGuestsMode
     ? canContinueToParticipants &&
-      virtualQuantityValid &&
-      !virtualParticipantsBlocking
-    : canContinueToParticipants &&
-      validParticipantQuantity &&
-      book === participantSelection.total &&
-      participantQuote.ready;
+      book >= totalGuestsMinimum &&
+      book <= selectedSlotCapacity
+    : isVirtualSelection
+      ? canContinueToParticipants &&
+        virtualQuantityValid &&
+        !virtualParticipantsBlocking
+      : canContinueToParticipants &&
+        validParticipantQuantity &&
+        book === participantSelection.total &&
+        participantQuote.ready;
   const participantQuantityMessage = participantSelection.message;
 
   const serviceOptionList = serviceOptionChoices
@@ -572,7 +583,7 @@ export default function Service(props) {
       axiosInstance(
         `/service-details?date=${moment(date).format(
           "YYYY-MM-DD",
-        )}&service_id=${id}${normalizedVirtualId > 0 ? `&virtual_service_id=${normalizedVirtualId}` : ""}&all=${allService}&is_bundle=${normalizedBundleId > 0 ? true : false}&bundle_id=${normalizedBundleId}`,
+        )}&service_id=${id}${normalizedVirtualId > 0 ? `&virtual_service_id=${normalizedVirtualId}` : ""}&all=${allService}&is_bundle=${normalizedBundleId > 0 ? true : false}&bundle_id=${normalizedBundleId}&gift=${gift ? true : false}`,
         {
           method: "get",
         },
@@ -714,7 +725,7 @@ export default function Service(props) {
     /* Slot availability calendar */
     const { data: dataa } = await axiosInstance(
       selectedVirtualId > 0
-        ? `/service-details?service_id=${id}&virtual_service_id=${selectedVirtualId}&date=${moment.max(moment(`${monthYear}-01`), moment().startOf("day")).format("YYYY-MM-DD")}`
+        ? `/service-details?service_id=${id}&virtual_service_id=${selectedVirtualId}&date=${moment.max(moment(`${monthYear}-01`), moment().startOf("day")).format("YYYY-MM-DD")}&gift=${gift ? true : false}`
         : `/slot-availability-calendar?month=${monthYear}&service_id=${id}&is_bundle=${normalizedBundleId > 0 ? true : false}&bundle_id=${normalizedBundleId}`,
       {
         method: "get",
@@ -1130,6 +1141,46 @@ export default function Service(props) {
     );
   };
 
+  // total_guests mode: − / + on a slot row sets the guest count and selects
+  // that slot (switching slots starts again from 0).
+  const changeSlotQuantity = (item, delta) => {
+    if (
+      isPopupBookingDisabled ||
+      item?.slot_type !== "active" ||
+      Number(item.capacity_left) <= 0
+    )
+      return;
+    const current = slot === item.time_slot ? Number(book) || 0 : 0;
+    const next = current + delta;
+    if (next < 0) return;
+    if (next > Number(item.capacity_left)) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "warning",
+        title: "Maximum capacity reached",
+      });
+      return;
+    }
+    if (slot !== item.time_slot) {
+      participantDefaultsKey.current = null;
+      setParticipants({});
+      setParticipantBreakdown({});
+      setParticipantConfig(null);
+      setParticipantError("");
+    }
+    setCurrentItem(item);
+    setSlot(item.time_slot);
+    setBook(next);
+    setSelectedSlotContext({
+      serviceId: serviceid,
+      bundleId: normalizeBundleId(bundleId),
+      virtualServiceId,
+    });
+  };
+
   const selectServiceTimeSlot = (item) => {
     if (
       isPopupBookingDisabled ||
@@ -1392,7 +1443,7 @@ export default function Service(props) {
           date,
         ).format(
           "YYYY-MM-DD",
-        )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_types=${encodeURIComponent(extraTypeStr)}&is_bundle=true&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_component_slots=${encodedComponentSlots}`,
+        )}&extra_id=null&extra_capacity=0&extra_types=&is_bundle=true&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_component_slots=${encodedComponentSlots}&gift=${gift ? true : false}`,
         { method: "get" },
       );
       cartupdate(data);
@@ -1457,7 +1508,7 @@ export default function Service(props) {
     const { data } = await axiosInstance(
       `/price-format?service_id=${
         productDetails.id
-      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&time_slot=${encodeURIComponent(slot)}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_types=${encodeURIComponent(extraTypeStr)}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_virtual_service_id=${virtualServiceId}`,
+      }&capacity=${book}&date=${moment(date).format("YYYY-MM-DD")}&time_slot=${encodeURIComponent(slot)}&extra_id=null&extra_capacity=0&extra_types=&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_virtual_service_id=${virtualServiceId}&gift=${gift ? true : false}`,
       {
         method: "get",
       },
@@ -1617,7 +1668,7 @@ export default function Service(props) {
         components: virtualServiceId > 0 ? productDetails.components || [] : [],
         // Band-level counts (e.g. "senior:41-100") for the order summary.
         participants:
-          gift || isVirtualSelection
+          gift || isVirtualSelection || isTotalGuestsMode
             ? null
             : getCategoryBandCounts(
                 participantCategories,
@@ -1625,9 +1676,13 @@ export default function Service(props) {
                 participantBreakdown,
               ),
         participant_guests:
-          gift || isVirtualSelection ? [] : participantSelection.guests,
+          gift || isVirtualSelection || isTotalGuestsMode
+            ? []
+            : participantSelection.guests,
         participant_configuration:
-          gift || isVirtualSelection ? null : participantConfig,
+          gift || isVirtualSelection || isTotalGuestsMode
+            ? null
+            : participantConfig,
         capacity_component_guests:
           isVirtualSelection && virtualParticipants.required
             ? virtualParticipants.guests
@@ -1635,15 +1690,16 @@ export default function Service(props) {
         line_key: participantLineKey.current,
       };
     }
-    let extraobj = cart.extra ? cart.extra : [];
-    if (cart.extra && cart.extra.length > 0 && !data?.data?.extra_id) {
-      extraobj = [];
-    }
+    // A newly priced service starts with no extras (chosen on the next step),
+    // so a previous extra selection can't stay in the cart or be pre-filled.
+    dispatch(setExtra(null));
+    dispatch(setExtracapacity(0));
+    dispatch(setHasExtras(null));
     dispatch(
       setCart({
         ...cart,
         service: [cartobj],
-        extra: extraobj,
+        extra: [],
         total: data?.data?.total,
         total_formatted: data?.data?.total_formated,
         discount: 0,
@@ -1671,7 +1727,7 @@ export default function Service(props) {
         date,
       ).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraid}&extra_capacity=${extracapacity}&extra_types=${encodeURIComponent(extraTypeStr)}&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_virtual_service_id=${virtualServiceId}`,
+      )}&extra_id=null&extra_capacity=0&extra_types=&is_bundle=${bundleId > 0 ? true : false}&bundle_id=${bundleId}&service_option_id=${selectedServiceOptionId}&selected_virtual_service_id=${virtualServiceId}&gift=${gift ? true : false}`,
       {
         method: "get",
       },
@@ -1702,6 +1758,7 @@ export default function Service(props) {
       },
     );
     if (data && data.status == 200) {
+      dispatch(setHasExtras(Boolean(data.has_extra)));
       if (data.has_extra) {
         dispatch(setStep("extrastep"));
         dispatch(setLoading(false));
@@ -2636,7 +2693,20 @@ export default function Service(props) {
                                   ))}
                                 </div>
                               )}
-                              {bundleId == 0 && (
+                              {bundleId == 0 && isTotalGuestsMode && (
+                                <ServiceSlotQuantity
+                                  availability={slotObj?.slots}
+                                  selectedSlot={slot}
+                                  quantity={book}
+                                  tab={slotVisible}
+                                  onTabChange={setSlotVisible}
+                                  onChange={changeSlotQuantity}
+                                  disabled={isPopupBookingDisabled}
+                                  showCapacityLeft={showCapacityLeft}
+                                  fallbackPrice={productDetails.svc_price}
+                                />
+                              )}
+                              {bundleId == 0 && !isTotalGuestsMode && (
                                 <ServiceSlotSelection
                                   availability={slotObj?.slots}
                                   selectedSlot={slot}
@@ -2645,6 +2715,7 @@ export default function Service(props) {
                                   onSelect={selectServiceTimeSlot}
                                   disabled={isPopupBookingDisabled}
                                   fallbackPrice={productDetails.svc_price}
+                                  showCapacityLeft={showCapacityLeft}
                                 />
                               )}
                             </div>
@@ -2752,13 +2823,14 @@ export default function Service(props) {
                           <button
                             type="button"
                             disabled={
-                              showParticipantStep
+                              showParticipantStep || isTotalGuestsMode
                                 ? !canContinueService
                                 : !canContinueToParticipants
                             }
-                            className={`continuebtn${(showParticipantStep ? canContinueService : canContinueToParticipants) ? "" : " fx-disable-button"}`}
+                            className={`continuebtn${(showParticipantStep || isTotalGuestsMode ? canContinueService : canContinueToParticipants) ? "" : " fx-disable-button"}`}
                             onClick={() => {
-                              if (showParticipantStep) {
+                              // total_guests: book straight from the slot list.
+                              if (showParticipantStep || isTotalGuestsMode) {
                                 bookservice();
                               } else if (canContinueToParticipants) {
                                 // Virtual services start at the slot's minimum quantity.

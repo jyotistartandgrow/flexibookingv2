@@ -389,9 +389,15 @@
 // Single-service participant step: age breakdown per category and the live
 // price summary from the participant-quote API.
 .fx-booking .fx-popup .fx-rightpopup {
-  .fx-service-participant-category { margin-bottom: 10px; }
-  .fx-service-participant-category > .fx-service-participant-row { margin-bottom: 0; }
-  .fx-service-participant-category.is-disabled { opacity: 0.4; }
+  .fx-service-participant-category {
+    margin-bottom: 10px;
+  }
+  .fx-service-participant-category > .fx-service-participant-row {
+    margin-bottom: 0;
+  }
+  .fx-service-participant-category.is-disabled {
+    opacity: 0.4;
+  }
 
   details.fx-service-participant-breakdown {
     margin-top: 6px;
@@ -409,15 +415,23 @@
     cursor: pointer;
     list-style: none;
   }
-  .fx-service-participant-breakdown summary::-webkit-details-marker { display: none; }
-  .fx-service-participant-breakdown summary svg { transition: transform 0.2s ease; }
-  .fx-service-participant-breakdown:not([open]) summary svg { transform: rotate(-90deg); }
+  .fx-service-participant-breakdown summary::-webkit-details-marker {
+    display: none;
+  }
+  .fx-service-participant-breakdown summary svg {
+    transition: transform 0.2s ease;
+  }
+  .fx-service-participant-breakdown:not([open]) summary svg {
+    transform: rotate(-90deg);
+  }
   p.fx-service-participant-breakdown-status {
     margin: 8px 0;
     color: var(--grey);
     font-size: 13px;
   }
-  p.fx-service-participant-breakdown-status.is-complete { color: var(--primary-color); }
+  p.fx-service-participant-breakdown-status.is-complete {
+    color: var(--primary-color);
+  }
   .fx-service-participant-band {
     display: flex;
     align-items: center;
@@ -427,7 +441,9 @@
     color: var(--darkgrey);
     font-size: 14px;
   }
-  .fx-service-participant-band + .fx-service-participant-band { border-top: 1px solid var(--border-color); }
+  .fx-service-participant-band + .fx-service-participant-band {
+    border-top: 1px solid var(--border-color);
+  }
 
   .fx-service-participant-quote {
     margin-top: 10px;
@@ -437,7 +453,47 @@
     color: var(--darkgrey);
     font-size: 14px;
   }
-  .fx-service-participant-quote p { margin: 0; }
-  .fx-service-participant-quote ul { margin: 6px 0 0; padding-left: 18px; color: var(--grey); }
-  p.fx-service-participant-message:not(.is-invalid) { color: var(--grey); }
+  .fx-service-participant-quote p {
+    margin: 0;
+  }
+  .fx-service-participant-quote ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+    color: var(--grey);
+  }
+  p.fx-service-participant-message:not(.is-invalid) {
+    color: var(--grey);
+  }
+}
+
+// total_guests mode (original slot rows): optional "N left" next to the time.
+.fx-booking .fx-popup .fx-service-slot-quantity {
+  // Time | price (centred) | quantity
+  .fx-timelistbox {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 12px;
+  }
+  .fx-timelistbox .fx-common {
+    justify-self: end;
+  }
+  .fx-slot-row-price {
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .fx-timeslotsection {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .fx-slot-capacity-left {
+    color: var(--grey);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .fx-quantitybox button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
 }

@@ -11,6 +11,9 @@ const initialState = {
   redeemUpsellSelections: [],
   redeemUpsellQuote: null,
   voucherdetail: {},
+  // Whether the booked service has extras: null = unknown, true / false from
+  // /has-extra or /extras. Drives the EXTRA tab in the step bar.
+  hasExtras: null,
 };
 
 const step3Slice = createSlice({
@@ -47,6 +50,9 @@ const step3Slice = createSlice({
     setVoucherDetail: (state, action) => {
       state.voucherdetail = action.payload;
     },
+    setHasExtras: (state, action) => {
+      state.hasExtras = action.payload;
+    },
   },
 });
 
@@ -61,5 +67,6 @@ export const {
   setVoucherDetail,
   setRedeemUpsellSelections,
   setRedeemUpsellQuote,
+  setHasExtras,
 } = step3Slice.actions;
 export default step3Slice.reducer;

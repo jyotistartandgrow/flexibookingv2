@@ -1,5 +1,40 @@
 import TimeSlotCard from "./TimeSlotCard";
 import { decodeHtml } from "../Utils/Functions";
+import { getServiceSlotLists } from "../Utils/serviceSlots";
+
+export function ServiceSlotTabs({ show, tab, onTabChange, disabled }) {
+  if (!show) return null;
+  return (
+    <div
+      id="fx-modaltab_nav"
+      className="fx-service-slot-tabs"
+      aria-label="Filter time slots"
+    >
+      <ul>
+        {[
+          ["morning", "Morning"],
+          ["afternoon", "Afternoon"],
+          ["all", "All"],
+        ].map(([key, label]) => (
+          <li key={key} className={tab === key ? "selected" : ""}>
+            <a
+              href="#"
+              className={tab === key ? "selected" : ""}
+              aria-current={tab === key ? "true" : undefined}
+              aria-disabled={disabled}
+              onClick={(event) => {
+                event.preventDefault();
+                if (!disabled) onTabChange(key);
+              }}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default function ServiceSlotSelection({
   availability,
@@ -9,35 +44,9 @@ export default function ServiceSlotSelection({
   onSelect,
   disabled,
   fallbackPrice,
+  showCapacityLeft = true,
 }) {
-  const singleSlot = availability?.single_time_slot;
-  const allSlots = singleSlot?.time_slot
-    ? [singleSlot]
-    : Array.isArray(availability?.time_slots) &&
-        availability.time_slots.length > 0
-      ? availability.time_slots
-      : ["morning", "afternoon", "evening"].flatMap(
-          (key) => availability?.[key] || [],
-        );
-  const uniqueSlots = allSlots.filter(
-    (slot, index, slots) =>
-      slots.findIndex((candidate) => candidate.time_slot === slot.time_slot) ===
-      index,
-  );
-  const visibleSlots = uniqueSlots.filter((slot) => {
-    if (tab === "all" || uniqueSlots.length === 1) return true;
-    if (Array.isArray(availability?.[tab]))
-      return availability[tab].some(
-        (candidate) => candidate.time_slot === slot.time_slot,
-      );
-    const match = String(slot.from || slot.time_slot).match(
-      /^(\d{1,2}):(\d{2})\s*(AM|PM)?/i,
-    );
-    let hour = Number(match?.[1] || 0);
-    if (match?.[3])
-      hour = (hour % 12) + (match[3].toUpperCase() === "PM" ? 12 : 0);
-    return tab === "morning" ? hour < 12 : hour >= 12;
-  });
+  const { uniqueSlots, visibleSlots } = getServiceSlotLists(availability, tab);
 
   return (
     <fieldset
@@ -46,36 +55,12 @@ export default function ServiceSlotSelection({
       aria-disabled={disabled}
     >
       <h3>Choose the Slot</h3>
-      {uniqueSlots.length > 1 && (
-        <div
-          id="fx-modaltab_nav"
-          className="fx-service-slot-tabs"
-          aria-label="Filter time slots"
-        >
-          <ul>
-            {[
-              ["morning", "Morning"],
-              ["afternoon", "Afternoon"],
-              ["all", "All"],
-            ].map(([key, label]) => (
-              <li key={key} className={tab === key ? "selected" : ""}>
-                <a
-                  href="#"
-                  className={tab === key ? "selected" : ""}
-                  aria-current={tab === key ? "true" : undefined}
-                  aria-disabled={disabled}
-                  onClick={(event) => {
-                    event.preventDefault();
-                    if (!disabled) onTabChange(key);
-                  }}
-                >
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <ServiceSlotTabs
+        show={uniqueSlots.length > 1}
+        tab={tab}
+        onTabChange={onTabChange}
+        disabled={disabled}
+      />
       <div className="fx-ms-slot-grid">
         {visibleSlots.map((item) => (
           <TimeSlotCard
@@ -89,7 +74,7 @@ export default function ServiceSlotSelection({
                   "",
               ),
             )}
-            left={item.capacity_left ?? 0}
+            left={showCapacityLeft ? (item.capacity_left ?? 0) : null}
             selected={selectedSlot === item.time_slot}
             disabled={
               disabled ||

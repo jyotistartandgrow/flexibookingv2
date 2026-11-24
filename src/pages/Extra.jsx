@@ -13,7 +13,12 @@ import {
 } from "../Utils/Functions";
 import extra from "../assets/extra1.jpg";
 
-import { setExtracapacity, setExtra, setBookingkey } from "../store/step3Slice";
+import {
+  setExtracapacity,
+  setExtra,
+  setBookingkey,
+  setHasExtras,
+} from "../store/step3Slice";
 import { setStep, setLoading } from "../store/step1Slice";
 import { setCart } from "../store/step2Slice";
 import Swal from "sweetalert2";
@@ -81,8 +86,6 @@ export default function Extra(props) {
   const cart = useSelector((state) => state.step2.cart);
   const gift = useSelector((state) => state.step1.gift);
   const openDatePurchase = useSelector((state) => state.step1.opendatepurchase);
-  const extracapacity = useSelector((state) => state.step3.extracapacity);
-  const extraID = useSelector((state) => state.step3.extra);
 
   const [products, setProductsArr] = useState([]);
   const [isVisible, setIsVisible] = useState("grid");
@@ -149,27 +152,9 @@ export default function Extra(props) {
 
   useEffect(() => {
     if (step !== "extrastep") return;
-    const initQ = {};
-    if (extraID && extracapacity) {
-      const ids = String(extraID)
-        .split(",")
-        .map((id) => id.trim())
-        .filter(Boolean);
-      const caps = String(extracapacity)
-        .split(",")
-        .map((c) => parseInt(c.trim()))
-        .filter(Boolean);
-      ids.forEach((id, i) => {
-        if (caps[i] > 0) initQ[parseInt(id)] = caps[i];
-      });
-    } else if (Array.isArray(cart.extra) && cart.extra.length > 0) {
-      cart.extra.forEach((item) => {
-        if (item?.id && item?.capacity > 0) {
-          initQ[item.id] = item.capacity;
-        }
-      });
-    }
-    setQuantities(initQ);
+    // Every extra starts at 0. Pre-filling from an earlier selection showed a
+    // quantity (e.g. 1 on the first extra) that was then kept even on Skip.
+    setQuantities({});
     if (date && service) {
       setLoadingske(true);
       const showExtraError = (title) =>
@@ -197,6 +182,7 @@ export default function Extra(props) {
               : Array.isArray(data?.data?.extras)
                 ? data.data.extras
                 : [];
+            dispatch(setHasExtras(extraList.length > 0));
 
             setProductsArr(
               extraList.map((product) => ({
@@ -274,8 +260,6 @@ export default function Extra(props) {
     gift,
     openDatePurchase,
     step,
-    extraID,
-    extracapacity,
     cart,
     selectedServiceOptionId,
     selectedBundleId,
@@ -408,7 +392,7 @@ export default function Extra(props) {
         cart.service[0].capacity
       }&date=${moment(date).format(
         "YYYY-MM-DD",
-      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&extra_types=${encodeURIComponent(extraTypeStr)}&bundle_id=${selectedBundleId}&service_option_id=${selectedServiceOptionId > 0 ? selectedServiceOptionId : null}&selected_component_slots=${encodedComponentSlots}&selected_virtual_service_id=${selectedVirtualServiceId}`,
+      )}&extra_id=${extraIdStr}&extra_capacity=${capacityArr.join(",")}&extra_types=${encodeURIComponent(extraTypeStr)}&bundle_id=${selectedBundleId}&service_option_id=${selectedServiceOptionId > 0 ? selectedServiceOptionId : null}&selected_component_slots=${encodedComponentSlots}&selected_virtual_service_id=${selectedVirtualServiceId}&gift=${gift ? true : false}`,
       {
         method: "get",
       },

@@ -8,6 +8,7 @@ import logo from "../assets/logo.png";
 import RedeemCommonbox from "../components/RedeemCommonbox";
 import axiosInstance from "../Utils/Interceptor";
 import useDeviceType from "../Utils/useDeviceType";
+import { isPhoneOnlyRedemption } from "../Utils/redeemByPhone";
 
 export default function ReedemSteps(props) {
   const dispatch = useDispatch();
@@ -23,8 +24,16 @@ export default function ReedemSteps(props) {
     (state) => state.step3.redeemUpsellSelections?.length > 0,
   );
 
+  // Vouchers that must be redeemed by phone end at the voucher details step: no checkout.
+  const phoneOnly = isPhoneOnlyRedemption(voucherdetail);
+
   // "Add more services" adds a Service step and a Payment step for the paid additions.
-  const redeemSteps = isUpsell
+  const redeemSteps = phoneOnly
+    ? [
+        ["codestep", "CODE", "ENTER YOUR CODE"],
+        ["datestep", "VOUCHER DETAILS", "VOUCHER DETAILS"],
+      ]
+    : isUpsell
     ? [
         ["codestep", "CODE", "ENTER YOUR CODE"],
         ["datestep", "DATE & SLOT", "SELECT DATE & SLOT"],
@@ -84,7 +93,9 @@ export default function ReedemSteps(props) {
       <div className="fx-step-top-fixed-box">
         <div
           className={`fx-stepper-tabstyle step-for-redeem ${
-            isUpsell
+            phoneOnly
+              ? "fx-redeem-two-step"
+              : isUpsell
               ? "fx-redeem-upsell-step"
               : isRedeemBooking
                 ? "fx-redeem-booking-step"
