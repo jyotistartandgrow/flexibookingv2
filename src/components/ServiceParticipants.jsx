@@ -8,9 +8,10 @@ import {
 } from "lucide-react";
 import { getBreakdownTotal } from "../Utils/participants";
 import { decodeHtml } from "../Utils/Functions";
+import { __, _n, sprintf } from "../i18n";
 
 const visitorsLabel = (count) =>
-  `${count} visitor${Number(count) === 1 ? "" : "s"}`;
+  sprintf(_n("%s visitor", "%s visitors", Number(count)), count);
 
 function QuantityControl({
   label,
@@ -24,24 +25,24 @@ function QuantityControl({
     <div
       className="fx-service-participant-quantity"
       role="group"
-      aria-label={`${label} quantity`}
+      aria-label={sprintf(__("%s quantity"), label)}
     >
       <button
         type="button"
         disabled={minusDisabled}
         onClick={onMinus}
-        aria-label={`Remove one ${label.toLowerCase()}`}
+        aria-label={sprintf(__("Remove one %s"), label.toLowerCase())}
       >
         <Minus size={12} aria-hidden="true" />
       </button>
-      <output aria-label={`${label} count`} aria-live="polite">
+      <output aria-label={sprintf(__("%s count"), label)} aria-live="polite">
         {value}
       </output>
       <button
         type="button"
         disabled={plusDisabled}
         onClick={onPlus}
-        aria-label={`Add one ${label.toLowerCase()}`}
+        aria-label={sprintf(__("Add one %s"), label.toLowerCase())}
       >
         <Plus size={12} aria-hidden="true" />
       </button>
@@ -56,15 +57,18 @@ function AgeBreakdown({ category, count, breakdown, disabled, onBandChange }) {
   return (
     <details className="fx-service-participant-breakdown" open>
       <summary>
-        <ChevronDown size={14} aria-hidden="true" /> Age breakdown
+        <ChevronDown size={14} aria-hidden="true" /> {__("Age breakdown")}
       </summary>
       <p
         className={`fx-service-participant-breakdown-status${remaining === 0 ? " is-complete" : ""}`}
         role="status"
       >
         {remaining === 0
-          ? "Age breakdown complete."
-          : `Assign ${visitorsLabel(remaining)} to an age range.`}
+          ? __("Age breakdown complete.")
+          : sprintf(
+              __("Assign %s to an age range."),
+              visitorsLabel(remaining),
+            )}
       </p>
       {category.bands.map((band) => {
         const value = Number(breakdown?.[band.key]) || 0;
@@ -97,12 +101,18 @@ function QuoteSummary({ quote, loading, error }) {
   }
   if (!quote) {
     return loading ? (
-      <p className="fx-service-participant-message">Calculating price…</p>
+      <p className="fx-service-participant-message">
+        {__("Calculating price…")}
+      </p>
     ) : null;
   }
   const lines = quote.group?.applied
     ? [
-        `Group rate · ${visitorsLabel(quote.group.count ?? quote.tickets)} · ${decodeHtml(quote.group.formatted_total || quote.formatted_total || "")}`,
+        sprintf(
+          __("Group rate · %1$s · %2$s"),
+          visitorsLabel(quote.group.count ?? quote.tickets),
+          decodeHtml(quote.group.formatted_total || quote.formatted_total || ""),
+        ),
       ]
     : (Array.isArray(quote.breakdown) ? quote.breakdown : [])
         .filter((line) => Number(line?.quantity) > 0)
@@ -113,7 +123,12 @@ function QuoteSummary({ quote, loading, error }) {
   return (
     <div className="fx-service-participant-quote" aria-live="polite">
       <p>
-        Total visitors: {quote.tickets} · Places needed: {quote.counting} ·{" "}
+        {sprintf(
+          __("Total visitors: %1$s · Places needed: %2$s"),
+          quote.tickets,
+          quote.counting,
+        )}{" "}
+        ·{" "}
         {decodeHtml(quote.formatted_total || "")}
       </p>
       {lines.length > 0 && (
@@ -158,10 +173,10 @@ export default function ServiceParticipants({
     <div className="fx-service-participants">
       <section
         className="fx-service-selected-slot"
-        aria-label="Selected time slot"
+        aria-label={__("Selected time slot")}
       >
         <h3>
-          <CalendarDays size={16} aria-hidden="true" /> Selected Slot
+          <CalendarDays size={16} aria-hidden="true" /> {__("Selected Slot")}
         </h3>
         <div className="fx-service-selected-slot-row">
           <div className="fx-service-selected-slot-value">
@@ -170,29 +185,30 @@ export default function ServiceParticipants({
             <strong>{price}</strong>
           </div>
           <button type="button" onClick={onBack}>
-            <Pencil size={15} aria-hidden="true" /> Change Slot
+            <Pencil size={15} aria-hidden="true" /> {__("Change Slot")}
           </button>
         </div>
       </section>
       {loading && (
         <p className="fx-service-participant-status" role="status">
-          Loading participant options…
+          {__("Loading participant options…")}
         </p>
       )}
       {error && (
         <div className="fx-service-participant-error" role="alert">
           <p>{error}</p>
           <button type="button" onClick={onRetry}>
-            Try again
+            {__("Try again")}
           </button>
         </div>
       )}
       {!loading && !error && (
         <fieldset className="fx-service-participant-panel" disabled={disabled}>
-          <h3>Who is coming?</h3>
+          <h3>{__("Who is coming?")}</h3>
           <p>
-            Choose your participants once. Your selection applies to this time
-            slot.
+            {__(
+              "Choose your participants once. Your selection applies to this time slot.",
+            )}
           </p>
           {categories.map((category) => {
             const value = Number(counts?.[category.key]) || 0;
@@ -234,8 +250,9 @@ export default function ServiceParticipants({
           })}
           {categories.length === 0 && (
             <p>
-              No participant options are available for this slot. Please choose
-              another slot.
+              {__(
+                "No participant options are available for this slot. Please choose another slot.",
+              )}
             </p>
           )}
           {total > 0 && !validQuantity && (
@@ -250,7 +267,10 @@ export default function ServiceParticipants({
             <>
               <div className="fx-service-participant-total" aria-live="polite">
                 <span>
-                  {total} participant{total === 1 ? "" : "s"}
+                  {sprintf(
+                    _n("%s participant", "%s participants", total),
+                    total,
+                  )}
                 </span>
                 <strong>
                   {quote?.quote?.formatted_total

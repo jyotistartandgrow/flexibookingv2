@@ -1,4 +1,5 @@
 import axios from "axios";
+import { initI18n } from "../i18n";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
@@ -57,16 +58,19 @@ const refreshNonce = (failedNonce) => {
   return getNonce(true);
 };
 
-const setNonceHeader = (config, nonce) => {
+const setHeader = (config, name, value) => {
   if (typeof config.headers?.set === "function") {
-    config.headers.set("X-Booking-Nonce", nonce);
+    config.headers.set(name, value);
   } else {
     config.headers = {
       ...(config.headers || {}),
-      "X-Booking-Nonce": nonce,
+      [name]: value,
     };
   }
+};
 
+const setNonceHeader = (config, nonce) => {
+  setHeader(config, "X-Booking-Nonce", nonce);
   config._bookingNonceValue = nonce;
 };
 
@@ -77,9 +81,12 @@ export const initializeBookingNonce = () => getNonce();
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const nonce = await getNonce();
+    const [nonce, locale] = await Promise.all([getNonce(), initI18n()]);
 
     setNonceHeader(config, nonce);
+    // Run the API in the language the UI was rendered in, so messages,
+    // service data and the language saved on the booking match the page.
+    setHeader(config, "X-Booking-Locale", locale);
     // Native voucher REST handlers also validate the AJAX nonce in the body.
     // Form bodies arrive as URLSearchParams, or as an encoded string when a request is retried.
     const isFormString =

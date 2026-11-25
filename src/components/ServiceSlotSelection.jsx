@@ -1,6 +1,7 @@
 import TimeSlotCard from "./TimeSlotCard";
 import { decodeHtml } from "../Utils/Functions";
 import { getServiceSlotLists } from "../Utils/serviceSlots";
+import { __ } from "../i18n";
 
 export function ServiceSlotTabs({ show, tab, onTabChange, disabled }) {
   if (!show) return null;
@@ -8,13 +9,13 @@ export function ServiceSlotTabs({ show, tab, onTabChange, disabled }) {
     <div
       id="fx-modaltab_nav"
       className="fx-service-slot-tabs"
-      aria-label="Filter time slots"
+      aria-label={__("Filter time slots")}
     >
       <ul>
         {[
-          ["morning", "Morning"],
-          ["afternoon", "Afternoon"],
-          ["all", "All"],
+          ["morning", __("Morning")],
+          ["afternoon", __("Afternoon")],
+          ["all", __("All")],
         ].map(([key, label]) => (
           <li key={key} className={tab === key ? "selected" : ""}>
             <a
@@ -59,7 +60,7 @@ export default function ServiceSlotSelection({
       disabled={disabled}
       aria-disabled={disabled}
     >
-      <h3>Choose the Slot</h3>
+      <h3>{__("Choose the Slot")}</h3>
       <ServiceSlotTabs
         show={!hideTabs && uniqueSlots.length > 1}
         tab={tab}
@@ -92,7 +93,11 @@ export default function ServiceSlotSelection({
       </div>
       {visibleSlots.length === 0 && (
         <p className="fx-service-slot-empty">
-          No {tab === "all" ? "" : `${tab} `}slots available for this date.
+          {tab === "morning"
+            ? __("No morning slots available for this date.")
+            : tab === "afternoon"
+              ? __("No afternoon slots available for this date.")
+              : __("No slots available for this date.")}
         </p>
       )}
     </fieldset>

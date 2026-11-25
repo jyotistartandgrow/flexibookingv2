@@ -11,6 +11,7 @@ import {
 import { setCart } from "../store/step2Slice";
 import { applyCouponToBooking } from "../Utils/coupons";
 import { toPlainText } from "../Utils/Functions";
+import { __, sprintf } from "../i18n";
 
 /**
  * bookingKey given (checkout page): Apply calls /apply-coupon right away and
@@ -47,7 +48,7 @@ export default function CouponSection({ bookingKey = null }) {
         showConfirmButton: false,
         timer: 3000,
         icon: "error",
-        title: "Please enter a coupon code",
+        title: __("Please enter a coupon code"),
       });
       return;
     }
@@ -60,7 +61,7 @@ export default function CouponSection({ bookingKey = null }) {
         if (!result.ok) {
           Swal.fire({
             iconHtml: `<img class="fx-coupon-close-icon" src="${closeicon}">`,
-            titleText: toPlainText(`${code} Coupon Error`),
+            titleText: toPlainText(sprintf(__("%s Coupon Error"), code)),
             text: result.error,
             customClass: { popup: "fx-coupon-box-popup" },
           });
@@ -86,13 +87,13 @@ export default function CouponSection({ bookingKey = null }) {
           showConfirmButton: false,
           timer: 3000,
           icon: "success",
-          title: "Coupon applied",
+          title: __("Coupon applied"),
         });
       } catch (error) {
         Swal.fire({
           iconHtml: `<img class="fx-coupon-close-icon" src="${closeicon}">`,
-          titleText: toPlainText(`${code} Coupon Error`),
-          text: error?.data?.message || "Failed to apply coupon",
+          titleText: toPlainText(sprintf(__("%s Coupon Error"), code)),
+          text: error?.data?.message || __("Failed to apply coupon"),
           customClass: { popup: "fx-coupon-box-popup" },
         });
       } finally {
@@ -107,7 +108,7 @@ export default function CouponSection({ bookingKey = null }) {
       showConfirmButton: false,
       timer: 3000,
       icon: "info",
-      title: "Once you proceed to payment, the discount will be applied.",
+      title: __("Once you proceed to payment, the discount will be applied."),
     });
 
     // Mark this coupon as applied
@@ -139,7 +140,7 @@ export default function CouponSection({ bookingKey = null }) {
             onChange={(e) => setIsVisibleGift(e.target.checked)}
           />
           <label htmlFor={uid} className="checkbox-label">
-            Have a coupon?
+            {__("Have a coupon?")}
           </label>
         </div>
         {isVisibleGift && (
@@ -149,7 +150,7 @@ export default function CouponSection({ bookingKey = null }) {
                 <div className="fx-coupon-box">
                   <input
                     type="text"
-                    placeholder="Enter your coupon code"
+                    placeholder={__("Enter your coupon code")}
                     value={field.code}
                     onChange={(e) => {
                       if (!field.applied) {
@@ -169,12 +170,12 @@ export default function CouponSection({ bookingKey = null }) {
                       className="fx-apply-btn"
                       onClick={() => applycoupon(index)}
                     >
-                      Apply
+                      {__("Apply")}
                     </button>
                   )}
                   {field.applied && (
                     <button className="fx-apply-btn fx-applied-btn">
-                      Applied <img src={iconapplied} />
+                      {__("Applied")} <img src={iconapplied} />
                     </button>
                   )}
                 </div>
@@ -190,7 +191,7 @@ export default function CouponSection({ bookingKey = null }) {
               </div>
             ))}
             <div className="fx-element-box" onClick={() => addmoreCoupon()}>
-              <p className="fx-addmorelink">Add More</p>
+              <p className="fx-addmorelink">{__("Add More")}</p>
             </div>
           </div>
         )}

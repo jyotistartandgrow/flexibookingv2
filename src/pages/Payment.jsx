@@ -15,6 +15,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import closeicon from "../assets/close2.svg";
 import { applyCouponToBooking } from "../Utils/coupons";
+import { __, sprintf, getStripeLocale } from "../i18n";
 
 const stripePromiseCache = {};
 
@@ -109,7 +110,7 @@ export default function Payment(props) {
       } else {
         Swal.fire({
           iconHtml: `<img class="fx-coupon-close-icon" src="${closeicon}">`,
-          titleText: toPlainText(`${code} Coupon Error`),
+          titleText: toPlainText(sprintf(__("%s Coupon Error"), code)),
           text: result.error,
           customClass: {
             popup: "fx-coupon-box-popup",
@@ -128,11 +129,11 @@ export default function Payment(props) {
         <div className="fx-paymentbox">
           {props.stepsVisibility?.step_5_title_visible == "true" && (
             <h1 className="fx-all-main-heading">
-              {props.stepTitles?.step_5_title || "Payment"}
+              {props.stepTitles?.step_5_title || __("Payment")}
             </h1>
           )}
           {stripePromise && (
-            <Elements stripe={stripePromise}>
+            <Elements stripe={stripePromise} options={{ locale: getStripeLocale() }}>
               <CheckoutForm />
             </Elements>
           )}
@@ -142,22 +143,22 @@ export default function Payment(props) {
         <>
           {props.stepsVisibility?.step_5_title_visible == "true" && (
             <h1 className="fx-all-main-heading">
-              {props.stepTitles?.step_5_title || "Checkout"}
+              {props.stepTitles?.step_5_title || __("Checkout")}
             </h1>
           )}
           <div className="fx-order-summary">
             <div className="fx-service-date">
-              <strong>Service Date:</strong>
+              <strong>{__("Service Date:")}</strong>
               <p>{moment(date).format("MMMM Do, YYYY")}</p>
             </div>
 
             <table className="fx-summary-table">
               <thead>
                 <tr>
-                  <th>Products Name</th>
-                  <th>Price</th>
-                  <th>Qty</th>
-                  <th>Total</th>
+                  <th>{__("Products Name")}</th>
+                  <th>{__("Price")}</th>
+                  <th>{__("Qty")}</th>
+                  <th>{__("Total")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -188,15 +189,15 @@ export default function Payment(props) {
 
             <div className="fx-summary-footer">
               <div className="fx-summary-line">
-                <span>Subtotal</span>
+                <span>{__("Subtotal")}</span>
                 <span className="value">{decodeHtml(cart?.subtotal)}</span>
               </div>
               <div className="fx-summary-line">
-                <span>Discount</span>
+                <span>{__("Discount")}</span>
                 <span className="value">{decodeHtml(cart?.discount)}</span>
               </div>
               <div className="fx-summary-line">
-                <span>Total</span>
+                <span>{__("Total")}</span>
                 <span className="value">
                   {decodeHtml(cart?.total_formatted)}
                 </span>

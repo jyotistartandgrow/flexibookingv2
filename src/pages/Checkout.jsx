@@ -28,6 +28,7 @@ import {
 } from "../Utils/Functions";
 import CouponSection from "./CouponSection";
 import { useRegionalPreferences } from "../Utils/regionalPreferences";
+import { __, withElement } from "../i18n";
 
 const formatInternationalPhone = (value) => {
   const digits = String(value ?? "").replace(/\D/g, "");
@@ -225,7 +226,7 @@ export default function Checkout(props) {
       dispatch(setSelectedPaymentMethod(defaultCard?.method || null));
 
       if (groups.length === 0) {
-        setPaymentMethodsError("No payment methods are currently available.");
+        setPaymentMethodsError(__("No payment methods are currently available."));
       }
     } catch (error) {
       setPaymentGroups([]);
@@ -233,7 +234,7 @@ export default function Checkout(props) {
       setPaymentMethodsError(
         error?.data?.message ||
           error?.message ||
-          "Unable to load payment methods. Please try again.",
+          __("Unable to load payment methods. Please try again."),
       );
     } finally {
       setPaymentMethodsLoading(false);
@@ -260,7 +261,7 @@ export default function Checkout(props) {
         showConfirmButton: false,
         timer: 3000,
         icon: "warning",
-        title: "Please choose a payment method before proceeding",
+        title: __("Please choose a payment method before proceeding"),
       });
       return;
     }
@@ -301,7 +302,7 @@ export default function Checkout(props) {
           showConfirmButton: false,
           timer: 3000,
           icon: "error",
-          title: "Please complete the gift receiver information",
+          title: __("Please complete the gift receiver information"),
         });
         return;
       }
@@ -327,7 +328,7 @@ export default function Checkout(props) {
           showConfirmButton: false,
           timer: 3000,
           icon: "error",
-          title: "Please enter a valid phone number for the selected country",
+          title: __("Please enter a valid phone number for the selected country"),
         });
         return;
       }
@@ -383,7 +384,7 @@ export default function Checkout(props) {
           showConfirmButton: false,
           timer: 3000,
           icon: "error",
-          title: "Please fill in all invoice fields",
+          title: __("Please fill in all invoice fields"),
         });
         return;
       }
@@ -396,7 +397,7 @@ export default function Checkout(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Please accept terms and conditions before proceeding",
+        title: __("Please accept terms and conditions before proceeding"),
       });
       return;
     }
@@ -536,14 +537,16 @@ export default function Checkout(props) {
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
         titleText: toPlainText(
-          data?.message ?? "There is some error , please try again",
+          data?.message ?? __("There is some error , please try again"),
         ),
       });
       if (data?.message == "Error Fetching Booking Information !!") {
         Swal.fire({
           icon: "error",
-          title: `Session Expired`,
-          text: "Your session has expired. Please start the booking process again.",
+          title: __("Session Expired"),
+          text: __(
+            "Your session has expired. Please start the booking process again.",
+          ),
         });
       }
     }
@@ -575,12 +578,12 @@ export default function Checkout(props) {
     };
   const getFields = guardRequest(
     getFieldsRequest,
-    "Unable to load checkout fields",
+    __("Unable to load checkout fields"),
   );
-  const getState = guardRequest(getStateRequest, "Unable to load states");
+  const getState = guardRequest(getStateRequest, __("Unable to load states"));
   const checkout = guardRequest(
     checkoutRequest,
-    "Unable to complete checkout, please try again",
+    __("Unable to complete checkout, please try again"),
   );
 
   return (
@@ -591,7 +594,7 @@ export default function Checkout(props) {
       {props.stepsVisibility?.step_4_title_visible == "true" && (
         <h1 className="fx-all-main-heading">
           {props.stepTitles?.step_4_title ||
-            (redeemBooking ? "Information" : "Checkout")}
+            (redeemBooking ? __("Information") : __("Checkout"))}
         </h1>
       )}
       <div className="fx-commoninput">
@@ -599,10 +602,10 @@ export default function Checkout(props) {
           <div
             className={`fx-element-box ${visibleField.sgbm_field_1 ? "" : "fx-hidden"}`}
           >
-            <label>First Name</label>
+            <label>{__("First Name")}</label>
             <input
               type="text"
-              placeholder="First Name"
+              placeholder={__("First Name")}
               value={billdata.sgbm_field_1 || ""}
               className={errorlist.sgbm_field_1 ? "fx-invalid" : ""}
               onChange={(e) =>
@@ -610,16 +613,16 @@ export default function Checkout(props) {
               }
             />
             {errorlist.sgbm_field_1 && (
-              <span class="fx-errortext">Enter First Name</span>
+              <span class="fx-errortext">{__("Enter First Name")}</span>
             )}
           </div>
           <div
             className={`fx-element-box ${visibleField.sgbm_field_2 ? "" : "fx-hidden"}`}
           >
-            <label>Last Name</label>
+            <label>{__("Last Name")}</label>
             <input
               type="text"
-              placeholder="Last Name"
+              placeholder={__("Last Name")}
               value={billdata.sgbm_field_2 || ""}
               onChange={(e) =>
                 setBilldata({ ...billdata, sgbm_field_2: e.target.value })
@@ -631,10 +634,10 @@ export default function Checkout(props) {
           <div
             className={`fx-element-box ${visibleField.sgbm_field_3 ? "" : "fx-hidden"}`}
           >
-            <label>Email</label>
+            <label>{__("Email")}</label>
             <input
               type="email"
-              placeholder="Email"
+              placeholder={__("Email")}
               value={billdata.sgbm_field_3 || ""}
               className={errorlist.sgbm_field_3 ? "fx-invalid" : ""}
               onChange={(e) =>
@@ -649,13 +652,13 @@ export default function Checkout(props) {
               }}
             />
             {errorlist.sgbm_field_3 && (
-              <span class="fx-errortext">Enter a valid email address</span>
+              <span class="fx-errortext">{__("Enter a valid email address")}</span>
             )}
           </div>
           <div
             className={`fx-element-box ${visibleField.sgbm_field_4 ? "" : "fx-hidden"}`}
           >
-            <label className="fx-mobile-input">Mobile</label>
+            <label className="fx-mobile-input">{__("Mobile")}</label>
             <div className="fx-phone-input">
               <PhoneInput
                 country={billdata.sgbm_field_8?.toLowerCase() || phoneCountry}
@@ -685,7 +688,7 @@ export default function Checkout(props) {
               />
               {errorlist.sgbm_field_4 && (
                 <span class="fx-errortext">
-                  Enter a valid phone number for the selected country
+                  {__("Enter a valid phone number for the selected country")}
                 </span>
               )}
             </div>
@@ -695,10 +698,10 @@ export default function Checkout(props) {
           <div
             className={`fx-element-box ${visibleField.sgbm_field_5 ? "" : "fx-hidden"}`}
           >
-            <label>Address</label>
+            <label>{__("Address")}</label>
             <input
               type="text"
-              placeholder="Address"
+              placeholder={__("Address")}
               value={billdata.sgbm_field_5 || ""}
               className={
                 errorlist.sgbm_field_5 ? "fx-invalid bigtextbox" : "bigtextbox"
@@ -708,7 +711,7 @@ export default function Checkout(props) {
               }
             />
             {errorlist.sgbm_field_5 && (
-              <span class="fx-errortext">Enter Address</span>
+              <span class="fx-errortext">{__("Enter Address")}</span>
             )}
           </div>
         </div>
@@ -716,7 +719,7 @@ export default function Checkout(props) {
           <div
             className={`fx-element-box fx-selectwrapper ${visibleField.sgbm_field_8 ? "" : "fx-hidden"}`}
           >
-            <label>Country</label>
+            <label>{__("Country")}</label>
             <select
               value={billdata.sgbm_field_8 || ""}
               onChange={(e) => {
@@ -730,7 +733,7 @@ export default function Checkout(props) {
               }}
               className={errorlist.sgbm_field_8 ? "fx-invalid" : ""}
             >
-              <option value="">Select Country</option>
+              <option value="">{__("Select Country")}</option>
               {countries &&
                 Object.keys(countries.data).map((code) => (
                   <option key={code} value={code}>
@@ -739,13 +742,13 @@ export default function Checkout(props) {
                 ))}
             </select>
             {errorlist.sgbm_field_8 && (
-              <span class="fx-errortext">Enter Country</span>
+              <span class="fx-errortext">{__("Enter Country")}</span>
             )}
           </div>
           <div
             className={`fx-element-box fx-selectwrapper ${visibleField.sgbm_field_7 ? "" : "fx-hidden"}`}
           >
-            <label>State</label>
+            <label>{__("State")}</label>
             <select
               value={billdata.sgbm_field_7 || ""}
               onChange={(e) => {
@@ -753,7 +756,7 @@ export default function Checkout(props) {
               }}
               className={errorlist.sgbm_field_7 ? "fx-invalid" : ""}
             >
-              <option value="">Select State</option>
+              <option value="">{__("Select State")}</option>
               {states.length > 0 &&
                 Object.keys(states).map((key) => (
                   <option key={states[key].code} value={states[key].code}>
@@ -762,7 +765,7 @@ export default function Checkout(props) {
                 ))}
             </select>
             {errorlist.sgbm_field_7 && (
-              <span class="fx-errortext">Enter State</span>
+              <span class="fx-errortext">{__("Enter State")}</span>
             )}
           </div>
         </div>
@@ -770,10 +773,10 @@ export default function Checkout(props) {
           <div
             className={`fx-element-box ${visibleField.sgbm_field_6 ? "" : "fx-hidden"}`}
           >
-            <label>City</label>
+            <label>{__("City")}</label>
             <input
               type="text"
-              placeholder="City"
+              placeholder={__("City")}
               value={billdata.sgbm_field_6 || ""}
               className={errorlist.sgbm_field_6 ? "fx-invalid" : ""}
               onChange={(e) =>
@@ -781,16 +784,16 @@ export default function Checkout(props) {
               }
             />
             {errorlist.sgbm_field_6 && (
-              <span class="fx-errortext">Enter City</span>
+              <span class="fx-errortext">{__("Enter City")}</span>
             )}
           </div>
           <div
             className={`fx-element-box ${visibleField.sgbm_field_9 ? "" : "fx-hidden"}`}
           >
-            <label>Postcode</label>
+            <label>{__("Postcode")}</label>
             <input
               type="text"
-              placeholder="Postcode"
+              placeholder={__("Postcode")}
               value={billdata.sgbm_field_9 || ""}
               className={errorlist.sgbm_field_9 ? "fx-invalid" : ""}
               onChange={(e) =>
@@ -798,7 +801,7 @@ export default function Checkout(props) {
               }
             />
             {errorlist.sgbm_field_9 && (
-              <span class="fx-errortext">Enter Postcode</span>
+              <span class="fx-errortext">{__("Enter Postcode")}</span>
             )}
           </div>
         </div>
@@ -806,10 +809,10 @@ export default function Checkout(props) {
           <div
             className={`fx-element-box ${visibleField.sgbm_field_10 ? "" : "fx-hidden"}`}
           >
-            <label>Order Notes</label>
+            <label>{__("Order Notes")}</label>
             <input
               type="text"
-              placeholder="Note"
+              placeholder={__("Note")}
               value={billdata.sgbm_field_10 || ""}
               className={
                 errorlist.sgbm_field_10 ? "bigtextbox fx-invalid" : "bigtextbox"
@@ -819,7 +822,7 @@ export default function Checkout(props) {
               }
             />
             {errorlist.sgbm_field_10 && (
-              <span class="fx-errortext">Enter Order Notes</span>
+              <span class="fx-errortext">{__("Enter Order Notes")}</span>
             )}
           </div>
         </div>
@@ -835,15 +838,15 @@ export default function Checkout(props) {
               /> */}
 
               <div className="fx-gift-receiver-header">
-                <h3>Gift Receiver Information</h3>
+                <h3>{__("Gift Receiver Information")}</h3>
                 {/* Preview Button */}
               </div>
               <div className="fx-commoninput">
                 <div class="fx-inputgroup">
                   <div class="fx-element-box">
-                    <label>First Name</label>
+                    <label>{__("First Name")}</label>
                     <input
-                      placeholder="First Name"
+                      placeholder={__("First Name")}
                       type="text"
                       value={receiverInfo.firstName}
                       onBlur={(e) =>
@@ -857,9 +860,9 @@ export default function Checkout(props) {
                     ></input>
                   </div>
                   <div class="fx-element-box">
-                    <label>Last Name</label>
+                    <label>{__("Last Name")}</label>
                     <input
-                      placeholder="Last Name"
+                      placeholder={__("Last Name")}
                       type="text"
                       value={receiverInfo.lastName}
                       onBlur={(e) =>
@@ -875,9 +878,9 @@ export default function Checkout(props) {
                 </div>
                 <div class="fx-inputgroup">
                   <div class="fx-element-box">
-                    <label>Email</label>
+                    <label>{__("Email")}</label>
                     <input
-                      placeholder="Email"
+                      placeholder={__("Email")}
                       type="email"
                       value={receiverInfo.email}
                       className={receiverErrors.email ? "fx-invalid" : ""}
@@ -902,12 +905,12 @@ export default function Checkout(props) {
                     ></input>
                     {receiverErrors.email && (
                       <span class="fx-errortext">
-                        Enter a valid email address
+                        {__("Enter a valid email address")}
                       </span>
                     )}
                   </div>
                   <div class="fx-element-box">
-                    <label>Phone Number</label>
+                    <label>{__("Phone Number")}</label>
                     <div className="fx-phone-input">
                       <PhoneInput
                         key={phoneCountry || "default"}
@@ -958,7 +961,7 @@ export default function Checkout(props) {
                       />
                       {receiverErrors.phoneNumber && (
                         <span className="fx-errortext">
-                          Enter a valid phone number for the selected country
+                          {__("Enter a valid phone number for the selected country")}
                         </span>
                       )}
                     </div>
@@ -966,9 +969,9 @@ export default function Checkout(props) {
                 </div>
                 <div className="fx-inputgroup">
                   <div className="fx-element-box">
-                    <label>Address</label>
+                    <label>{__("Address")}</label>
                     <input
-                      placeholder="Address"
+                      placeholder={__("Address")}
                       type="text"
                       value={receiverInfo.address || ""}
                       className={
@@ -981,13 +984,13 @@ export default function Checkout(props) {
                       }
                     />
                     {receiverErrors.address && (
-                      <span className="fx-errortext">Enter Address</span>
+                      <span className="fx-errortext">{__("Enter Address")}</span>
                     )}
                   </div>
                 </div>
                 <div className="fx-inputgroup">
                   <div className="fx-element-box fx-selectwrapper">
-                    <label>Country</label>
+                    <label>{__("Country")}</label>
                     <select
                       value={receiverInfo.country || ""}
                       className={receiverErrors.country ? "fx-invalid" : ""}
@@ -1003,7 +1006,7 @@ export default function Checkout(props) {
                         if (country) getState(country);
                       }}
                     >
-                      <option value="">Select Country</option>
+                      <option value="">{__("Select Country")}</option>
                       {countries?.data &&
                         Object.keys(countries.data).map((code) => (
                           <option key={code} value={code}>
@@ -1012,11 +1015,11 @@ export default function Checkout(props) {
                         ))}
                     </select>
                     {receiverErrors.country && (
-                      <span className="fx-errortext">Enter Country</span>
+                      <span className="fx-errortext">{__("Enter Country")}</span>
                     )}
                   </div>
                   <div className="fx-element-box fx-selectwrapper">
-                    <label>State</label>
+                    <label>{__("State")}</label>
                     <select
                       value={receiverInfo.state || ""}
                       className={receiverErrors.state ? "fx-invalid" : ""}
@@ -1024,7 +1027,7 @@ export default function Checkout(props) {
                         dispatch(setReceiverInfo({ state: e.target.value }))
                       }
                     >
-                      <option value="">Select State</option>
+                      <option value="">{__("Select State")}</option>
                       {Array.isArray(states) &&
                         states.map((stateOption) => (
                           <option
@@ -1036,15 +1039,15 @@ export default function Checkout(props) {
                         ))}
                     </select>
                     {receiverErrors.state && (
-                      <span className="fx-errortext">Enter State</span>
+                      <span className="fx-errortext">{__("Enter State")}</span>
                     )}
                   </div>
                 </div>
                 <div className="fx-inputgroup">
                   <div className="fx-element-box">
-                    <label>City</label>
+                    <label>{__("City")}</label>
                     <input
-                      placeholder="City"
+                      placeholder={__("City")}
                       type="text"
                       value={receiverInfo.city || ""}
                       className={receiverErrors.city ? "fx-invalid" : ""}
@@ -1053,13 +1056,13 @@ export default function Checkout(props) {
                       }
                     />
                     {receiverErrors.city && (
-                      <span className="fx-errortext">Enter City</span>
+                      <span className="fx-errortext">{__("Enter City")}</span>
                     )}
                   </div>
                   <div className="fx-element-box">
-                    <label>Postcode</label>
+                    <label>{__("Postcode")}</label>
                     <input
-                      placeholder="Postcode"
+                      placeholder={__("Postcode")}
                       type="text"
                       value={receiverInfo.postcode || receiverInfo.zip || ""}
                       className={receiverErrors.postcode ? "fx-invalid" : ""}
@@ -1073,7 +1076,7 @@ export default function Checkout(props) {
                       }
                     />
                     {receiverErrors.postcode && (
-                      <span className="fx-errortext">Enter Postcode</span>
+                      <span className="fx-errortext">{__("Enter Postcode")}</span>
                     )}
                   </div>
                 </div>
@@ -1086,13 +1089,13 @@ export default function Checkout(props) {
             aria-labelledby="payment-methods-title"
           >
             <div className="fx-payment-methods-heading">
-              <h2 id="payment-methods-title">Choose payment method</h2>
-              <p>Select how you’d like to pay for this booking.</p>
+              <h2 id="payment-methods-title">{__("Choose payment method")}</h2>
+              <p>{__("Select how you’d like to pay for this booking.")}</p>
             </div>
 
             {paymentMethodsLoading && (
               <div className="fx-payment-methods-status" role="status">
-                Loading payment methods...
+                {__("Loading payment methods...")}
               </div>
             )}
 
@@ -1103,8 +1106,8 @@ export default function Checkout(props) {
                   type="button"
                   className="fx-payment-methods-retry"
                   onClick={getPaymentMethods}
-                  aria-label="Retry loading payment methods"
-                  title="Retry"
+                  aria-label={__("Retry loading payment methods")}
+                  title={__("Retry")}
                 >
                   <RefreshCw size={17} aria-hidden="true" />
                 </button>
@@ -1188,7 +1191,7 @@ export default function Checkout(props) {
               </div>
             )}
           </section>
-          <label htmlFor="option2">Invoice Request</label>
+          <label htmlFor="option2">{__("Invoice Request")}</label>
           <InputSwitch
             checked={invoice ? true : false}
             onChange={() => setInvoice(!invoice)}
@@ -1199,10 +1202,10 @@ export default function Checkout(props) {
           <div className="fx-commoninput fx-invoice-fields">
             <div className="fx-inputgroup">
               <div className="fx-element-box">
-                <label>Company Name</label>
+                <label>{__("Company Name")}</label>
                 <input
                   type="text"
-                  placeholder="Company Name"
+                  placeholder={__("Company Name")}
                   value={billdata.invoice_company_name || ""}
                   className={errorlist.invoice_company_name ? "fx-invalid" : ""}
                   onChange={(e) =>
@@ -1213,14 +1216,14 @@ export default function Checkout(props) {
                   }
                 />
                 {errorlist.invoice_company_name && (
-                  <span className="fx-errortext">Enter Company Name</span>
+                  <span className="fx-errortext">{__("Enter Company Name")}</span>
                 )}
               </div>
               <div className="fx-element-box">
-                <label>VAT ID</label>
+                <label>{__("VAT ID")}</label>
                 <input
                   type="text"
-                  placeholder="VAT ID"
+                  placeholder={__("VAT ID")}
                   value={billdata.invoice_vat_id || ""}
                   className={errorlist.invoice_vat_id ? "fx-invalid" : ""}
                   onChange={(e) =>
@@ -1228,16 +1231,16 @@ export default function Checkout(props) {
                   }
                 />
                 {errorlist.invoice_vat_id && (
-                  <span className="fx-errortext">Enter VAT ID</span>
+                  <span className="fx-errortext">{__("Enter VAT ID")}</span>
                 )}
               </div>
             </div>
             <div className="fx-inputgroup">
               <div className="fx-element-box">
-                <label>Company Address</label>
+                <label>{__("Company Address")}</label>
                 <input
                   type="text"
-                  placeholder="Company Address"
+                  placeholder={__("Company Address")}
                   className={
                     errorlist.invoice_company_address
                       ? "fx-invalid bigtextbox"
@@ -1252,13 +1255,13 @@ export default function Checkout(props) {
                   }
                 />
                 {errorlist.invoice_company_address && (
-                  <span className="fx-errortext">Enter Company Address</span>
+                  <span className="fx-errortext">{__("Enter Company Address")}</span>
                 )}
               </div>
             </div>
             <div className="fx-inputgroup">
               <div className="fx-element-box fx-selectwrapper">
-                <label>Company Country</label>
+                <label>{__("Company Country")}</label>
                 <select
                   value={billdata.invoice_company_country || ""}
                   className={
@@ -1271,7 +1274,7 @@ export default function Checkout(props) {
                     })
                   }
                 >
-                  <option value="">Select Country</option>
+                  <option value="">{__("Select Country")}</option>
                   {countries &&
                     Object.keys(countries.data).map((code) => (
                       <option key={code} value={code}>
@@ -1280,7 +1283,7 @@ export default function Checkout(props) {
                     ))}
                 </select>
                 {errorlist.invoice_company_country && (
-                  <span className="fx-errortext">Select Company Country</span>
+                  <span className="fx-errortext">{__("Select Company Country")}</span>
                 )}
               </div>
             </div>
@@ -1294,22 +1297,23 @@ export default function Checkout(props) {
             onClick={() => setTerm(!term)}
           />
           <label htmlFor="terms-checkbox" className="checkbox-label">
-            You are making a direct booking.Please accept{" "}
-            <a
-              href={toSafeUrl(props.termsAndConditionLink) || undefined}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              terms and conditions
-            </a>{" "}
-            before proceeding
+            {withElement(
+              __("You are making a direct booking.Please accept %s before proceeding"),
+              <a
+                href={toSafeUrl(props.termsAndConditionLink) || undefined}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {__("terms and conditions")}
+              </a>,
+            )}
           </label>
         </div>
         <div className="fx-element-box fx-checkoutbuttonbar">
           <input
             type="button"
             className="btn-primary"
-            value={selectedPaymentCard?.button || "CONTINUE"}
+            value={selectedPaymentCard?.button || __("CONTINUE")}
             disabled={paymentMethodsLoading || !selectedPaymentCard}
             onClick={() => checkout()}
           />

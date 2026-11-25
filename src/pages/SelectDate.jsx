@@ -29,8 +29,12 @@ import { useRedeemParticipants } from "../Utils/redeemParticipants";
 import RedeemParticipants from "../components/RedeemParticipants";
 import RedeemByPhone from "../components/RedeemByPhone";
 import { isPhoneOnlyRedemption } from "../Utils/redeemByPhone";
+import { calendarLocaleOptions } from "../i18n/dates";
 
+// Same locale as CalendarPage, with the page language's month/day names, so
+// whichever loads last does not reset the other's translated names.
 addLocale("en-monday", {
+  ...calendarLocaleOptions(),
   firstDayOfWeek: 1, // Monday
 });
 

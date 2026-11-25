@@ -6,15 +6,24 @@ import "primereact/resources/primereact.min.css";
 import { addLocale } from "primereact/api";
 import moment from "moment";
 import useDeviceType from "../Utils/useDeviceType";
+import { calendarLocaleOptions } from "../i18n/dates";
 
 // Store dates arrive as "YYYY-MM-DD" strings, Date objects or ISO strings.
 // new Date("YYYY-MM-DD") parses as UTC midnight and shows the previous day west
 // of UTC, so parse through moment (local midnight) instead.
 const toLocalDate = (value) => (value ? moment(value).toDate() : null);
 
-addLocale("en-monday", {
-  firstDayOfWeek: 1, // Monday
-});
+// Registered on first render, not at import: the names come from the page
+// language, which is only known once the translation catalog has loaded.
+let calendarLocaleReady = false;
+const ensureCalendarLocale = () => {
+  if (calendarLocaleReady) return;
+  addLocale("en-monday", {
+    ...calendarLocaleOptions(),
+    firstDayOfWeek: 1, // Monday
+  });
+  calendarLocaleReady = true;
+};
 
 const CalendarPage = ({
   value,
@@ -29,6 +38,7 @@ const CalendarPage = ({
   inline = false,
   ...otherProps
 }) => {
+  ensureCalendarLocale();
   const isDesktop = useDeviceType();
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [viewDate, setViewDate] = useState(() => {

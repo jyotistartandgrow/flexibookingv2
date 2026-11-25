@@ -8,6 +8,8 @@ import { PersistorContext } from "./store/PersistorContext";
 import { PersistGate } from "redux-persist/integration/react";
 import { setGift, setOpenDatePurchase } from "./store/step1Slice";
 import { initializeBookingNonce } from "./Utils/Interceptor";
+import { initI18n, translateDynamic } from "./i18n";
+import { applyMomentLocale } from "./i18n/dates";
 
 // Shortcode container id -> initial route. Each one found on the page gets
 // its own isolated store, saved as sessionStorage "persist:fx-<id>".
@@ -92,11 +94,17 @@ const toPositiveId = (value, fallback = 0) =>
     ? String(value).trim()
     : fallback;
 
-function mountAll() {
+async function mountAll() {
   // Start nonce loading once for all API requests made by this frontend.
   initializeBookingNonce().catch((error) => {
     console.error("Unable to initialize the booking API nonce.", error);
   });
+
+  // Load the translation catalog before rendering so text never flashes in
+  // English. On WordPress pages it is already inline, so this resolves at
+  // once; it never rejects (falls back to English on failure).
+  await initI18n();
+  applyMomentLocale();
 
   const present = SHORTCODES.filter(([id]) => document.getElementById(id));
   if (!present.length) return;
@@ -154,7 +162,13 @@ function mountReactApp(id, initialRoute, isNewSession) {
     categoryLabelVisibility: el.dataset.categoryLabelVisibility || "true",
     termsAndConditionLink: el.dataset.termsAndConditionLink || "",
     secondaryColor: el.dataset.secondaryColor,
-    stepTitles: parseJsonAttr(el.dataset.stepTitles, {}),
+    // Step titles come from shortcode attributes (PHP defaults are English);
+    // translate the ones known to Translation Management, keep custom text.
+    stepTitles: Object.fromEntries(
+      Object.entries(parseJsonAttr(el.dataset.stepTitles, {})).map(
+        ([key, title]) => [key, translateDynamic(title)],
+      ),
+    ),
     stepsVisibility: parseJsonAttr(el.dataset.stepsVisibility, {
       step_1_title_visible: "true",
       step_2_title_visible: "true",

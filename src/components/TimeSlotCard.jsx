@@ -1,3 +1,5 @@
+import { __, sprintf } from "../i18n";
+
 export default function TimeSlotCard({
   time,
   price,
@@ -18,7 +20,9 @@ export default function TimeSlotCard({
       <span className="fx-ms-slot-meta">
         <strong>{price}</strong>
         {/* Hidden when service-details sets show_cap_left_text to false. */}
-        {left !== null && left !== undefined && <small>{left} left</small>}
+        {left !== null && left !== undefined && (
+          <small>{sprintf(__("%s left"), left)}</small>
+        )}
       </span>
     </button>
   );

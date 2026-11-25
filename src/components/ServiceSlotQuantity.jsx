@@ -1,6 +1,7 @@
 import { ServiceSlotTabs } from "./ServiceSlotSelection";
 import { getServiceSlotLists } from "../Utils/serviceSlots";
 import { decodeHtml } from "../Utils/Functions";
+import { __, sprintf } from "../i18n";
 
 /**
  * "total_guests" mode (participant_input_mode): the original slot design — a
@@ -32,10 +33,10 @@ export default function ServiceSlotQuantity({
         onTabChange={onTabChange}
         disabled={disabled}
       />
-      <h5>Choose the time</h5>
+      <h5>{__("Choose the time")}</h5>
       <div className="fx-timelistboxbar">
         {visibleSlots.length === 0 && (
-          <p className="fx-noslots">No slots available</p>
+          <p className="fx-noslots">{__("No slots available")}</p>
         )}
         {visibleSlots.map((item) => {
           const isSelected = selectedSlot === item.time_slot;
@@ -70,7 +71,10 @@ export default function ServiceSlotQuantity({
                         className="decrement"
                         disabled={disabled || value <= 0}
                         onClick={() => onChange(item, -1)}
-                        aria-label={`Remove one guest at ${item.time_slot}`}
+                        aria-label={sprintf(
+                          __("Remove one guest at %s"),
+                          item.time_slot,
+                        )}
                       >
                         -
                       </button>
@@ -80,14 +84,17 @@ export default function ServiceSlotQuantity({
                         min={0}
                         max={capacityLeft}
                         readOnly
-                        aria-label={`Guests at ${item.time_slot}`}
+                        aria-label={sprintf(__("Guests at %s"), item.time_slot)}
                       />
                       <button
                         type="button"
                         className="increment"
                         disabled={disabled || value >= capacityLeft}
                         onClick={() => onChange(item, 1)}
-                        aria-label={`Add one guest at ${item.time_slot}`}
+                        aria-label={sprintf(
+                          __("Add one guest at %s"),
+                          item.time_slot,
+                        )}
                       >
                         +
                       </button>

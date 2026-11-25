@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setSessionExpired } from "../store/step4Slice";
 import { setStep } from "../store/step1Slice";
+import { __, sprintf } from "../i18n";
 
 function formatTime(seconds) {
   const m = String(Math.floor(seconds / 60)).padStart(2, "0");
@@ -53,14 +54,14 @@ export default function CountdownTimer({ startSeconds = 180 }) {
     <div>
       <h4>
         {running && !sessionExpired
-          ? `Session ends in ${formatTime(time)}`
-          : "Session expired!"}
+          ? sprintf(__("Session ends in %s"), formatTime(time))
+          : __("Session expired!")}
       </h4>
       {sessionExpired && (
         <input
           type="button"
           className="btn-primary"
-          value="Re-initiate Payment"
+          value={__("Re-initiate Payment")}
           onClick={() => reinitiate()}
         />
       )}
