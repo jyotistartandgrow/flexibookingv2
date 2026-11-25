@@ -218,6 +218,11 @@ svg.p-icon.p-datepicker-prev-icon {
   padding: 0px;
 }
 
+.fx-bottom-bar input.btn-secondary.fx-skip:hover {
+    color: #fff;
+    background: var(--primary-color);
+}
+
 @media screen and (max-width: 768px) {
   /* body{
     overflow: auto !important;
