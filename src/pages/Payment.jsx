@@ -14,6 +14,7 @@ import useDeviceType from "../Utils/useDeviceType";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import closeicon from "../assets/close2.svg";
+import { applyCouponToBooking } from "../Utils/coupons";
 
 const stripePromiseCache = {};
 
@@ -26,6 +27,8 @@ export default function Payment(props) {
   const cart = useSelector((state) => state.step2.cart);
   const bookingkey = useSelector((state) => state.step3.bookingkey);
   const couponcode = useSelector((state) => state.step1.couponcode);
+  // Coupons already applied to this booking from the checkout page.
+  const bookingCoupons = useSelector((state) => state.step1.bookingCoupons);
   const checkoutkey = useSelector((state) => state.step4.checkoutkey);
   // Coupons are applied once per checkout session, not every time the user
   // navigates back to the payment step.
@@ -71,46 +74,47 @@ export default function Payment(props) {
       },
     );
     if (data && data.status == 200 && data?.data.status) {
+      // discount may arrive as a number or as formatted text ("€13,00");
+      // keep a number for the "is there a discount" check and the text to show.
+      const rawDiscount = data?.data?.discount;
+      const discountNumber =
+        Number(
+          String(rawDiscount ?? "")
+            .replace(/[^\d,.-]/g, "")
+            .replace(",", "."),
+        ) || 0;
       latestCart = {
         ...latestCart,
         total_formatted: data?.data?.total,
-        discount: data?.data?.discount,
+        discount: discountNumber,
+        discount_formatted:
+          typeof rawDiscount === "string" && Number.isNaN(Number(rawDiscount))
+            ? rawDiscount
+            : latestCart.discount_formatted,
         subtotal: data?.data?.subtotal,
       };
       dispatch(setCart(latestCart));
     }
-    if (couponcode && couponcode.length > 0) {
-      // apply coupons one by one
-      for (let i = 0; i < couponcode.length; i++) {
-        const { data: coupondata } = await axiosInstance.post(`/apply-coupon`, {
-          booking_key: bookingkey,
-          coupon_code: couponcode[i],
+    const alreadyApplied =
+      bookingCoupons?.bookingKey === bookingkey ? bookingCoupons.codes : [];
+    const pendingCoupons = (couponcode || []).filter(
+      (code) => !alreadyApplied.includes(code),
+    );
+    // Date-screen coupons are applied here, one by one.
+    for (const code of pendingCoupons) {
+      const result = await applyCouponToBooking(bookingkey, code, latestCart);
+      if (result.ok) {
+        latestCart = result.cart;
+        dispatch(setCart(latestCart));
+      } else {
+        Swal.fire({
+          iconHtml: `<img class="fx-coupon-close-icon" src="${closeicon}">`,
+          titleText: toPlainText(`${code} Coupon Error`),
+          text: result.error,
+          customClass: {
+            popup: "fx-coupon-box-popup",
+          },
         });
-
-        if (
-          coupondata &&
-          coupondata.status == 200 &&
-          coupondata.data.status == true
-        ) {
-          latestCart = {
-            ...latestCart,
-            total: coupondata?.data?.original_data?.amount,
-            total_formatted: coupondata?.data?.total,
-            discount: coupondata?.data?.coupon_discount,
-            subtotal: coupondata?.data?.original_data?.subtotal,
-          };
-          dispatch(setCart(latestCart));
-        } else {
-          Swal.fire({
-            iconHtml: `<img class="fx-coupon-close-icon" src="${closeicon}">`,
-            titleText: toPlainText(`${couponcode[i]} Coupon Error`),
-            text:
-              decodeHtml(coupondata?.data?.error) || "Failed to apply coupon",
-            customClass: {
-              popup: "fx-coupon-box-popup",
-            },
-          });
-        }
       }
     }
   };

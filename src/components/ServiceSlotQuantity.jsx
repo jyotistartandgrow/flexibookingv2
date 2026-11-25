@@ -15,15 +15,19 @@ export default function ServiceSlotQuantity({
   onTabChange,
   onChange,
   disabled,
-  showCapacityLeft = true,
   fallbackPrice,
+  hideTabs = false,
 }) {
-  const { uniqueSlots, visibleSlots } = getServiceSlotLists(availability, tab);
+  // hideTabs: no tab bar, always the "All" list.
+  const { uniqueSlots, visibleSlots } = getServiceSlotLists(
+    availability,
+    hideTabs ? "all" : tab,
+  );
 
   return (
     <div className="fx-service-slot-quantity" aria-disabled={disabled}>
       <ServiceSlotTabs
-        show={uniqueSlots.length > 1}
+        show={!hideTabs && uniqueSlots.length > 1}
         tab={tab}
         onTabChange={onTabChange}
         disabled={disabled}
@@ -45,11 +49,6 @@ export default function ServiceSlotQuantity({
             >
               <div className="fx-timeslotsection">
                 <div className="time">{item.time_slot}</div>
-                {showCapacityLeft && (
-                  <small className="fx-slot-capacity-left">
-                    {capacityLeft} left
-                  </small>
-                )}
               </div>
               {/* Same price source as the slot boxes in the age-wise view. */}
               <div className="fx-slot-row-price">

@@ -1080,7 +1080,7 @@ export default function Checkout(props) {
               </div>
             </>
           )}
-          <CouponSection />
+          <CouponSection bookingKey={bookingkey} />
           <section
             className="fx-payment-methods"
             aria-labelledby="payment-methods-title"

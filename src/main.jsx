@@ -168,6 +168,9 @@ function mountReactApp(id, initialRoute, isNewSession) {
     showStepsAfterProceed: el.dataset.showStepsAfterProceed || "true",
     showProceedButton: el.dataset.showProceedButton || "true",
     showGiftButton: el.dataset.showGiftButton || "false",
+    // data-hide-slotbar="true": no Morning / Afternoon / All tabs in the
+    // service popup; all slots are listed.
+    hideSlotbar: el.dataset.hideSlotbar || "false",
     serviceIds: (el.dataset.serviceIds || "")
       .split(",")
       .map((serviceId) => toPositiveId(serviceId, ""))
@@ -185,7 +188,7 @@ function mountReactApp(id, initialRoute, isNewSession) {
       pageSecondaryColorSet = true;
     }
   }
-
+console.log("Mounting booking shortcode", id, "with props:", props);
   createRoot(el).render(
     <StrictMode>
       <Provider store={store}>

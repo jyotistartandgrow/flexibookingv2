@@ -359,7 +359,10 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                 })}
             </div>
             <div className="fx-right-bottom-bar">
-              {cart.discount > 0 && (
+              {/* discount is a number; discount_formatted is the text to show
+                  (older carts may hold the formatted text in discount). */}
+              {(Number(cart.discount) > 0 ||
+                Boolean(cart.discount_formatted)) && (
                 <div className="fx-subtotal-discount-bar">
                   <div className="fx-subtotalbar">
                     <p>
@@ -368,7 +371,16 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                   </div>
                   <div className="fx-discountbar">
                     <p>
-                      Discount <span> {decodeHtml(cart.discount)}</span>
+                      Discount
+                      {cart.coupon_codes?.length > 0 &&
+                        ` (${cart.coupon_codes.join(", ")})`}{" "}
+                      <span>
+                        {" "}
+                        -
+                        {decodeHtml(
+                          String(cart.discount_formatted || cart.discount),
+                        )}
+                      </span>
                     </p>
                   </div>
                 </div>
