@@ -17,6 +17,7 @@ import {
 import CountdownTimer from "./CountdownTimer";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { __, sprintf } from "../i18n";
 
 // A PaymentIntent that reached one of these is paid for as far as the booking
 // is concerned (`requires_capture` = authorised, captured later by the server).
@@ -129,7 +130,7 @@ export default function CheckoutForm() {
             showConfirmButton: false,
             timer: 3000, // auto-close after 3 seconds
             icon: "error", // 'success', 'error', 'warning', 'info', 'question'
-            title: "Session Expired! Please re-initiate payment.",
+            title: __("Session Expired! Please re-initiate payment."),
           });
           dispatch(setPaymentstring(null));
           dispatch(setCheckoutkey(null));
@@ -160,7 +161,9 @@ export default function CheckoutForm() {
       });
 
       if (!data || data.status != 200) {
-        setMessage(data?.message || "There is some error , please try again");
+        setMessage(
+          data?.message || __("There is some error , please try again"),
+        );
         return;
       }
 
@@ -169,7 +172,7 @@ export default function CheckoutForm() {
       let paymentSuccess = false;
 
       if (SUCCESS_INTENT_STATUSES.includes(backendStatus)) {
-        setMessage("Payment successful!");
+        setMessage(__("Payment successful!"));
         paymentSuccess = true;
       } else if (
         backendStatus == "success" ||
@@ -180,7 +183,9 @@ export default function CheckoutForm() {
         );
         if (!clientSecret) {
           setMessage(
-            "Payment could not be confirmed because the payment reference returned by the server could not be read. Please try again.",
+            __(
+              "Payment could not be confirmed because the payment reference returned by the server could not be read. Please try again.",
+            ),
           );
         } else {
           const result = await finishPaymentIntent(clientSecret, cardElement);
@@ -188,15 +193,17 @@ export default function CheckoutForm() {
           if (result?.error) {
             setMessage(result.error.message);
           } else if (SUCCESS_INTENT_STATUSES.includes(resultStatus)) {
-            setMessage("Payment successful!");
+            setMessage(__("Payment successful!"));
             paymentSuccess = true;
           } else if (resultStatus == "processing") {
             setMessage(
-              "Your payment is still being processed. Please wait a moment before trying again.",
+              __(
+                "Your payment is still being processed. Please wait a moment before trying again.",
+              ),
             );
           } else {
             setMessage(
-              "Card authentication was not completed. Please try again.",
+              __("Card authentication was not completed. Please try again."),
             );
           }
         }
@@ -204,7 +211,7 @@ export default function CheckoutForm() {
         setMessage(
           paymentResponse?.message ||
             data?.message ||
-            "Payment could not be processed. Please try again.",
+            __("Payment could not be processed. Please try again."),
         );
       }
 
@@ -261,7 +268,7 @@ export default function CheckoutForm() {
             ) {
               throw new Error(
                 redeemResponse?.data?.message ||
-                  "Unable to complete voucher redemption",
+                  __("Unable to complete voucher redemption"),
               );
             }
           }
@@ -277,7 +284,7 @@ export default function CheckoutForm() {
           if (paymentSaveResponse?.data?.status != 200) {
             throw new Error(
               paymentSaveResponse?.data?.message ||
-                "Unable to save the successful booking payment",
+                __("Unable to save the successful booking payment"),
             );
           }
 
@@ -310,7 +317,7 @@ export default function CheckoutForm() {
           const completionMessage =
             completionError?.response?.data?.message ||
             completionError?.message ||
-            "Payment succeeded, but the booking could not be finalized";
+            __("Payment succeeded, but the booking could not be finalized");
           setMessage(completionMessage);
           Swal.fire({
             toast: true,
@@ -327,7 +334,7 @@ export default function CheckoutForm() {
         submitError?.data?.message ||
         submitError?.response?.data?.message ||
         submitError?.message ||
-        "Payment could not be processed. Please try again.";
+        __("Payment could not be processed. Please try again.");
       setMessage(submitMessage);
       Swal.fire({
         toast: true,
@@ -364,8 +371,8 @@ export default function CheckoutForm() {
           <div className="fx-element-box fx-paymentbutton">
             <button disabled={!stripe || loading} className="btn-primary">
               {loading
-                ? "Processing..."
-                : "Pay " + decodeHtml(cart.total_formatted)}
+                ? __("Processing...")
+                : sprintf(__("Pay %s"), decodeHtml(cart.total_formatted))}
             </button>
           </div>
           {message && <p>{message}</p>}

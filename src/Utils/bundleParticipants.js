@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axiosInstance from "./Interceptor";
+import { __ } from "../i18n";
 import {
   getParticipantSelection,
   normalizeParticipantGroups,
@@ -197,7 +198,7 @@ export function useComponentParticipants(request) {
           key: requestKey,
           components: [],
           loading: false,
-          error: errorMessage(error, "Unable to load participant options."),
+          error: errorMessage(error, __("Unable to load participant options.")),
         }));
       });
     return () => {
@@ -281,7 +282,7 @@ export function useComponentParticipants(request) {
         ...previous,
         error: errorMessage(
           error,
-          "Unable to verify availability for these participants.",
+          __("Unable to verify availability for these participants."),
         ),
       }));
       return false;

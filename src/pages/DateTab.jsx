@@ -7,8 +7,14 @@ import { setDate, setGift, setLoading } from "../store/step1Slice";
 import { setService } from "../store/step2Slice";
 import { decodeHtml } from "../Utils/Functions";
 import Service from "./Service";
+import { __, getLanguageTag } from "../i18n";
 
-const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+// Monday-first short day names in the page language ("Mon".."Sun" in
+// English). moment's list starts on Sunday and follows the page language.
+const weekdays = () => {
+  const names = moment.weekdaysShort();
+  return [...names.slice(1), names[0]];
+};
 
 const toIso = (year, monthIndex, day) => {
   const month = String(monthIndex + 1).padStart(2, "0");
@@ -66,8 +72,10 @@ const isDateBookable = (availability) =>
 
 const formatSelectedDate = (iso) => {
   const date = new Date(`${iso}T00:00:00`);
-  const weekday = date.toLocaleDateString("en-GB", { weekday: "short" });
-  const month = date.toLocaleDateString("en-GB", { month: "long" });
+  const weekday = date.toLocaleDateString(getLanguageTag(), {
+    weekday: "short",
+  });
+  const month = date.toLocaleDateString(getLanguageTag(), { month: "long" });
   return `${weekday}, ${date.getDate()} ${month} ${date.getFullYear()}`;
 };
 
@@ -150,7 +158,7 @@ export default function DateTab(props) {
     visibleMonth.year,
     visibleMonth.month,
     1,
-  ).toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+  ).toLocaleDateString(getLanguageTag(), { month: "long", year: "numeric" });
 
   const availabilityByDate = useMemo(
     () =>
@@ -186,13 +194,16 @@ export default function DateTab(props) {
           dispatch(setService(data.data.id || serviceid));
         } else {
           setServiceDetails(null);
-          setErrorMessage(data?.message || "Unable to load service details.");
+          setErrorMessage(
+            data?.message || __("Unable to load service details."),
+          );
         }
       } catch (error) {
         if (requestId !== detailRequestIdRef.current) return;
         setServiceDetails(null);
         setErrorMessage(
-          error?.response?.data?.message || "Unable to load service details.",
+          error?.response?.data?.message ||
+            __("Unable to load service details."),
         );
       } finally {
         if (requestId === detailRequestIdRef.current) {
@@ -217,7 +228,7 @@ export default function DateTab(props) {
   useEffect(() => {
     if (!serviceid) {
       setServiceDetails(null);
-      setErrorMessage("A service ID is required to load this calendar.");
+      setErrorMessage(__("A service ID is required to load this calendar."));
       return;
     }
 
@@ -270,7 +281,7 @@ export default function DateTab(props) {
         setCalendarSlots([]);
         setErrorMessage(
           error?.response?.data?.message ||
-            "Unable to load calendar availability.",
+            __("Unable to load calendar availability."),
         );
       })
       .finally(() => {
@@ -332,7 +343,7 @@ export default function DateTab(props) {
               style={{ color: serviceDetails?.svc_name_colour || undefined }}
             >
               {serviceDetails?.service_title ||
-                (detailsLoading ? "Loading service..." : "Service")}
+                (detailsLoading ? __("Loading service...") : __("Service"))}
             </h2>
             <InfoIcon />
             {serviceDetails?.category_name && (
@@ -358,8 +369,8 @@ export default function DateTab(props) {
         <div className="fx-divider" />
 
         <div className="fx-date-heading">
-          <strong>Choose your date</strong>
-          <span>Monday – Sunday</span>
+          <strong>{__("Choose your date")}</strong>
+          <span>{__("Monday – Sunday")}</span>
         </div>
 
         <div className="fx-calendar">
@@ -367,7 +378,7 @@ export default function DateTab(props) {
             <button
               type="button"
               className="fx-nav"
-              aria-label="Previous month"
+              aria-label={__("Previous month")}
               onClick={() => shiftMonth(-1)}
               disabled={!canGoToPreviousMonth}
             >
@@ -377,7 +388,7 @@ export default function DateTab(props) {
             <button
               type="button"
               className="fx-nav"
-              aria-label="Next month"
+              aria-label={__("Next month")}
               onClick={() => shiftMonth(1)}
             >
               <Chevron direction="right" />
@@ -385,7 +396,7 @@ export default function DateTab(props) {
           </div>
 
           <div className="fx-weekdays" aria-hidden="true">
-            {WEEKDAYS.map((day) => (
+            {weekdays().map((day) => (
               <span key={day}>{day}</span>
             ))}
           </div>
@@ -448,30 +459,30 @@ export default function DateTab(props) {
         </div>
 
         {calendarLoading && (
-          <p className="fx-calendar-message">Loading availability...</p>
+          <p className="fx-calendar-message">{__("Loading availability...")}</p>
         )}
         {!calendarLoading &&
           !calendarSlots.some(isDateBookable) &&
           serviceid && (
             <p className="fx-calendar-message">
-              No dates are available for this month.
+              {__("No dates are available for this month.")}
             </p>
           )}
 
         <div className="fx-legend">
           <span className="fx-legend-item">
             <i className="fx-dot fx-dot-available" />
-            Available
+            {__("Available")}
           </span>
           <span className="fx-legend-item">
             <i className="fx-dot fx-dot-unavailable" />
-            Unavailable
+            {__("Unavailable")}
           </span>
           <span className="fx-legend-item">
             <i className="fx-selected-mark">
               <CheckIcon />
             </i>
-            Selected
+            {__("Selected")}
           </span>
         </div>
 
@@ -480,7 +491,7 @@ export default function DateTab(props) {
             <div className="fx-selected-left">
               <CalendarIcon />
               <div className="fx-selected-info">
-                <span>Selected date</span>
+                <span>{__("Selected date")}</span>
                 <strong>{formatSelectedDate(selectedDate)}</strong>
               </div>
             </div>
@@ -503,7 +514,7 @@ export default function DateTab(props) {
                 setPopupRequest((request) => request + 1);
               }}
             >
-              <span>Proceed</span>
+              <span>{__("Proceed")}</span>
               <span className="fx-arrow" aria-hidden="true">
                 →
               </span>
@@ -522,7 +533,7 @@ export default function DateTab(props) {
                   setPopupRequest((request) => request + 1);
                 }}
               >
-                <i class="pi pi-gift"></i> Gift
+                <i class="pi pi-gift"></i> {__("Gift")}
               </button>
             )}
         </div>

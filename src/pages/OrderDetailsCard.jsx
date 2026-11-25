@@ -4,6 +4,7 @@ import moment from "moment";
 import { decodeHtml } from "../Utils/Functions";
 import Commonbox from "../components/Commonbox";
 import { setTopbar } from "../store/step1Slice";
+import { __ } from "../i18n";
 
 const OrderDetailsCard = (props) => {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ const OrderDetailsCard = (props) => {
         {/* Header Section */}
         <div onClick={toggleCard}>
           <div className="fx-header-row">
-            <span className="fx-title">Order Details</span>
+            <span className="fx-title">{__("Order Details")}</span>
             <div className="fx-chevron"></div>
           </div>
           {/* Summary Section */}

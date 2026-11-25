@@ -1,4 +1,5 @@
 import moment from "moment";
+import { __, sprintf } from "../i18n";
 
 export const getParticipantSlotStart = (item) => {
   const value =
@@ -44,13 +45,13 @@ export const normalizeParticipantGroups = (config) => {
 export const getParticipantSummary = (service) => {
   const groups = normalizeParticipantGroups(service?.participant_configuration);
   const labels = {
-    adult: "Adults",
-    adults: "Adults",
-    children: "Children",
-    senior: "Seniors",
-    seniors: "Seniors",
-    infant: "Infants",
-    infants: "Infants",
+    adult: __("Adults"),
+    adults: __("Adults"),
+    children: __("Children"),
+    senior: __("Seniors"),
+    seniors: __("Seniors"),
+    infant: __("Infants"),
+    infants: __("Infants"),
   };
   const summary = new Map();
   for (const [key, value] of Object.entries(service?.participants || {})) {
@@ -141,14 +142,17 @@ export const getParticipantSelection = (
     config?.slot?.bookable !== false &&
     !["not_on_sale", "too_late"].includes(config?.slot?.state);
   const adultValid = !config?.adult_required || accompanied;
-  let message = "Please choose a valid participant quantity for this slot.";
+  let message = __("Please choose a valid participant quantity for this slot.");
   if (total > maximum || counting > physicalCapacity)
-    message =
-      "This selection exceeds the available capacity. Reduce participants or choose another slot.";
+    message = __(
+      "This selection exceeds the available capacity. Reduce participants or choose another slot.",
+    );
   else if (total > 0 && !adultValid)
-    message = "At least one accompanying adult or senior is required.";
+    message = __("At least one accompanying adult or senior is required.");
   else if (!available)
-    message = "This slot is no longer available. Please choose another slot.";
+    message = __(
+      "This slot is no longer available. Please choose another slot.",
+    );
   return {
     total,
     counting,
@@ -312,9 +316,10 @@ export const getCategoryParticipantSelection = (
     valid: base.valid && incomplete.length === 0,
     message:
       base.valid && incomplete.length > 0
-        ? `Complete the age breakdown for ${incomplete
-            .map((category) => category.name)
-            .join(", ")}.`
+        ? sprintf(
+            __("Complete the age breakdown for %s."),
+            incomplete.map((category) => category.name).join(", "),
+          )
         : base.message,
   };
 };

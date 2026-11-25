@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "./Interceptor";
+import { __ } from "../i18n";
 
 // The quote lives in the capacity namespace, not booking/v1.
 const participantQuoteUrl = (serviceId) =>
@@ -52,7 +53,7 @@ export function useParticipantQuote(request) {
               error?.data?.message ||
               error?.response?.data?.message ||
               error?.message ||
-              "Unable to calculate the price for these participants.",
+              __("Unable to calculate the price for these participants."),
           });
         });
     }, 250);

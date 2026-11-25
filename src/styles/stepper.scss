@@ -66,6 +66,12 @@
   /* enough height for steps to show */
 }
 
+/* Labels are written in normal case so they share translations with the rest
+   of the plugin ("Services", "Checkout"...); CSS shows them in capitals. */
+.fx-stepper-tabstyle .step span {
+  text-transform: uppercase;
+}
+
 .fx-stepper-tabstyle .step {
   position: absolute;
   top: 0;

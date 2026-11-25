@@ -6,6 +6,7 @@ import axiosInstance from "../Utils/Interceptor";
 import { decodeHtml } from "../Utils/Functions";
 import moment from "moment";
 import Swal from "sweetalert2";
+import { __ } from "../i18n";
 
 export default function SelectSlot() {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ export default function SelectSlot() {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Please select a slot",
+        title: __("Please select a slot"),
       });
       return;
     }
@@ -82,7 +83,7 @@ export default function SelectSlot() {
 
           <div className="fx-slots-list">
             {voucherdetail?.slots?.length == 0 && (
-              <div>No slots available for the selected date.</div>
+              <div>{__("No slots available for the selected date.")}</div>
             )}
             {voucherdetail?.slots?.map((slot) => (
               <div
@@ -104,7 +105,7 @@ export default function SelectSlot() {
               className="fx-btn-continue"
               onClick={() => checkout()}
             >
-              CONTINUE
+              {__("CONTINUE")}
             </button>
           </div>
         </div>

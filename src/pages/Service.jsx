@@ -50,6 +50,7 @@ import {
   normalizeParticipantCategories,
 } from "../Utils/participants";
 import { useParticipantQuote } from "../Utils/participantQuote";
+import { __, sprintf } from "../i18n";
 
 export default function Service(props) {
   const dispatch = useDispatch();
@@ -509,7 +510,7 @@ export default function Service(props) {
         timer: 3000, // auto-close after 3 seconds
         icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
         titleText: toPlainText(
-          data?.message || "No services found for the selected date",
+          data?.message || __("No services found for the selected date"),
         ),
       });
     }
@@ -737,7 +738,7 @@ export default function Service(props) {
         timer: 3000,
         icon: "error",
         titleText: toPlainText(
-          data?.message || "Unable to load service details",
+          data?.message || __("Unable to load service details"),
         ),
       });
     }
@@ -848,7 +849,7 @@ export default function Service(props) {
         if (response?.status !== 200 || !response?.data?.categories) {
           throw new Error(
             response?.message ||
-              "Participant options are unavailable for this slot.",
+              __("Participant options are unavailable for this slot."),
           );
         }
         setParticipantConfig(response.data);
@@ -869,7 +870,7 @@ export default function Service(props) {
           error?.data?.message ||
             error?.response?.data?.message ||
             error?.message ||
-            "Unable to load participant options. Please try again.",
+            __("Unable to load participant options. Please try again."),
         );
       } finally {
         if (active) setParticipantLoading(false);
@@ -912,7 +913,7 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000,
         icon: "warning",
-        title: "Cannot select past months",
+        title: __("Cannot select past months"),
       });
       // Reset to current month
       return;
@@ -940,7 +941,7 @@ export default function Service(props) {
           d.getDate() === day,
       )
     ) {
-      tooltipText = "Date not available";
+      tooltipText = __("Date not available");
     } else {
       const matchedObj = calendarslots?.find((item) => {
         const itemDate = item?.date
@@ -953,11 +954,18 @@ export default function Service(props) {
       if (matchedObj) {
         // example: set tooltip based on matched object's properties
         if (matchedObj.single_time_slot) {
-          tooltipText = `1 Slot, (${matchedObj.total_capacity_left}) Capacity`;
+          tooltipText = sprintf(
+            __("1 Slot, (%s) Capacity"),
+            matchedObj.total_capacity_left,
+          );
         } else if (matchedObj.time_slots) {
-          tooltipText = `${matchedObj.time_slots.length} Slots, (${matchedObj.total_capacity_left}) Capacity`;
+          tooltipText = sprintf(
+            __("%1$s Slots, (%2$s) Capacity"),
+            matchedObj.time_slots.length,
+            matchedObj.total_capacity_left,
+          );
         } else {
-          tooltipText = `0 Slot`;
+          tooltipText = __("0 Slot");
         }
         tooltipText = `${tooltipText}`;
         availabilityPercent = matchedObj.capacity_left_percentage;
@@ -1104,7 +1112,9 @@ export default function Service(props) {
     const tooltipText =
       product?.bundle_tooltip ||
       product?.svc_long_desc ||
-      "Open this experience to view all included details, options, and pricing information.";
+      __(
+        "Open this experience to view all included details, options, and pricing information.",
+      );
 
     return (
       <div className="fx-tooltip-wrapper">
@@ -1136,7 +1146,7 @@ export default function Service(props) {
             className="fx-price-form"
             style={{ display: gift ? "none" : "inline" }}
           >
-            from
+            {__("from")}
           </span>
           <span className="fx-price-one">
             {decodeHtml(product.svc_price).split(",")[0]}
@@ -1161,7 +1171,7 @@ export default function Service(props) {
             }}
           >
             <a href="#" onClick={(e) => e.preventDefault()}>
-              {gift ? "Select Gift" : "Book Now"}
+              {gift ? __("Select Gift") : __("Book Now")}
             </a>
           </div>
         )}
@@ -1188,7 +1198,7 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000,
         icon: "warning",
-        title: "Maximum capacity reached",
+        title: __("Maximum capacity reached"),
       });
       return;
     }
@@ -1382,7 +1392,8 @@ export default function Service(props) {
 
       if (!nextSchedule) {
         throw new Error(
-          responseData?.message || "Unable to load the next bundle component",
+          responseData?.message ||
+            __("Unable to load the next bundle component"),
         );
       }
 
@@ -1421,7 +1432,7 @@ export default function Service(props) {
         title:
           error?.response?.data?.message ||
           error?.message ||
-          "Unable to load the next bundle component",
+          __("Unable to load the next bundle component"),
       });
     } finally {
       setBundleScheduleLoading(false);
@@ -1440,7 +1451,7 @@ export default function Service(props) {
         icon: "warning",
         title:
           bundleTimeSlots?.blocker_message ||
-          "Please choose every bundle component slot",
+          __("Please choose every bundle component slot"),
       });
       return;
     }
@@ -1452,7 +1463,7 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000,
         icon: "info",
-        title: "Please choose the participants for each included service",
+        title: __("Please choose the participants for each included service"),
       });
       return;
     }
@@ -1490,7 +1501,7 @@ export default function Service(props) {
         icon: "error",
         title:
           error?.response?.data?.message ||
-          "Unable to calculate the bundle price",
+          __("Unable to calculate the bundle price"),
       });
     }
   };
@@ -1503,7 +1514,7 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Please choose slot and capacity",
+        title: __("Please choose slot and capacity"),
       });
       return;
     }
@@ -1527,7 +1538,10 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Minimum capacity to book is " + currentitem.min_capacity,
+        title: sprintf(
+          __("Minimum capacity to book is %s"),
+          currentitem.min_capacity,
+        ),
       });
       return;
     }
@@ -1744,7 +1758,7 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000,
         icon: "warning",
-        title: "Please choose at least 1 quantity",
+        title: __("Please choose at least 1 quantity"),
       });
       return;
     }
@@ -1801,7 +1815,7 @@ export default function Service(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Failed to fetch extras",
+        title: __("Failed to fetch extras"),
       });
     }
   };
@@ -1860,7 +1874,7 @@ export default function Service(props) {
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
         titleText: toPlainText(
-          data?.message ?? "There is some error , please try again",
+          data?.message ?? __("There is some error , please try again"),
         ),
       });
       dispatch(setLoading(false));
@@ -1896,28 +1910,28 @@ export default function Service(props) {
     };
   const fetchProductsByDate = guardRequest(
     fetchProductsByDateRequest,
-    "Unable to load services for the selected date",
+    __("Unable to load services for the selected date"),
   );
   const servicedetail = guardRequest(
     servicedetailRequest,
-    "Unable to load service details",
+    __("Unable to load service details"),
   );
   const getslotavailabilitycalendar = guardRequest(
     getslotavailabilitycalendarRequest,
-    "Unable to load slot availability",
+    __("Unable to load slot availability"),
   );
   const bookservice = guardRequest(
     bookserviceRequest,
-    "Unable to calculate the price",
+    __("Unable to calculate the price"),
   );
   const giftbookservice = guardRequest(
     giftbookserviceRequest,
-    "Unable to calculate the price",
+    __("Unable to calculate the price"),
   );
-  const hasExtra = guardRequest(hasExtraRequest, "Failed to fetch extras");
+  const hasExtra = guardRequest(hasExtraRequest, __("Failed to fetch extras"));
   const addtocart = guardRequest(
     addtocartRequest,
-    "Unable to add the service to the cart",
+    __("Unable to add the service to the cart"),
   );
 
   const displayedProducts =
@@ -2060,7 +2074,7 @@ export default function Service(props) {
               }}
             >
               {props.stepTitles?.step_2_title ||
-                "What experience are you looking for?"}{" "}
+                __("What experience are you looking for?")}{" "}
             </h1>
           )}
         {/* Category filter toggle button + dropdown */}
@@ -2073,7 +2087,7 @@ export default function Service(props) {
                 className="fx-category-scroll-arrow"
                 onClick={() => scrollCategoryPills("left")}
                 disabled={!canScrollCategoryLeft}
-                aria-label="Scroll categories left"
+                aria-label={__("Scroll categories left")}
               >
                 <i className="pi pi-chevron-left"></i>
               </button>
@@ -2084,7 +2098,7 @@ export default function Service(props) {
                 className={`fx-category-pill${selectedCategory === "all" ? " fx-category-pill-active" : ""}`}
                 onClick={() => setSelectedCategory("all")}
               >
-                All
+                {__("All")}
               </button>
               {categories.map((cat, idx) => (
                 <button
@@ -2103,7 +2117,7 @@ export default function Service(props) {
                 className="fx-category-scroll-arrow"
                 onClick={() => scrollCategoryPills("right")}
                 disabled={!canScrollCategoryRight}
-                aria-label="Scroll categories right"
+                aria-label={__("Scroll categories right")}
               >
                 <i className="pi pi-chevron-right"></i>
               </button>
@@ -2190,7 +2204,7 @@ export default function Service(props) {
             !skeloading && products.length == 0 ? "show" : "hide"
           }`}
         >
-          No services found
+          {__("No services found")}
         </div>
 
         <div
@@ -2219,7 +2233,7 @@ export default function Service(props) {
                         className="fx-price-form"
                         style={{ display: gift ? "none" : "block" }}
                       >
-                        from
+                        {__("from")}
                       </span>
                       <span className="fx-price-one">
                         {decodeHtml(product.svc_price).split(",")[0]}
@@ -2245,7 +2259,7 @@ export default function Service(props) {
                         }}
                       >
                         <a href="#" onClick={(e) => e.preventDefault()}>
-                          {gift ? "Select Gift" : "Book Now"}
+                          {gift ? __("Select Gift") : __("Book Now")}
                         </a>
                       </div>
                     )}
@@ -2299,7 +2313,7 @@ export default function Service(props) {
                         className="fx-price-form"
                         style={{ display: gift ? "none" : "block" }}
                       >
-                        from
+                        {__("from")}
                       </span>
                       <span className="fx-price-one">
                         {decodeHtml(product.svc_price).split(",")[0]}
@@ -2382,7 +2396,7 @@ export default function Service(props) {
           <input
             type="submit"
             className="btn-primary fx-continue"
-            value="Continue"
+            value={__("Continue")}
             onClick={() => dispatch(setStep("extrastep"))}
           />
         </div>
@@ -2409,7 +2423,7 @@ export default function Service(props) {
             <div className="fx-popup">
               {serviceOptionList.length > 0 && !serviceOptionsConfirmed && (
                 <div className="fx-service-details-content-box">
-                  <h1>Service Variant</h1>
+                  <h1>{__("Service Variant")}</h1>
                   {serviceOptionChoices?.description && (
                     <div className="fx-info-box">
                       <span className="fx-info-icon">i</span>
@@ -2430,7 +2444,7 @@ export default function Service(props) {
                             onChange={() => selectServiceOption(option)}
                           />
                           <h3 className="fx-service-title">
-                            {decodeHtml(option?.name || "Option")}
+                            {decodeHtml(option?.name || __("Option"))}
                           </h3>
                           <div className="fx-service-description-box">
                             {/* Always render, even when empty, so option cards line up. */}
@@ -2451,7 +2465,7 @@ export default function Service(props) {
                     className="fx-service-option-continue"
                     onClick={() => setServiceOptionsConfirmed(true)}
                   >
-                    Continue
+                    {__("Continue")}
                   </button>
                 </div>
               )}
@@ -2477,7 +2491,7 @@ export default function Service(props) {
                             className="pi pi-arrow-left"
                             aria-hidden="true"
                           ></i>
-                          Back
+                          {__("Back")}
                         </button>
                       )}
                       {productDetails.svc_img && (
@@ -2534,7 +2548,7 @@ export default function Service(props) {
                                     className="readmore"
                                     onClick={() => setReadmorecl(!readmorecl)}
                                   >
-                                    {readmorecl ? "Read Less" : "Read More"}
+                                    {readmorecl ? __("Read Less") : __("Read More")}
                                   </span>
                                 )}
                             </p>
@@ -2595,7 +2609,7 @@ export default function Service(props) {
                                     className="readmore"
                                     onClick={() => setReadmorecl(!readmorecl)}
                                   >
-                                    {readmorecl ? "Read Less" : "Read More"}
+                                    {readmorecl ? __("Read Less") : __("Read More")}
                                   </span>
                                 )}
                             </p>{" "}
@@ -2634,7 +2648,7 @@ export default function Service(props) {
                                 <div className="calendarbox">
                                   <i
                                     className="pi pi-calendar"
-                                    alt="Open Calendar"
+                                    alt={__("Open Calendar")}
                                     id="fx-openCalendar"
                                     onClick={(e) =>
                                       isDesktop
@@ -2695,7 +2709,7 @@ export default function Service(props) {
                                       <path d="M20 7h-3.17l-1.41-1.41A1.98 1.98 0 0 0 14 5h-4c-.7 0-1.3.3-1.42.59L7.17 7H4a2 2 0 0 0-2 2v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2Zm-8 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
                                     </svg>
 
-                                    <span>What's included in this bundle</span>
+                                    <span>{__("What's included in this bundle")}</span>
                                   </div>
 
                                   {bundleComponents.map((component, index) => (
@@ -2840,7 +2854,7 @@ export default function Service(props) {
                                 setShowBundleSlots(true);
                             }}
                           >
-                            Continue
+                            {__("Continue")}
                           </div>
                         </div>
                       )}
@@ -2852,7 +2866,7 @@ export default function Service(props) {
                               className="fx-service-back-to-slots"
                               onClick={() => setShowParticipantStep(false)}
                             >
-                              Back to Slots
+                              {__("Back to Slots")}
                             </button>
                           )}
                           <button
@@ -2884,7 +2898,7 @@ export default function Service(props) {
                               }
                             }}
                           >
-                            Continue
+                            {__("Continue")}
                           </button>
                         </div>
                       )}
@@ -2893,7 +2907,7 @@ export default function Service(props) {
                           className="continuebtn"
                           onClick={() => giftbookservice()}
                         >
-                          Continue
+                          {__("Continue")}
                         </div>
                       )}
                     </div>
@@ -2910,7 +2924,7 @@ export default function Service(props) {
                 <div className="fx-booking-modal-header">
                   <div className="fx-bundle-modal-heading">
                     <h2 className="fx-booking-modal-title">
-                      {decodeHtml(bundleTimeSlots?.title || "Bundle slots")}
+                      {decodeHtml(bundleTimeSlots?.title || __("Bundle slots"))}
                     </h2>
                     <p>{decodeHtml(bundleTimeSlots?.description || "")}</p>
                   </div>
@@ -2929,7 +2943,10 @@ export default function Service(props) {
                       const componentQuantityLabel = Number.isFinite(
                         componentQuantity,
                       )
-                        ? `Quantity: ${componentQuantity * bundleQuantity}`
+                        ? sprintf(
+                            __("Quantity: %s"),
+                            componentQuantity * bundleQuantity,
+                          )
                         : component?.quantity_label || "";
                       const selectedComponentSlot =
                         selectedBundleComponentSlots.find(
@@ -3023,7 +3040,12 @@ export default function Service(props) {
                             <p className="fx-component-waiting-message">
                               {decodeHtml(
                                 component?.message ||
-                                  `Choose slot after completing Component ${Math.max(1, position - 1)}`,
+                                  sprintf(
+                                    __(
+                                      "Choose slot after completing Component %s",
+                                    ),
+                                    Math.max(1, position - 1),
+                                  ),
                               )}
                             </p>
                           )}
@@ -3033,9 +3055,9 @@ export default function Service(props) {
                               {!hideSlotbar && allComponentSlots.length > 1 && (
                                 <div className="fx-bundle-slot-tabs">
                                   {[
-                                    ["morning", "Morning"],
-                                    ["afternoon", "Afternoon"],
-                                    ["all", "All day"],
+                                    ["morning", __("Morning")],
+                                    ["afternoon", __("Afternoon")],
+                                    ["all", __("All day")],
                                   ].map(([tabKey, tabLabel]) => (
                                     <button
                                       className={
@@ -3089,7 +3111,11 @@ export default function Service(props) {
                                 </div>
                               ) : (
                                 <p className="fx-no-bundle-slots">
-                                  No {activeTab} slots available
+                                  {activeTab === "morning"
+                                    ? __("No morning slots available")
+                                    : activeTab === "afternoon"
+                                      ? __("No afternoon slots available")
+                                      : __("No all slots available")}
                                 </p>
                               )}
                             </div>
@@ -3102,9 +3128,11 @@ export default function Service(props) {
                     className={`fx-bundle-selection-message${bundleAllSelected ? " fx-complete" : ""}`}
                   >
                     {bundleAllSelected
-                      ? "All component slots are selected. Choose quantity to continue."
+                      ? __(
+                          "All component slots are selected. Choose quantity to continue.",
+                        )
                       : bundleTimeSlots?.blocker_message ||
-                        "Choose every bundle component slot."}
+                        __("Choose every bundle component slot.")}
                   </p>
 
                   {/* Bundle quantity is fixed at 1; visitors are chosen per component below. */}
@@ -3119,17 +3147,17 @@ export default function Service(props) {
                     onClick={() => setShowBundleSlots(false)}
                   >
                     <i className="pi pi-arrow-left" aria-hidden="true"></i>
-                    Back
+                    {__("Back")}
                   </span>
 
                   <span className="fx-bundle-footer-message">
                     {!bundleAllSelected
-                      ? "Complete all components to continue"
+                      ? __("Complete all components to continue")
                       : bundleParticipants.checking
-                        ? "Checking availability…"
+                        ? __("Checking availability…")
                         : bundleParticipantsBlocking
-                          ? "Choose participants to continue"
-                          : "Ready to continue"}
+                          ? __("Choose participants to continue")
+                          : __("Ready to continue")}
                   </span>
 
                   <span
@@ -3142,7 +3170,7 @@ export default function Service(props) {
                     type="button"
                     onClick={bookBundleService}
                   >
-                    Continue
+                    {__("Continue")}
                     <i className="pi pi-arrow-right" aria-hidden="true"></i>
                   </span>
                 </div>

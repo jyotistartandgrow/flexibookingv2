@@ -13,6 +13,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Swal from "sweetalert2";
 import { callVoucherApi, formatLikePrice } from "../Utils/redeemUpsells";
+import { __, sprintf, withElement } from "../i18n";
 
 export default function Thankyou() {
   const dispatch = useDispatch();
@@ -131,7 +132,7 @@ export default function Thankyou() {
         icon: "error",
         title:
           error?.response?.data?.message ||
-          "Unable to load confirmation details",
+          __("Unable to load confirmation details"),
       });
     } finally {
       dispatch(setLoading(false));
@@ -140,7 +141,7 @@ export default function Thankyou() {
 
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
-    documentTitle: "Print",
+    documentTitle: __("Print"),
     pageStyle: `
       @page { margin: 20mm; }
       * { box-sizing: border-box; }
@@ -205,7 +206,7 @@ export default function Thankyou() {
         showConfirmButton: false,
         timer: 3000,
         icon: "error",
-        title: "Please provide email",
+        title: __("Please provide email"),
       });
       return;
     }
@@ -224,7 +225,7 @@ export default function Thankyou() {
           showConfirmButton: false,
           timer: 3000,
           icon: "success",
-          title: "Mail Sent successfully",
+          title: __("Mail Sent successfully"),
         });
       }
     }
@@ -250,40 +251,43 @@ export default function Thankyou() {
           <div className="fx-confirm-left">
             <div className="fx-voucher-icon">
               <i className="pi pi-file-pdf"></i>
-              <span>Voucher</span>
+              <span>{__("Voucher")}</span>
             </div>
 
             <h1>
-              Hey {bookingData?.customer_billing?.billing_first_name}{" "}
-              {bookingData?.customer_billing?.billing_last_name}!
+              {sprintf(
+                __("Hey %1$s %2$s!"),
+                bookingData?.customer_billing?.billing_first_name ?? "",
+                bookingData?.customer_billing?.billing_last_name ?? "",
+              )}
             </h1>
-            <h2>Thanks for Redeeming.</h2>
+            <h2>{__("Thanks for Redeeming.")}</h2>
 
             <p className="fx-info-text">
-              Thank you for redeeming your voucher. You can print or download
-              your voucher for future reference. You will also receive a
-              confirmation email with the details of your booking.
+              {__(
+                "Thank you for redeeming your voucher. You can print or download your voucher for future reference. You will also receive a confirmation email with the details of your booking.",
+              )}
             </p>
 
             <div className="fx-email-box">
               <input
                 type="text"
-                placeholder="Send via mail"
+                placeholder={__("Send via mail")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <button className="fx-btn-send" onClick={sendEmail}>
-                Send
+                {__("Send")}
               </button>
             </div>
 
             <div className="fx-button-row">
               <button className="fx-btn-light" onClick={handlePrint}>
-                <span className="fx-thankubuttontext">Print</span>
+                <span className="fx-thankubuttontext">{__("Print")}</span>
                 <i className="pi pi-print"></i>
               </button>
               <button className="fx-btn-light" onClick={downloadAsPDF}>
-                <span className="fx-thankubuttontext">Download</span>
+                <span className="fx-thankubuttontext">{__("Download")}</span>
                 <i className="pi pi-download"></i>
               </button>
             </div>
@@ -296,12 +300,14 @@ export default function Thankyou() {
           >
             <div className="fx-confirm-innerrightbox">
               <h3 className="fx-order-title">
-                Your order is Confirmed. You will receive a confirmation mail.
+                {__(
+                  "Your order is Confirmed. You will receive a confirmation mail.",
+                )}
               </h3>
 
               {additionsData && (
                 <h3 className="fx-order-title fx-redeem-details-title">
-                  Redemption Details
+                  {__("Redemption Details")}
                 </h3>
               )}
 
@@ -309,7 +315,7 @@ export default function Thankyou() {
                 {bookingData?.service_date &&
                   moment(bookingData?.service_date).isValid() && (
                     <div>
-                      Service Date:
+                      {__("Service Date:")}
                       <br />
                       <span>
                         {moment(bookingData?.service_date).format(
@@ -319,14 +325,14 @@ export default function Thankyou() {
                     </div>
                   )}
                 <div>
-                  Payment via: <br />
-                  <span>Voucher</span>
+                  {__("Payment via:")} <br />
+                  <span>{__("Voucher")}</span>
                 </div>
               </div>
 
               <div className="fx-order-row">
                 <div>
-                  Order Ref:
+                  {__("Order Ref:")}
                   <br />
                   <span>
                     {bookingData?.payment_ref_id ||
@@ -339,8 +345,8 @@ export default function Thankyou() {
               <table className="fx-order-table">
                 <thead>
                   <tr>
-                    <th>Product</th>
-                    <th>Qty</th>
+                    <th>{__("Product")}</th>
+                    <th>{__("Qty")}</th>
                   </tr>
                 </thead>
 
@@ -368,7 +374,7 @@ export default function Thankyou() {
                   >
                     <div className="fx-bundle-package-summary">
                       <div>
-                        <strong>Package</strong>
+                        <strong>{__("Package")}</strong>
                         <span>{bundleProduct?.name}</span>
                       </div>
                     </div>
@@ -377,10 +383,10 @@ export default function Thankyou() {
                       <table className="fx-bundle-component-table fx-redeem-bundle-component-table">
                         <thead>
                           <tr>
-                            <th>Component</th>
-                            <th>Quantity</th>
-                            <th>Date</th>
-                            {showSlotColumn && <th>Slot</th>}
+                            <th>{__("Component")}</th>
+                            <th>{__("Quantity")}</th>
+                            <th>{__("Date")}</th>
+                            {showSlotColumn && <th>{__("Slot")}</th>}
                           </tr>
                         </thead>
                         <tbody>
@@ -394,9 +400,11 @@ export default function Thankyou() {
                                 <td>
                                   <strong>{component?.service_name}</strong>
                                   <small>
-                                    Component{" "}
-                                    {component?.component_position ||
-                                      componentIndex + 1}
+                                    {sprintf(
+                                      __("Component %s"),
+                                      component?.component_position ||
+                                        componentIndex + 1,
+                                    )}
                                   </small>
                                 </td>
                                 <td>
@@ -432,17 +440,19 @@ export default function Thankyou() {
                           className="fa fa-exclamation-triangle"
                           aria-hidden="true"
                         ></i>
-                        This order has
+                        {__("This order has")}
                       </th>
                     </tr>
                     <tr>
                       <td className="fx-coupon-des">
                         <i className="pi pi-angle-double-right"></i>
-                        coupon/s <strong>{bookingData?.coupon}</strong> with
-                        total discount of
-                        <span className="postive_price_module_discount">
-                          {decodeHtml(bookingData?.coupon_discount)}
-                        </span>
+                        {withElement(
+                          __("coupon/s %1$s with total discount of %2$s"),
+                          <strong>{bookingData?.coupon}</strong>,
+                          <span className="postive_price_module_discount">
+                            {decodeHtml(bookingData?.coupon_discount)}
+                          </span>,
+                        )}
                       </td>
                     </tr>
                   </tbody>
@@ -463,16 +473,16 @@ export default function Thankyou() {
                   ].includes(additionsData.status);
                   return (
                     <section className="fx-combined-booking-confirmation fx-redeem-paid-additions">
-                      <h3 className="fx-order-title">Paid Additions</h3>
+                      <h3 className="fx-order-title">{__("Paid Additions")}</h3>
 
                       <div className="fx-order-row">
                         <div>
-                          Payment via: <br />
-                          <span>Card</span>
+                          {__("Payment via:")} <br />
+                          <span>{__("Card")}</span>
                         </div>
                         {additionsData.payment_reference && (
                           <div>
-                            Payment Ref:
+                            {__("Payment Ref:")}
                             <br />
                             <span>{additionsData.payment_reference}</span>
                           </div>
@@ -482,8 +492,9 @@ export default function Thankyou() {
                       {!confirmed && (
                         <p className="fx-order-row">
                           <span>
-                            Your additions payment is still being confirmed. You
-                            will receive an email once it is complete.
+                            {__(
+                              "Your additions payment is still being confirmed. You will receive an email once it is complete.",
+                            )}
                           </span>
                         </p>
                       )}
@@ -491,10 +502,10 @@ export default function Thankyou() {
                       <table className="fx-order-table">
                         <thead>
                           <tr>
-                            <th>Product</th>
-                            <th>Date &amp; Time</th>
-                            <th>Qty</th>
-                            <th>Total</th>
+                            <th>{__("Product")}</th>
+                            <th>{__("Date & Time")}</th>
+                            <th>{__("Qty")}</th>
+                            <th>{__("Total")}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -525,17 +536,17 @@ export default function Thankyou() {
                         {discount > 0 && (
                           <>
                             <div>
-                              Subtotal
+                              {__("Subtotal")}
                               <span>{money(additionsData.subtotal)}</span>
                             </div>
                             <div>
-                              Discount
+                              {__("Discount")}
                               <span>-{money(discount)}</span>
                             </div>
                           </>
                         )}
                         <div>
-                          Total Paid
+                          {__("Total Paid")}
                           <span>
                             {additionsData.formatted_total ||
                               money(additionsData.total)}
@@ -548,13 +559,13 @@ export default function Thankyou() {
 
               {redeemBooking && serviceBookingData && (
                 <section className="fx-combined-booking-confirmation">
-                  <h3 className="fx-order-title">New Service Booking</h3>
+                  <h3 className="fx-order-title">{__("New Service Booking")}</h3>
 
                   <div className="fx-order-row">
                     {serviceBookingData?.service_date &&
                       moment(serviceBookingData.service_date).isValid() && (
                         <div>
-                          Service Date:
+                          {__("Service Date:")}
                           <br />
                           <span>
                             {moment(serviceBookingData.service_date).format(
@@ -564,14 +575,14 @@ export default function Thankyou() {
                         </div>
                       )}
                     <div>
-                      Payment via: <br />
-                      <span>Card</span>
+                      {__("Payment via:")} <br />
+                      <span>{__("Card")}</span>
                     </div>
                   </div>
 
                   <div className="fx-order-row">
                     <div>
-                      Order Ref:
+                      {__("Order Ref:")}
                       <br />
                       <span>{serviceBookingData?.payment_ref_id}</span>
                     </div>
@@ -580,10 +591,10 @@ export default function Thankyou() {
                   <table className="fx-order-table">
                     <thead>
                       <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Qty</th>
-                        <th>Total</th>
+                        <th>{__("Product")}</th>
+                        <th>{__("Price")}</th>
+                        <th>{__("Qty")}</th>
+                        <th>{__("Total")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -602,7 +613,7 @@ export default function Thankyou() {
                     {serviceBookingData?.product_details?.discount > 0 && (
                       <>
                         <div>
-                          Subtotal
+                          {__("Subtotal")}
                           <span>
                             {decodeHtml(
                               serviceBookingData?.product_details?.subtotal,
@@ -610,7 +621,7 @@ export default function Thankyou() {
                           </span>
                         </div>
                         <div>
-                          Discount
+                          {__("Discount")}
                           <span>
                             {decodeHtml(serviceBookingData?.coupon_discount)}
                           </span>
@@ -618,7 +629,7 @@ export default function Thankyou() {
                       </>
                     )}
                     <div>
-                      Total
+                      {__("Total")}
                       <span>
                         {decodeHtml(serviceBookingData?.product_details?.total)}
                       </span>
@@ -630,18 +641,19 @@ export default function Thankyou() {
                       <table className="fx-billing-shipping-notification noborder">
                         <tbody>
                           <tr>
-                            <th>This order has</th>
+                            <th>{__("This order has")}</th>
                           </tr>
                           <tr>
                             <td className="fx-coupon-des">
-                              coupon/s{" "}
-                              <strong>{serviceBookingData.coupon}</strong> with
-                              total discount of{" "}
-                              <span className="postive_price_module_discount">
-                                {decodeHtml(
-                                  serviceBookingData?.coupon_discount,
-                                )}
-                              </span>
+                              {withElement(
+                                __("coupon/s %1$s with total discount of %2$s"),
+                                <strong>{serviceBookingData.coupon}</strong>,
+                                <span className="postive_price_module_discount">
+                                  {decodeHtml(
+                                    serviceBookingData?.coupon_discount,
+                                  )}
+                                </span>,
+                              )}
                             </td>
                           </tr>
                         </tbody>
@@ -652,7 +664,7 @@ export default function Thankyou() {
 
               <div className="fx-address-block">
                 <div>
-                  <h4>Customer Details</h4>
+                  <h4>{__("Customer Details")}</h4>
                   <p>
                     {bookingData?.recipient?.recipient_first_name}{" "}
                     {bookingData?.recipient?.recipient_last_name} <br />
@@ -668,13 +680,13 @@ export default function Thankyou() {
                 serviceQrCodeImage && (
                   <div className="fx-qr-block">
                     <div className="fx-qr-block-text">
-                      <h4>Booking Verification QR Code</h4>
-                      <p>Present this QR code at the time of service</p>
+                      <h4>{__("Booking Verification QR Code")}</h4>
+                      <p>{__("Present this QR code at the time of service")}</p>
                     </div>
                     <div className="fx-qr-image-wrapper">
                       <img
                         src={serviceQrCodeImage}
-                        alt="Booking verification QR code"
+                        alt={__("Booking verification QR code")}
                         className="fx-qr-image"
                       />
                     </div>

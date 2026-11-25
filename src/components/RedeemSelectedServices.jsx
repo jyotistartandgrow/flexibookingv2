@@ -15,6 +15,7 @@ import {
   formatLikePrice,
   getSelectedChoice,
 } from "../Utils/redeemUpsells";
+import { __, _n, sprintf } from "../i18n";
 
 const choiceLabel = (choice) =>
   choice.slot_label || [choice.from, choice.to].filter(Boolean).join(" - ");
@@ -63,7 +64,7 @@ function SelectedServiceRow({
           <div className="fx-ms-quantity">
             <button
               type="button"
-              aria-label={`Decrease quantity of ${item.name}`}
+              aria-label={sprintf(__("Decrease quantity of %s"), item.name)}
               disabled={lower == null}
               onClick={() => onQuantity(lower)}
             >
@@ -72,7 +73,7 @@ function SelectedServiceRow({
             <span aria-live="polite">{quantity}</span>
             <button
               type="button"
-              aria-label={`Increase quantity of ${item.name}`}
+              aria-label={sprintf(__("Increase quantity of %s"), item.name)}
               disabled={higher == null}
               onClick={() => onQuantity(higher)}
             >
@@ -84,7 +85,7 @@ function SelectedServiceRow({
 
       <div className="fx-ms-slots">
         <h4 className="fx-ms-slots-title">
-          {needsSlot(item) ? "Select time slot" : "Time slot"}
+          {needsSlot(item) ? __("Select time slot") : __("Time slot")}
         </h4>
         {needsSlot(item) ? (
           <div className="fx-ms-slot-grid">
@@ -109,14 +110,16 @@ function SelectedServiceRow({
             })}
           </div>
         ) : (
-          <p className="fx-ms-description">Added to your gift's time slot.</p>
+          <p className="fx-ms-description">
+            {__("Added to your gift's time slot.")}
+          </p>
         )}
       </div>
 
       <button
         type="button"
         className="fx-ms-remove"
-        aria-label={`Remove ${item.name}`}
+        aria-label={sprintf(__("Remove %s"), item.name)}
         onClick={onRemove}
       >
         <Trash2 size={22} />
@@ -159,7 +162,7 @@ export default function RedeemSelectedServices({
         showConfirmButton: false,
         timer: 3000,
         icon: "warning",
-        title: "Please select a time slot for each service",
+        title: __("Please select a time slot for each service"),
       });
       return;
     }
@@ -199,14 +202,17 @@ export default function RedeemSelectedServices({
     >
       <section className="fx-multi-services">
         <header className="fx-ms-header">
-          <h2 className="fx-ms-title">Selected Services</h2>
+          <h2 className="fx-ms-title">{__("Selected Services")}</h2>
           <span className="fx-ms-badge">
-            {items.length} {items.length === 1 ? "service" : "services"}
+            {sprintf(
+              _n("%s service", "%s services", items.length),
+              items.length,
+            )}
           </span>
           <button
             type="button"
             className="fx-ms-close"
-            aria-label="Close"
+            aria-label={__("Close")}
             onClick={onClose}
           >
             <X size={28} />
@@ -229,20 +235,23 @@ export default function RedeemSelectedServices({
 
         <footer className="fx-ms-footer">
           <button type="button" className="fx-ms-cancel" onClick={onClose}>
-            Back
+            {__("Back")}
           </button>
           <div className="fx-ms-summary">
             <div className="fx-ms-summary-item">
               <span className="fx-ms-summary-icon">
                 <CalendarDays size={18} />
               </span>
-              {slotCount} {slotCount === 1 ? "Slot" : "Slots"} selected
+              {sprintf(
+                _n("%s Slot selected", "%s Slots selected", slotCount),
+                slotCount,
+              )}
             </div>
             <div className="fx-ms-summary-item">
               <span className="fx-ms-summary-icon">
                 <Wallet size={18} />
               </span>
-              Total Price:{" "}
+              {__("Total Price:")}{" "}
               <strong className="fx-ms-total">
                 {formatLikePrice(items[0]?.formatted_price, total)}
               </strong>
@@ -254,7 +263,7 @@ export default function RedeemSelectedServices({
             disabled={items.length === 0}
             onClick={handleContinue}
           >
-            CONTINUE
+            {__("CONTINUE")}
           </button>
         </footer>
       </section>

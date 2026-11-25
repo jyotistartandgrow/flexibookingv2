@@ -2,11 +2,14 @@ import { Clock3, Minus, Plus, Users } from "lucide-react";
 import { normalizeParticipantGroups } from "../Utils/participants";
 import { decodeHtml } from "../Utils/Functions";
 import { getComponentLimits } from "../Utils/bundleParticipants";
+import { __, _n, sprintf } from "../i18n";
 
 const visitorsLabel = (count) =>
-  `${count} visitor${Number(count) === 1 ? "" : "s"}`;
+  sprintf(_n("%s visitor", "%s visitors", Number(count)), count);
 const limitsLabel = ({ minimum, maximum, fixed }) =>
-  fixed ? visitorsLabel(minimum) : `${minimum}–${maximum} visitors`;
+  fixed
+    ? visitorsLabel(minimum)
+    : sprintf(__("%1$s–%2$s visitors"), minimum, maximum);
 
 function ParticipantRows({
   groups,
@@ -37,13 +40,20 @@ function ParticipantRows({
         <div
           className="fx-service-participant-quantity"
           role="group"
-          aria-label={`${group.name} quantity${label ? ` for ${label}` : ""}`}
+          aria-label={
+            label
+              ? sprintf(__("%1$s quantity for %2$s"), group.name, label)
+              : sprintf(__("%s quantity"), group.name)
+          }
         >
           <button
             type="button"
             disabled={disabled || group.disabled || value <= 0}
             onClick={() => onChange(group, -1)}
-            aria-label={`Remove one ${group.name.toLowerCase()} participant`}
+            aria-label={sprintf(
+              __("Remove one %s participant"),
+              group.name.toLowerCase(),
+            )}
           >
             <Minus size={12} aria-hidden="true" />
           </button>
@@ -52,7 +62,10 @@ function ParticipantRows({
             type="button"
             disabled={disabled || group.disabled || !canAdd}
             onClick={() => onChange(group, 1)}
-            aria-label={`Add one ${group.name.toLowerCase()} participant`}
+            aria-label={sprintf(
+              __("Add one %s participant"),
+              group.name.toLowerCase(),
+            )}
           >
             <Plus size={12} aria-hidden="true" />
           </button>
@@ -67,7 +80,7 @@ function PartyStatus({ party, limits }) {
   if (party.valid) {
     return (
       <p className="fx-bundle-participant-note is-complete">
-        {visitorsLabel(party.total)} selected
+        {sprintf(__("%s selected"), visitorsLabel(party.total))}
       </p>
     );
   }
@@ -76,7 +89,11 @@ function PartyStatus({ party, limits }) {
   const outOfRange =
     party.total < limits.minimum || party.total > limits.maximum;
   const message = outOfRange
-    ? `Choose ${limitsLabel(limits)} (${party.total} selected).`
+    ? sprintf(
+        __("Choose %1$s (%2$s selected)."),
+        limitsLabel(limits),
+        party.total,
+      )
     : party.message;
   return (
     <p className="fx-bundle-participant-note" role="status">
@@ -101,7 +118,7 @@ export default function BundleParticipants({ selection }) {
     >
       {loading && (
         <p className="fx-service-participant-status" role="status">
-          Loading participant options…
+          {__("Loading participant options…")}
         </p>
       )}
       {error && !loading && (
@@ -111,18 +128,18 @@ export default function BundleParticipants({ selection }) {
         >
           <p>{decodeHtml(error)}</p>
           <button type="button" onClick={selection.retry}>
-            Try again
+            {__("Try again")}
           </button>
         </div>
       )}
       {!loading && !error && (
         <fieldset className="fx-service-participant-panel" disabled={checking}>
-          <h3>Who is coming?</h3>
+          <h3>{__("Who is coming?")}</h3>
           <p>
             {decodeHtml(selection.guidance) ||
               (shared
-                ? "Choose participants once for these included services."
-                : "Confirm the participants for each included service.")}
+                ? __("Choose participants once for these included services.")
+                : __("Confirm the participants for each included service."))}
           </p>
 
           {shared && first && (
@@ -204,8 +221,10 @@ export default function BundleParticipants({ selection }) {
 
           <p className="fx-bundle-participant-footnote">
             {checking
-              ? "Checking availability…"
-              : "Visitor numbers follow the booking quantity. When all places are filled, use + on a group to move a visitor into it. The package price does not change."}
+              ? __("Checking availability…")
+              : __(
+                  "Visitor numbers follow the booking quantity. When all places are filled, use + on a group to move a visitor into it. The package price does not change.",
+                )}
           </p>
         </fieldset>
       )}

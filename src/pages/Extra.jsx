@@ -23,6 +23,7 @@ import { setStep, setLoading } from "../store/step1Slice";
 import { setCart } from "../store/step2Slice";
 import Swal from "sweetalert2";
 import useDeviceType from "../Utils/useDeviceType";
+import { __ } from "../i18n";
 
 // Use the extra's own image from /extras when the API sends one; otherwise
 // (or if that URL fails to load) fall back to the default extra image.
@@ -246,17 +247,18 @@ export default function Extra(props) {
               } else {
                 showExtraError(
                   addToCartRes?.data?.message ??
-                    "There is some error , please try again",
+                    __("There is some error , please try again"),
                 );
               }
             }
           } else {
-            showExtraError(data?.message || "Unable to load extras");
+            showExtraError(data?.message || __("Unable to load extras"));
           }
         } catch (error) {
           console.error("Unable to load extras.", error);
           showExtraError(
-            error?.data?.message || "Unable to load extras, please try again",
+            error?.data?.message ||
+              __("Unable to load extras, please try again"),
           );
         } finally {
           setLoadingske(false);
@@ -347,7 +349,7 @@ export default function Extra(props) {
           showConfirmButton: false,
           timer: 3000,
           icon: "warning",
-          title: "Maximum capacity reached",
+          title: __("Maximum capacity reached"),
         });
         return;
       }
@@ -377,7 +379,7 @@ export default function Extra(props) {
         showConfirmButton: false,
         timer: 3000,
         icon: "warning",
-        title: "Please choose capacity",
+        title: __("Please choose capacity"),
       });
       return;
     }
@@ -479,7 +481,7 @@ export default function Extra(props) {
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
         titleText: toPlainText(
-          data?.message ?? "There is some error , please try again",
+          data?.message ?? __("There is some error , please try again"),
         ),
       });
       dispatch(setLoading(false));
@@ -511,7 +513,7 @@ export default function Extra(props) {
               }}
             >
               {props.stepTitles?.step_3_title ||
-                "What experience are you looking for?"}{" "}
+                __("What experience are you looking for?")}{" "}
             </h1>
           )}
         </div>
@@ -592,7 +594,7 @@ export default function Extra(props) {
           </div>
 
           {!skeloading && products.length == 0 && (
-            <div className="fx-no-data">No services found</div>
+            <div className="fx-no-data">{__("No services found")}</div>
           )}
           {!skeloading && products.length > 0 && (
             <>
@@ -815,13 +817,13 @@ export default function Extra(props) {
         <input
           type="submit"
           className="btn-secondary fx-skip"
-          value="Skip"
+          value={__("Skip")}
           onClick={() => skipextra()}
         />
         <input
           type="submit"
           className="btn-primary fx-continue"
-          value="Continue"
+          value={__("Continue")}
           onClick={() => bookextra()}
         />
       </div>

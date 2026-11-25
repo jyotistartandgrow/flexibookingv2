@@ -17,6 +17,7 @@ import { Toast } from "primereact/toast";
 import { Sidebar as Sidebarpanel } from "primereact/sidebar";
 import axiosInstance from "../Utils/Interceptor";
 import useDeviceType from "../Utils/useDeviceType";
+import { __ } from "../i18n";
 
 export default function Steps({ type = "date", ...props }) {
   // Check for 'type' param in URL if not provided as prop
@@ -186,7 +187,7 @@ export default function Steps({ type = "date", ...props }) {
               }}
             >
               <div>
-                1 <span>CODE</span>
+                1 <span>{__("Code")}</span>
               </div>
             </div>
           )}
@@ -206,10 +207,10 @@ export default function Steps({ type = "date", ...props }) {
                 {isRedeemBooking ? 2 : 1}{" "}
                 <span>
                   {isRedeemBooking
-                    ? "DATE & SLOT"
+                    ? __("Date & Slot")
                     : gift
-                      ? "INFORMATION"
-                      : "DATE"}
+                      ? __("Information")
+                      : __("Date")}
                 </span>
               </div>
             </div>
@@ -221,7 +222,7 @@ export default function Steps({ type = "date", ...props }) {
               onClick={() => dispatch(setStep("datestep"))}
             >
               <div>
-                1<span> DATE</span>
+                1<span> {__("Date")}</span>
               </div>
             </div>
           )}
@@ -234,7 +235,7 @@ export default function Steps({ type = "date", ...props }) {
               }}
             >
               <div>
-                1 <span> CATEGORY</span>
+                1 <span> {__("Category")}</span>
               </div>
             </div>
           )}
@@ -247,7 +248,7 @@ export default function Steps({ type = "date", ...props }) {
             >
               <div>
                 {isRedeemBooking ? 3 : type == "service" ? 1 : 2}{" "}
-                <span>SERVICES</span>
+                <span>{__("Services")}</span>
               </div>
             </div>
           )}
@@ -256,7 +257,7 @@ export default function Steps({ type = "date", ...props }) {
             aria-disabled={extrasUnavailable || !canOpenExtras}
             title={
               extrasUnavailable
-                ? "No extras available for this service"
+                ? __("No extras available for this service")
                 : undefined
             }
             onClick={() => {
@@ -269,7 +270,7 @@ export default function Steps({ type = "date", ...props }) {
                 : type == "service" || type == "singleservice"
                   ? 2
                   : 3}{" "}
-              <span>EXTRA</span>
+              <span>{__("Extra")}</span>
             </div>
           </div>
           {showCustomize && (
@@ -281,7 +282,7 @@ export default function Steps({ type = "date", ...props }) {
             >
               <div>
                 {type == "service" || type == "singleservice" ? 3 : 4}{" "}
-                <span>CUSTOMIZE</span>
+                <span>{__("Customize")}</span>
               </div>
             </div>
           )}
@@ -301,7 +302,7 @@ export default function Steps({ type = "date", ...props }) {
                   : showCustomize
                     ? 5
                     : 4}{" "}
-              <span>{isRedeemBooking ? "INFORMATION" : "CHECKOUT"}</span>
+              <span>{isRedeemBooking ? __("Information") : __("Checkout")}</span>
             </div>
           </div>
           <div className={paymentstepclass}>
@@ -315,7 +316,7 @@ export default function Steps({ type = "date", ...props }) {
                   : showCustomize
                     ? 6
                     : 5}{" "}
-              <span>PAYMENT</span>
+              <span>{__("Payment")}</span>
             </div>
           </div>
         </div>
@@ -333,7 +334,7 @@ export default function Steps({ type = "date", ...props }) {
           }}
         >
           <div className="fx-bottombar-top-details">
-            <span className="fx-order-details">Order Details </span>
+            <span className="fx-order-details">{__("Order Details")} </span>
             <i
               className={
                 step != "paymentstep" && step != "checkoutstep"
@@ -389,7 +390,7 @@ export default function Steps({ type = "date", ...props }) {
               <i className="pi pi-chevron-down"></i>
             </div>
           )}
-          <h3>Order Details</h3>
+          <h3>{__("Order Details")}</h3>
           {!isDesktop && !topbar && (
             <Commonbox setVisibleBottom={setVisibleBottom} />
           )}

@@ -1,5 +1,6 @@
 import axiosInstance from "./Interceptor";
 import { decodeHtml } from "./Functions";
+import { __ } from "../i18n";
 
 /**
  * Applies one coupon to an existing booking via POST /apply-coupon and
@@ -16,7 +17,7 @@ export const applyCouponToBooking = async (bookingKey, code, cart) => {
       ok: false,
       error:
         decodeHtml(result?.error || result?.message || "") ||
-        "Failed to apply coupon",
+        __("Failed to apply coupon"),
     };
   }
   return { ok: true, cart: cartWithCouponTotals(cart, result) };

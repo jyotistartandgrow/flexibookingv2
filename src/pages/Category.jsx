@@ -8,6 +8,7 @@ import { decodeHtml } from "../Utils/Functions";
 import categoryimg from "../assets/service1.jpg";
 import { setStep, setLoading, setCategory } from "../store/step1Slice";
 import useDeviceType from "../Utils/useDeviceType";
+import { __ } from "../i18n";
 
 export default function Category(props) {
   const dispatch = useDispatch();
@@ -105,9 +106,9 @@ export default function Category(props) {
         </div>
         <div className="fx-servicecontentbox">
           <h4>{category.cat_name}</h4>
-          <p>Category description here</p>
+          <p>{__("Category description here")}</p>
           <p className="price">
-            <span className="fx-price-form">from</span>
+            <span className="fx-price-form">{__("from")}</span>
             <span className="fx-price-one">{decodeHtml(category.price)}</span>
             {props.showBookNowButton !== "true" && (
               <i className="pi pi-chevron-right"></i>
@@ -115,7 +116,7 @@ export default function Category(props) {
           </p>
           {props.showBookNowButton == "true" && (
             <div className="booknowbtn" onClick={() => getservice(category.id)}>
-              <a href="#">Book Now</a>
+              <a href="#">{__("Book Now")}</a>
             </div>
           )}
         </div>
@@ -146,7 +147,7 @@ export default function Category(props) {
             }}
           >
             {props.stepTitles?.step_1_title ||
-              "What experience are you looking for?"}{" "}
+              __("What experience are you looking for?")}{" "}
           </h1>
         )}
       </div>
@@ -227,7 +228,7 @@ export default function Category(props) {
             !skeloading && categories.length == 0 ? "show" : "hide"
           }`}
         >
-          No category found
+          {__("No category found")}
         </div>
 
         <div
@@ -260,9 +261,9 @@ export default function Category(props) {
                     </div>
                     <div className="fx-servicecontentbox">
                       <h4>{category.cat_name}</h4>
-                      <p>Category description here</p>
+                      <p>{__("Category description here")}</p>
                       <p className="price">
-                        <span className="fx-price-form">from</span>
+                        <span className="fx-price-form">{__("from")}</span>
                         <span className="fx-price-one">
                           {decodeHtml(category.price)}
                         </span>
@@ -276,7 +277,7 @@ export default function Category(props) {
                           className="booknowbtn"
                           onClick={() => getservice(category.id)}
                         >
-                          <a href="#">Book Now</a>
+                          <a href="#">{__("Book Now")}</a>
                         </div>
                       )}
                     </div>
@@ -313,10 +314,10 @@ export default function Category(props) {
                   <div className="fx-servicecontentboxlist">
                     <div className="list-view-text-content">
                       <h4>{category.cat_name}</h4>
-                      <p>Category description here</p>
+                      <p>{__("Category description here")}</p>
                     </div>
                     <p className="price">
-                      <span className="fx-price-form">from</span>
+                      <span className="fx-price-form">{__("from")}</span>
                       <span className="fx-price-one">
                         {decodeHtml(category.price)}
                       </span>

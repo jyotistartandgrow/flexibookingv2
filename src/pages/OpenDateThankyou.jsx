@@ -12,6 +12,7 @@ import { setLoading } from "../store/step1Slice";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Swal from "sweetalert2";
+import { __, sprintf, withElement } from "../i18n";
 
 export default function OpenDateThankyou() {
   const dispatch = useDispatch();
@@ -108,7 +109,7 @@ export default function OpenDateThankyou() {
   const getShareMessage = () => {
     const voucher = bookingData?.voucher || "N/A";
     const total = decodeHtml(bookingData?.product_details?.total || "");
-    const productName = bookingData?.products?.[0]?.name || "Gift Voucher";
+    const productName = bookingData?.products?.[0]?.name || __("Gift Voucher");
     const quantity = bookingData?.products?.reduce(
       (sum, product) => sum + Number(product?.quantity || 0),
       0,
@@ -116,16 +117,16 @@ export default function OpenDateThankyou() {
     const lineBreak = "\n";
 
     return [
-      "*FLEXIBOOKING GIFT VOUCHER*",
+      `*${__("FLEXIBOOKING GIFT VOUCHER")}*`,
       "============================",
-      `[PRODUCT] ${productName}`,
-      quantity ? `[QTY] ${quantity}` : null,
-      total ? `[TOTAL PAID] ${total}` : null,
+      sprintf(__("[PRODUCT] %s"), productName),
+      quantity ? sprintf(__("[QTY] %s"), quantity) : null,
+      total ? sprintf(__("[TOTAL PAID] %s"), total) : null,
       "",
-      "*VOUCHER CODE*",
+      `*${__("VOUCHER CODE")}*`,
       `*${voucher}*`,
       "",
-      "Use this code during checkout to redeem.",
+      __("Use this code during checkout to redeem."),
     ]
       .filter(Boolean)
       .join(lineBreak);
@@ -149,7 +150,7 @@ export default function OpenDateThankyou() {
 
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
-    documentTitle: "Print",
+    documentTitle: __("Print"),
     pageStyle: `
       @page { margin: 20mm; }
       * { box-sizing: border-box; }
@@ -217,7 +218,7 @@ export default function OpenDateThankyou() {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Please provide email",
+        title: __("Please provide email"),
       });
     }
     const { data } = await axiosInstance.post(`/send-email`, {
@@ -233,7 +234,7 @@ export default function OpenDateThankyou() {
           showConfirmButton: false,
           timer: 3000, // auto-close after 3 seconds
           icon: "success", // 'success', 'error', 'warning', 'info', 'question'
-          title: "Mail Sent successfully",
+          title: __("Mail Sent successfully"),
         });
       }
     }
@@ -259,41 +260,45 @@ export default function OpenDateThankyou() {
           />
             <div className="fx-voucher-icon">
               <i className="pi pi-file-pdf"></i>
-              <span>Voucher</span>
+              <span>{__("Voucher")}</span>
             </div>
 
             <h1>
-              Hey {bookingData?.customer_billing?.billing_first_name}{" "}
-              {bookingData?.customer_billing?.billing_last_name}!
+              {sprintf(
+                __("Hey %1$s %2$s!"),
+                bookingData?.customer_billing?.billing_first_name ?? "",
+                bookingData?.customer_billing?.billing_last_name ?? "",
+              )}
             </h1>
-            <h2>Thanks for Your Order.</h2>
+            <h2>{__("Thanks for Your Order.")}</h2>
 
             <p className="fx-info-text">
-              You will receive an email with your ticket. Please show it upon
-              arrival to access your booked service.
+              {__(
+                "You will receive an email with your ticket. Please show it upon arrival to access your booked service.",
+              )}
             </p>
 
             <div className="fx-email-box">
               <input
                 type="text"
-                placeholder="Send via mail"
+                placeholder={__("Send via mail")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <button className="fx-btn-send" onClick={sendEmail}>
-                Send
+                {__("Send")}
               </button>
             </div>
 
             <div className="fx-button-row">
               <button className="fx-btn-light" onClick={handlePrint}>
                 {" "}
-                <span className="fx-thankubuttontext">Print</span>{" "}
+                <span className="fx-thankubuttontext">{__("Print")}</span>{" "}
                 <i className="pi pi-print"></i>
               </button>
               <button className="fx-btn-light" onClick={downloadAsPDF}>
                 {" "}
-                <span className="fx-thankubuttontext">Download</span>{" "}
+                <span className="fx-thankubuttontext">{__("Download")}</span>{" "}
                 <i className="pi pi-download"></i>
               </button>
               <div
@@ -304,7 +309,7 @@ export default function OpenDateThankyou() {
                   className="fx-btn-light"
                   onClick={() => setShowShareMenu(!showShareMenu)}
                 >
-                  <span className="fx-thankubuttontext">Share Voucher</span>
+                  <span className="fx-thankubuttontext">{__("Share Voucher")}</span>
                   <i className="pi pi-share-alt"></i>
                 </button>
                 {showShareMenu && (
@@ -331,10 +336,10 @@ export default function OpenDateThankyou() {
                         onClick: shareVoucherOnWhatsApp,
                       },
                       {
-                        label: "Email",
+                        label: __("Email"),
                         icon: "✉️",
                         onClick: () => {
-                          const subject = encodeURIComponent("My Voucher Code");
+                          const subject = encodeURIComponent(__("My Voucher Code"));
                           const body = encodeURIComponent(getShareMessage());
                           window.location.href = `mailto:?subject=${subject}&body=${body}`;
                         },
@@ -380,12 +385,14 @@ export default function OpenDateThankyou() {
           >
             <div className="fx-confirm-innerrightbox">
               <h3 className="fx-order-title">
-                Your order is Confirmed. You will receive a confirmation mail.
+                {__(
+                  "Your order is Confirmed. You will receive a confirmation mail.",
+                )}
               </h3>
 
               <div className="fx-voucher-box">
                 <span className="fx-voucher-label">
-                  Your Unique Voucher Code
+                  {__("Your Unique Voucher Code")}
                 </span>
                 <div className="fx-voucher-code">
                   {bookingData?.voucher || "N/A"}
@@ -399,7 +406,7 @@ export default function OpenDateThankyou() {
                         showConfirmButton: false,
                         timer: 2000,
                         icon: "success",
-                        title: "Voucher copied!",
+                        title: __("Voucher copied!"),
                       });
                     }}
                   >
@@ -412,7 +419,7 @@ export default function OpenDateThankyou() {
                 {bookingData?.service_date &&
                   moment(bookingData?.service_date).isValid() && (
                     <div>
-                      Service Date:
+                      {__("Service Date:")}
                       <br />{" "}
                       <span>
                         {moment(bookingData?.service_date).format(
@@ -422,14 +429,14 @@ export default function OpenDateThankyou() {
                     </div>
                   )}
                 <div>
-                  Payment via: <br />
-                  <span>Card</span>
+                  {__("Payment via:")} <br />
+                  <span>{__("Card")}</span>
                 </div>
               </div>
 
               <div className="fx-order-row">
                 <div>
-                  Order Ref:
+                  {__("Order Ref:")}
                   <br />
                   <span>{bookingData?.payment_ref_id}</span>
                 </div>
@@ -440,11 +447,11 @@ export default function OpenDateThankyou() {
                   <tr>
                     {/* <th>#</th> */}
                     <th>
-                      {bookingData?.products?.[0]?.product_heading || "Product"}
+                      {bookingData?.products?.[0]?.product_heading || __("Product")}
                     </th>
-                    <th>Price</th>
-                    <th>Qty</th>
-                    <th>Total</th>
+                    <th>{__("Price")}</th>
+                    <th>{__("Qty")}</th>
+                    <th>{__("Total")}</th>
                   </tr>
                 </thead>
 
@@ -489,11 +496,14 @@ export default function OpenDateThankyou() {
                   >
                     <div className="fx-bundle-package-summary">
                       <div>
-                        <strong>Package</strong>
+                        <strong>{__("Package")}</strong>
                         <span>{bundleProduct?.name}</span>
                         <span className="fx-bundle-package-note">
-                          Original {formatReceiptAmount(originalTotal)} -
-                          Discount {formatReceiptAmount(discountAmount)}
+                          {sprintf(
+                            __("Original %1$s - Discount %2$s"),
+                            formatReceiptAmount(originalTotal),
+                            formatReceiptAmount(discountAmount),
+                          )}
                         </span>
                       </div>
                       <strong>{formatReceiptAmount(packageTotal)}</strong>
@@ -503,11 +513,11 @@ export default function OpenDateThankyou() {
                       <table className="fx-bundle-component-table">
                         <thead>
                           <tr>
-                            <th>Component</th>
-                            <th>Quantity</th>
-                            <th>Date</th>
-                            {showSlotColumn && <th>Slot</th>}
-                            <th>Line total</th>
+                            <th>{__("Component")}</th>
+                            <th>{__("Quantity")}</th>
+                            <th>{__("Date")}</th>
+                            {showSlotColumn && <th>{__("Slot")}</th>}
+                            <th>{__("Line total")}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -521,9 +531,11 @@ export default function OpenDateThankyou() {
                                 <td>
                                   <strong>{component?.service_name}</strong>
                                   <small>
-                                    Component{" "}
-                                    {component?.component_position ||
-                                      componentIndex + 1}
+                                    {sprintf(
+                                      __("Component %s"),
+                                      component?.component_position ||
+                                        componentIndex + 1,
+                                    )}
                                   </small>
                                 </td>
                                 <td>
@@ -557,13 +569,13 @@ export default function OpenDateThankyou() {
                 {Number(bookingData?.product_details?.discount) > 0 && (
                   <>
                     <div>
-                      Subtotal{" "}
+                      {__("Subtotal")}{" "}
                       <span>
                         {decodeHtml(bookingData?.product_details?.subtotal)}
                       </span>
                     </div>
                     <div>
-                      Discount
+                      {__("Discount")}
                       <span>
                         -
                         {formatReceiptAmount(
@@ -578,14 +590,14 @@ export default function OpenDateThankyou() {
                   </>
                 )}
                 <div>
-                  Total
+                  {__("Total")}
                   <span>{decodeHtml(bookingData?.product_details?.total)}</span>
                 </div>
               </div>
 
               <div className="fx-address-block">
                 <div>
-                  <h4>Customer Details</h4>
+                  <h4>{__("Customer Details")}</h4>
                   <p>
                     {bookingData?.customer_billing?.billing_first_name}{" "}
                     {bookingData?.customer_billing?.billing_last_name} <br />
@@ -604,17 +616,19 @@ export default function OpenDateThankyou() {
                           className="fa fa-exclamation-triangle"
                           aria-hidden="true"
                         ></i>
-                        This order has
+                        {__("This order has")}
                       </th>
                     </tr>
                     <tr>
                       <td className="fx-coupon-des">
                         <i className="pi pi-angle-double-right"></i>
-                        coupon/s <strong>{bookingData?.coupon}</strong> with
-                        total discount of{" "}
-                        <span className="postive_price_module_discount">
-                          {decodeHtml(bookingData?.coupon_discount)}
-                        </span>{" "}
+                        {withElement(
+                          __("coupon/s %1$s with total discount of %2$s"),
+                          <strong>{bookingData?.coupon}</strong>,
+                          <span className="postive_price_module_discount">
+                            {decodeHtml(bookingData?.coupon_discount)}
+                          </span>,
+                        )}{" "}
                       </td>
                     </tr>
                   </tbody>

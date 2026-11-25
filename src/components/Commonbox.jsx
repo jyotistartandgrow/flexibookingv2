@@ -24,6 +24,7 @@ import { setExtracapacity, setExtra } from "../store/step3Slice";
 import axiosInstance from "../Utils/Interceptor";
 import { getParticipantSummary } from "../Utils/participants";
 import useDeviceType from "../Utils/useDeviceType";
+import { __, sprintf, getStripeLocale } from "../i18n";
 
 const formatBundleSlot = (component) => {
   if (component?.from && component?.to) {
@@ -140,8 +141,8 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
     dispatch(setLoading(false));
     toast.current.show({
       severity: "success",
-      summary: "Deleted",
-      detail: "Service has been removed from cart",
+      summary: __("Deleted"),
+      detail: __("Service has been removed from cart"),
       life: 3000,
     });
     if (type == "service") {
@@ -154,8 +155,8 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
   const reject = () => {
     toast.current.show({
       severity: "warn",
-      summary: "Rejected",
-      detail: "You have rejected the request",
+      summary: __("Rejected"),
+      detail: __("You have rejected the request"),
       life: 3000,
     });
   };
@@ -163,10 +164,12 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
   const edititem = (id, type) => {
     if (toggleCard) toggleCard();
     confirmDialog({
-      message: "Are you sure you want to proceed?",
-      header: "Confirmation",
+      message: __("Are you sure you want to proceed?"),
+      header: __("Confirmation"),
       icon: "pi pi-exclamation-triangle",
       className: "fx-confirmation-popup",
+      acceptLabel: __("Yes"),
+      rejectLabel: __("No"),
       accept: () => editaccept(id, type),
       reject,
     });
@@ -175,10 +178,15 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
   const deleteitem = (id, type) => {
     if (toggleCard) toggleCard();
     confirmDialog({
-      message: `Are you sure you want to delete this ${type}?`,
-      header: "Delete Confirmation",
+      message:
+        type === "extra"
+          ? __("Are you sure you want to delete this extra?")
+          : __("Are you sure you want to delete this service?"),
+      header: __("Delete Confirmation"),
       icon: "pi pi-exclamation-triangle",
       className: "fx-confirmation-popup",
+      acceptLabel: __("Yes"),
+      rejectLabel: __("No"),
       accept: () => deleteaccept(id, type),
       reject,
     });
@@ -188,7 +196,9 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
     <>
       {!cart.service && !date && !gift && (
         <p className="giftmessagebox">
-          book your service on a specific date" and "do a gift to a friend
+          {__(
+            'book your service on a specific date" and "do a gift to a friend',
+          )}
         </p>
       )}
       {date &&
@@ -197,7 +207,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
           (step === "paymentstep" && !isDesktop)) && (
           <div className="fx-bookingdatebar">
             <div className="fx-bookingdate">
-              Date
+              {__("Date")}
               <br />
               <span>{moment(date).format("MMMM DD YYYY")}</span>
             </div>
@@ -220,7 +230,10 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                   <React.Fragment key={"ct-" + ckey}>
                     <div className="fx-serviceitem">
                       <div className="itemname">
-                        {ct.name} {!gift && !ct.bundle_id && `X ${ct.capacity}`}
+                        {ct.name}{" "}
+                        {!gift &&
+                          !ct.bundle_id &&
+                          sprintf(__("X %s"), ct.capacity)}
                         {cart?.service_option_details?.name && (
                           <>( {cart.service_option_details.name} )</>
                         )}
@@ -228,8 +241,8 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                         <div className="time">{ct.slot}</div>
                         {!gift && participantSummary.length > 0 && (
                           <div className="fx-order-participants">
-                            <div>Participants:</div>
-                            <ul aria-label="Selected participants">
+                            <div>{__("Participants:")}</div>
+                            <ul aria-label={__("Selected participants")}>
                               {participantSummary.map((participant) => (
                                 <li key={participant.key}>
                                   {participant.name} × {participant.quantity}
@@ -257,7 +270,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                           {ct.bundle_pricing && (
                             <div className="fx-bundle-cart-pricing">
                               <span>
-                                Original{" "}
+                                {__("Original")}{" "}
                                 <strong>
                                   {decodeHtml(
                                     ct.bundle_pricing.subtotal_formatted,
@@ -265,7 +278,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                                 </strong>
                               </span>
                               <span>
-                                Discount{" "}
+                                {__("Discount")}{" "}
                                 <strong>
                                   {decodeHtml(
                                     ct.bundle_pricing.discount_amount_formatted,
@@ -273,7 +286,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                                 </strong>
                               </span>
                               <span>
-                                Package total{" "}
+                                {__("Package total")}{" "}
                                 <strong>
                                   {decodeHtml(
                                     ct.bundle_pricing.final_price_formatted,
@@ -286,11 +299,11 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                             <table>
                               <thead>
                                 <tr>
-                                  <th>Component</th>
-                                  <th>Quantity</th>
-                                  <th>Date</th>
-                                  {!gift && <th>Slot</th>}
-                                  <th>Line total</th>
+                                  <th>{__("Component")}</th>
+                                  <th>{__("Quantity")}</th>
+                                  <th>{__("Date")}</th>
+                                  {!gift && <th>{__("Slot")}</th>}
+                                  <th>{__("Line total")}</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -340,7 +353,8 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                   return (
                     <div className="fx-serviceitem" key={"ct-" + ckey}>
                       <div className="itemname">
-                        {ct.name} {!gift && `X ${ct.capacity}`}
+                        {ct.name}{" "}
+                        {!gift && sprintf(__("X %s"), ct.capacity)}
                         <br />
                         <div className="time">{ct.slot}</div>
                         <span onClick={() => edititem(ct.id, "extra")}>
@@ -366,12 +380,12 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
                 <div className="fx-subtotal-discount-bar">
                   <div className="fx-subtotalbar">
                     <p>
-                      Sub Total <span> {decodeHtml(cart.subtotal)}</span>
+                      {__("Sub Total")} <span> {decodeHtml(cart.subtotal)}</span>
                     </p>
                   </div>
                   <div className="fx-discountbar">
                     <p>
-                      Discount
+                      {__("Discount")}
                       {cart.coupon_codes?.length > 0 &&
                         ` (${cart.coupon_codes.join(", ")})`}{" "}
                       <span>
@@ -387,7 +401,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
               )}
               <div className="fx-totalbar">
                 <p>
-                  Total <span> {decodeHtml(cart.total_formatted)}</span>
+                  {__("Total")} <span> {decodeHtml(cart.total_formatted)}</span>
                 </p>
               </div>
               {(step == "paymentstep" || step == "checkoutstep") && (
@@ -405,7 +419,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
         )}
       {!cart.service && gift && (
         <p className="giftmessagebox">
-          Please select the service you want to gift to your friend.
+          {__("Please select the service you want to gift to your friend.")}
         </p>
       )}
       {step === "paymentstep" &&
@@ -414,8 +428,11 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
         isDesktop &&
         !topbar && (
           <div className="fx-paymentbox">
-            <h1 className="fx-all-main-heading">Payment</h1>
-            <Elements stripe={stripePromise}>
+            <h1 className="fx-all-main-heading">{__("Payment")}</h1>
+            <Elements
+              stripe={stripePromise}
+              options={{ locale: getStripeLocale() }}
+            >
               <CheckoutForm />
             </Elements>
           </div>

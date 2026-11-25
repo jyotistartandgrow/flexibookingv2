@@ -6,6 +6,7 @@ import {
   getParticipantSelection,
 } from "./participants";
 import { setRedeemParticipants } from "../store/step3Slice";
+import { __ } from "../i18n";
 
 export const getRedemptionParty = (component, counts) => {
   const quantity = Number(component.quantity) || 1;
@@ -60,7 +61,7 @@ const preflight = async (post, signal) => {
     throw new Error(
       data?.data?.message ||
         data?.message ||
-        "This schedule is no longer available.",
+        __("This schedule is no longer available."),
     );
   }
   return data.data;
@@ -126,7 +127,7 @@ export function useRedeemParticipants(request) {
               error?.data?.data?.message ||
               error?.data?.message ||
               error.message ||
-              "Unable to load participants.",
+              __("Unable to load participants."),
           });
       });
     return () => {
@@ -204,7 +205,7 @@ export function useRedeemParticipants(request) {
           error?.data?.data?.message ||
           error?.data?.message ||
           error.message ||
-          "Unable to verify availability.",
+          __("Unable to verify availability."),
       }));
       return false;
     } finally {

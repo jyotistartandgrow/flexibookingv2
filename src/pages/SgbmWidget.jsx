@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import axiosInstance from "../Utils/Interceptor";
 import { darkenHex, escapeHtml, toSafeUrl } from "../Utils/Functions";
+import moment from "moment";
+import { __, _n, sprintf, withElement, getLanguageTag } from "../i18n";
 
 /* ── Constants ───────────────────────────────────────────── */
 const API_BASE = import.meta.env.VITE_API_URL;
@@ -16,7 +18,12 @@ const DEFAULT_REDIRECT_URL = "";
 //   "#10b981",
 // ];
 
-const WEEKDAY_LABELS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+// Monday-first short day names in the page language ("Mo".."Su" in English).
+// moment's list starts on Sunday and follows the language set in main.jsx.
+const weekdayLabels = () => {
+  const names = moment.weekdaysMin();
+  return [...names.slice(1), names[0]];
+};
 
 /* ── Helpers ─────────────────────────────────────────────── */
 function parsePrice(raw = "") {
@@ -75,10 +82,10 @@ function CalendarPreview({ accentColor, redirectUrl }) {
         });
         setCalData((prev) => ({ ...prev, [key]: map }));
       } else {
-        setError("Failed to load calendar.");
+        setError(__("Failed to load calendar."));
       }
     } catch {
-      setError("Network error loading calendar.");
+      setError(__("Network error loading calendar."));
     } finally {
       setLoading(false);
     }
@@ -95,7 +102,7 @@ function CalendarPreview({ accentColor, redirectUrl }) {
   const daysInMonth = getDaysInMonth(year, month);
   const totalCells = Math.ceil((offset + daysInMonth) / 7) * 7;
 
-  const monthLabel = new Date(year, month, 1).toLocaleString("en-US", {
+  const monthLabel = new Date(year, month, 1).toLocaleString(getLanguageTag(), {
     month: "long",
   });
 
@@ -137,7 +144,7 @@ function CalendarPreview({ accentColor, redirectUrl }) {
           </button>
         </div>
         <div className="fx-widget-cal-days-header">
-          {WEEKDAY_LABELS.map((d) => (
+          {weekdayLabels().map((d) => (
             <span key={d} className="fx-widget-cal-day-name">
               {d}
             </span>
@@ -152,7 +159,7 @@ function CalendarPreview({ accentColor, redirectUrl }) {
               className="fx-widget-spinner"
               style={{ "--fx-accent": accentColor }}
             />
-            <span>Loading dates…</span>
+            <span>{__("Loading dates…")}</span>
           </div>
         ) : error ? (
           <div className="fx-widget-error">
@@ -234,10 +241,10 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
           );
           setServices(filtered);
         } else {
-          setError("Failed to load services.");
+          setError(__("Failed to load services."));
         }
       })
-      .catch(() => setError("Network error loading services."))
+      .catch(() => setError(__("Network error loading services.")))
       .finally(() => setLoading(false));
   }, [today]);
 
@@ -264,7 +271,7 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
           className="fx-widget-spinner"
           style={{ "--fx-accent": accentColor }}
         />
-        <span>Loading services…</span>
+        <span>{__("Loading services…")}</span>
       </div>
     );
 
@@ -308,7 +315,10 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
         <p className="fx-widget-card-desc">{s.svc_short_desc}</p>
         <div className="fx-widget-card-footer">
           <span className="fx-widget-card-price">
-            from <strong>€{parsePrice(s.svc_price)}</strong>
+            {withElement(
+              __("from %s"),
+              <strong>€{parsePrice(s.svc_price)}</strong>,
+            )}
           </span>
           <span className="fx-widget-card-arrow">›</span>
         </div>
@@ -324,21 +334,21 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
       <div
         className="fx-widget-view-switch"
         role="tablist"
-        aria-label="Cards view"
+        aria-label={__("Cards view")}
       >
         <button
           className={`fx-widget-view-btn${viewMode === "grid" ? " active" : ""}`}
           onClick={() => setViewMode("grid")}
           type="button"
         >
-          Grid
+          {__("Grid")}
         </button>
         <button
           className={`fx-widget-view-btn${viewMode === "carousel" ? " active" : ""}`}
           onClick={() => setViewMode("carousel")}
           type="button"
         >
-          Carousel
+          {__("Carousel")}
         </button>
       </div>
 
@@ -352,7 +362,7 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
             className="fx-widget-carousel-arrow"
             onClick={() => scrollDesktop("prev")}
             type="button"
-            aria-label="Previous"
+            aria-label={__("Previous")}
           >
             ‹
           </button>
@@ -372,7 +382,7 @@ function CardsPreview({ accentColor, cols, showCategory, redirectUrl }) {
             className="fx-widget-carousel-arrow"
             onClick={() => scrollDesktop("next")}
             type="button"
-            aria-label="Next"
+            aria-label={__("Next")}
           >
             ›
           </button>
@@ -522,21 +532,21 @@ export default function WidgetBuilder() {
       <div className="fx-widget-layout fx-booking fx-container bgbody">
         {/* ── Config Panel ── */}
         <aside className="fx-widget-config">
-          <Section label="Widget type">
+          <Section label={__("Widget type")}>
             <div className="fx-widget-opt-group">
               <OptBtn
                 active={tab === "calendar"}
                 onClick={() => setTab("calendar")}
               >
-                Calendar
+                {__("Calendar")}
               </OptBtn>
               <OptBtn active={tab === "cards"} onClick={() => setTab("cards")}>
-                Cards
+                {__("Cards")}
               </OptBtn>
             </div>
           </Section>
 
-          <Section label="Accent color">
+          <Section label={__("Accent color")}>
             <div className="fx-widget-color-row">
               {/* {ACCENT_PRESETS.map((c) => (
                 <div
@@ -551,14 +561,14 @@ export default function WidgetBuilder() {
                 className="fx-widget-color-input"
                 value={accentColor}
                 onChange={(e) => setAccentColor(e.target.value)}
-                title="Custom color"
+                title={__("Custom color")}
               />
             </div>
           </Section>
 
           {tab === "cards" && (
             <>
-              <Section label="Columns">
+              <Section label={__("Columns")}>
                 <div className="fx-widget-opt-group">
                   {[1, 2, 3].map((n) => (
                     <OptBtn
@@ -566,35 +576,35 @@ export default function WidgetBuilder() {
                       active={cols === n}
                       onClick={() => setCols(n)}
                     >
-                      {n} col{n > 1 ? "s" : ""}
+                      {sprintf(_n("%s col", "%s cols", n), n)}
                     </OptBtn>
                   ))}
                 </div>
               </Section>
 
-              <Section label="Category badge">
+              <Section label={__("Category badge")}>
                 <div className="fx-widget-opt-group">
                   <OptBtn
                     active={showCategory}
                     onClick={() => setShowCategory(true)}
                   >
-                    Show
+                    {__("Show")}
                   </OptBtn>
                   <OptBtn
                     active={!showCategory}
                     onClick={() => setShowCategory(false)}
                   >
-                    Hide
+                    {__("Hide")}
                   </OptBtn>
                 </div>
               </Section>
             </>
           )}
 
-          <Section label="Iframe size">
+          <Section label={__("Iframe size")}>
             <div className="fx-widget-slider-wrap">
               <label className="fx-widget-slider-label">
-                Width: <strong>{widgetWidth}px</strong>
+                {withElement(__("Width: %s"), <strong>{widgetWidth}px</strong>)}
                 <input
                   type="range"
                   min={280}
@@ -606,7 +616,7 @@ export default function WidgetBuilder() {
                 />
               </label>
               <label className="fx-widget-slider-label">
-                Height: <strong>{widgetHeight}px</strong>
+                {withElement(__("Height: %s"), <strong>{widgetHeight}px</strong>)}
                 <input
                   type="range"
                   min={300}
@@ -620,14 +630,14 @@ export default function WidgetBuilder() {
             </div>
           </Section>
 
-          <Section label="Redirect URL">
+          <Section label={__("Redirect URL")}>
             <input
               value={redirectUrl || ""}
               className="fx-widget-url-input"
               onChange={(e) => setRedirectUrl(e.target.value)}
             />
             <p className="fx-widget-url-hint">
-              Clicks redirect to your booking shortcode page
+              {__("Clicks redirect to your booking shortcode page")}
             </p>
           </Section>
         </aside>
@@ -636,9 +646,9 @@ export default function WidgetBuilder() {
         <main className="fx-widget-content">
           <div className="fx-widget-content-topbar">
             <div className="fx-widget-content-header">
-              <div className="fx-widget-header-title">Widget Builder</div>
+              <div className="fx-widget-header-title">{__("Widget Builder")}</div>
               <span className="fx-widget-panel-title">
-                {mode === "preview" ? "Live Preview" : "Embed Code"}
+                {mode === "preview" ? __("Live Preview") : __("Embed Code")}
               </span>
             </div>
             <div className="fx-widget-tabbar">
@@ -646,13 +656,13 @@ export default function WidgetBuilder() {
                 className={`fx-widget-tab${mode === "preview" ? " fx-widget-tab-active" : ""}`}
                 onClick={() => setMode("preview")}
               >
-                Preview
+                {__("Preview")}
               </button>
               <button
                 className={`fx-widget-tab${mode === "code" ? " fx-widget-tab-active" : ""}`}
                 onClick={() => setMode("code")}
               >
-                Embed code
+                {__("Embed code")}
               </button>
             </div>
           </div>
@@ -690,28 +700,34 @@ export default function WidgetBuilder() {
                   className={`fx-widget-copy-btn${copied ? " fx-widget-copy-success" : ""}`}
                   onClick={handleCopy}
                 >
-                  {copied ? "✓ Copied!" : "Copy"}
+                  {copied ? `✓ ${__("Copied!")}` : __("Copy")}
                 </button>
                 <pre className="fx-widget-code-block">{embedCode}</pre>
               </div>
 
               <div className="fx-widget-banner fx-widget-banner-success">
                 <p className="fx-widget-banner-title">
-                  How to embed on your site:
+                  {__("How to embed on your site:")}
                 </p>
                 <ol>
-                  <li>Copy the embed code above</li>
-                  <li>Paste into a Custom HTML block on your site</li>
+                  <li>{__("Copy the embed code above")}</li>
+                  <li>{__("Paste into a Custom HTML block on your site")}</li>
                   <li>
-                    The script renders the widget directly on your page (no
-                    iframe)
+                    {__(
+                      "The script renders the widget directly on your page (no iframe)",
+                    )}
                   </li>
                 </ol>
               </div>
 
               <div className="fx-widget-banner fx-widget-banner-info">
-                <strong>Tip:</strong> You can paste this snippet multiple times
-                on one page. Load <strong>widget-embed.js</strong> only once.
+                <strong>{__("Tip:")}</strong>{" "}
+                {withElement(
+                  __(
+                    "You can paste this snippet multiple times on one page. Load %s only once.",
+                  ),
+                  <strong>widget-embed.js</strong>,
+                )}
               </div>
             </>
           )}

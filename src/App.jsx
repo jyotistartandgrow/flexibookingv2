@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { __ } from "./i18n";
 
 // Declared at module scope: lazy() inside the component body creates new
 // component types on every render, which remounts the whole booking tree.
@@ -22,7 +23,9 @@ const SgbmSingleService = lazy(() => import("./pages/SgbmSingleService"));
 export default function App({ initialRoute = "/", ...props }) {
   return (
     <MemoryRouter initialEntries={[initialRoute]}>
-      <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+      <Suspense
+        fallback={<div className="p-8 text-center">{__("Loading...")}</div>}
+      >
         <Routes>
           <Route path="/" element={<Layout {...props} />}>
             <Route index element={<SgbmDateGift {...props} />} />
@@ -46,7 +49,7 @@ export default function App({ initialRoute = "/", ...props }) {
               path="singleservice"
               element={<SgbmSingleService {...props} />}
             />
-            <Route path="*" element={<h1>Page Not Found</h1>} />
+            <Route path="*" element={<h1>{__("Page Not Found")}</h1>} />
           </Route>
           <Route path="redeemgift" element={<RedeemGift {...props} />} />
           <Route path="thankyou" element={<Thankyou />} />
