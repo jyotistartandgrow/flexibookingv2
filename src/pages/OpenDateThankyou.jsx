@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.webp";
 import { useDispatch, useSelector } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
