@@ -929,6 +929,9 @@
     width: 82%;
     padding-right: 37px;
   }
+   .fx-service-step .step.checkoutstep {
+            width: 59%;
+  }
   .fx-service-step .step {
     padding-right: 32px;
     left: 39%;
@@ -1016,6 +1019,7 @@
 
 // redeem-upsell-step
 
+
 .fx-stepper-tabstyle.fx-redeem-upsell-step .codestep.active {
   width: 18%;
 }
@@ -1099,4 +1103,41 @@
     color: #cae9ed;
     background: #fbfbfb;
     border: 1px solid #f1f1f1;
+}
+
+@media screen and (min-width: 768px) {
+.fx-it-italy .fx-service-step .checkoutstep{
+  width: 82%;
+  padding-right: 27px;
+}
+
+.fx-it-italy .fx-service-step .step.paymentstep {
+    padding-right: 21px;
+}
+
+.fx-it-italy .fx-service-step .extrastep {
+    width: 52%;
+}
+
+.fx-it-italy .fx-service-step .servicesstep.complete{
+      width: 26%;
+}
+
+.fx-it-italy .fx-service-step .extrastep.active{
+  width: 31%;
+}
+
+.fx-it-italy .fx-service-step .extrastep.complete{
+      width: 43%;
+}
+
+.fx-it-italy .fx-service-step .checkoutstep.active{
+    width: 39%;
+    left: 43%;
+}
+
+.fx-it-italy .fx-service-step .paymentstep.active {
+    padding-left: 101px;
+}
+
 }
