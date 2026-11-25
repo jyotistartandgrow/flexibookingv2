@@ -35,22 +35,22 @@ export default function ReedemSteps(props) {
   // "Add more services" adds a Service step and a Payment step for the paid additions.
   const redeemSteps = phoneOnly
     ? [
-        ["codestep", __("CODE"), __("ENTER YOUR CODE")],
-        ["datestep", __("VOUCHER DETAILS"), __("VOUCHER DETAILS")],
+        ["codestep", __("Code"), __("Enter Your Code")],
+        ["datestep", __("Voucher Details"), __("Voucher Details")],
       ]
     : isUpsell
       ? [
-          ["codestep", __("CODE"), __("ENTER YOUR CODE")],
-          ["datestep", __("DATE & SLOT"), __("SELECT DATE & SLOT")],
-          ["upsellstep", __("OPTIONAL ADDITIONS"), __("OPTIONAL ADDITIONS")],
-          ["checkoutstep", __("DETAILS"), __("DETAILS")],
+          ["codestep", __("Code"), __("Enter Your Code")],
+          ["datestep", __("Date & Slot"), __("Select Date & Slot")],
+          ["upsellstep", __("Optional Additions"), __("Optional Additions")],
+          ["checkoutstep", __("Details"), __("Details")],
           // Payment only applies when additions were chosen; skipping redeems the gift directly.
-          ...(hasAdditions ? [["paymentstep", __("PAYMENT"), __("PAYMENT")]] : []),
+          ...(hasAdditions ? [["paymentstep", __("Payment"), __("Payment")]] : []),
         ]
       : [
-          ["codestep", __("CODE"), __("ENTER YOUR CODE")],
-          ["datestep", __("DATE & SLOT"), __("SELECT DATE & SLOT")],
-          ["checkoutstep", __("CHECKOUT"), __("CHECKOUT")],
+          ["codestep", __("Code"), __("Enter Your Code")],
+          ["datestep", __("Date & Slot"), __("Select Date & Slot")],
+          ["checkoutstep", __("Checkout"), __("Checkout")],
         ];
   const activeIndex = Math.max(
     0,

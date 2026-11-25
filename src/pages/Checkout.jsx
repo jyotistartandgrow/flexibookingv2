@@ -1313,7 +1313,7 @@ export default function Checkout(props) {
           <input
             type="button"
             className="btn-primary"
-            value={selectedPaymentCard?.button || __("CONTINUE")}
+            value={__("Continue")}
             disabled={paymentMethodsLoading || !selectedPaymentCard}
             onClick={() => checkout()}
           />

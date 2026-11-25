@@ -187,7 +187,7 @@ export default function Steps({ type = "date", ...props }) {
               }}
             >
               <div>
-                1 <span>{__("CODE")}</span>
+                1 <span>{__("Code")}</span>
               </div>
             </div>
           )}
@@ -207,10 +207,10 @@ export default function Steps({ type = "date", ...props }) {
                 {isRedeemBooking ? 2 : 1}{" "}
                 <span>
                   {isRedeemBooking
-                    ? __("DATE & SLOT")
+                    ? __("Date & Slot")
                     : gift
-                      ? __("INFORMATION")
-                      : __("DATE")}
+                      ? __("Information")
+                      : __("Date")}
                 </span>
               </div>
             </div>
@@ -222,7 +222,7 @@ export default function Steps({ type = "date", ...props }) {
               onClick={() => dispatch(setStep("datestep"))}
             >
               <div>
-                1<span> {__("DATE")}</span>
+                1<span> {__("Date")}</span>
               </div>
             </div>
           )}
@@ -235,7 +235,7 @@ export default function Steps({ type = "date", ...props }) {
               }}
             >
               <div>
-                1 <span> {__("CATEGORY")}</span>
+                1 <span> {__("Category")}</span>
               </div>
             </div>
           )}
@@ -248,7 +248,7 @@ export default function Steps({ type = "date", ...props }) {
             >
               <div>
                 {isRedeemBooking ? 3 : type == "service" ? 1 : 2}{" "}
-                <span>{__("SERVICES")}</span>
+                <span>{__("Services")}</span>
               </div>
             </div>
           )}
@@ -270,7 +270,7 @@ export default function Steps({ type = "date", ...props }) {
                 : type == "service" || type == "singleservice"
                   ? 2
                   : 3}{" "}
-              <span>{__("EXTRA")}</span>
+              <span>{__("Extra")}</span>
             </div>
           </div>
           {showCustomize && (
@@ -282,7 +282,7 @@ export default function Steps({ type = "date", ...props }) {
             >
               <div>
                 {type == "service" || type == "singleservice" ? 3 : 4}{" "}
-                <span>{__("CUSTOMIZE")}</span>
+                <span>{__("Customize")}</span>
               </div>
             </div>
           )}
@@ -302,7 +302,7 @@ export default function Steps({ type = "date", ...props }) {
                   : showCustomize
                     ? 5
                     : 4}{" "}
-              <span>{isRedeemBooking ? __("INFORMATION") : __("CHECKOUT")}</span>
+              <span>{isRedeemBooking ? __("Information") : __("Checkout")}</span>
             </div>
           </div>
           <div className={paymentstepclass}>
@@ -316,7 +316,7 @@ export default function Steps({ type = "date", ...props }) {
                   : showCustomize
                     ? 6
                     : 5}{" "}
-              <span>{__("PAYMENT")}</span>
+              <span>{__("Payment")}</span>
             </div>
           </div>
         </div>

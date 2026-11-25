@@ -251,12 +251,13 @@ export default function OpenDateThankyou() {
       </div>
       <div className="fx-booking fx-container">
         <div className="fx-confirmation-wrapper">
-          <img
+         
+          <div className="fx-confirm-left">
+             <img
             src={logo}
             className="fx-thanku-logo"
             onClick={() => (window.location.href = "/")}
           />
-          <div className="fx-confirm-left">
             <div className="fx-voucher-icon">
               <i className="pi pi-file-pdf"></i>
               <span>{__("Voucher")}</span>
