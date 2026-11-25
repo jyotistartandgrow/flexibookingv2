@@ -1,6 +1,7 @@
 import { normalizeParticipantGroups } from "../Utils/participants";
 import { getRedemptionParty } from "../Utils/redeemParticipants";
 import "../styles/redeem-participants.scss";
+import { __, sprintf } from "../i18n";
 
 export default function RedeemParticipants({ selection }) {
   if (!selection.visible) return null;
@@ -9,13 +10,15 @@ export default function RedeemParticipants({ selection }) {
       className="fx-redeem-participants"
       aria-busy={selection.loading || selection.checking}
     >
-      <h2>Who is coming?</h2>
-      {selection.loading && <p role="status">Loading participant options…</p>}
+      <h2>{__("Who is coming?")}</h2>
+      {selection.loading && (
+        <p role="status">{__("Loading participant options…")}</p>
+      )}
       {selection.error && (
         <div role="alert">
           <p>{selection.error}</p>
           <button type="button" onClick={selection.retry}>
-            Try again
+            {__("Try again")}
           </button>
         </div>
       )}
@@ -26,7 +29,7 @@ export default function RedeemParticipants({ selection }) {
           return (
             <div className="fx-redeem-participant-service" key={component.key}>
               <h3>{component.name}</h3>
-              <p>Required visitors: {component.quantity}</p>
+              <p>{sprintf(__("Required visitors: %s"), component.quantity)}</p>
               {normalizeParticipantGroups(component.config).map((group) => (
                 <div className="fx-redeem-participant-row" key={group.key}>
                   <div>
@@ -36,7 +39,11 @@ export default function RedeemParticipants({ selection }) {
                   <div className="fx-redeem-participant-controls">
                     <button
                       type="button"
-                      aria-label={`Remove ${group.name} for ${component.name}`}
+                      aria-label={sprintf(
+                        __("Remove %1$s for %2$s"),
+                        group.name,
+                        component.name,
+                      )}
                       disabled={
                         component.fixed ||
                         group.disabled ||
@@ -47,12 +54,22 @@ export default function RedeemParticipants({ selection }) {
                     >
                       −
                     </button>
-                    <output aria-label={`${group.name} for ${component.name}`}>
+                    <output
+                      aria-label={sprintf(
+                        __("%1$s for %2$s"),
+                        group.name,
+                        component.name,
+                      )}
+                    >
                       {counts[group.key] || 0}
                     </output>
                     <button
                       type="button"
-                      aria-label={`Add ${group.name} for ${component.name}`}
+                      aria-label={sprintf(
+                        __("Add %1$s for %2$s"),
+                        group.name,
+                        component.name,
+                      )}
                       disabled={
                         component.fixed ||
                         group.disabled ||
@@ -68,9 +85,12 @@ export default function RedeemParticipants({ selection }) {
               ))}
               {!party.valid && (
                 <p className="fx-redeem-participant-warning" role="status">
-                  Choose {component.quantity} visitors for this service.
+                  {sprintf(
+                    __("Choose %s visitors for this service."),
+                    component.quantity,
+                  )}
                   {component.config?.adult_required
-                    ? " At least one adult or senior is required."
+                    ? ` ${__("At least one adult or senior is required.")}`
                     : ""}
                 </p>
               )}
@@ -80,10 +100,12 @@ export default function RedeemParticipants({ selection }) {
       {!selection.loading && !selection.error && (
         <p className="fx-redeem-participant-note">
           {selection.checking
-            ? "Checking availability…"
+            ? __("Checking availability…")
             : selection.valid
-              ? "Participants selected. Availability is checked when you continue."
-              : "Select participants for each included service to continue."}
+              ? __(
+                  "Participants selected. Availability is checked when you continue.",
+                )
+              : __("Select participants for each included service to continue.")}
         </p>
       )}
     </section>

@@ -30,6 +30,7 @@ import RedeemParticipants from "../components/RedeemParticipants";
 import RedeemByPhone from "../components/RedeemByPhone";
 import { isPhoneOnlyRedemption } from "../Utils/redeemByPhone";
 import { calendarLocaleOptions } from "../i18n/dates";
+import { __, sprintf, withElement } from "../i18n";
 
 // Same locale as CalendarPage, with the page language's month/day names, so
 // whichever loads last does not reset the other's translated names.
@@ -233,7 +234,7 @@ export default function SelectDate(props) {
         showConfirmButton: false,
         timer: 3000,
         icon: "warning",
-        title: "Please select a date",
+        title: __("Please select a date"),
       });
       dispatch(setLoading(false));
       return;
@@ -247,8 +248,8 @@ export default function SelectDate(props) {
         timer: 3000,
         icon: "warning",
         title: isBundleVoucher
-          ? "Please select a slot for every bundle component"
-          : "Please select a slot",
+          ? __("Please select a slot for every bundle component")
+          : __("Please select a slot"),
       });
       dispatch(setLoading(false));
       return;
@@ -367,7 +368,8 @@ export default function SelectDate(props) {
       const nextSchedule = getBundleScheduleFromResponse(responseData);
       if (!nextSchedule) {
         throw new Error(
-          responseData?.message || "Unable to load the next bundle component",
+          responseData?.message ||
+            __("Unable to load the next bundle component"),
         );
       }
 
@@ -414,7 +416,7 @@ export default function SelectDate(props) {
         title:
           error?.response?.data?.message ||
           error?.message ||
-          "Unable to load the next bundle component",
+          __("Unable to load the next bundle component"),
       });
     } finally {
       setBundleScheduleLoading(false);
@@ -445,10 +447,10 @@ export default function SelectDate(props) {
             <div className="fx-redeem-slot-heading">
               {props.stepsVisibility?.step_2_title_visible == "true" && (
                 <h1 className="fx-all-main-heading">
-                  {props.stepTitles?.step_2_title || "Select Date & Time"}{" "}
+                  {props.stepTitles?.step_2_title || __("Select Date & Time")}{" "}
                 </h1>
               )}
-              <p>Choose when you’d like to use this voucher.</p>
+              <p>{__("Choose when you’d like to use this voucher.")}</p>
             </div>
 
             <div
@@ -459,8 +461,8 @@ export default function SelectDate(props) {
                   <section className="fx-section-group">
                     <h2 className="fx-section-title">
                       {services.length === 1
-                        ? "Included service"
-                        : "Included services"}
+                        ? __("Included service")
+                        : __("Included services")}
                     </h2>
                     {services.map((product, index) => (
                       <RedeemItemCard
@@ -474,7 +476,7 @@ export default function SelectDate(props) {
                 <section className="fx-scheduling-panel">
                   <div className="fx-date-picker-group">
                     <label className="fx-label" htmlFor="redeem-slot-date">
-                      Date
+                      {__("Date")}
                     </label>
                     <div className="fx-input-with-icon">
                       <Calendar
@@ -511,17 +513,19 @@ export default function SelectDate(props) {
 
                   {!isBundleVoucher && voucherdetail?.slots?.length > 0 && (
                     <p className="fx-availability-note">
-                      Available times for{" "}
-                      <strong>
-                        {moment(voucherdetail?.date).format("dddd, MMM DD")}
-                      </strong>
+                      {withElement(
+                        __("Available times for %s"),
+                        <strong>
+                          {moment(voucherdetail?.date).format("dddd, MMM DD")}
+                        </strong>,
+                      )}
                     </p>
                   )}
 
                   {!isBundleVoucher && (
                     <div className="fx-time-selector-grid">
                       {voucherdetail?.slots?.length == 0 && (
-                        <div>No slots available for the selected date.</div>
+                        <div>{__("No slots available for the selected date.")}</div>
                       )}
                       {voucherdetail?.slots?.map((slot, index) => {
                         const slotLabel = getSlotLabel(slot);
@@ -550,13 +554,16 @@ export default function SelectDate(props) {
                       <div className="fx-booking-modal-header">
                         <div className="fx-bundle-modal-heading">
                           <h2 className="fx-booking-modal-title">
-                            Bundle slots
+                            {__("Bundle slots")}
                           </h2>
-                          <p>Pick slots for each package component in order.</p>
+                          <p>{__("Pick slots for each package component in order.")}</p>
                         </div>
                         <span className="fx-bundle-progress">
-                          {selectedBundleSlots.length} of{" "}
-                          {bundleComponents.length} selected
+                          {sprintf(
+                            __("%1$s of %2$s selected"),
+                            selectedBundleSlots.length,
+                            bundleComponents.length,
+                          )}
                         </span>
                       </div>
 
@@ -618,16 +625,16 @@ export default function SelectDate(props) {
                                 >
                                   <div className="fx-massage-card-info">
                                     <div className="fx-component-label-row">
-                                      <span>Component {position}</span>
+                                      <span>{sprintf(__("Component %s"), position)}</span>
                                       <span
                                         className={`fx-component-status fx-status-${isSelected ? "selected" : isWaiting ? "waiting" : "active"}`}
                                       >
                                         {" "}
                                         {isSelected
-                                          ? "Selected"
+                                          ? __("Selected")
                                           : isWaiting
-                                            ? "Waiting"
-                                            : "Choose now"}
+                                            ? __("Waiting")
+                                            : __("Choose now")}
                                       </span>
                                     </div>
                                     <div className="fx-bundle-component-title-row">
@@ -635,7 +642,10 @@ export default function SelectDate(props) {
                                         {component?.service_name}
                                       </h3>
                                       <p className="fx-massage-description">
-                                        Quantity: {componentQuantity}
+                                        {sprintf(
+                                          __("Quantity: %s"),
+                                          componentQuantity,
+                                        )}
                                       </p>
                                     </div>
                                   </div>
@@ -646,8 +656,12 @@ export default function SelectDate(props) {
 
                                 {isWaiting && (
                                   <p className="fx-component-waiting-message">
-                                    Choose slot after completing Component{" "}
-                                    {componentIndex}
+                                    {sprintf(
+                                      __(
+                                        "Choose slot after completing Component %s",
+                                      ),
+                                      componentIndex,
+                                    )}
                                   </p>
                                 )}
 
@@ -655,9 +669,9 @@ export default function SelectDate(props) {
                                   <div className="fx-massage-card-content">
                                     <div className="fx-bundle-slot-tabs">
                                       {[
-                                        ["morning", "Morning"],
-                                        ["afternoon", "Afternoon"],
-                                        ["all", "All day"],
+                                        ["morning", __("Morning")],
+                                        ["afternoon", __("Afternoon")],
+                                        ["all", __("All day")],
                                       ].map(([tabKey, tabLabel]) => (
                                         <button
                                           className={
@@ -729,7 +743,10 @@ export default function SelectDate(props) {
                                                   </span>
                                                 </span>
                                                 <small>
-                                                  {slotItem?.capacity_left} left
+                                                  {sprintf(
+                                                    __("%s left"),
+                                                    slotItem?.capacity_left,
+                                                  )}
                                                 </small>
                                               </button>
                                             );
@@ -738,7 +755,11 @@ export default function SelectDate(props) {
                                       </div>
                                     ) : (
                                       <p className="fx-no-bundle-slots">
-                                        No {activeTab} slots available
+                                        {activeTab === "morning"
+                                          ? __("No morning slots available")
+                                          : activeTab === "afternoon"
+                                            ? __("No afternoon slots available")
+                                            : __("No all slots available")}
                                       </p>
                                     )}
                                   </div>
@@ -751,8 +772,8 @@ export default function SelectDate(props) {
                           className={`fx-bundle-selection-message${bundleSelectionComplete ? " fx-complete" : ""}`}
                         >
                           {bundleSelectionComplete
-                            ? "All component slots are selected."
-                            : "Choose every bundle component slot."}
+                            ? __("All component slots are selected.")
+                            : __("Choose every bundle component slot.")}
                         </p>
                       </div>
                     </div>
@@ -761,7 +782,7 @@ export default function SelectDate(props) {
                 {extras.length > 0 && (
                   <section className="fx-section-group">
                     <h2 className="fx-section-title">
-                      {extras.length === 1 ? "Extra" : "Extras"}
+                      {extras.length === 1 ? __("Extra") : __("Extras")}
                     </h2>
                     {extras.map((product, index) => (
                       <RedeemItemCard
@@ -796,7 +817,7 @@ export default function SelectDate(props) {
                 onClick={() => dispatch(setRedeemStep("codestep"))}
               >
                 <ArrowLeft size={16} aria-hidden="true" />
-                Back
+                {__("Back")}
               </button>
               <div className="fx-footer-primary-actions">
                 <button
@@ -809,7 +830,7 @@ export default function SelectDate(props) {
                   }}
                   disabled={isContinueDisabled}
                 >
-                  Continue
+                  {__("Continue")}
                 </button>
               </div>
             </div>

@@ -13,6 +13,7 @@ import RedeemCommonbox from "../components/RedeemCommonbox";
 import axiosInstance from "../Utils/Interceptor";
 import useDeviceType from "../Utils/useDeviceType";
 import { isPhoneOnlyRedemption } from "../Utils/redeemByPhone";
+import { __ } from "../i18n";
 
 export default function ReedemSteps(props) {
   const dispatch = useDispatch();
@@ -34,22 +35,22 @@ export default function ReedemSteps(props) {
   // "Add more services" adds a Service step and a Payment step for the paid additions.
   const redeemSteps = phoneOnly
     ? [
-        ["codestep", "CODE", "ENTER YOUR CODE"],
-        ["datestep", "VOUCHER DETAILS", "VOUCHER DETAILS"],
+        ["codestep", __("CODE"), __("ENTER YOUR CODE")],
+        ["datestep", __("VOUCHER DETAILS"), __("VOUCHER DETAILS")],
       ]
     : isUpsell
       ? [
-          ["codestep", "CODE", "ENTER YOUR CODE"],
-          ["datestep", "DATE & SLOT", "SELECT DATE & SLOT"],
-          ["upsellstep", "OPTIONAL ADDITIONS", "OPTIONAL ADDITIONS"],
-          ["checkoutstep", "DETAILS", "DETAILS"],
+          ["codestep", __("CODE"), __("ENTER YOUR CODE")],
+          ["datestep", __("DATE & SLOT"), __("SELECT DATE & SLOT")],
+          ["upsellstep", __("OPTIONAL ADDITIONS"), __("OPTIONAL ADDITIONS")],
+          ["checkoutstep", __("DETAILS"), __("DETAILS")],
           // Payment only applies when additions were chosen; skipping redeems the gift directly.
-          ...(hasAdditions ? [["paymentstep", "PAYMENT", "PAYMENT"]] : []),
+          ...(hasAdditions ? [["paymentstep", __("PAYMENT"), __("PAYMENT")]] : []),
         ]
       : [
-          ["codestep", "CODE", "ENTER YOUR CODE"],
-          ["datestep", "DATE & SLOT", "SELECT DATE & SLOT"],
-          ["checkoutstep", "CHECKOUT", "CHECKOUT"],
+          ["codestep", __("CODE"), __("ENTER YOUR CODE")],
+          ["datestep", __("DATE & SLOT"), __("SELECT DATE & SLOT")],
+          ["checkoutstep", __("CHECKOUT"), __("CHECKOUT")],
         ];
   const activeIndex = Math.max(
     0,
@@ -136,7 +137,7 @@ export default function ReedemSteps(props) {
           }}
         >
           <div className="fx-bottombar-top-details">
-            <span className="fx-order-details">Order Details </span>
+            <span className="fx-order-details">{__("Order Details")} </span>
             <i
               className={
                 step != "checkoutstep"
@@ -191,7 +192,7 @@ export default function ReedemSteps(props) {
               <i className="pi pi-chevron-down"></i>
             </div>
           )}
-          <h3>Order Details</h3>
+          <h3>{__("Order Details")}</h3>
           <RedeemCommonbox setVisibleBottom={setVisibleBottom} />
         </div>
       </Sidebarpanel>

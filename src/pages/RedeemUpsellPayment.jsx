@@ -18,6 +18,7 @@ import {
   getApiErrorMessage,
 } from "../Utils/redeemUpsells";
 import "../styles/redeem-upsell-services.scss";
+import { __, sprintf, getStripeLocale } from "../i18n";
 
 const stripePromiseCache = {};
 const PAID_INTENT_STATUSES = ["succeeded", "processing", "requires_capture"];
@@ -92,13 +93,15 @@ function usePayAdditions() {
         // Only follow http(s) payment URLs; never script-capable schemes.
         const paymentUrl = toSafeUrl(payment.payment_url);
         if (!paymentUrl)
-          throw new Error("Invalid payment link. Please try again.");
+          throw new Error(__("Invalid payment link. Please try again."));
         window.location.href = paymentUrl;
         return;
       }
       if (payment.status !== "provider_paid") {
         if (!confirmCard || !payment.client_secret)
-          throw new Error("Card payment is not available. Please try again.");
+          throw new Error(
+            __("Card payment is not available. Please try again."),
+          );
         const { error, paymentIntent } = await confirmCard(
           payment.client_secret,
         );
@@ -106,7 +109,7 @@ function usePayAdditions() {
         if (!PAID_INTENT_STATUSES.includes(intent?.status)) {
           throw new Error(
             error?.message ||
-              "Payment could not be processed. Please try again.",
+              __("Payment could not be processed. Please try again."),
           );
         }
       }
@@ -115,7 +118,7 @@ function usePayAdditions() {
       showError(
         getApiErrorMessage(
           error,
-          "Payment could not be processed. Please try again.",
+          __("Payment could not be processed. Please try again."),
         ),
       );
     } finally {
@@ -185,7 +188,7 @@ function CardPaymentForm({ totalLabel }) {
           disabled={!stripe || busy}
           className="btn-primary"
         >
-          {busy ? "Processing..." : `Pay ${totalLabel}`}
+          {busy ? __("Processing...") : sprintf(__("Pay %s"), totalLabel)}
         </button>
       </div>
     </form>
@@ -202,7 +205,7 @@ function RedirectPaymentButton({ totalLabel }) {
         className="btn-primary"
         onClick={() => pay("auto")}
       >
-        {busy ? "Processing..." : `Pay ${totalLabel}`}
+        {busy ? __("Processing...") : sprintf(__("Pay %s"), totalLabel)}
       </button>
     </div>
   );
@@ -231,7 +234,7 @@ export default function RedeemUpsellPayment(props) {
     <div className="fx-leftcontentbox fx-checkoutpage fx-redeem-upsell-payment">
       {props.stepsVisibility?.step_5_title_visible != "false" && (
         <h1 className="fx-all-main-heading">
-          {props.stepTitles?.step_5_title || "Payment"}
+          {props.stepTitles?.step_5_title || __("Payment")}
         </h1>
       )}
 
@@ -280,7 +283,7 @@ export default function RedeemUpsellPayment(props) {
 
       <div className="fx-paymentbox">
         {stripePromise ? (
-          <Elements stripe={stripePromise}>
+          <Elements stripe={stripePromise} options={{ locale: getStripeLocale() }}>
             <CardPaymentForm totalLabel={totalLabel} />
           </Elements>
         ) : (
@@ -293,7 +296,7 @@ export default function RedeemUpsellPayment(props) {
         className="fx-upsell-back fx-redeem-payment-back"
         onClick={() => dispatch(setRedeemStep("checkoutstep"))}
       >
-        Back
+        {__("Back")}
       </button>
     </div>
   );

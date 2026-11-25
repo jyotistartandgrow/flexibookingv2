@@ -7,6 +7,7 @@ import { setDate, setGift, setLoading } from "../store/step1Slice";
 import { setService } from "../store/step2Slice";
 import { decodeHtml } from "../Utils/Functions";
 import Service from "./Service";
+import { __ } from "../i18n";
 
 export default function ServiceTab(props) {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ export default function ServiceTab(props) {
   useEffect(() => {
     if (!serviceid) {
       setServiceDetails(null);
-      setErrorMessage("A service ID is required to load this service.");
+      setErrorMessage(__("A service ID is required to load this service."));
       return;
     }
 
@@ -60,7 +61,9 @@ export default function ServiceTab(props) {
         if (!active) return;
         if (data?.status != 200 || !data?.data || data.data.length === 0) {
           setServiceDetails(null);
-          setErrorMessage(data?.message || "Unable to load service details.");
+          setErrorMessage(
+            data?.message || __("Unable to load service details."),
+          );
           return;
         }
 
@@ -83,7 +86,8 @@ export default function ServiceTab(props) {
         if (!active) return;
         setServiceDetails(null);
         setErrorMessage(
-          error?.response?.data?.message || "Unable to load service details.",
+          error?.response?.data?.message ||
+            __("Unable to load service details."),
         );
       } finally {
         if (active) dispatch(setLoading(false));
@@ -131,7 +135,7 @@ export default function ServiceTab(props) {
               <img
                 className="fx-service-card__image"
                 src={serviceDetails.svc_img}
-                alt={title || "Service"}
+                alt={title || __("Service")}
               />
             ) : (
               <div className="fx-service-card__image-placeholder">
@@ -163,22 +167,23 @@ export default function ServiceTab(props) {
 
           <div className="fx-service-card__content">
             <div className="fx-service-card__eyebrow">
-              {serviceDetails?.is_bundle ? "BUNDLE" : "SINGLE SERVICE"}
+              {serviceDetails?.is_bundle ? __("BUNDLE") : __("SINGLE SERVICE")}
             </div>
 
             <h1
               className="fx-service-card__title"
               style={{ color: serviceDetails?.svc_name_colour || undefined }}
             >
-              {title || (errorMessage ? "Service unavailable" : "Loading...")}
+              {title ||
+                (errorMessage ? __("Service unavailable") : __("Loading..."))}
               <span
                 className="fx-service-card__info"
                 title={
                   description && props.showDescription == "true"
                     ? decodeHtml(description)
-                    : "Service information"
+                    : __("Service information")
                 }
-                aria-label="More information"
+                aria-label={__("More information")}
               >
                 i
               </span>
@@ -190,7 +195,7 @@ export default function ServiceTab(props) {
 
             {props.showPrice == "true" && (
               <p className="fx-service-card__price">
-                <span>Total</span>
+                <span>{__("Total")}</span>
                 <strong>
                   {serviceDetails?.svc_price
                     ? decodeHtml(serviceDetails.svc_price)
@@ -218,7 +223,7 @@ export default function ServiceTab(props) {
                       ></rect>
                       <path d="M2.8 6h18.4v3H2.8zM12 6v14.5M12 6H8.8a2.2 2.2 0 1 1 2.2-2.2V6Zm0 0h3.2a2.2 2.2 0 1 0-2.2-2.2V6Z"></path>
                     </svg>
-                    Buy as Gift
+                    {__("Buy as Gift")}
                   </button>
                 )}
               {props.showProceedButton == "true" && (
@@ -228,7 +233,7 @@ export default function ServiceTab(props) {
                   disabled={!serviceDetails}
                   onClick={() => openServicePopup(false)}
                 >
-                  Book Now
+                  {__("Book Now")}
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M5 12h13M13 6.5l5.5 5.5-5.5 5.5"></path>
                   </svg>

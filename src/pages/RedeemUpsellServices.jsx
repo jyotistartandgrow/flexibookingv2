@@ -13,12 +13,13 @@ import ServiceCard from "../components/ServiceCard";
 import RedeemSelectedServices from "../components/RedeemSelectedServices";
 import { choiceKey, getSelectedChoice } from "../Utils/redeemUpsells";
 import "../styles/redeem-upsell-services.scss";
+import { __, sprintf } from "../i18n";
 
 const getErrorMessage = (error) =>
   error?.response?.data?.message ||
   error?.data?.message ||
   error?.message ||
-  "Unable to load additions for this schedule.";
+  __("Unable to load additions for this schedule.");
 
 export default function RedeemUpsellServices() {
   const dispatch = useDispatch();
@@ -196,25 +197,30 @@ export default function RedeemUpsellServices() {
     >
       <header className="fx-redemption-upsells__heading">
         <div>
-          <p className="fx-redemption-upsells__eyebrow">Optional additions</p>
-          <h1 id="fx-upsell-heading">Make the appointment your own</h1>
+          <p className="fx-redemption-upsells__eyebrow">{__("Optional additions")}</p>
+          <h1 id="fx-upsell-heading">{__("Make the appointment your own")}</h1>
           <p>
-            Only additions available for your selected schedule are shown. You
-            pay only for what you add.
+            {__(
+              "Only additions available for your selected schedule are shown. You pay only for what you add.",
+            )}
           </p>
         </div>
         {maxProducts > 0 && (
           <span className="fx-redemption-upsells__count" aria-live="polite">
             {selectedItems.length > 0
-              ? `${selectedItems.length} of ${maxProducts} selected`
-              : `Choose up to ${maxProducts}`}
+              ? sprintf(
+                  __("%1$s of %2$s selected"),
+                  selectedItems.length,
+                  maxProducts,
+                )
+              : sprintf(__("Choose up to %s"), maxProducts)}
           </span>
         )}
       </header>
 
       {loading && (
         <p className="fx-redemption-upsells__status" role="status">
-          Loading additions for your schedule…
+          {__("Loading additions for your schedule…")}
         </p>
       )}
 
@@ -229,14 +235,14 @@ export default function RedeemUpsellServices() {
             className="fx-upsell-back"
             onClick={() => setRetry((value) => value + 1)}
           >
-            Try again
+            {__("Try again")}
           </button>
         </div>
       )}
 
       {!loading && !error && recommendations.length === 0 && (
         <p className="fx-redemption-upsells__status" role="status">
-          There are no additions available for your selected schedule.
+          {__("There are no additions available for your selected schedule.")}
         </p>
       )}
 
@@ -268,7 +274,7 @@ export default function RedeemUpsellServices() {
                     disabled={blocked}
                     onClick={(event) => event.stopPropagation()}
                     onChange={() => toggleItem(item)}
-                    aria-label={`Select ${item.name}`}
+                    aria-label={sprintf(__("Select %s"), item.name)}
                   />
                 }
               >
@@ -279,7 +285,7 @@ export default function RedeemUpsellServices() {
                   <div
                     className="fx-upsell-service__quantity"
                     role="group"
-                    aria-label={`${item.name} quantity`}
+                    aria-label={sprintf(__("%s quantity"), item.name)}
                   >
                     <button
                       type="button"
@@ -288,13 +294,13 @@ export default function RedeemUpsellServices() {
                         event.stopPropagation();
                         stepQuantity(item, -1);
                       }}
-                      aria-label={`Decrease ${item.name} quantity`}
+                      aria-label={sprintf(__("Decrease %s quantity"), item.name)}
                     >
                       <Minus size={13} aria-hidden="true" />
                     </button>
                     <output
                       aria-live="polite"
-                      aria-label={`${item.name} selected quantity`}
+                      aria-label={sprintf(__("%s selected quantity"), item.name)}
                     >
                       {quantity}
                     </output>
@@ -305,7 +311,7 @@ export default function RedeemUpsellServices() {
                         event.stopPropagation();
                         stepQuantity(item, 1);
                       }}
-                      aria-label={`Increase ${item.name} quantity`}
+                      aria-label={sprintf(__("Increase %s quantity"), item.name)}
                     >
                       <Plus size={13} aria-hidden="true" />
                     </button>
@@ -323,7 +329,7 @@ export default function RedeemUpsellServices() {
           className="fx-upsell-back"
           onClick={() => dispatch(setRedeemStep("datestep"))}
         >
-          <ArrowLeft size={16} aria-hidden="true" /> Back
+          <ArrowLeft size={16} aria-hidden="true" /> {__("Back")}
         </button>
         <div className="fx-redemption-upsells__continue">
           <button
@@ -331,7 +337,7 @@ export default function RedeemUpsellServices() {
             className="fx-upsell-skip"
             onClick={skipAdditions}
           >
-            Skip
+            {__("Skip")}
           </button>
           {!loading && !error && recommendations.length > 0 && (
             <button
@@ -340,7 +346,7 @@ export default function RedeemUpsellServices() {
               onClick={openPopup}
               disabled={selectedItems.length === 0}
             >
-              Continue <ArrowRight size={17} aria-hidden="true" />
+              {__("Continue")} <ArrowRight size={17} aria-hidden="true" />
             </button>
           )}
         </div>

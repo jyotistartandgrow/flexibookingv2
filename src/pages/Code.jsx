@@ -17,6 +17,7 @@ import {
   setRedeemUpsellSelections,
   setSlot,
 } from "../store/step3Slice";
+import { __ } from "../i18n";
 
 export default function Code() {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ export default function Code() {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Please enter a voucher code",
+        title: __("Please enter a voucher code"),
       });
     }
     dispatch(setLoading(true));
@@ -58,7 +59,7 @@ export default function Code() {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
-        titleText: toPlainText(data?.message || "Invalid voucher code"),
+        titleText: toPlainText(data?.message || __("Invalid voucher code")),
       });
     }
     dispatch(setLoading(false));
@@ -69,13 +70,13 @@ export default function Code() {
       style={{ display: step === "codestep" ? "block" : "none" }}
     >
       <div className="fx-redeem-container">
-        <h2 className="fx-redeem-title">Redeem Your gift</h2>
+        <h2 className="fx-redeem-title">{__("Redeem Your gift")}</h2>
         <div className="fx-input-group">
           <input
             type="text"
             className="fx-voucher-input"
-            placeholder="Enter your voucher code"
-            aria-label="Voucher code"
+            placeholder={__("Enter your voucher code")}
+            aria-label={__("Voucher code")}
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
@@ -86,7 +87,7 @@ export default function Code() {
           onClick={() => reedemcode()}
           disabled={!code}
         >
-          Verify
+          {__("Verify")}
         </button>
       </div>
     </div>

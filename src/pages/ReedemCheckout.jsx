@@ -20,6 +20,7 @@ import {
   validatePhoneForCountry,
 } from "../Utils/Functions";
 import { useRegionalPreferences } from "../Utils/regionalPreferences";
+import { __ } from "../i18n";
 
 export default function ReedemCheckout(props) {
   // Default phone country from /settings regional_preferences.
@@ -143,7 +144,7 @@ export default function ReedemCheckout(props) {
         showConfirmButton: false,
         timer: 3000, // auto-close after 3 seconds
         icon: "warning", // 'success', 'error', 'warning', 'info', 'question'
-        title: "Please accept terms and conditions before proceeding",
+        title: __("Please accept terms and conditions before proceeding"),
       });
       return;
     }
@@ -188,7 +189,7 @@ export default function ReedemCheckout(props) {
           titleText: toPlainText(
             getApiErrorMessage(
               error,
-              "Unable to prepare your additions. Please try again.",
+              __("Unable to prepare your additions. Please try again."),
             ),
           ),
         });
@@ -223,7 +224,7 @@ export default function ReedemCheckout(props) {
         timer: 3000, // auto-close after 3 seconds
         icon: "error", // 'success', 'error', 'warning', 'info', 'question'
         titleText: toPlainText(
-          data?.message ?? "There is some error , please try again",
+          data?.message ?? __("There is some error , please try again"),
         ),
       });
       dispatch(setLoading(false));
@@ -237,7 +238,7 @@ export default function ReedemCheckout(props) {
     >
       {props.stepsVisibility?.step_3_title_visible == "true" && (
         <h1 className="fx-all-main-heading">
-          {props.stepTitles?.step_3_title || "Checkout"}{" "}
+          {props.stepTitles?.step_3_title || __("Checkout")}{" "}
         </h1>
       )}
       <div className="fx-commoninput">
@@ -245,10 +246,10 @@ export default function ReedemCheckout(props) {
           <div
             className={`fx-element-box ${visibleField.sgbm_field_1 ? "" : "fx-hidden"}`}
           >
-            <label>First Name</label>
+            <label>{__("First Name")}</label>
             <input
               type="text"
-              placeholder="First Name"
+              placeholder={__("First Name")}
               className={errorlist.recipient_first_name ? "fx-invalid" : ""}
               value={billdata.recipient_first_name || ""}
               onChange={(e) =>
@@ -259,16 +260,16 @@ export default function ReedemCheckout(props) {
               }
             />
             {errorlist.recipient_first_name && (
-              <span className="fx-errortext">Enter First Name</span>
+              <span className="fx-errortext">{__("Enter First Name")}</span>
             )}
           </div>
           <div
             className={`fx-element-box ${visibleField.sgbm_field_2 ? "" : "fx-hidden"}`}
           >
-            <label>Last Name</label>
+            <label>{__("Last Name")}</label>
             <input
               type="text"
-              placeholder="Last Name"
+              placeholder={__("Last Name")}
               value={billdata.recipient_last_name || ""}
               onChange={(e) =>
                 setBilldata({
@@ -283,10 +284,10 @@ export default function ReedemCheckout(props) {
           <div
             className={`fx-element-box ${visibleField.sgbm_field_3 ? "" : "fx-hidden"}`}
           >
-            <label>Email</label>
+            <label>{__("Email")}</label>
             <input
               type="email"
-              placeholder="Email"
+              placeholder={__("Email")}
               className={errorlist.recipient_email ? "fx-invalid" : ""}
               value={billdata.recipient_email || ""}
               onChange={(e) =>
@@ -301,13 +302,13 @@ export default function ReedemCheckout(props) {
               }}
             />
             {errorlist.recipient_email && (
-              <span className="fx-errortext">Enter Email</span>
+              <span className="fx-errortext">{__("Enter Email")}</span>
             )}
           </div>
           <div
             className={`fx-element-box ${visibleField.sgbm_field_4 ? "" : "fx-hidden"}`}
           >
-            <label>Mobile</label>
+            <label>{__("Mobile")}</label>
             <div className="fx-phone-input">
               <PhoneInput
                 country={
@@ -338,17 +339,17 @@ export default function ReedemCheckout(props) {
                 }}
               />
               {errorlist.recipient_contact && (
-                <span className="fx-errortext">Enter Phone number</span>
+                <span className="fx-errortext">{__("Enter Phone number")}</span>
               )}
             </div>
           </div>
         </div>
         <div className="fx-inputgroup">
           <div className="fx-element-box">
-            <label>Address</label>
+            <label>{__("Address")}</label>
             <input
               type="text"
-              placeholder="Address"
+              placeholder={__("Address")}
               required
               value={billdata.recipient_address || ""}
               className={
@@ -361,13 +362,13 @@ export default function ReedemCheckout(props) {
               }
             />
             {errorlist.recipient_address && (
-              <span className="fx-errortext">Enter Address</span>
+              <span className="fx-errortext">{__("Enter Address")}</span>
             )}
           </div>
         </div>
         <div className="fx-inputgroup">
           <div className="fx-element-box fx-selectwrapper">
-            <label>Country</label>
+            <label>{__("Country")}</label>
             <select
               required
               value={billdata.recipient_country || ""}
@@ -385,7 +386,7 @@ export default function ReedemCheckout(props) {
               }}
               className={errorlist.recipient_country ? "fx-invalid" : ""}
             >
-              <option value="">Select Country</option>
+              <option value="">{__("Select Country")}</option>
               {countries &&
                 Object.keys(countries.data).map((code) => (
                   <option key={code} value={code}>
@@ -394,11 +395,11 @@ export default function ReedemCheckout(props) {
                 ))}
             </select>
             {errorlist.recipient_country && (
-              <span className="fx-errortext">Enter Country</span>
+              <span className="fx-errortext">{__("Enter Country")}</span>
             )}
           </div>
           <div className="fx-element-box fx-selectwrapper">
-            <label>State</label>
+            <label>{__("State")}</label>
             <select
               required
               value={billdata.recipient_state || ""}
@@ -407,7 +408,7 @@ export default function ReedemCheckout(props) {
               }}
               className={errorlist.recipient_state ? "fx-invalid" : ""}
             >
-              <option value="">Select State</option>
+              <option value="">{__("Select State")}</option>
               {states.length > 0 &&
                 states.map((state) => (
                   <option key={state.code} value={state.code}>
@@ -416,16 +417,16 @@ export default function ReedemCheckout(props) {
                 ))}
             </select>
             {errorlist.recipient_state && (
-              <span className="fx-errortext">Enter State</span>
+              <span className="fx-errortext">{__("Enter State")}</span>
             )}
           </div>
         </div>
         <div className="fx-inputgroup">
           <div className="fx-element-box">
-            <label>City</label>
+            <label>{__("City")}</label>
             <input
               type="text"
-              placeholder="City"
+              placeholder={__("City")}
               required
               value={billdata?.recipient_city || ""}
               className={errorlist.recipient_city ? "fx-invalid" : ""}
@@ -434,14 +435,14 @@ export default function ReedemCheckout(props) {
               }
             />
             {errorlist.recipient_city && (
-              <span className="fx-errortext">Enter City</span>
+              <span className="fx-errortext">{__("Enter City")}</span>
             )}
           </div>
           <div className="fx-element-box">
-            <label>Postcode</label>
+            <label>{__("Postcode")}</label>
             <input
               type="text"
-              placeholder="Postcode"
+              placeholder={__("Postcode")}
               required
               className={errorlist.recipient_postcode ? "fx-invalid" : ""}
               value={billdata?.recipient_postcode || ""}
@@ -450,7 +451,7 @@ export default function ReedemCheckout(props) {
               }
             />
             {errorlist.recipient_postcode && (
-              <span className="fx-errortext">Enter Postcode</span>
+              <span className="fx-errortext">{__("Enter Postcode")}</span>
             )}
           </div>
         </div>
@@ -463,8 +464,9 @@ export default function ReedemCheckout(props) {
             onClick={() => setTerm(!term)}
           />
           <label htmlFor="checkbox-checked" className="checkbox-label">
-            You are making a direct booking.Please accept terms and conditions
-            before proceeding
+            {__(
+              "You are making a direct booking.Please accept terms and conditions before proceeding",
+            )}
           </label>
         </div>
         <div className="fx-element-box fx-checkoutbuttonbar">

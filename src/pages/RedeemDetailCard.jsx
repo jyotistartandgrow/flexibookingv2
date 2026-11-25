@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RedeemCommonbox from "../components/RedeemCommonbox";
 import { setTopbar } from "../store/step1Slice";
+import { __ } from "../i18n";
 
 const RedeemDetailCard = (props) => {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ const RedeemDetailCard = (props) => {
         {/* Header Section */}
         <div onClick={toggleCard}>
           <div className="fx-header-row">
-            <span className="fx-title">Redeem Details</span>
+            <span className="fx-title">{__("Redeem Details")}</span>
             <div className="fx-chevron"></div>
           </div>
           {/* Summary Section */}

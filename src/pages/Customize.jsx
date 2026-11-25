@@ -24,6 +24,7 @@ import {
   setStep,
 } from "../store/step1Slice";
 import axiosInstance from "../Utils/Interceptor";
+import { __, sprintf, translateDynamic } from "../i18n";
 
 const fallbackTemplates = [
   {
@@ -84,7 +85,7 @@ const fallbackTemplates = [
 
 const normalizeTemplate = (template, occasion) => ({
   id: String(template.id),
-  name: template.name || "Gift template",
+  name: template.name || __("Gift template"),
   giftType: occasion?.name || "",
   occasionId: occasion?.id ?? null,
   variant: "photo",
@@ -185,7 +186,7 @@ function TemplateArt({ variant, image, alt }) {
             />
           ))}
         </svg>
-        <div className="fx-art-script">Hey New</div>
+        <div className="fx-art-script">{__("Hey New")}</div>
         <div className="fx-art-year">2026</div>
         <svg className="fx-flute" viewBox="0 0 80 150">
           <defs>
@@ -213,7 +214,7 @@ function TemplateArt({ variant, image, alt }) {
           />
           <ellipse cx="40" cy="128" rx="18" ry="4.2" fill="#efe6d4" />
         </svg>
-        <div className="fx-art-footer">Happy New Year</div>
+        <div className="fx-art-footer">{__("Happy New Year")}</div>
       </div>
     );
   }
@@ -229,8 +230,8 @@ function TemplateArt({ variant, image, alt }) {
         </svg>
         <div className="fx-art-spacer" />
         <div className="fx-art-year">2028</div>
-        <div className="fx-art-script">Gift Card</div>
-        <div className="fx-art-footer">Fireworks</div>
+        <div className="fx-art-script">{__("Gift Card")}</div>
+        <div className="fx-art-footer">{__("Fireworks")}</div>
       </div>
     );
   }
@@ -280,8 +281,8 @@ function TemplateArt({ variant, image, alt }) {
         />
         <circle cx="100" cy="100" r="3.5" fill="#f4f4f4" />
       </svg>
-      <div className="fx-art-script">New Year!</div>
-      <div className="fx-art-footer">Midnight Magic</div>
+      <div className="fx-art-script">{__("New Year!")}</div>
+      <div className="fx-art-footer">{__("Midnight Magic")}</div>
     </div>
   );
 }
@@ -306,7 +307,7 @@ function PreviewCard({ active, font, firstName, lastName, message }) {
       >
         {active.variant === "photo" ? (
           <>
-            <img src={active.image} alt="Selected gift template preview" />
+            <img src={active.image} alt={__("Selected gift template preview")} />
             {active.source !== "api" && active.id !== "birthday" && (
               <div className="fx-art-label">{active.title}</div>
             )}
@@ -316,19 +317,19 @@ function PreviewCard({ active, font, firstName, lastName, message }) {
         )}
       </div>
       <div className="fx-preview-content" style={previewStyle}>
-        <h2>{active.name}</h2>
+        <h2>{translateDynamic(active.name)}</h2>
         {active.year && <p className="fx-year">{active.year}</p>}
         <h3>
-          {[firstName, lastName].filter(Boolean).join(" ") || "Recipient"}
+          {[firstName, lastName].filter(Boolean).join(" ") || __("Recipient")}
         </h3>
         <div className="fx-preview-divider" />
         <p
           className="fx-preview-message"
           style={{ color: active.settings?.text_color || undefined }}
         >
-          {message || "Your personal message will appear here."}
+          {message || __("Your personal message will appear here.")}
         </p>
-        <p className="fx-sender">From Your Name</p>
+        <p className="fx-sender">{__("From Your Name")}</p>
       </div>
     </div>
   );
@@ -430,11 +431,11 @@ export default function Customize() {
         setFontOptions(apiFonts);
 
         if (!payload.gift_enabled) {
-          setCatalogError("Gift customization is currently unavailable.");
+          setCatalogError(__("Gift customization is currently unavailable."));
           return;
         }
         if (!payload.catalog_configured || occasionList.length === 0) {
-          setCatalogError("No gift occasions are configured.");
+          setCatalogError(__("No gift occasions are configured."));
           return;
         }
 
@@ -502,7 +503,7 @@ export default function Customize() {
       } catch (error) {
         console.error("Unable to load gift occasions:", error);
         if (mounted) {
-          setCatalogError("Unable to load gift customization options.");
+          setCatalogError(__("Unable to load gift customization options."));
         }
       } finally {
         if (mounted) {
@@ -604,7 +605,7 @@ export default function Customize() {
     } catch (error) {
       console.error("Unable to load gift templates:", error);
       setAvailableTemplates([]);
-      setCatalogError("Unable to load templates for this occasion.");
+      setCatalogError(__("Unable to load templates for this occasion."));
     } finally {
       setCatalogLoading(false);
     }
@@ -614,10 +615,10 @@ export default function Customize() {
     <main className="fx-page-shell">
       <div className="fx-customize-layout">
         <section className="fx-form-column">
-          <h1>Customize</h1>
+          <h1>{__("Customize")}</h1>
 
           <div className="fx-panel type-panel">
-            <StepTitle number="1">Occasion</StepTitle>
+            <StepTitle number="1">{__("Occasion")}</StepTitle>
             <div className="fx-select-wrap">
               <select
                 value={String(occasionId)}
@@ -625,7 +626,7 @@ export default function Customize() {
                 disabled={catalogLoading || occasions.length === 0}
               >
                 {occasions.length === 0 && (
-                  <option value="">Select occasion</option>
+                  <option value="">{__("Select occasion")}</option>
                 )}
                 {occasions.map((occasion) => (
                   <option key={occasion.id} value={String(occasion.id)}>
@@ -640,12 +641,12 @@ export default function Customize() {
           <div className="fx-panel template-panel">
             <div className="fx-step-title fx-template-step-title">
               <span className="fx-step-number">2</span>
-              <span>Choose template</span>
+              <span>{__("Choose template")}</span>
               <button
                 type="button"
                 className="fx-template-info"
-                aria-label="Each template changes the card design in the preview"
-                title="Each template changes the card design in the preview"
+                aria-label={__("Each template changes the card design in the preview")}
+                title={__("Each template changes the card design in the preview")}
               >
                 <Info size={15} strokeWidth={1.75} />
               </button>
@@ -653,7 +654,7 @@ export default function Customize() {
             <div
               className="fx-template-grid"
               role="radiogroup"
-              aria-label="Choose template"
+              aria-label={__("Choose template")}
             >
               {visibleTemplates.map((template) => (
                 <button
@@ -669,7 +670,7 @@ export default function Customize() {
                       templateSettings: template.settings || {},
                     })
                   }
-                  aria-label={`Choose ${template.name} template`}
+                  aria-label={sprintf(__("Choose %s template"), template.name)}
                 >
                   <span className="fx-template-face">
                     <TemplateArt
@@ -688,11 +689,11 @@ export default function Customize() {
             </div>
             {!catalogLoading && visibleTemplates.length === 0 && (
               <p className="fx-customize-empty">
-                No templates are available for this occasion.
+                {__("No templates are available for this occasion.")}
               </p>
             )}
             {catalogLoading && (
-              <p className="fx-customize-empty">Loading templates…</p>
+              <p className="fx-customize-empty">{__("Loading templates…")}</p>
             )}
             {catalogError && (
               <p className="fx-customize-error">{catalogError}</p>
@@ -700,14 +701,14 @@ export default function Customize() {
           </div>
 
           <div className="fx-panel message-panel">
-            <StepTitle number="3">Add a message</StepTitle>
+            <StepTitle number="3">{__("Add a message")}</StepTitle>
             <label className="fx-field-label" htmlFor="gift-message">
-              Your personal message
+              {__("Your personal message")}
             </label>
             <div className="fx-editor">
               <div className="fx-toolbar">
                 <button
-                  aria-label="Bold"
+                  aria-label={__("Bold")}
                   type="button"
                   onClick={() =>
                     updateCustomization({
@@ -720,7 +721,7 @@ export default function Customize() {
                   <Bold size={14} />
                 </button>
                 <button
-                  aria-label="Italic"
+                  aria-label={__("Italic")}
                   type="button"
                   onClick={() =>
                     updateCustomization({
@@ -732,28 +733,28 @@ export default function Customize() {
                 >
                   <Italic size={14} />
                 </button>
-                <button aria-label="Underline" type="button">
+                <button aria-label={__("Underline")} type="button">
                   <Underline size={14} />
                 </button>
                 <i />
-                <button aria-label="Align left" type="button">
+                <button aria-label={__("Align left")} type="button">
                   <AlignLeft size={14} />
                 </button>
-                <button aria-label="Align center" type="button">
+                <button aria-label={__("Align center")} type="button">
                   <AlignCenter size={14} />
                 </button>
-                <button aria-label="Align right" type="button">
+                <button aria-label={__("Align right")} type="button">
                   <AlignRight size={14} />
                 </button>
                 <i />
-                <button aria-label="Bulleted list" type="button">
+                <button aria-label={__("Bulleted list")} type="button">
                   <List size={14} />
                 </button>
-                <button aria-label="Numbered list" type="button">
+                <button aria-label={__("Numbered list")} type="button">
                   <ListOrdered size={14} />
                 </button>
                 <i />
-                <button aria-label="Insert link" type="button">
+                <button aria-label={__("Insert link")} type="button">
                   <Link2 size={14} />
                 </button>
               </div>
@@ -763,13 +764,13 @@ export default function Customize() {
                 onChange={(event) =>
                   updateCustomization({ message: event.target.value })
                 }
-                placeholder="Enter your personal message..."
+                placeholder={__("Enter your personal message...")}
               />
             </div>
           </div>
 
           <div className="fx-panel font-panel">
-            <StepTitle number="4">Select font</StepTitle>
+            <StepTitle number="4">{__("Select font")}</StepTitle>
             <div className="fx-select-wrap">
               <select
                 value={selectedFont?.value || ""}
@@ -794,23 +795,23 @@ export default function Customize() {
           </div>
 
           <div className="fx-panel fx-recipient-panel">
-            <StepTitle number="5">Add recipient Details</StepTitle>
+            <StepTitle number="5">{__("Add recipient Details")}</StepTitle>
             <div className="fx-recipient-fields">
               <input
                 value={receiverInfo.firstName || ""}
                 onChange={(event) =>
                   updateRecipient({ firstName: event.target.value })
                 }
-                placeholder="First Name"
-                aria-label="First name"
+                placeholder={__("First Name")}
+                aria-label={__("First name")}
               />
               <input
                 value={receiverInfo.lastName || ""}
                 onChange={(event) =>
                   updateRecipient({ lastName: event.target.value })
                 }
-                placeholder="Last name"
-                aria-label="Last name"
+                placeholder={__("Last name")}
+                aria-label={__("Last name")}
               />
               <div className="fx-email-field">
                 <input
@@ -819,8 +820,8 @@ export default function Customize() {
                   onChange={(event) =>
                     updateRecipient({ email: event.target.value })
                   }
-                  placeholder="Enter email address"
-                  aria-label="Email address"
+                  placeholder={__("Enter email address")}
+                  aria-label={__("Email address")}
                 />
                 <Mail size={15} />
               </div>
@@ -830,12 +831,12 @@ export default function Customize() {
           <div className="fx-panel fx-delivery-panel">
             <div className="fx-step-title fx-template-step-title">
               <span className="fx-step-number">6</span>
-              <span>Voucher delivery</span>
+              <span>{__("Voucher delivery")}</span>
               <button
                 type="button"
                 className="fx-template-info"
-                aria-label="Choose who receives the voucher email"
-                title="Choose who receives the voucher email"
+                aria-label={__("Choose who receives the voucher email")}
+                title={__("Choose who receives the voucher email")}
               >
                 <Info size={15} strokeWidth={1.75} />
               </button>
@@ -843,22 +844,26 @@ export default function Customize() {
             <div
               className="fx-delivery-list"
               role="radiogroup"
-              aria-label="Voucher delivery"
+              aria-label={__("Voucher delivery")}
             >
               <DeliveryOption
                 value="recipient"
                 selected={delivery}
                 icon={<Send size={14} />}
-                title="Email the recipient immediately"
-                description="Send the digital voucher directly to the recipient's email."
+                title={__("Email the recipient immediately")}
+                description={__(
+                  "Send the digital voucher directly to the recipient's email.",
+                )}
                 onChange={updateCustomization}
               />
               <DeliveryOption
                 value="me"
                 selected={delivery}
                 icon={<Mail size={14} />}
-                title="Email me so I can deliver it"
-                description="Send the digital voucher to your email for personal delivery."
+                title={__("Email me so I can deliver it")}
+                description={__(
+                  "Send the digital voucher to your email for personal delivery.",
+                )}
                 onChange={(values) =>
                   updateCustomization({
                     ...values,
@@ -878,8 +883,8 @@ export default function Customize() {
                     onChange={(event) =>
                       updateRecipient({ email: event.target.value })
                     }
-                    placeholder="Recipient's email"
-                    aria-label="Recipient's email"
+                    placeholder={__("Recipient's email")}
+                    aria-label={__("Recipient's email")}
                   />
                   <Mail size={15} />
                 </div>
@@ -899,7 +904,7 @@ export default function Customize() {
             className="fx-preview-button"
             onClick={() => setShowPreview(true)}
           >
-            PREVIEW
+            {__("PREVIEW")}
           </button>
           <button
             type="button"
@@ -907,12 +912,12 @@ export default function Customize() {
             disabled={catalogLoading || visibleTemplates.length === 0}
             onClick={() => dispatch(setStep("checkoutstep"))}
           >
-            CONTINUE
+            {__("CONTINUE")}
           </button>
         </section>
 
         <aside className="fx-preview-column">
-          <h1 className="fx-right-box-heading">Live Preview</h1>
+          <h1 className="fx-right-box-heading">{__("Live Preview")}</h1>
           <PreviewCard
             active={active}
             font={previewFontFamily}
@@ -931,16 +936,16 @@ export default function Customize() {
               className="fx-preview-dialog"
               role="dialog"
               aria-modal="true"
-              aria-label="Live Preview"
+              aria-label={__("Live Preview")}
               onClick={(event) => event.stopPropagation()}
             >
               <div className="fx-preview-modal-bar">
-                <h2>Live Preview</h2>
+                <h2>{__("Live Preview")}</h2>
                 <button
                   type="button"
                   className="fx-preview-close"
                   onClick={() => setShowPreview(false)}
-                  aria-label="Close preview"
+                  aria-label={__("Close preview")}
                 >
                   <X size={18} />
                 </button>

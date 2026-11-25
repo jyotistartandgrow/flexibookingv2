@@ -1,4 +1,5 @@
 import axiosInstance from "./Interceptor";
+import { __ } from "../i18n";
 
 // Format a total in the same currency style as a server-formatted sample, e.g. "60,00 €" or "€60.00".
 export const formatLikePrice = (sample, amount) => {
@@ -70,7 +71,7 @@ export const callVoucherApi = async (route, action, post) => {
     throw new Error(
       data?.data?.message ||
         data?.message ||
-        "The request could not be completed.",
+        __("The request could not be completed."),
     );
   }
   return data.data;

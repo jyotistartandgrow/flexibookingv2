@@ -4,6 +4,7 @@ import moment from "moment";
 import Commonbox from "../components/Commonbox";
 import RedeemCommonbox from "../components/RedeemCommonbox";
 import { setTopbar } from "../store/step1Slice";
+import { __ } from "../i18n";
 
 export default function CombinedDetailsCard({ topbar }) {
   const dispatch = useDispatch();
@@ -53,7 +54,7 @@ export default function CombinedDetailsCard({ topbar }) {
           onClick={() => setIsOpen((open) => !open)}
         >
           <span className="fx-combined-details-header">
-            <span className="fx-title">Details</span>
+            <span className="fx-title">{__("Details")}</span>
             <span className="fx-chevron" aria-hidden="true"></span>
           </span>
           <span className="fx-combined-details-summary">
@@ -72,12 +73,12 @@ export default function CombinedDetailsCard({ topbar }) {
 
         <div className="fx-collapsible-content">
           <section className="fx-combined-details-section">
-            <h3>Redeem Details</h3>
+            <h3>{__("Redeem Details")}</h3>
             <RedeemCommonbox hideSchedule />
           </section>
 
           <section className="fx-combined-details-section fx-order-details-section">
-            <h3>Order Details</h3>
+            <h3>{__("Order Details")}</h3>
             <Commonbox />
           </section>
         </div>

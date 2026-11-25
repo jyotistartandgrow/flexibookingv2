@@ -4,6 +4,7 @@ import moment from "moment";
 import { formatLikePrice } from "../Utils/redeemUpsells";
 import { isPhoneOnlyRedemption } from "../Utils/redeemByPhone";
 import "../styles/redeem-upsell-services.scss";
+import { __, sprintf } from "../i18n";
 
 export default function RedeemCommonbox({
   setVisibleBottom,
@@ -48,12 +49,14 @@ export default function RedeemCommonbox({
   return (
     <>
       {!voucherdetail.products && !date && (
-        <p className="giftmessagebox">Redeem your gift on a specific date</p>
+        <p className="giftmessagebox">
+          {__("Redeem your gift on a specific date")}
+        </p>
       )}
       {date && !hideSchedule && (
         <div className="fx-bookingdatebar">
           <div className="fx-bookingdate">
-            Date
+            {__("Date")}
             <br />
             <span>{moment(date).format("MMMM DD YYYY")}</span>
           </div>
@@ -62,7 +65,7 @@ export default function RedeemCommonbox({
       {slot && !hideSchedule && (
         <div className="fx-bookingdatebar">
           <div className="fx-bookingdate">
-            Time
+            {__("Time")}
             <br />
             <span>{slot}</span>
           </div>
@@ -75,7 +78,7 @@ export default function RedeemCommonbox({
               return (
                 <div className="fx-serviceitem" key={"ct-" + ckey}>
                   <div className="itemname">
-                    {ct.name} {`X ${ct.quantity}`}
+                    {ct.name} {sprintf(__("X %s"), ct.quantity)}
                   </div>
                   {/* <div className="price">{decodeHtml(ct.total)}</div> */}
                 </div>
@@ -85,19 +88,19 @@ export default function RedeemCommonbox({
           {additions.length > 0 && (
             <div className="fx-servicelistbox fx-redeem-summary-additions">
               <div className="fx-redeem-summary-additions__title">
-                Added services
+                {__("Added services")}
               </div>
               {additions.map((item, index) => (
                 <div className="fx-serviceitem" key={`addition-${index}`}>
                   <div className="itemname">
-                    {item.name} {`X ${item.quantity}`}
+                    {item.name} {sprintf(__("X %s"), item.quantity)}
                     {item.slot_label && <small>{item.slot_label}</small>}
                   </div>
                   <div className="price">{item.line_total}</div>
                 </div>
               ))}
               <div className="fx-redeem-summary-additions__total">
-                <span>{useQuote ? "Total to pay" : "Additions total"}</span>
+                <span>{useQuote ? __("Total to pay") : __("Additions total")}</span>
                 <strong>{additionsTotal}</strong>
               </div>
             </div>

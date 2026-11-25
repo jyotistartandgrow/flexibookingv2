@@ -35,6 +35,7 @@ import {
 import CalendarPage from "./CalendarPage";
 import { useRegionalPreferences } from "../Utils/regionalPreferences";
 import CouponSection from "./CouponSection";
+import { __, sprintf } from "../i18n";
 
 const DATE_FORMAT = "YYYY-MM-DD";
 const toDateString = (value) =>
@@ -150,7 +151,7 @@ export default function ChooseDate(props) {
           d.getDate() === day,
       )
     ) {
-      tooltipText = "Date not available";
+      tooltipText = __("Date not available");
     } else {
       const matchedObj = responsearr?.find((item) => {
         const itemDate = item?.date
@@ -161,10 +162,11 @@ export default function ChooseDate(props) {
 
       if (matchedObj) {
         // example: set tooltip based on matched object's properties
-        tooltipText =
-          matchedObj.total_service +
-          " Options \n Starts From " +
-          matchedObj.price;
+        tooltipText = sprintf(
+          __("%1$s Options \n Starts From %2$s"),
+          matchedObj.total_service,
+          matchedObj.price,
+        );
         tooltipText = decodeHtml(tooltipText);
         availabilityPercent = matchedObj.available_service_percentage || 0;
         price = matchedObj ? decodeHtml(matchedObj.price).split(",")[0] : "";
@@ -217,7 +219,7 @@ export default function ChooseDate(props) {
       return;
     }
     if (!date) {
-      showToast("warning", "Please select a date to check availability");
+      showToast("warning", __("Please select a date to check availability"));
       return;
     }
 
@@ -232,14 +234,17 @@ export default function ChooseDate(props) {
       if (data?.data?.is_bookable) {
         dispatch(setStep("servicesstep"));
       } else {
-        showToast("warning", "There is no service available on selected Date");
+        showToast(
+          "warning",
+          __("There is no service available on selected Date"),
+        );
       }
     } catch (error) {
       console.error("Unable to check availability.", error);
       showToast(
         "error",
         error?.data?.message ||
-          "Unable to check availability, please try again",
+          __("Unable to check availability, please try again"),
       );
     } finally {
       dispatch(setLoading(false));
@@ -317,7 +322,7 @@ export default function ChooseDate(props) {
       }
     } catch (error) {
       console.error("Unable to load the availability calendar.", error);
-      showToast("error", "Unable to load availability, please try again");
+      showToast("error", __("Unable to load availability, please try again"));
     } finally {
       dispatch(setLoading(false));
     }
@@ -341,7 +346,7 @@ export default function ChooseDate(props) {
         showConfirmButton: false,
         timer: 3000,
         icon: "warning",
-        title: "Cannot select past months",
+        title: __("Cannot select past months"),
       });
       return;
     }
@@ -356,7 +361,7 @@ export default function ChooseDate(props) {
     >
       {props.stepsVisibility?.step_1_title_visible == "true" && (
         <h1 className="fx-all-main-heading fx-select-date-heading">
-          {props.stepTitles?.step_1_title || "Book your Services"}
+          {props.stepTitles?.step_1_title || __("Book your Services")}
         </h1>
       )}
       <div id="fx-tab_nav">
@@ -367,7 +372,7 @@ export default function ChooseDate(props) {
               className={isVisible == "booking" ? "selected" : ""}
               onClick={() => handleFlowSwitch("booking")}
             >
-              Booking
+              {__("Booking")}
             </a>
           </li>
           <li>
@@ -376,7 +381,7 @@ export default function ChooseDate(props) {
               className={isVisible == "gift" ? "selected" : ""}
               onClick={() => handleFlowSwitch("gift")}
             >
-              Gift
+              {__("Gift")}
             </a>
           </li>
         </ul>
@@ -404,7 +409,7 @@ export default function ChooseDate(props) {
             <input
               type="submit"
               className={!date ? "btn-primary fx-btn-disable" : "btn-primary"}
-              value="Check Availability"
+              value={__("Check Availability")}
               onClick={() => checkavailability()}
               disabled={!date}
             />
@@ -418,13 +423,13 @@ export default function ChooseDate(props) {
               : "fx-tabcontent"
           }
         >
-          <h3>Gift receiver information</h3>
+          <h3>{__("Gift receiver information")}</h3>
           <div className="fx-giftbox">
             <div className="fx-inputgroup">
               <div className="fx-input-wrapper">
                 <input
                   type="text"
-                  placeholder="First Name"
+                  placeholder={__("First Name")}
                   value={receiverInfo.firstName}
                   className={
                     errorlist.firstName
@@ -441,13 +446,13 @@ export default function ChooseDate(props) {
                   }
                 />
                 {errorlist.firstName && (
-                  <span className="fx-errortext">Enter First Name</span>
+                  <span className="fx-errortext">{__("Enter First Name")}</span>
                 )}
               </div>
               <div className="fx-input-wrapper">
                 <input
                   type="text"
-                  placeholder="Last Name"
+                  placeholder={__("Last Name")}
                   value={receiverInfo.lastName}
                   className={
                     errorlist.lastName ? "fx-invalid" : "fx-input-lastname-box"
@@ -462,7 +467,7 @@ export default function ChooseDate(props) {
                   }
                 />
                 {errorlist.lastName && (
-                  <span className="fx-errortext">Enter Last Name</span>
+                  <span className="fx-errortext">{__("Enter Last Name")}</span>
                 )}
               </div>
             </div>
@@ -471,7 +476,7 @@ export default function ChooseDate(props) {
               <div className="fx-input-wrapper">
                 <input
                   type="email"
-                  placeholder="Email"
+                  placeholder={__("Email")}
                   value={receiverInfo.email}
                   className={
                     errorlist.email ? "fx-invalid" : "fx-input-email-box"
@@ -494,7 +499,7 @@ export default function ChooseDate(props) {
                 />
                 <i className="pi pi-envelope"></i>
                 {errorlist.email && (
-                  <span className="fx-errortext">Enter Valid Email</span>
+                  <span className="fx-errortext">{__("Enter Valid Email")}</span>
                 )}
               </div>
               <div className="fx-input-wrapper">
@@ -542,7 +547,7 @@ export default function ChooseDate(props) {
                   />
                   {errorlist.phoneNumber && (
                     <span className="fx-errortext">
-                      Enter a valid phone number for the selected country
+                      {__("Enter a valid phone number for the selected country")}
                     </span>
                   )}
                 </div>
@@ -552,7 +557,7 @@ export default function ChooseDate(props) {
               <div className="fx-input-wrapper">
                 <input
                   type="text"
-                  placeholder="Country"
+                  placeholder={__("Country")}
                   value={receiverInfo.country}
                   className={errorlist.country ? "fx-invalid" : ""}
                   onChange={(e) =>
@@ -566,13 +571,13 @@ export default function ChooseDate(props) {
                 />
                 <i className="pi pi-flag"></i>
                 {errorlist.country && (
-                  <span className="fx-errortext">Enter Country</span>
+                  <span className="fx-errortext">{__("Enter Country")}</span>
                 )}
               </div>
               <div className="fx-input-wrapper">
                 <input
                   type="text"
-                  placeholder="Zip"
+                  placeholder={__("Zip")}
                   value={receiverInfo.zip}
                   className={errorlist.zip ? "fx-invalid" : ""}
                   onChange={(e) =>
@@ -585,7 +590,7 @@ export default function ChooseDate(props) {
                   }
                 />
                 {errorlist.zip && (
-                  <span className="fx-errortext">Enter Zip</span>
+                  <span className="fx-errortext">{__("Enter Zip")}</span>
                 )}
               </div>
             </div>
@@ -593,7 +598,7 @@ export default function ChooseDate(props) {
               <div className="fx-input-wrapper">
                 <input
                   type="text"
-                  placeholder="Address"
+                  placeholder={__("Address")}
                   value={receiverInfo.address}
                   className={
                     errorlist.address ? "fx-invalid bigtextbox" : "bigtextbox"
@@ -608,7 +613,7 @@ export default function ChooseDate(props) {
                   }
                 />
                 {errorlist.address && (
-                  <span className="fx-errortext">Enter Address</span>
+                  <span className="fx-errortext">{__("Enter Address")}</span>
                 )}
               </div>
             </div>
@@ -629,7 +634,7 @@ export default function ChooseDate(props) {
                     className={
                       isValid ? "btn-primary" : "btn-primary fx-btn-disable"
                     }
-                    value="View Services"
+                    value={__("View Services")}
                     onClick={() => viewService()}
                     disabled={!isValid}
                   />

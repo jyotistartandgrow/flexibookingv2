@@ -24,6 +24,7 @@ import { setBookingkey } from "../store/step3Slice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { darkenHex } from "../Utils/Functions";
+import { __, _n, sprintf, withElement } from "../i18n";
 
 GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
 
@@ -66,7 +67,7 @@ async function getCroppedCanvas(imageSource, cropPixels, sourceImage = null) {
 
   const context = canvas.getContext("2d", { willReadFrequently: true });
   if (!context) {
-    throw new Error("Unable to prepare cropped image canvas.");
+    throw new Error(__("Unable to prepare cropped image canvas."));
   }
 
   context.drawImage(
@@ -122,7 +123,7 @@ async function getFullSourceCanvas(imageSource, sourceImage = null) {
 
   const context = canvas.getContext("2d", { willReadFrequently: true });
   if (!context) {
-    throw new Error("Unable to prepare full source canvas.");
+    throw new Error(__("Unable to prepare full source canvas."));
   }
 
   context.drawImage(image, 0, 0, width, height);
@@ -146,7 +147,7 @@ export default function SgbmCheckin() {
 
   const [isScanning, setIsScanning] = useState(false);
   const [scanResult, setScanResult] = useState("");
-  const [scannerMessage, setScannerMessage] = useState("Camera Ready");
+  const [scannerMessage, setScannerMessage] = useState(__("Camera Ready"));
   const [scannerError, setScannerError] = useState("");
   const [lastScanAt, setLastScanAt] = useState(null);
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
@@ -213,7 +214,7 @@ export default function SgbmCheckin() {
     setIsScanning(false);
 
     if (!keepSuccessMessage) {
-      setScannerMessage("Scanner stopped");
+      setScannerMessage(__("Scanner stopped"));
     }
   }, []);
 
@@ -255,7 +256,7 @@ export default function SgbmCheckin() {
 
       try {
         setApiStatus("verifying");
-        setApiMessage("Verifying QR code...");
+        setApiMessage(__("Verifying QR code..."));
 
         const { data: verifyData } = await axiosInstance.post(
           "/qr-verification",
@@ -265,13 +266,13 @@ export default function SgbmCheckin() {
         );
         if (!verifyData?.status) {
           setApiStatus("invalid");
-          setApiMessage(verifyData?.message || "Invalid QR code.");
+          setApiMessage(verifyData?.message || __("Invalid QR code."));
           return;
         }
 
         if (verifyData?.status) {
           setApiStatus("success");
-          setApiMessage(verifyData?.message || "Check-in successful!");
+          setApiMessage(verifyData?.message || __("Check-in successful!"));
           dispatch(setBookingkey(value));
           navigate("/checkin-thankyou");
           return;
@@ -281,7 +282,7 @@ export default function SgbmCheckin() {
         setApiStatus("error");
         setApiMessage(
           error?.response?.data?.message ||
-            "An error occurred. Please try again.",
+            __("An error occurred. Please try again."),
         );
         swalError(error);
       }
@@ -493,7 +494,7 @@ export default function SgbmCheckin() {
       setIsUploadProcessing(true);
       setScannerError("");
       setScanResult("");
-      setScannerMessage("Reading cropped area...");
+      setScannerMessage(__("Reading cropped area..."));
       stopScanner();
 
       const sourceImage = await createImage(cropSource);
@@ -526,9 +527,11 @@ export default function SgbmCheckin() {
 
       if (!detectedValue) {
         setScannerError(
-          "No QR/Data Matrix code found. Try selecting a tighter crop around the code, or use a clearer image.",
+          __(
+            "No QR/Data Matrix code found. Try selecting a tighter crop around the code, or use a clearer image.",
+          ),
         );
-        setScannerMessage("No code found");
+        setScannerMessage(__("No code found"));
         return;
       }
 
@@ -536,8 +539,8 @@ export default function SgbmCheckin() {
       setLastScanAt(new Date());
       setScannerMessage(
         cropSourceType === "pdf"
-          ? "Scan complete from cropped PDF"
-          : "Scan complete from cropped image",
+          ? __("Scan complete from cropped PDF")
+          : __("Scan complete from cropped image"),
       );
       setApiStatus("idle");
       setApiMessage("");
@@ -545,8 +548,8 @@ export default function SgbmCheckin() {
       processScannedCode(detectedValue);
     } catch (error) {
       console.error("Unable to decode cropped source:", error);
-      setScannerError("Unable to read selected crop. Please try again.");
-      setScannerMessage("Scan failed");
+      setScannerError(__("Unable to read selected crop. Please try again."));
+      setScannerMessage(__("Scan failed"));
     } finally {
       setIsUploadProcessing(false);
     }
@@ -577,14 +580,14 @@ export default function SgbmCheckin() {
 
       stopScanner();
       setScannerError("");
-      setScannerMessage("Preparing image crop...");
+      setScannerMessage(__("Preparing image crop..."));
 
       releaseImageObjectUrl();
 
       const objectUrl = URL.createObjectURL(file);
       imageObjectUrlRef.current = objectUrl;
       openCropModal(objectUrl, "image");
-      setScannerMessage("Crop image and read code");
+      setScannerMessage(__("Crop image and read code"));
     },
     [openCropModal, releaseImageObjectUrl, stopScanner],
   );
@@ -599,7 +602,7 @@ export default function SgbmCheckin() {
     const pdf = await documentTask.promise;
 
     if (!pdf.numPages) {
-      throw new Error("PDF has no pages.");
+      throw new Error(__("PDF has no pages."));
     }
 
     const page = await pdf.getPage(1);
@@ -608,7 +611,7 @@ export default function SgbmCheckin() {
     const context = canvas.getContext("2d");
 
     if (!context) {
-      throw new Error("Unable to render PDF.");
+      throw new Error(__("Unable to render PDF."));
     }
 
     canvas.width = viewport.width;
@@ -628,14 +631,14 @@ export default function SgbmCheckin() {
         setIsUploadProcessing(true);
         stopScanner();
         setScannerError("");
-        setScannerMessage("Preparing PDF page for crop...");
+        setScannerMessage(__("Preparing PDF page for crop..."));
 
         const pdfPreviewImage = await convertPdfToImage(file);
         openCropModal(pdfPreviewImage, "pdf");
-        setScannerMessage("Crop PDF and read code");
+        setScannerMessage(__("Crop PDF and read code"));
       } catch (error) {
         console.error("Unable to process uploaded PDF:", error);
-        setScannerError("Unable to process PDF. Please upload a valid file.");
+        setScannerError(__("Unable to process PDF. Please upload a valid file."));
       } finally {
         setIsUploadProcessing(false);
       }
@@ -649,7 +652,7 @@ export default function SgbmCheckin() {
     try {
       setScannerError("");
       setScanResult("");
-      setScannerMessage("Starting camera...");
+      setScannerMessage(__("Starting camera..."));
       setApiStatus("idle");
       setApiMessage("");
 
@@ -704,7 +707,7 @@ export default function SgbmCheckin() {
           if (detectorRef.current) {
             const codes = await detectorRef.current.detect(videoRef.current);
             if (codes.length > 0) {
-              detectedValue = codes[0].rawValue || "Code detected";
+              detectedValue = codes[0].rawValue || __("Code detected");
             }
           } else {
             const videoEl = videoRef.current;
@@ -742,7 +745,7 @@ export default function SgbmCheckin() {
             const value = detectedValue;
             setScanResult(value);
             setLastScanAt(new Date());
-            setScannerMessage("Scan complete");
+            setScannerMessage(__("Scan complete"));
             stopScanner({ keepSuccessMessage: true });
             processScannedCode(value);
             return;
@@ -758,7 +761,7 @@ export default function SgbmCheckin() {
     } catch (error) {
       console.error("Unable to start scanner:", error);
       setScannerError(
-        "Unable to access camera. Please allow permission and try again.",
+        __("Unable to access camera. Please allow permission and try again."),
       );
       stopScanner();
     }
@@ -772,18 +775,21 @@ export default function SgbmCheckin() {
   }, [releaseImageObjectUrl, stopScanner]);
 
   const lastScanLabel = useMemo(() => {
-    if (!lastScanAt) return "Never";
+    if (!lastScanAt) return __("Never");
     const elapsedSeconds = Math.floor(
       (Date.now() - lastScanAt.getTime()) / 1000,
     );
 
-    if (elapsedSeconds < 60) return "just now";
+    if (elapsedSeconds < 60) return __("just now");
     const elapsedMinutes = Math.floor(elapsedSeconds / 60);
     if (elapsedMinutes < 60)
-      return `${elapsedMinutes} min${elapsedMinutes > 1 ? "s" : ""} ago`;
+      return sprintf(
+        _n("%s min ago", "%s mins ago", elapsedMinutes),
+        elapsedMinutes,
+      );
 
     const elapsedHours = Math.floor(elapsedMinutes / 60);
-    return `${elapsedHours} hr${elapsedHours > 1 ? "s" : ""} ago`;
+    return sprintf(_n("%s hr ago", "%s hrs ago", elapsedHours), elapsedHours);
   }, [lastScanAt]);
 
   return (
@@ -794,10 +800,11 @@ export default function SgbmCheckin() {
       <div className="fx-leftcontentbox">
         <div className="fx-scanner-main-box">
           <header className="fx-header">
-            <h1>Scan QR Code</h1>
+            <h1>{__("Scan QR Code")}</h1>
             <p>
-              Position the QR code within the frame to automatically scan and
-              process the booking information.
+              {__(
+                "Position the QR code within the frame to automatically scan and process the booking information.",
+              )}
             </p>
           </header>
 
@@ -807,7 +814,7 @@ export default function SgbmCheckin() {
                 <div
                   className={`fx-status-dot ${isScanning ? "active" : "idle"}`}
                 ></div>
-                {isScanning ? "System Active" : "System Idle"}
+                {isScanning ? __("System Active") : __("System Idle")}
               </div>
 
               <div className="fx-video-container">
@@ -842,7 +849,7 @@ export default function SgbmCheckin() {
 
               {scanResult ? (
                 <p className="fx-scan-result" title={scanResult}>
-                  Last code: {scanResult}
+                  {sprintf(__("Last code: %s"), scanResult)}
                 </p>
               ) : null}
 
@@ -864,7 +871,7 @@ export default function SgbmCheckin() {
             <aside className="fx-controls-side">
               <div className="fx-controls-title">
                 <SlidersHorizontal size={18} />
-                <span>Controls</span>
+                <span>{__("Controls")}</span>
               </div>
 
               <button
@@ -873,7 +880,7 @@ export default function SgbmCheckin() {
                 onClick={startScanner}
                 type="button"
               >
-                <Play size={16} /> Start Scanner
+                <Play size={16} /> {__("Start Scanner")}
               </button>
 
               <button
@@ -882,11 +889,11 @@ export default function SgbmCheckin() {
                 onClick={() => stopScanner()}
                 type="button"
               >
-                <Square size={14} fill="currentColor" /> Stop Scanner
+                <Square size={14} fill="currentColor" /> {__("Stop Scanner")}
               </button>
 
               <div className="fx-or-divider">
-                <span>OR</span>
+                <span>{__("OR")}</span>
               </div>
 
               <button
@@ -895,7 +902,7 @@ export default function SgbmCheckin() {
                 onClick={handleImageUploadClick}
                 disabled={isUploadProcessing}
               >
-                <Image size={16} /> Upload Image
+                <Image size={16} /> {__("Upload Image")}
               </button>
 
               <button
@@ -904,7 +911,7 @@ export default function SgbmCheckin() {
                 onClick={handlePdfUploadClick}
                 disabled={isUploadProcessing}
               >
-                <FileText size={16} /> Upload PDF
+                <FileText size={16} /> {__("Upload PDF")}
               </button>
 
               <input
@@ -925,8 +932,9 @@ export default function SgbmCheckin() {
               <div className="fx-info-note">
                 <Info size={16} />
                 <p>
-                  Ensure adequate lighting and hold the code steady within the
-                  frame for best results. Supported formats: QR, Data Matrix.
+                  {__(
+                    "Ensure adequate lighting and hold the code steady within the frame for best results. Supported formats: QR, Data Matrix.",
+                  )}
                 </p>
               </div>
             </aside>
@@ -934,10 +942,11 @@ export default function SgbmCheckin() {
 
           <footer className="fx-footer">
             <div>
-              <History size={14} /> Last scan: <strong>{lastScanLabel}</strong>
+              <History size={14} />{" "}
+              {withElement(__("Last scan: %s"), <strong>{lastScanLabel}</strong>)}
             </div>
             <a href="#" className="fx-view-history">
-              View History <ArrowRight size={14} />
+              {__("View History")} <ArrowRight size={14} />
             </a>
           </footer>
 
@@ -951,10 +960,10 @@ export default function SgbmCheckin() {
                 <div className="fx-cropper-head">
                   <h3>
                     {cropSourceType === "pdf"
-                      ? "Crop PDF Area"
-                      : "Crop Image Area"}
+                      ? __("Crop PDF Area")
+                      : __("Crop Image Area")}
                   </h3>
-                  <p>Select the code area, then click Read QR From Crop.</p>
+                  <p>{__("Select the code area, then click Read QR From Crop.")}</p>
                 </div>
 
                 <div className="fx-cropper-stage">
@@ -971,7 +980,7 @@ export default function SgbmCheckin() {
                 </div>
 
                 <div className="fx-cropper-range">
-                  <label htmlFor="fx-crop-zoom">Zoom</label>
+                  <label htmlFor="fx-crop-zoom">{__("Zoom")}</label>
                   <input
                     id="fx-crop-zoom"
                     type="range"
@@ -990,7 +999,7 @@ export default function SgbmCheckin() {
                     onClick={closeCropModal}
                     disabled={isUploadProcessing}
                   >
-                    Cancel
+                    {__("Cancel")}
                   </button>
                   <button
                     className="fx-btn fx-btn-start"
@@ -998,7 +1007,7 @@ export default function SgbmCheckin() {
                     onClick={handleReadCrop}
                     disabled={isUploadProcessing || !croppedAreaPixels}
                   >
-                    {isUploadProcessing ? "Reading..." : "Read QR From Crop"}
+                    {isUploadProcessing ? __("Reading...") : __("Read QR From Crop")}
                   </button>
                 </div>
               </div>
