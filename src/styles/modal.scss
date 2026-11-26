@@ -96,6 +96,11 @@ h2 {
 .p-dialog-header-icons button[type="button"] {
   padding: 5px;
   box-shadow: none;
+  
+}
+
+.p-dialog-header-icon.p-dialog-header-maximize{
+  display: none;
 }
 .p-dialog-header-icons button[type="button"] {
   background: var(--white);
