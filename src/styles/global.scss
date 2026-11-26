@@ -231,6 +231,7 @@ svg.p-icon.p-datepicker-prev-icon {
   .fx-booking.fx-container {
     display: inherit !important;
     width: 100%;
+    min-width: 95vw;
   }
   .fx-booking .fx-leftbar {
     padding: 15px;
@@ -238,7 +239,6 @@ svg.p-icon.p-datepicker-prev-icon {
     overflow: auto;
     padding-bottom: 16px;
     min-height: auto;
-    min-width: 95vw;
   }
   .fx-booking.fx-container {
     min-height: auto;
