@@ -10,6 +10,7 @@ import BookingDateFlow from "./SgbmDateGift";
 import Sidebar from "../components/Sidebar";
 import RedeemUpsellServices from "./RedeemUpsellServices";
 import RedeemUpsellPayment from "./RedeemUpsellPayment";
+import { getLanguageClass } from "../i18n";
 
 export default function SgbmDateGift(props) {
   const loading = useSelector((state) => state.step1.loading);
@@ -26,7 +27,7 @@ export default function SgbmDateGift(props) {
 
   if (redeemBooking && isServiceFlowStep) {
     return (
-      <div className="fx-booking fx-container bgbody">
+      <div className={`fx-booking fx-container bgbody ${getLanguageClass()}`}>
         <BookingDateFlow redeemBooking {...props} />
         <Sidebar {...props} />
       </div>
@@ -34,7 +35,7 @@ export default function SgbmDateGift(props) {
   }
 
   return (
-    <div className="fx-booking fx-container bgbody">
+    <div className={`fx-booking fx-container bgbody ${getLanguageClass()}`}>
       <div
         className={`${props.rightbar == "true" ? "fx-leftbar-in-rightbar-show" : ""} fx-leftbar`}
       >

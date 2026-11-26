@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import axiosInstance from "../Utils/Interceptor";
 import { darkenHex, escapeHtml, toSafeUrl } from "../Utils/Functions";
 import moment from "moment";
-import { __, _n, sprintf, withElement, getLanguageTag } from "../i18n";
+import { __, _n, sprintf, withElement, getLanguageTag, getLanguageClass } from "../i18n";
 
 /* ── Constants ───────────────────────────────────────────── */
 const API_BASE = import.meta.env.VITE_API_URL;
@@ -529,7 +529,7 @@ export default function WidgetBuilder() {
         </div>
       </header> */}
 
-      <div className="fx-widget-layout fx-booking fx-container bgbody">
+      <div className={`fx-widget-layout fx-booking fx-container bgbody ${getLanguageClass()}`}>
         {/* ── Config Panel ── */}
         <aside className="fx-widget-config">
           <Section label={__("Widget type")}>

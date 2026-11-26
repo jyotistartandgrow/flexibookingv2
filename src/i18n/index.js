@@ -88,6 +88,10 @@ export function initI18n() {
 /** WordPress locale of the loaded catalog, e.g. "it_IT". */
 export const getLocale = () => currentLocale;
 
+/** CSS class for the page language, e.g. "fx-it" or "fx-en". */
+export const getLanguageClass = () =>
+  `fx-${currentLocale.split("_")[0].toLowerCase()}`;
+
 /** BCP 47 tag for Intl / toLocaleDateString, e.g. "it-IT". */
 export const getLanguageTag = () => currentLocale.replace(/_/g, "-");
 
