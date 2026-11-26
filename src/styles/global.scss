@@ -238,6 +238,7 @@ svg.p-icon.p-datepicker-prev-icon {
     overflow: auto;
     padding-bottom: 16px;
     min-height: auto;
+    min-width: 95vw;
   }
   .fx-booking.fx-container {
     min-height: auto;
@@ -836,7 +837,7 @@ div:where(.swal2-container).swal2-center > .swal2-popup label.swal2-checkbox {
 }
 
 .fx-top-order-details-box .fx-summary-row .fx-info-group span {
-  height: 22px;
+  height: 26px;
   overflow: hidden;
 }
 
