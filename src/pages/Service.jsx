@@ -98,6 +98,8 @@ export default function Service(props) {
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  // Category order from /service-categories (cat_position). null = not loaded.
+  const [orderedCategoryNames, setOrderedCategoryNames] = useState(null);
   const categoryPillsRef = useRef(null);
   const [showCategoryScrollControls, setShowCategoryScrollControls] =
     useState(false);
@@ -402,8 +404,40 @@ export default function Service(props) {
       .filter(Boolean);
 
   useEffect(() => {
-    const cats = [...new Set(products.flatMap(getProductCategoryNames))];
-    setCategories(cats);
+    let cancelled = false;
+    axiosInstance("/service-categories", { method: "get" })
+      .then(({ data }) => {
+        if (cancelled) return;
+        const names =
+          data?.status == 200 && Array.isArray(data.data)
+            ? data.data
+                .map((cat) => String(cat?.name ?? "").trim())
+                .filter(Boolean)
+            : [];
+        setOrderedCategoryNames(names);
+      })
+      .catch(() => {
+        // Older backend without this route: keep the /services order.
+        if (!cancelled) setOrderedCategoryNames([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Pills show only categories that have services in the current list,
+  // ordered by cat_position. Names not returned by /service-categories keep
+  // their /services order at the end.
+  useEffect(() => {
+    const productCats = new Set(products.flatMap(getProductCategoryNames));
+    const ordered = (orderedCategoryNames || []).filter((name) =>
+      productCats.has(name),
+    );
+    const rest = [...productCats].filter((name) => !ordered.includes(name));
+    setCategories([...new Set([...ordered, ...rest])]);
+  }, [products, orderedCategoryNames]);
+
+  useEffect(() => {
     setSelectedCategory("all");
   }, [products]);
 

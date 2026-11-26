@@ -12,7 +12,7 @@ import { setLoading } from "../store/step1Slice";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Swal from "sweetalert2";
-import { __, sprintf, withElement } from "../i18n";
+import { __, sprintf, withElement, getLanguageClass } from "../i18n";
 
 export default function OpenDateThankyou() {
   const dispatch = useDispatch();
@@ -249,7 +249,7 @@ export default function OpenDateThankyou() {
       <div className={`fx-fullscreen-loader ${loading ? "show" : "hide"}`}>
         <div className="fx-seg-loader"></div>
       </div>
-      <div className="fx-booking fx-container">
+      <div className={`fx-booking fx-container ${getLanguageClass()}`}>
         <div className="fx-confirmation-wrapper">
          
           <div className="fx-confirm-left">
