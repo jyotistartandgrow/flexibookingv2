@@ -938,6 +938,10 @@ button[type="button"].p-carousel-next {
     bottom: auto;
     left: -7px;
   }
+  .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist h4{
+        height: 24px;
+        overflow: hidden;
+  }
 }
 
 /* List view, all screen sizes: show the full service name (wrapping if needed)
@@ -998,4 +1002,11 @@ button[type="button"].p-carousel-next {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+
+@media screen and (max-width: 767px) {
+  .fx-booking .fx-tabcontent .fx-serviceboxlist .fx-servicecontentboxlist h4{
+        height: 24px;
+        overflow: hidden;
+  }
 }
