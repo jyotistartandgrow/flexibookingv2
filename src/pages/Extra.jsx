@@ -123,10 +123,13 @@ export default function Extra(props) {
   // /settings: show_grid_list_button false → always default_view_type, no
   // view buttons, and the automatic rule below is skipped.
   const viewSettings = useSelector((state) => state.step1.viewSettings);
-  const fixedViewType =
+  // On mobile a "grid" default is shown as list.
+  const settingsViewType =
     viewSettings && viewSettings.showGridListButton === false
       ? viewSettings.defaultViewType
       : null;
+  const fixedViewType =
+    settingsViewType === "grid" && !isDesktop ? "list" : settingsViewType;
 
   useEffect(() => {
     if (fixedViewType) {

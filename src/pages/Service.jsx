@@ -334,10 +334,13 @@ export default function Service(props) {
   // /settings: show_grid_list_button false → always default_view_type, no
   // view buttons, and the automatic rule below is skipped.
   const viewSettings = useSelector((state) => state.step1.viewSettings);
-  const fixedViewType =
+  // On mobile a "grid" default is shown as list.
+  const settingsViewType =
     viewSettings && viewSettings.showGridListButton === false
       ? viewSettings.defaultViewType
       : null;
+  const fixedViewType =
+    settingsViewType === "grid" && !isDesktop ? "list" : settingsViewType;
 
   const updateCategoryScrollState = () => {
     const el = categoryPillsRef.current;
@@ -2582,7 +2585,9 @@ export default function Service(props) {
                                     className="readmore"
                                     onClick={() => setReadmorecl(!readmorecl)}
                                   >
-                                    {readmorecl ? __("Read Less") : __("Read More")}
+                                    {readmorecl
+                                      ? __("Read Less")
+                                      : __("Read More")}
                                   </span>
                                 )}
                             </p>
@@ -2643,7 +2648,9 @@ export default function Service(props) {
                                     className="readmore"
                                     onClick={() => setReadmorecl(!readmorecl)}
                                   >
-                                    {readmorecl ? __("Read Less") : __("Read More")}
+                                    {readmorecl
+                                      ? __("Read Less")
+                                      : __("Read More")}
                                   </span>
                                 )}
                             </p>{" "}
@@ -2743,7 +2750,9 @@ export default function Service(props) {
                                       <path d="M20 7h-3.17l-1.41-1.41A1.98 1.98 0 0 0 14 5h-4c-.7 0-1.3.3-1.42.59L7.17 7H4a2 2 0 0 0-2 2v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2Zm-8 9a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
                                     </svg>
 
-                                    <span>{__("What's included in this bundle")}</span>
+                                    <span>
+                                      {__("What's included in this bundle")}
+                                    </span>
                                   </div>
 
                                   {bundleComponents.map((component, index) => (
