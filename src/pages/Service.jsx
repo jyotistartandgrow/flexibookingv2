@@ -1890,6 +1890,9 @@ export default function Service(props) {
       extra_types: null,
       no_of_persons: 0,
       gift,
+      ...(opendatepurchase
+        ? { is_open_date_purchase: true, purchase_kind: "open_date" }
+        : {}),
       selected_bundle_id: bundleId > 0 ? bundleId : null,
       selected_virtual_service_id: virtualServiceId || null,
       selected_component_slots:

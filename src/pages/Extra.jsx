@@ -224,6 +224,9 @@ export default function Extra(props) {
                 extra_types: null,
                 no_of_persons: 0,
                 gift,
+                ...(openDatePurchase
+                  ? { is_open_date_purchase: true, purchase_kind: "open_date" }
+                  : {}),
                 selected_bundle_id: selectedBundleId,
                 selected_virtual_service_id: selectedVirtualServiceId || null,
                 selected_component_slots:
@@ -461,6 +464,9 @@ export default function Extra(props) {
       extra_types: extraTypesParam,
       no_of_persons: bookParam,
       gift,
+      ...(openDatePurchase
+        ? { is_open_date_purchase: true, purchase_kind: "open_date" }
+        : {}),
       selected_bundle_id: selectedBundleId,
       selected_virtual_service_id: selectedVirtualServiceId || null,
       selected_component_slots:
