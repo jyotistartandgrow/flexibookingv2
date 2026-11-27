@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, useStore } from "react-redux";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -18,6 +18,7 @@ import {
   setExtra,
   setBookingkey,
   setHasExtras,
+  setEditingExtras,
 } from "../store/step3Slice";
 import { setStep, setLoading } from "../store/step1Slice";
 import { setCart } from "../store/step2Slice";
@@ -64,6 +65,7 @@ const bundleGuestFields = (gift, line) =>
 
 export default function Extra(props) {
   const dispatch = useDispatch();
+  const store = useStore();
   const isDesktop = useDeviceType();
   const desktopCarouselRef = useRef(null);
 
@@ -170,6 +172,19 @@ export default function Extra(props) {
     if (step !== "extrastep") return;
     // Every extra starts at 0. Pre-filling from an earlier selection showed a
     // quantity (e.g. 1 on the first extra) that was then kept even on Skip.
+    // Exception: the user clicked edit on an extra in the order summary. Then
+    // every extra already in the booking starts selected, so changing one
+    // doesn't drop the others. The flag is read once (not a dependency) and
+    // cleared, so a later visit starts at 0 again.
+    const editing = store.getState().step3.editingExtras;
+    const editQuantities = {};
+    if (editing) {
+      dispatch(setEditingExtras(false));
+      (Array.isArray(cart.extra) ? cart.extra : []).forEach((item) => {
+        const quantity = Number(item?.capacity) || 0;
+        if (item?.id && quantity > 0) editQuantities[item.id] = quantity;
+      });
+    }
     setQuantities({});
     if (date && service) {
       setLoadingske(true);
@@ -206,6 +221,17 @@ export default function Extra(props) {
                 extra_type: String(product.extra_type ?? "").trim() || "local",
               })),
             );
+            if (editing) {
+              // Keep only extras still offered for this date/slot.
+              const offered = new Set(extraList.map((p) => String(p.id)));
+              setQuantities(
+                Object.fromEntries(
+                  Object.entries(editQuantities).filter(([id]) =>
+                    offered.has(id),
+                  ),
+                ),
+              );
+            }
 
             if (extraList.length == 0) {
               const addToCartRes = await axiosInstance.post(`/addtocart`, {
@@ -287,6 +313,7 @@ export default function Extra(props) {
     totalServiceBooking,
     extrasTimeSlot,
     dispatch,
+    store,
   ]);
 
   // Template for each carousel item
@@ -374,27 +401,9 @@ export default function Extra(props) {
     }
   };
 
-  const bookextra = async () => {
-    const selectedIds = Object.keys(quantities).filter(
-      (id) => quantities[id] > 0,
-    );
-    if (selectedIds.length === 0) {
-      Swal.fire({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        icon: "warning",
-        title: __("Please choose capacity"),
-      });
-      return;
-    }
-
-    const selectedExtras = selectedIds.map((id) => ({
-      product: products.find((product) => String(product.id) === id),
-      id,
-      quantity: quantities[id],
-    }));
+  // Prices the booking with the given extras ([] = none) and puts them in the
+  // order summary. Returns the extras as the comma lists /addtocart takes.
+  const priceCartWithExtras = async (selectedExtras) => {
     const extraIdStr = selectedExtras.map((item) => item.id).join(",");
     const capacityArr = selectedExtras.map((item) => item.quantity);
     const extraTypeStr = selectedExtras
@@ -443,7 +452,37 @@ export default function Extra(props) {
       }),
     );
 
-    addtocart(extraIdStr, capacityArr.join(","), extraTypeStr);
+    return {
+      extraIdStr,
+      capacityStr: capacityArr.join(","),
+      extraTypeStr,
+    };
+  };
+
+  const bookextra = async () => {
+    const selectedIds = Object.keys(quantities).filter(
+      (id) => quantities[id] > 0,
+    );
+    if (selectedIds.length === 0) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        icon: "warning",
+        title: __("Please choose capacity"),
+      });
+      return;
+    }
+
+    const selectedExtras = selectedIds.map((id) => ({
+      product: products.find((product) => String(product.id) === id),
+      id,
+      quantity: quantities[id],
+    }));
+    const { extraIdStr, capacityStr, extraTypeStr } =
+      await priceCartWithExtras(selectedExtras);
+    addtocart(extraIdStr, capacityStr, extraTypeStr);
   };
 
   const addtocart = async (extraIdParam, bookParam, extraTypesParam = null) => {
@@ -497,8 +536,13 @@ export default function Extra(props) {
     }
   };
 
-  const skipextra = () => {
+  const skipextra = async () => {
     setQuantities({});
+    // Skip books no extras, so drop any left in the order summary (e.g. after
+    // edit → Skip) and re-price it without them.
+    if (Array.isArray(cart.extra) && cart.extra.length > 0) {
+      await priceCartWithExtras([]);
+    }
     addtocart(null, 0);
   };
 

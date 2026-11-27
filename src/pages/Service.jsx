@@ -30,6 +30,7 @@ import Swal from "sweetalert2";
 import useDeviceType from "../Utils/useDeviceType";
 import CalendarPage from "./CalendarPage";
 import ServiceCard from "../components/ServiceCard";
+import { cartWithoutCoupons, clearCoupons } from "../Utils/coupons";
 import ServiceSlotSelection from "../components/ServiceSlotSelection";
 import ServiceSlotQuantity from "../components/ServiceSlotQuantity";
 import ServiceParticipants from "../components/ServiceParticipants";
@@ -1774,9 +1775,12 @@ export default function Service(props) {
     dispatch(setExtra(null));
     dispatch(setExtracapacity(0));
     dispatch(setHasExtras(null));
+    // A changed service is a new booking: drop the old coupon so its discount
+    // isn't shown against the new service. The user applies it again.
+    clearCoupons(dispatch);
     dispatch(
       setCart({
-        ...cart,
+        ...cartWithoutCoupons(cart),
         service: [cartobj],
         extra: [],
         total: data?.data?.total,

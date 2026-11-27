@@ -1,4 +1,4 @@
-import { useState, useId } from "react";
+import { useState, useId, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import iconapplied from "../assets/icons8-confirm.svg";
 import closeicon from "../assets/close2.svg";
@@ -25,6 +25,28 @@ export default function CouponSection({ bookingKey = null }) {
   const uid = useId();
   const [isVisibleGift, setIsVisibleGift] = useState(false);
   const [fields, setFields] = useState([{ code: "", applied: false }]);
+  const couponcode = useSelector((state) => state.step1.couponcode);
+
+  // Coupons the store still counts as applied for this screen.
+  const appliedCount = bookingKey
+    ? bookingCoupons?.bookingKey === bookingKey
+      ? bookingCoupons.codes?.length || 0
+      : 0
+    : couponcode?.length || 0;
+  const prevAppliedCount = useRef(appliedCount);
+
+  // When the coupons are cleared elsewhere (e.g. the service was changed),
+  // drop the "Applied" inputs too so the user enters the coupon again.
+  // Only on a drop to zero, so a coupon being applied right now is kept.
+  useEffect(() => {
+    if (prevAppliedCount.current > 0 && appliedCount === 0) {
+      setFields((prev) => {
+        const kept = prev.filter((f) => !f.applied);
+        return kept.length > 0 ? kept : [{ code: "", applied: false }];
+      });
+    }
+    prevAppliedCount.current = appliedCount;
+  }, [appliedCount]);
 
   const addmoreCoupon = () => {
     setFields([...fields, { code: "", applied: false }]);

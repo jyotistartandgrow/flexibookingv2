@@ -14,6 +14,9 @@ const initialState = {
   // Whether the booked service has extras: null = unknown, true / false from
   // /has-extra or /extras. Drives the EXTRA tab in the step bar.
   hasExtras: null,
+  // Set when the user clicks edit on an extra in the order summary, so the
+  // Extras page opens with the current selection instead of starting at 0.
+  editingExtras: false,
 };
 
 const step3Slice = createSlice({
@@ -53,6 +56,9 @@ const step3Slice = createSlice({
     setHasExtras: (state, action) => {
       state.hasExtras = action.payload;
     },
+    setEditingExtras: (state, action) => {
+      state.editingExtras = action.payload;
+    },
   },
 });
 
@@ -68,5 +74,6 @@ export const {
   setRedeemUpsellSelections,
   setRedeemUpsellQuote,
   setHasExtras,
+  setEditingExtras,
 } = step3Slice.actions;
 export default step3Slice.reducer;

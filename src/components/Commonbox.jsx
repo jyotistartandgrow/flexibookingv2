@@ -13,14 +13,19 @@ import {
   setPaymentstring,
   setSessionExpired,
 } from "../store/step4Slice";
-import { setCouponlist, setLoading } from "../store/step1Slice";
+import { setLoading } from "../store/step1Slice";
+import { cartWithoutCoupons, clearCoupons } from "../Utils/coupons";
 import {
   setCart,
   setTimeslot,
   setCapacity,
   setService,
 } from "../store/step2Slice";
-import { setExtracapacity, setExtra } from "../store/step3Slice";
+import {
+  setExtracapacity,
+  setExtra,
+  setEditingExtras,
+} from "../store/step3Slice";
 import axiosInstance from "../Utils/Interceptor";
 import { getParticipantSummary } from "../Utils/participants";
 import useDeviceType from "../Utils/useDeviceType";
@@ -76,6 +81,8 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
     if (type === "service") {
       dispatch(setStep("servicesstep"));
     } else {
+      // Open the Extras page with every extra already in the booking selected.
+      dispatch(setEditingExtras(true));
       dispatch(setStep("extrastep"));
     }
   };
@@ -120,7 +127,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
     if (data && data.status == 200) {
       dispatch(
         setCart({
-          ...cart,
+          ...cartWithoutCoupons(cart),
           [type]: updatedServices,
           total: data?.data?.total,
           total_formatted: data?.data?.total_formated,
@@ -129,7 +136,7 @@ export default function Commonbox({ setVisibleBottom, toggleCard }) {
         }),
       );
     }
-    dispatch(setCouponlist([])); // Clear coupons on service/extra change
+    clearCoupons(dispatch); // Clear coupons on service/extra change
     if (type == "service") {
       dispatch(setTimeslot(null));
       dispatch(setCapacity(0));

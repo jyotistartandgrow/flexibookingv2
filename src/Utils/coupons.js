@@ -1,6 +1,7 @@
 import axiosInstance from "./Interceptor";
 import { decodeHtml } from "./Functions";
 import { __ } from "../i18n";
+import { setBookingCoupons, setCouponlist } from "../store/step1Slice";
 
 /**
  * Applies one coupon to an existing booking via POST /apply-coupon and
@@ -42,3 +43,20 @@ export const cartWithCouponTotals = (cart, result) => ({
       ? [result.code]
       : cart?.coupon_codes || [],
 });
+
+/** The cart without any coupon discount (the booking it was applied to is gone). */
+export const cartWithoutCoupons = (cart) => ({
+  ...cart,
+  discount: 0,
+  discount_formatted: "",
+  coupon_codes: [],
+});
+
+/**
+ * Forgets every applied or pending coupon. Called when the service changes:
+ * the new booking has no discount and the user must apply the coupon again.
+ */
+export const clearCoupons = (dispatch) => {
+  dispatch(setCouponlist([]));
+  dispatch(setBookingCoupons({ bookingKey: null, codes: [] }));
+};

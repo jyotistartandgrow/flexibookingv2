@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setSessionExpired } from "../store/step4Slice";
 import { setStep } from "../store/step1Slice";
-import { __, sprintf } from "../i18n";
+import { __, withElement } from "../i18n";
 
 function formatTime(seconds) {
   const m = String(Math.floor(seconds / 60)).padStart(2, "0");
@@ -54,7 +54,16 @@ export default function CountdownTimer({ startSeconds = 180 }) {
     <div>
       <h4>
         {running && !sessionExpired
-          ? sprintf(__("Session ends in %s"), formatTime(time))
+          ? // The countdown sits in its own no-translate element: browser page
+            // translation (e.g. Chrome/Google Translate) otherwise reads "02:21"
+            // as a clock time ("Session ends at 2:21 AM") and re-translates it
+            // every second as the countdown ticks.
+            withElement(
+              __("Session ends in %s"),
+              <span className="notranslate" translate="no">
+                {formatTime(time)}
+              </span>,
+            )
           : __("Session expired!")}
       </h4>
       {sessionExpired && (
